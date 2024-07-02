@@ -1,0 +1,192 @@
+{
+  "Aggregate": {
+    "scope": "typescript",
+    "prefix": "_agg",
+    "body": [
+      "export class $TM_FILENAME_BASE extends Aggregate {",
+      "  constructor(id: Uuid, $0) {",
+      "    super(id);                 ",
+      "  }",
+      " ",
+      "  toPrimitives(): Primitives<$TM_FILENAME_BASE> {",
+      "    return {",
+      "      id: this.id.toString(),",
+      "    };",
+      "  }",
+      " ",
+      "  static fromPrimitives(data: Primitives<$TM_FILENAME_BASE>): $TM_FILENAME_BASE {",
+      "    return new $TM_FILENAME_BASE(",
+      "      new Uuid(data.id),",
+      "    );",
+      "  }",
+      "}"
+    ],
+    "description": "Create an aggregate",
+    "isFileTemplate": true
+  },
+  "Base Object": {
+    "scope": "typescript",
+    "prefix": "_base",
+    "body": [
+      "export class $TM_FILENAME_BASE extends BaseObject {",
+      "  constructor($0) {",
+      "    super();                 ",
+      "  }",
+      " ",
+      "  toPrimitives(): Primitives<$TM_FILENAME_BASE> {",
+      "    return {};",
+      "  }",
+      " ",
+      "  fromPrimitives(data: Primitives<$TM_FILENAME_BASE>): $TM_FILENAME_BASE {",
+      "    return new $TM_FILENAME_BASE();",
+      "  }",
+      "}"
+    ],
+    "description": "Create an aggregate",
+    "isFileTemplate": true
+  },
+  "Command handler": {
+    "scope": "typescript",
+    "prefix": "_comhand",
+    "body": [
+      "export class $TM_FILENAME_BASE implements CommandHandler<${TM_FILENAME_BASE/(.*)(Handler)/$1/g}>{",
+      "  constructor($0) {}",
+      " ",
+      "  subscribedTo(): Command {",
+      "    return ${TM_FILENAME_BASE/(.*)(Handler)/$1/g};",
+      "  }",
+      " ",
+      "  public async handle(command: ${TM_FILENAME_BASE/(.*)(Handler)/$1/g}): Promise<void> {",
+      "    throw new Error('Method not implemented.');",
+      "  }",
+      "}"
+    ],
+    "description": "Create a command handler",
+    "isFileTemplate": true
+  },
+  "Query handler": {
+    "scope": "typescript",
+    "prefix": "_quehand",
+    "body": [
+      "export class $TM_FILENAME_BASE implements QueryHandler<${TM_FILENAME_BASE/(.*)(Handler)/$1/g}>{",
+      "  constructor($0) {}",
+      " ",
+      "  subscribedTo(): Query {",
+      "    return ${TM_FILENAME_BASE/(.*)(Handler)/$1/g};",
+      "  }",
+      " ",
+      "  public async handle(query: ${TM_FILENAME_BASE/(.*)(Handler)/$1/g}): Promise<any> {",
+      "    throw new Error('Method not implemented.');",
+      "  }",
+      "}"
+    ],
+    "description": "Create a query handler",
+    "isFileTemplate": true
+  },
+  "EventSubscriber": {
+    "scope": "typescript",
+    "prefix": "_eventsub",
+    "body": [
+      "export class $TM_FILENAME_BASE implements DomainEventSubscriber {",
+      "  constructor($0) {}",
+      " ",
+      "  subscribedTo(): DomainEventClass[] {",
+      "    return [${TM_FILENAME_BASE/(.*)On(.*)/$2/g}];",
+      "  }",
+      " ",
+      "  async on(domainEvent: ${TM_FILENAME_BASE/(.*)On(.*)/$2/g}): Promise<any> {",
+      "    throw new Error('Method not implemented.');",
+      "  }",
+      "  name(): string {",
+      "    return '${TM_FILENAME_BASE/(.*)(On)/$2/g}';",
+      "  }",
+      "}"
+    ],
+    "description": "Create a query handler",
+    "isFileTemplate": true
+  },
+  "Mother": {
+    "scope": "typescript",
+    "prefix": "_mth",
+    "body": [
+      "export class $TM_FILENAME_BASE {",
+			"\tstatic create(value?: string): ${TM_FILENAME_BASE/(.*)(Mother)/$1/g} {",
+			"\t\treturn new ${TM_FILENAME_BASE/(.*)(Mother)/$1/g}(value ?? $0);",
+			"\t}",
+			"}",
+    ],
+    "description": "Create a object mother",
+    "isFileTemplate": true
+  },
+  "Command": {
+    "scope": "typescript",
+    "prefix": "_com",
+    "body": [
+      "export class $TM_FILENAME_BASE extends Command {",
+      "  constructor($0) {",
+      "    super();                 ",
+      "  }",
+      "}"
+    ],
+    "description": "Create a command",
+    "isFileTemplate": true
+  },
+  "Query": {
+    "scope": "typescript",
+    "prefix": "_que",
+    "body": [
+      "export class $TM_FILENAME_BASE extends Query {",
+      "  constructor($0) {",
+      "    super();                 ",
+      "  }",
+      "}"
+    ],
+    "description": "Create a query",
+    "isFileTemplate": true
+  },
+  "Event": {
+    "scope": "typescript",
+    "prefix": "_eve",
+    "body": [
+      "export class $TM_FILENAME_BASE extends DomainEvent {",
+      "  static readonly EVENT_NAME: string = '${TM_FILENAME_BASE/(^[A-Z])|(?<=[a-z0-9])([A-Z])/${1:/downcase}${2:+.}${2:/downcase}/g}'",
+      "  constructor({",
+      "    aggregate,",
+      "    extraData,",
+      "    eventId,",
+      "    ocurredOn,",
+      "  }: {",
+      "    aggregate: Record<string, unknown>$0; // Change to the aggregate primitive ",
+      "    extraData?: Record<string, unknown>;",
+      "    eventId?: string;",
+      "    ocurredOn?: Date;",
+      "  }) {",
+      "    super($TM_FILENAME_BASE.EVENT_NAME, aggregate, eventId, ocurredOn, extraData);                 ",
+      "  }",
+      "  toPrimitive(): DomainEventPrimitives {",
+      "    throw new Error('Method not implemented.');",
+      "  }",
+      "  static fromPrimitives(data: DomainEventPrimitives): $TM_FILENAME_BASE {",
+      "    return new $TM_FILENAME_BASE(data);",
+      "  }",
+      "  isPublic(): boolean {",
+      "    return false;",
+      "  }",
+      "}"
+    ],
+    "description": "Create a event",
+    "isFileTemplate": true
+  },
+  "Class": {
+    "scope": "typescript",
+    "prefix": "_class",
+    "body": [
+      "export class $TM_FILENAME_BASE {",
+      "  constructor($0) {",
+      "  }",
+      "}"
+    ],
+    "description": "Create a class",
+    "isFileTemplate": true
+  },
+}

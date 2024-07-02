@@ -1,0 +1,49 @@
+{
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/.next" : true,
+    "**/%ProgramData%": true,
+    "**/.expo": true,
+    "**/node_modules": true,
+    "**/dist": true,
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.organizeImports": "explicit",
+    "source.addMissingImports": "explicit"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "cmake.configureOnOpen": false,
+  "editor.cursorBlinking": "expand",
+  "cSpell.words": [
+    "bson",
+    "cancellator",
+    "Cancellator",
+    "dtos",
+    "Lucide",
+    "otlp",
+    "OTLP",
+    "prometheus",
+    "qstash",
+    "rescheduler",
+    "Rescheduler",
+    "SEMRESATTRS",
+    "upstash"
+  ],
+}
