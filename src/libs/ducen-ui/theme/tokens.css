@@ -1,0 +1,67 @@
+:root {
+  /*SPACING*/
+  /* Vertical Spacing */
+  --spacing-vertical-none: 0px;
+  --spacing-vertical-tiny: 4px;
+  --spacing-vertical-small: 8px;
+  --spacing-vertical-light: 12px;
+  --spacing-vertical-medium: 16px;
+  --spacing-vertical-large: 32px;
+  --spacing-vertical-x-large: 64px;
+  /* Horizontal Spacing */
+  --spacing-horizontal-none: 0px;
+  --spacing-horizontal-tiny: 4px;
+  --spacing-horizontal-small: 8px;
+  --spacing-horizontal-light: 12px;
+  --spacing-horizontal-medium: 16px;
+  --spacing-horizontal-large: 32px;
+  --spacing-horizontal-x-large: 64px;
+
+  /*ELEVATION*/
+  --elevation-none: 0px 0px 0px  rgba(0, 0, 0, 0);
+  --elevation-normal: 3px 3px #282825;
+  --elevation-high: 7px 7px #282825;
+
+  /*Border Radius*/
+  --border-radius-none: none;
+  --border-radius-small: 4px;
+  --border-radius-medium: 8px;
+  --border-radius-large: 16px;
+  --border-radius-full: 9999px;
+
+  /* Borders */
+  --border-simple: 1px solid;
+  --border-bold: 2px solid;
+  --border-x-bold: 5px solid;
+
+  /*SIZE*/
+  /*Specific fixed sizes*/
+  --size-fixed-tiny: 20px;
+  --size-fixed-small: 50px;
+  --size-fixed-medium: 100px;
+  --size-fixed-large: 300px;
+  --size-fixed-x-large: 500px;
+  /* Relative percentage sizes */
+  --size-relative-small: 20%;
+  --size-relative-medium: 50%;
+  --size-relative-large: 75%;
+  --size-relative-full: 100%;
+
+  /*SPECIFIC COMPONENTS SIZES*/
+  --size-height-input: 40px;
+  --font-main-family: Nunito, Roboto, Arial;
+  --font-size-heading-large: 40px;
+  --font-size-heading-medium: 28px;
+  --font-size-heading-small: 20px;
+  --font-size-text-large: 20px;
+  --font-size-text-medium: 16px;
+  --font-size-text-small: 12px;
+
+  --font-weight-heading: 700;
+  --font-weight-x-bold: 800;
+  --font-weight-bold: 700;
+  --font-weight-semi-bold: 600;
+  --font-weight-normal: 500;
+  --font-weight-regular: 400;
+  --font-weight-light: 300;
+}

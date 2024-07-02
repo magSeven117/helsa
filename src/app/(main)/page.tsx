@@ -1,8 +1,9 @@
+import { UserButton } from "@clerk/nextjs";
 
 const Page = () => {
   return (
     <div>
-      Page
+      <UserButton></UserButton>
     </div>
   );
 }
