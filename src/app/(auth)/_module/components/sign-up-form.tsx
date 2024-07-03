@@ -13,7 +13,7 @@ import Link from 'next/link';
 export default function SignUpForm() {
   return (
     <div className="grid w-full h-full grow items-center px-20">
-      <SignUp.Root>
+      <SignUp.Root >
         <Clerk.Loading>
           {(isGlobalLoading) => (
             <>
