@@ -90,8 +90,8 @@ export default function SignInForm() {
                 </Card>
               </SignIn.Step>
 
-              <SignIn.Step name="choose-strategy">
-                <Card className="w-full sm:w-96">
+              <SignIn.Step name="choose-strategy" className='w-full'>
+                <Card className="border-none shadow-none w-full">
                   <CardHeader>
                     <CardTitle>Use another method</CardTitle>
                     <CardDescription>Facing issues? You can use any of these methods to sign in.</CardDescription>
@@ -124,9 +124,9 @@ export default function SignInForm() {
                 </Card>
               </SignIn.Step>
 
-              <SignIn.Step name="verifications">
+              <SignIn.Step name="verifications" className='w-full'>
                 <SignIn.Strategy name="password">
-                  <Card className="w-full sm:w-96">
+                  <Card className="border-none shadow-none w-full">
                     <CardHeader>
                       <CardTitle>Check your email</CardTitle>
                       <CardDescription>Enter the verification code sent to your email</CardDescription>
@@ -167,7 +167,7 @@ export default function SignInForm() {
                 </SignIn.Strategy>
 
                 <SignIn.Strategy name="email_code">
-                  <Card className="w-full sm:w-96">
+                  <Card className="border-none shadow-none w-full">
                     <CardHeader>
                       <CardTitle>Check your email</CardTitle>
                       <CardDescription>Enter the verification code sent to your email</CardDescription>
