@@ -1,0 +1,174 @@
+.sidebar_container {
+  width: 16.66%;
+  height: 100vh;
+  box-sizing: border-box;
+  padding: 0.75rem;
+  &.closed {
+    width: 5rem;
+  }
+  transition: 0.4s ease-in-out;
+  @media not all and (min-width: 640px){
+    display: none;
+  }
+}
+
+.sidebar_main {
+  background-color: hsl(var(--foreground));
+  height: 100%;
+  width: 100%;
+  border-radius: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  position: relative;
+  transition: 0.4s ease-in-out;
+  &.closed {
+    width: 4rem;
+  }
+}
+
+.sidebar_button {
+  background-color: hsl(var(--foreground));
+  border-radius: 9999px;
+  padding: 0.25rem;
+  position: absolute;
+  top: 1rem;
+  right: -0.75rem;
+  cursor: pointer;
+  &.closed {
+    right: -1.25rem;
+    top: 0.75rem;
+  }
+}
+
+.sidebar_button_2 {
+  background-color: hsl(var(--primary));
+  border-radius: 9999px;
+  padding: 0.25rem;
+}
+
+.sidebar_brand {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  &.closed {
+    justify-content: center;
+  }
+}
+
+.sidebar_brand_image {
+  height: 50px;
+  &.closed {
+    height: 30px;
+  }
+}
+
+.sidebar_brand_text {
+  color: hsl(var(--primary));
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: 700;
+  &.closed {
+    display: none;
+    opacity: 0;
+  }
+  transition-property: display, opacity;
+  animation: show 0.7s ease-in-out;
+}
+
+.sidebar_sections {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.sidebar_section_title {
+  color: hsl(var(--border));
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  margin-left: 0.75rem;
+  &.closed {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    margin-left: 0;
+    text-align: center;
+  }
+}
+
+.sidebar_section_content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 0.75rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.sidebar_section_item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem;
+  padding-left: 1.5rem;
+  color: hsl(var(--background));
+  &:hover {
+    color: hsl(var(--primary));
+    border-right: 3px solid hsl(var(--primary));
+    cursor: pointer;
+  }
+  &.active {
+    color: hsl(var(--primary));
+    border-right: 3px solid hsl(var(--primary));
+    .item_icon {
+      animation: spin 1s ease-in-out;
+    }
+  }
+}
+
+.sidebar_section_item_text {
+  transition-property: display, opacity;
+  animation: show 1s ease-in-out;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(-25%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes show {
+  0% {
+    opacity: 0;
+    transform: none;
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  100% {
+    opacity: 1;
+    display: inherit;
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+.sidebar_container_closed {
+  width: 3.5rem;
+}
