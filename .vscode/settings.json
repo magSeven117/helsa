@@ -45,6 +45,7 @@
     "Rescheduler",
     "SEMRESATTRS",
     "svix",
+    "topbar",
     "upstash"
   ],
 }

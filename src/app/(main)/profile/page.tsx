@@ -1,11 +1,10 @@
-import { UserButton } from "@clerk/nextjs";
 
 const Page = () => {
   return (
     <div>
-      <UserButton></UserButton>
+      Profile
     </div>
   );
-};
+}
 
 export default Page;

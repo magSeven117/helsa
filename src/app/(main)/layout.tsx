@@ -1,7 +1,7 @@
 import { auth } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
 import SideBar from './_module/components/side-bar/side-bar';
-import TopBar from './_module/components/top-bar';
+import TopBar from './_module/components/top-bar/top-bar';
 
 const Layout = ({ children }) => {
   const { userId, sessionClaims } = auth();
