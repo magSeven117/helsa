@@ -59,13 +59,15 @@
 }
 
 .topbar_searcher {
-  width: 50%;
+  width: 100%;
   border-radius: 9999px;
   display: flex;
   position: relative;
   align-items: center;
   gap: 0.5rem;
-  
+  @media screen and (min-width: 768px){
+    width: 50%;
+  }
 }
 
 .topbar_searcher_input {
@@ -75,7 +77,7 @@
   color: hsl(var(--secondary-foreground));
   border-radius: 9999px;
   box-shadow: none !important;
-  width: 50%;
+  width: 80%;
 }
 
 .topbar_searcher_icon {
@@ -96,15 +98,15 @@
 .topbar_searcher_container {
   width: 100%;
   @media not all and (min-width: 768px){
-    display: none;
+    display: inherit;
   }
 }
 
 .searcher_result_container {
   z-index: 50;
   position: absolute;
-  background-color: var(--background);
-  width: 50%;
+  background-color: hsl(var(--background));
+  width: 80%;
   height: 250px;
   border-radius: var(--radius);
   --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
@@ -164,8 +166,76 @@
   }
 }
 
+
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+.topbar_button_sidebar {
+  height: 2.5rem;
+  width: 2.5rem;
+  padding: 0.25rem;
+  background-color: hsl(var(--foreground));
+  border-radius: 9999px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: none !important;
+  margin-right: 1rem;
+  display: none;
+  @media not all and (min-width: 640px) {
+    display: flex;
+  }
+}
+
+.topbar_button_icon_sidebar {
+  height: 1rem;
+  width: 1rem;
+}
+
+.topbar_sidebar_sections {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.topbar_sidebar_section_title {
+  color: hsl(var(--border));
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  margin-left: 0.75rem;
+}
+
+.topbar_sidebar_section_content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 0.75rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+.topbar_sidebar_section_item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem;
+  padding-left: 1.5rem;
+  color: hsl(var(--background));
+  &:hover {
+    color: hsl(var(--primary));
+    border-right: 3px solid hsl(var(--primary));
+    cursor: pointer;
+  }
+  &.active {
+    color: hsl(var(--primary));
+    border-right: 3px solid hsl(var(--primary));
+    .item_icon {
+      animation: spin 1s ease-in-out;
+    }
   }
 }

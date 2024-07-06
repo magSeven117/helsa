@@ -60,10 +60,7 @@
 }
 
 .sidebar_brand_image {
-  height: 50px;
-  &.closed {
-    height: 30px;
-  }
+  height: 30px;
 }
 
 .sidebar_brand_text {
@@ -172,3 +169,4 @@
 .sidebar_container_closed {
   width: 3.5rem;
 }
+

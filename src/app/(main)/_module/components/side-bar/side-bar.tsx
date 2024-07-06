@@ -44,7 +44,7 @@ const SideBar = ({ role }: { role: string }) => {
             open && <p className={styles.sidebar_brand_text}>Helsa</p>
           }
         </Link>
-        <div className={styles.sidebar_sections}>
+        <div className={styles.topbar_sidebar_sections}>
           {sections.map((section, index) => (
             <div key={section.title}>
               <p className={styles.sidebar_section_title + ` ${open ? '' : styles.closed}`}>{section.title}</p>
@@ -70,7 +70,7 @@ const SideBar = ({ role }: { role: string }) => {
 
 export default SideBar;
 
-const doctorSections: Section[] = [
+export const doctorSections: Section[] = [
   {
     title: 'General',
     routes: [
@@ -117,7 +117,7 @@ const doctorSections: Section[] = [
     ],
   },
 ];
-const patientSections: Section[] = [
+export const patientSections: Section[] = [
   {
     title: 'General',
     routes: [
