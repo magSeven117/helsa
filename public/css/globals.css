@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('../../src/libs/ducen-ui/theme/theme.css');
+html, body, :root {
+  height: 100%;
+}
+@layer base {
+  :root {
+    --background: 0 0%, 100%;
+    --foreground: 228 15% 6%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 228 15% 6%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 228 15% 6%;
+
+    --primary: 252 78% 66%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 266 82% 89%;
+    --secondary-foreground: 228 15% 6%;
+
+    --muted: 0 0% 94%;
+    --muted-foreground: 243 14% 26%;
+
+    --accent: 210 40% 96%;
+    --accent-foreground: 228 15% 6%;
+
+    --destructive: 359 81% 57%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 174 58% 68%;
+    --success-foreground: 174 65% 29%;
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 228 15% 6%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 220 9% 13%;
+    --foreground: 0 0% 100%;
+
+    --card: 220 9% 13%;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 220 9% 13%;
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 252 78% 66%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 266 82% 89%;
+    --secondary-foreground: 210 40% 96%;
+
+    --muted: #191b22;
+    --muted-foreground: 243 14% 26%;
+
+    --accent: 243 14% 26%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 359 81% 57%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 174 58% 68%;
+    --success-foreground: 174 65% 29%;
+
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 213 27% 84%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
