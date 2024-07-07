@@ -83,3 +83,10 @@ html, body, :root {
     @apply bg-background text-foreground;
   }
 }
+
+.no-scroll::-webkit-scrollbar {
+  display: none;
+}
+.ql-container {
+  font-family: '__Nunito_14f33d', '__Nunito_Fallback_14f33d' !important;
+}

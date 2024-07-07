@@ -4,7 +4,6 @@ import {
   LayoutDashboard,
   MessagesSquare,
   PieChart,
-  Settings,
   Users
 } from "lucide-react";
 import Link from "next/link";
@@ -29,8 +28,8 @@ const SideBar = ({ role }: { role: string }) => {
   const [open, setOpen] = useState(true);
   const pathName = usePathname();
   return (
-    <div className={styles.sidebar_container + ` ${open ? '' : styles.closed}`}>
-      <div className={styles.sidebar_main + ` ${open ? '' : styles.closed}`}>
+    <div className={styles.sidebar_container + ` ${open ? '' : styles.closed}` }>
+      <div className={styles.sidebar_main + ` ${open ? '' : styles.closed}` + ' no-scroll'}>
         <div className={styles.sidebar_button + ` ${open ? '' : styles.closed}`} onClick={()=> setOpen((current) => !current)}>
           <div className={styles.sidebar_button_2}>
             {
@@ -108,11 +107,6 @@ export const doctorSections: Section[] = [
         icon: <CircleDollarSign className="h-5 w-5 item-icon" />,
         name: 'Billings',
         path: '/doctor/billing',
-      },
-      {
-        icon: <Settings className="h-5 w-5 item-icon" />,
-        name: 'Settings',
-        path: '/settings',
       },
     ],
   },
