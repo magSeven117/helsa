@@ -1,6 +1,6 @@
 
 import { currentUser } from '@clerk/nextjs/server';
-import ProfileTabs from '../../../components/profile/profile-tabs/profile-tabs';
+import ProfileTabs from '../../../components/sections/profile-tabs/profile-tabs';
 
 const Page = async ({ children }) => {
   const { publicMetadata, fullName } = await currentUser();

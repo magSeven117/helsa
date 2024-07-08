@@ -1,8 +1,8 @@
 import { Button } from '@/libs/shadcn-ui/button';
 import { currentUser } from '@clerk/nextjs/server';
 import { CircleX, Edit, UploadCloud } from 'lucide-react';
-import BioForm from '../components/personal-data/bio-form';
-import PersonalInfoForm from '../components/personal-data/personal-info-form/personal-info-form';
+import BioForm from '../../../../components/forms/bio-form';
+import PersonalInfoForm from '../../../../components/forms/personal-info-form/personal-info-form';
 import styles from './styles.module.css';
 const Page = async () => {
   const user = await currentUser();

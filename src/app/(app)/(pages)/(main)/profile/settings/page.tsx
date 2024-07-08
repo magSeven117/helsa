@@ -1,6 +1,6 @@
-import ChangePasswordForm from '../components/settings/change-password-form';
-import DeleteAccount from '../components/settings/delete-account';
-import NotificationControl from '../components/settings/notification-control';
+import ChangePasswordForm from '../../../../components/forms/change-password-form';
+import DeleteAccount from '../../../../components/forms/delete-account';
+import NotificationControl from '../../../../components/forms/notification-control';
 import styles from './styles.module.css';
 const Page = () => {
   return (
