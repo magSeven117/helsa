@@ -1,5 +1,5 @@
-import banner from '../../../public/images/banner2-removebg.png';
-import styles from './_module/styles/auth.module.css';
+import banner from '../../../../../public/images/banner2-removebg.png';
+import styles from './auth.module.css';
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className={styles.auth_layout}>

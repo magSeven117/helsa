@@ -11,7 +11,7 @@ import {
 } from '@/libs/shadcn-ui/form';
 import { Switch } from '@/libs/shadcn-ui/switch';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Save } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 const formSchema = z.object({
@@ -139,7 +139,10 @@ const NotificationControl = ({}) => {
                 {isSubmitting ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
-                  'Save'
+                  <>
+                    <Save className="h-4 w-4" />
+                    Save
+                  </>
                 )}
               </Button>
             </div>

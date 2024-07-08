@@ -1,4 +1,6 @@
 'use client';
+import EditorRichText from '@/libs/ducen-ui/components/editor-rich-text';
+import ImagePicker from '@/libs/ducen-ui/components/image-picker';
 import { Button } from '@/libs/shadcn-ui/button';
 import {
   Form,
@@ -9,9 +11,11 @@ import {
   FormMessage,
 } from '@/libs/shadcn-ui/form';
 import { Input } from '@/libs/shadcn-ui/input';
+import { useUser } from '@clerk/nextjs';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Edit, Loader2, Save, X } from 'lucide-react';
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import styles from './component.module.css';
@@ -20,23 +24,39 @@ interface PersonalInfoFormProps {
     firstName: string;
     lastName: string;
     email: string;
+    imageUrl: string;
+    bio: string;
   };
 }
 const formSchema = z.object({
   firstName: z.string().min(1, { message: 'First name is required' }),
   lastName: z.string().min(1, { message: 'Last name is required' }),
   email: z.string().min(1, { message: 'Email is required' }),
+  imageUrl: z.string().optional(),
+  bio: z.string().optional(),
 });
 const PersonalInfoForm = ({ initialData }: PersonalInfoFormProps) => {
+  const ref = useRef(null);
+  const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
+  const [avatarImageFile, setAvatarImageFile] = useState<File>(null);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: initialData,
-    mode: 'all'
+    mode: 'all',
   });
   const { isValid, isSubmitting } = form.formState;
+  const { user } = useUser();
   const onSubmit = async (data: any) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      await user.setProfileImage({
+        file: avatarImageFile,
+      });
+      setIsEditing(false);
+      router.refresh();
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div className={styles.personal_info_form__container}>
@@ -59,15 +79,33 @@ const PersonalInfoForm = ({ initialData }: PersonalInfoFormProps) => {
           )}
         </Button>
       </div>
-      <div className={styles.personal_info_form__content}>
+      <div className={styles.personal_info_form__content + ` ${isEditing ? styles.editing : ''}`}>
         {isEditing ? (
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <FormField
                 control={form.control}
+                name="imageUrl"
+                render={({ field }) => (
+                  <FormItem className="">
+                    <FormControl>
+                      <ImagePicker
+                        ref={ref}
+                        value={field.value || ''}
+                        onChange={(value) => field.onChange(value)}
+                        onSelectFile={(file: File) => setAvatarImageFile(file)}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
                 name="firstName"
                 render={({ field }) => (
-                  <FormItem className="flex justify-start items-center gap-4">
+                  <FormItem className="flex justify-start items-start flex-col gap-1 mb-3">
                     <FormLabel className="text-[1rem] font-bold w-1/6">
                       First name:{' '}
                     </FormLabel>
@@ -85,7 +123,7 @@ const PersonalInfoForm = ({ initialData }: PersonalInfoFormProps) => {
                 control={form.control}
                 name="lastName"
                 render={({ field }) => (
-                  <FormItem className="flex justify-start items-center gap-4">
+                  <FormItem className="flex justify-start items-start flex-col gap-1 mb-3">
                     <FormLabel className="text-[1rem] font-bold w-1/6">
                       Last name:{' '}
                     </FormLabel>
@@ -103,7 +141,7 @@ const PersonalInfoForm = ({ initialData }: PersonalInfoFormProps) => {
                 control={form.control}
                 name="email"
                 render={({ field }) => (
-                  <FormItem className="flex justify-start items-center gap-4">
+                  <FormItem className="flex justify-start items-start flex-col gap-1 mb-3">
                     <FormLabel className="text-[1rem] font-bold w-1/6">
                       Email:{' '}
                     </FormLabel>
@@ -112,6 +150,24 @@ const PersonalInfoForm = ({ initialData }: PersonalInfoFormProps) => {
                         placeholder="e.g Advanced Web Development"
                         {...field}
                       />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="bio"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col justify-start items-start gap-4 mt-3">
+                    <FormLabel className="text-[1rem] font-bold w-1/6">
+                      Biography
+                    </FormLabel>
+                    <FormControl>
+                      <EditorRichText
+                        placeholder="What is this course about"
+                        {...field}
+                      ></EditorRichText>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -138,28 +194,20 @@ const PersonalInfoForm = ({ initialData }: PersonalInfoFormProps) => {
         ) : (
           <>
             <div className={styles.personal_info_form__content_field}>
-              <p className={styles.personal_info_form__content_field_label}>
-                First name
-              </p>
-              <p className={styles.personal_info_form__content_field_value}>
-                {initialData.firstName}
-              </p>
-            </div>
-            <div className={styles.personal_info_form__content_field}>
-              <p className={styles.personal_info_form__content_field_label}>
-                Last name
-              </p>
-              <p className={styles.personal_info_form__content_field_value}>
-                {initialData.lastName}
-              </p>
-            </div>
-            <div className={styles.personal_info_form__content_field}>
-              <p className={styles.personal_info_form__content_field_label}>
-                Email
-              </p>
-              <p className={styles.personal_info_form__content_field_value}>
-                {initialData.email}
-              </p>
+              <div className={styles.personal_info_avatar}>
+                <img
+                  src={initialData.imageUrl}
+                  alt=""
+                  className={styles.image}
+                />
+              </div>
+              <div className={styles.personal_info_data}>
+                <p className={styles.data_full_name}>
+                  {initialData.firstName + ' ' + initialData.lastName}
+                </p>
+                <p className={styles.data_email}>{initialData.email}</p>
+                <p className={styles.data_bio}>{initialData.bio}</p>
+              </div>
             </div>
           </>
         )}

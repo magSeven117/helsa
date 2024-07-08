@@ -1,4 +1,4 @@
-.personal_info_form__container {
+.address_info_form__container {
   display: flex;
   width: 100%;
   flex-direction: column;
@@ -10,21 +10,21 @@
   @media screen and (max-width: 768px){
     width: 100%;
   }
-  .personal_info_form__header {
+  .address_info_form__header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
     padding: 0px 1rem;
-    .personal_info_form__header_title {
+    .address_info_form__header_title {
       font-size: 1.25rem;
       font-weight: bold;
     }
-    .personal_info_form__header_actions {
+    .address_info_form__header_actions {
       display: flex;
       gap: 1rem;
     }
-    .personal_info_form__header_action {
+    .address_info_form__header_action {
       background-color: hsl(var(--background));
       color: hsl(var(--foreground));
       border: 2px solid hsl(var(--muted));
@@ -46,7 +46,7 @@
     }
     
   }
-  .personal_info_form__content {
+  .address_info_form__content {
     display: flex;
     flex-direction: column;
     margin-top: 1rem;
@@ -54,59 +54,40 @@
     justify-content: space-between;
     padding: 0px 1rem;
     gap: 1rem;
-    transition: 0.3s ease-in-out;
-    height: 100px;
-    &.editing {
-      height: 600px;
-    }
-    .personal_info_form__content_field {
+    .address_info_form__content_field {
       display: flex;
       align-items: center;
       gap: 1rem;
       width: 100%;
-      @media screen and (max-width: 768px){
-        flex-direction: column;
-        align-items: flex-start;
+      .address_info_form__content_field_label {
+        font-size: 1rem;
+        font-weight: normal;
+        width: 15%;
       }
-      .personal_info_avatar {
-        width: 90px;
-        height: 90px;
-        border-radius: 50%;
-        border: dashed 1px hsl(var(--border));
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
-        .image {
-          width: 100%;
-          height: 100%;
-          object-fit: contain;
-        }
+      .address_info_form__content_field_value {
+        font-size: 0.8rem;
       }
-      .personal_info_data {
-        display: flex;
-        flex-direction: column;
-        width: 50%;
-        .data_full_name {
-          font-size: 1.25rem;
-          font-weight: bold;
-        }
-        .data_email {
-          font-size: 0.8rem;
-          color: hsl(var(--muted-foreground));
-        }
-        .data_bio {
-          font-size: 0.8rem;
-          color: hsl(var(--foreground));
+      .address_info_form__content_field_input {
+        width: 100%;
+        border: 1px solid hsl(var(--border));
+        border-radius: var(--radius);
+        padding: 0.5rem;
+        background-color: hsl(var(--background));
+        color: hsl(var(--foreground));
+        font-size: 0.8rem;
+        &:focus {
+          border: none !important;
+          outline: none !important;
+          @apply ring-0
         }
       }
     }
-    .personal_info_form__submit {
+    .address_info_form__submit {
       margin-top: .5rem;
       display: flex;
       justify-content: flex-start;
       gap: 1rem;
-      .personal_info_form__submit_button {
+      .address_info_form__submit_button {
         background-color: hsl(var(--background));
         color: hsl(var(--foreground));
         border: 2px solid hsl(var(--muted));
@@ -129,7 +110,6 @@
     }
   }
 }
-
 
 @keyframes spin {
   to {
