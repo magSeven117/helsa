@@ -32,7 +32,7 @@ const ImagePicker = forwardRef<HTMLInputElement, ImagePickerProps>(
       <div className="flex gap-3 items-center mb-6">
         
         {value !== '' && (
-          <div className='w-[90px] h-[90px] rounded-full border-dashed border border-muted flex justify-center items-center overflow-hidden'>
+          <div className='w-[90px] h-[90px] rounded-full  border border-foreground flex justify-center items-center overflow-hidden'>
             <img
               src={value}
               alt="course-image"

@@ -1,4 +1,5 @@
 'use client';
+import { PasswordInput } from '@/libs/ducen-ui/components/password-input';
 import { Button } from '@/libs/shadcn-ui/button';
 import {
   Form,
@@ -8,7 +9,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/libs/shadcn-ui/form';
-import { Input } from '@/libs/shadcn-ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Edit, Loader2, X } from 'lucide-react';
 import { useState } from 'react';
@@ -61,7 +61,7 @@ const ChangePasswordForm = ({}) => {
           )}
         </Button>
       </div>
-      <div className="flex flex-col mt-6 w-full justify-between py-0 px-4 ">
+      <div className="flex flex-col mt-6 w-3/4 justify-between py-0 px-4 ">
         {!isEditing ? (
           <p className="text-accent-foreground italic">
             If you want to change your password, click the edit button.
@@ -79,8 +79,7 @@ const ChangePasswordForm = ({}) => {
                   <FormItem>
                     <FormLabel>New Password</FormLabel>
                     <FormControl>
-                      <Input
-                        type="password"
+                      <PasswordInput
                         disabled={isSubmitting}
                         {...field}
                       />
@@ -97,8 +96,7 @@ const ChangePasswordForm = ({}) => {
                   <FormItem>
                     <FormLabel>Confirm new password</FormLabel>
                     <FormControl>
-                      <Input
-                        type="password"
+                    <PasswordInput
                         disabled={isSubmitting}
                         {...field}
                       />

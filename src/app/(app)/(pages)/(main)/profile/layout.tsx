@@ -7,7 +7,7 @@ const Page = async ({ children }) => {
   return (
     <div className="flex flex-col justify-start items-start w-full p-4">
       <h1 className="text-3xl font-bold mb-5">{ publicMetadata.role === 'DOCTOR' ? `Dr. ${fullName}` : fullName}</h1>
-      <div className='w-[70%]'>
+      <div className='w-[70%] max-md:w-full'>
         <ProfileTabs role={publicMetadata.role as string || 'PATIENT'}/>
         {children}
       </div>

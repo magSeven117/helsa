@@ -3,6 +3,12 @@ import EditorRichText from '@/libs/ducen-ui/components/editor-rich-text';
 import ImagePicker from '@/libs/ducen-ui/components/image-picker';
 import { Button } from '@/libs/shadcn-ui/button';
 import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/libs/shadcn-ui/card';
+import {
   Form,
   FormControl,
   FormField,
@@ -59,30 +65,37 @@ const PersonalInfoForm = ({ initialData }: PersonalInfoFormProps) => {
     }
   };
   return (
-    <div className={styles.personal_info_form__container}>
-      <div className={styles.personal_info_form__header}>
-        <p className={styles.personal_info_form__header_title}>Personal Info</p>
-        <Button
-          className={styles.personal_info_form__header_action}
-          onClick={() => setIsEditing((prev) => !prev)}
-        >
-          {!isEditing ? (
-            <>
-              <Edit className={styles.icon} />
-              Edit
-            </>
-          ) : (
-            <>
-              <X className={styles.icon} />
-              Cancel
-            </>
-          )}
-        </Button>
-      </div>
-      <div className={styles.personal_info_form__content + ` ${isEditing ? styles.editing : ''}`}>
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex justify-between items-center">
+          Personal Info
+          <Button
+            variant="ghost"
+            className="gap-1 text-sm"
+            onClick={() => setIsEditing((prev) => !prev)}
+          >
+            {!isEditing ? (
+              <>
+                <Edit className="w-4 h-4" />
+                Edit
+              </>
+            ) : (
+              <>
+                <X className="w-4 h-4" />
+                Cancel
+              </>
+            )}
+          </Button>
+        </CardTitle>
+      </CardHeader>
+      <CardContent
+        className={`flex flex-col my-4 w-full gap-4 justify-between items-start max-h-[300px] duration-500 ease-in-out ${
+          isEditing ? 'max-h-[500px]' : ''
+        }`}
+      >
         {isEditing ? (
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="w-3/4">
               <FormField
                 control={form.control}
                 name="imageUrl"
@@ -101,48 +114,50 @@ const PersonalInfoForm = ({ initialData }: PersonalInfoFormProps) => {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="firstName"
-                render={({ field }) => (
-                  <FormItem className="flex justify-start items-start flex-col gap-1 mb-3">
-                    <FormLabel className="text-sm text-color-foreground-secondary w-1/6">
-                      First name:{' '}
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="e.g Advanced Web Development"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="lastName"
-                render={({ field }) => (
-                  <FormItem className="flex justify-start items-start flex-col gap-1 mb-3">
-                    <FormLabel className="text-sm text-color-foreground-secondary w-1/6">
-                      Last name:{' '}
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="e.g Advanced Web Development"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="flex justify-start items-center w-full gap-2">
+                <FormField
+                  control={form.control}
+                  name="firstName"
+                  render={({ field }) => (
+                    <FormItem className="flex w-full justify-start items-start flex-col gap-1 mb-3">
+                      <FormLabel className="text-sm text-color-foreground-secondary ">
+                        First name:{' '}
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="e.g Advanced Web Development"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="lastName"
+                  render={({ field }) => (
+                    <FormItem className="flex w-full justify-start items-start flex-col gap-1 mb-3">
+                      <FormLabel className="text-sm text-color-foreground-secondary">
+                        Last name:{' '}
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="e.g Advanced Web Development"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
               <FormField
                 control={form.control}
                 name="email"
                 render={({ field }) => (
                   <FormItem className="flex justify-start items-start flex-col gap-1 mb-3">
-                    <FormLabel className="text-sm text-color-foreground-secondary w-1/6">
+                    <FormLabel className="text-sm text-color-foreground-secondary">
                       Email:{' '}
                     </FormLabel>
                     <FormControl>
@@ -160,7 +175,7 @@ const PersonalInfoForm = ({ initialData }: PersonalInfoFormProps) => {
                 name="bio"
                 render={({ field }) => (
                   <FormItem className="flex flex-col justify-start items-start gap-1 mt-3">
-                    <FormLabel className="text-sm text-color-foreground-secondary w-1/6">
+                    <FormLabel className="text-sm text-color-foreground-secondary">
                       Biography
                     </FormLabel>
                     <FormControl>
@@ -211,8 +226,8 @@ const PersonalInfoForm = ({ initialData }: PersonalInfoFormProps) => {
             </div>
           </>
         )}
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 

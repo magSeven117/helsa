@@ -1,7 +1,6 @@
 import AddressInfoForm from '@/app/(app)/components/forms/address-info-form/address-info-form';
-import { Button } from '@/libs/shadcn-ui/button';
+import LinksForm from '@/app/(app)/components/forms/links-form';
 import { currentUser } from '@clerk/nextjs/server';
-import { Edit } from 'lucide-react';
 import PersonalInfoForm from '../../../../components/forms/personal-info-form/personal-info-form';
 import styles from './styles.module.css';
 const Page = async () => {
@@ -18,31 +17,8 @@ const Page = async () => {
             bio: user.publicMetadata.biography as string,
           }}
         ></PersonalInfoForm>
-        <AddressInfoForm initialData={{ city: 'unique', state: '1' }}></AddressInfoForm>
-        <div className={styles.personal_data__section}>
-          <div className={styles.personal_data__section_header}>
-            <p className={styles.personal_data__section_header_title}>Links</p>
-            <Button className={styles.personal_data__section_header_button}>
-              <Edit className={styles.icon} /> Edit
-            </Button>
-          </div>
-          <div className={styles.personal_data__section_content}>
-            <div className={styles.personal_data__section_content_field}>
-              <p className={styles.personal_data__section_content_value}>
-                Twitter: @johndoe
-              </p>
-              <p className={styles.personal_data__section_content_value}>
-                Linkedin: @johndoe
-              </p>
-              <p className={styles.personal_data__section_content_value}>
-                Personal Page: johndoe.com
-              </p>
-              <p className={styles.personal_data__section_content_value}>
-                Instagram: @johndoe
-              </p>
-            </div>
-          </div>
-        </div>
+        <AddressInfoForm initialData={{ city: '1', state: '1', street: 'La sardina' }}></AddressInfoForm>
+        <LinksForm></LinksForm>
       </div>
     </div>
   );

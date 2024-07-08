@@ -29,24 +29,20 @@
   }
 }
 
-.sidebar_button {
-  background-color: hsl(var(--foreground));
-  border-radius: 9999px;
-  padding: 0.25rem;
-  position: absolute;
-  top: 1rem;
-  right: -0.75rem;
-  cursor: pointer;
-  &.closed {
-    right: -1.25rem;
-    top: 0.75rem;
-  }
-}
-
 .sidebar_button_2 {
+  width: 20px;
+  height: 20px;
+  box-sizing: border-box;
+  border: 3px solid hsl(var(--foreground));
   background-color: hsl(var(--primary));
   border-radius: 9999px;
-  padding: 0.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 1.2rem;
+  right: -0.5rem;
+  cursor: pointer;
 }
 
 .sidebar_brand {
@@ -54,9 +50,19 @@
   justify-content: center;
   align-items: center;
   gap: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
   &.closed {
     justify-content: center;
+    flex-direction: column;
   }
+}
+
+.sidebar_brand_logo{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .sidebar_brand_image {
