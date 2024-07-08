@@ -106,7 +106,7 @@ const PersonalInfoForm = ({ initialData }: PersonalInfoFormProps) => {
                 name="firstName"
                 render={({ field }) => (
                   <FormItem className="flex justify-start items-start flex-col gap-1 mb-3">
-                    <FormLabel className="text-[1rem] font-bold w-1/6">
+                    <FormLabel className="text-sm text-color-foreground-secondary w-1/6">
                       First name:{' '}
                     </FormLabel>
                     <FormControl>
@@ -124,7 +124,7 @@ const PersonalInfoForm = ({ initialData }: PersonalInfoFormProps) => {
                 name="lastName"
                 render={({ field }) => (
                   <FormItem className="flex justify-start items-start flex-col gap-1 mb-3">
-                    <FormLabel className="text-[1rem] font-bold w-1/6">
+                    <FormLabel className="text-sm text-color-foreground-secondary w-1/6">
                       Last name:{' '}
                     </FormLabel>
                     <FormControl>
@@ -142,7 +142,7 @@ const PersonalInfoForm = ({ initialData }: PersonalInfoFormProps) => {
                 name="email"
                 render={({ field }) => (
                   <FormItem className="flex justify-start items-start flex-col gap-1 mb-3">
-                    <FormLabel className="text-[1rem] font-bold w-1/6">
+                    <FormLabel className="text-sm text-color-foreground-secondary w-1/6">
                       Email:{' '}
                     </FormLabel>
                     <FormControl>
@@ -159,8 +159,8 @@ const PersonalInfoForm = ({ initialData }: PersonalInfoFormProps) => {
                 control={form.control}
                 name="bio"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col justify-start items-start gap-4 mt-3">
-                    <FormLabel className="text-[1rem] font-bold w-1/6">
+                  <FormItem className="flex flex-col justify-start items-start gap-1 mt-3">
+                    <FormLabel className="text-sm text-color-foreground-secondary w-1/6">
                       Biography
                     </FormLabel>
                     <FormControl>
