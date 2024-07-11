@@ -55,7 +55,7 @@ const ProfileMenu = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem>
-          <Link href={'/profile/personal-data'} className={styles.topbar_button_item}>
+          <Link href={'/profile'} className={styles.topbar_button_item}>
             <Edit className={styles.topbar_button_icon} /> Profile
           </Link>
         </DropdownMenuItem>

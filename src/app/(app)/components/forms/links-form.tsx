@@ -64,7 +64,7 @@ const icons = {
   GitHub: <Icons.gitHub className="w-3 h-3" />,
   LinkedIn: <Icons.likedin className="w-3 h-3" />,
   Twitter: <Icons.twitter className="w-3 h-3" />,
-  Instagram: <Icons.facebook className="w-3 h-3" />,
+  Instagram: <Icons.instagram className="w-3 h-3" />,
   Facebook: <Icons.facebook className="w-3 h-3" />,
   Website: <Globe className="w-3 h-3" />,
 };
