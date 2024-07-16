@@ -1,17 +1,16 @@
-import { auth, currentUser } from '@clerk/nextjs/server';
+import { auth } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
 import SideBar from '../../components/sections/side-bar/side-bar';
 import TopBar from '../../components/sections/top-bar/top-bar';
 
-const Layout = async ({ children }) => {
+const Layout = ({ children }) => {
   const { userId, sessionClaims } = auth();
   if (!userId) return redirect('/sign-in');
-  const user = await currentUser();
   return (
     <div className="flex justify-start items-start w-full">
       <SideBar role={sessionClaims.metadata.role}></SideBar>
       <div className="flex flex-col items-start w-full">
-        <TopBar role={user?.publicMetadata?.role as string || ''}></TopBar>
+        <TopBar role={sessionClaims.metadata.role || ''}></TopBar>
         {children}
       </div>
     </div>
