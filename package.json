@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:push": "prisma db push"
   },
   "dependencies": {
     "@apollo/client": "^3.10.8",
@@ -57,7 +60,7 @@
     "typescript": "^5"
   },
   "prisma": {
-    "schema": "./src/schemas/prisma/schema.prisma",
+    "schema": "./src/modules/shared/infrastructure/persistence/prisma/schema.prisma",
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} .src/schemas/prisma/seed.ts"
   }
 }

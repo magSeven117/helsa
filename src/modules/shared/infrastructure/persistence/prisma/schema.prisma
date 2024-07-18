@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  DOCTOR
+  PATIENT
+  UNDEFINED
+}
+
+model User {
+  id         String   @id @default(uuid()) @map("_id") @db.String
+  externalId String   @unique
+  email      String?
+  role       Role     @default(PATIENT)
+  doctor     Doctor?
+  ratings    Rating[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Doctor {
+  id                    String                 @id @default(uuid()) @map("_id") @db.String
+  userId                String                 @unique @db.String
+  user                  User                   @relation(fields: [userId], references: [id])
+  specialtyId           String                 @db.String
+  specialty             Specialty              @relation(fields: [specialtyId], references: [id])
+  licenseMedicalNumber  String                 @unique
+  score                 Float                  @default(0)
+  educations            Education[]
+  experiences           Experience[]
+  ratings               Rating[]
+  schedule              Schedule?
+  consultingRoomAddress ConsultingRoomAddress?
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+}
+
+model Specialty {
+  id     String   @id @default(uuid()) @map("_id") @db.String
+  name   String   @unique
+  doctor Doctor[]
+}
+
+type ConsultingRoomAddress {
+  city            String
+  address         String
+  roomCoordinates RoomCoordinates
+}
+
+type RoomCoordinates {
+  latitude  Float
+  longitude Float
+}
+
+type Education {
+  title       String
+  institution String
+  degree      String
+  type        String
+  startDate   DateTime
+  endDate     DateTime
+}
+
+type Experience {
+  title       String
+  institution String
+  description String
+  startDate   DateTime
+  endDate     DateTime
+}
+
+type Schedule {
+  days                  Day[]
+  appointmentDuration   Int
+  maxAppointmentsPerDay Int
+}
+
+type Day {
+  day   String
+  hours Hour[]
+}
+
+type Hour {
+  hour String
+}
+
+model Rating {
+  id        String   @id @default(uuid()) @map("_id") @db.String
+  doctorId  String   @db.String
+  doctor    Doctor   @relation(fields: [doctorId], references: [id])
+  patientId String   @db.String
+  patient   User     @relation(fields: [patientId], references: [id])
+  score     Float
+  comment   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

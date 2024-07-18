@@ -1,4 +1,4 @@
-import { db } from '@/modules/shared/infrastructure/connections/prisma';
+import { db } from '@/modules/shared/infrastructure/persistence/prisma/prisma';
 import { headers } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 import { UpdateRoleUser } from '../../application/UpdateRoleUser';

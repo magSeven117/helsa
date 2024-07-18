@@ -10,7 +10,7 @@ import { UserRole, UserRoleValue } from './UserRole';
 
 export class User extends Aggregate {
   constructor(
-    public id: Uuid,
+    id: Uuid,
     public externalId: StringValueObject,
     public email: UserEmail,
     public role: UserRole,

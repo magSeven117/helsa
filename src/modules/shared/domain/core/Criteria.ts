@@ -1,19 +1,19 @@
 export enum Operator {
-  EQUAL = '=',
-  NOT_EQUAL = '!=',
-  GT = '>',
-  LT = '<',
-  CONTAINS = 'CONTAINS',
-  NOT_CONTAINS = 'NOT_CONTAINS',
+  EQUAL = "=",
+  NOT_EQUAL = "!=",
+  GT = ">",
+  LT = "<",
+  CONTAINS = "CONTAINS",
+  NOT_CONTAINS = "NOT_CONTAINS",
 }
 export enum Direction {
-  ASC = 'ASC',
-  DESC = 'DESC',
+  ASC = "ASC",
+  DESC = "DESC",
 }
 export enum FilterType {
-  AND = 'AND',
-  OR = 'OR',
-  NOT = 'NOT',
+  AND = "AND",
+  OR = "OR",
+  NOT = "NOT",
 }
 export type Filter = { field: string; value: any; operator: Operator };
 export type Filters = { filters: (Filter | Filters)[]; type: FilterType };

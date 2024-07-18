@@ -1,9 +1,8 @@
+import { schema } from '@/modules/shared/infrastructure/presentation/graphql/gql-schema';
 import { ApolloServer } from '@apollo/server';
 import { startServerAndCreateNextHandler } from '@as-integrations/next';
-import { readFileSync } from 'fs';
 import { DateTimeResolver } from 'graphql-scalars';
 import { NextRequest } from 'next/server';
-import path from 'path';
 const resolvers = {
   Query: {
     hello: () => 'Word!',
@@ -11,10 +10,7 @@ const resolvers = {
   },
 };
 const apolloServer = new ApolloServer({
-  typeDefs: readFileSync(
-    path.join(process.cwd(), 'src/schemas/graphql/schema.graphql'),
-    'utf8'
-  ),
+  typeDefs: schema,
   resolvers: {
     DateTime: DateTimeResolver,
     ...resolvers,

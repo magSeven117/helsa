@@ -1,10 +1,10 @@
-import { NotFoundError } from '@/modules/shared/domain/core/errors/NotFoundError';
-import { Uuid } from '@/modules/shared/domain/core/value-objects/Uuid';
-import { Primitives } from '@/modules/shared/domain/types/Primitives';
-import { PrismaClient } from '@prisma/client';
-import { User } from '../domain/User';
-import { UserEmail } from '../domain/UserEmail';
-import { UserRepository } from '../domain/UserRepository';
+import { NotFoundError } from "@/modules/shared/domain/core/errors/NotFoundError";
+import { Uuid } from "@/modules/shared/domain/core/value-objects/Uuid";
+import { Primitives } from "@/modules/shared/domain/types/Primitives";
+import { PrismaClient } from "@/modules/shared/infrastructure/persistence/prisma/generated/client";
+import { User } from "../domain/User";
+import { UserEmail } from "../domain/UserEmail";
+import { UserRepository } from "../domain/UserRepository";
 
 export class PrismaUserRepository implements UserRepository {
   constructor(private readonly prisma: PrismaClient) {}
@@ -12,7 +12,6 @@ export class PrismaUserRepository implements UserRepository {
     return this.prisma.user;
   }
   async save(user: User): Promise<void> {
-    console.log(user.id.value);
     await this.model.upsert({
       where: { id: user.id.value },
       update: user.toPrimitives(),
@@ -24,7 +23,7 @@ export class PrismaUserRepository implements UserRepository {
       where: { email: email.value },
     });
     if (!user) {
-      throw new NotFoundError('User not found');
+      throw new NotFoundError("User not found");
     }
     return User.fromPrimitives(user as Primitives<User>);
   }
@@ -33,7 +32,7 @@ export class PrismaUserRepository implements UserRepository {
       where: { id: id.value },
     });
     if (!user) {
-      throw new NotFoundError('User not found');
+      throw new NotFoundError("User not found");
     }
     return User.fromPrimitives(user as Primitives<User>);
   }
@@ -46,7 +45,7 @@ export class PrismaUserRepository implements UserRepository {
       where: { externalId },
     });
     if (!user) {
-      throw new NotFoundError('User not found');
+      throw new NotFoundError("User not found");
     }
     return User.fromPrimitives(user as Primitives<User>);
   }
