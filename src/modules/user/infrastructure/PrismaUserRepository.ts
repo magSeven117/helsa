@@ -12,9 +12,10 @@ export class PrismaUserRepository implements UserRepository {
     return this.prisma.user;
   }
   async save(user: User): Promise<void> {
+    const { id, ...saveData } = user.toPrimitives();
     await this.model.upsert({
       where: { id: user.id.value },
-      update: user.toPrimitives(),
+      update: saveData,
       create: user.toPrimitives(),
     });
   }

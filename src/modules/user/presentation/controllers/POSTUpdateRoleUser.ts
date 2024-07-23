@@ -11,7 +11,7 @@ export const POSTUpdateRoleUser = async (req: NextRequest) => {
   const bodyPayload = await req.text();
   let evt;
   try {
-    evt = await verifyWebhook(headerPayload, bodyPayload);
+    evt = await verifyWebhook(headerPayload, bodyPayload, process.env.CLERK_WEBHOOK_SECRET_2);
   } catch (error) {
     return new NextResponse("Error occurred verifying", { status: 500 });
   }

@@ -12,8 +12,9 @@ export const POSTCreateUser = async (req: NextRequest) => {
   const bodyPayload = await req.text();
   let evt;
   try {
-    evt = await verifyWebhook(headerPayload, bodyPayload);
+    evt = await verifyWebhook(headerPayload, bodyPayload, process.env.CLERK_WEBHOOK_SECRET);
   } catch (error) {
+    console.log(error);
     return new NextResponse("Error occurred", { status: 500 });
   }
   if (evt.type !== "user.created") {
@@ -23,6 +24,7 @@ export const POSTCreateUser = async (req: NextRequest) => {
   try {
     await useCase.run(Uuid.random().value, id, email_addresses?.[0].email_address);
   } catch (error) {
+    console.log(error);
     return new NextResponse("Error occurred", { status: 500 });
   }
 

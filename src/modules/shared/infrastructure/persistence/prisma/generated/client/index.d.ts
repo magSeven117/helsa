@@ -1710,6 +1710,7 @@ export namespace Prisma {
     externalId: string | null
     email: string | null
     role: $Enums.Role | null
+    onboarded: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1719,6 +1720,7 @@ export namespace Prisma {
     externalId: string | null
     email: string | null
     role: $Enums.Role | null
+    onboarded: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1728,6 +1730,7 @@ export namespace Prisma {
     externalId: number
     email: number
     role: number
+    onboarded: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -1739,6 +1742,7 @@ export namespace Prisma {
     externalId?: true
     email?: true
     role?: true
+    onboarded?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1748,6 +1752,7 @@ export namespace Prisma {
     externalId?: true
     email?: true
     role?: true
+    onboarded?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1757,6 +1762,7 @@ export namespace Prisma {
     externalId?: true
     email?: true
     role?: true
+    onboarded?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -1839,6 +1845,7 @@ export namespace Prisma {
     externalId: string
     email: string | null
     role: $Enums.Role
+    onboarded: boolean
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
@@ -1865,6 +1872,7 @@ export namespace Prisma {
     externalId?: boolean
     email?: boolean
     role?: boolean
+    onboarded?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     doctor?: boolean | User$doctorArgs<ExtArgs>
@@ -1878,6 +1886,7 @@ export namespace Prisma {
     externalId?: boolean
     email?: boolean
     role?: boolean
+    onboarded?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
@@ -1899,6 +1908,7 @@ export namespace Prisma {
       externalId: string
       email: string | null
       role: $Enums.Role
+      onboarded: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["user"]>
@@ -2299,6 +2309,7 @@ export namespace Prisma {
     readonly externalId: FieldRef<"User", 'String'>
     readonly email: FieldRef<"User", 'String'>
     readonly role: FieldRef<"User", 'Role'>
+    readonly onboarded: FieldRef<"User", 'Boolean'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
   }
@@ -2857,7 +2868,7 @@ export namespace Prisma {
     id: string
     userId: string
     specialtyId: string
-    licenseMedicalNumber: string
+    licenseMedicalNumber: string | null
     score: number
     createdAt: Date
     updatedAt: Date
@@ -2929,7 +2940,7 @@ export namespace Prisma {
       id: string
       userId: string
       specialtyId: string
-      licenseMedicalNumber: string
+      licenseMedicalNumber: string | null
       score: number
       createdAt: Date
       updatedAt: Date
@@ -5616,6 +5627,7 @@ export namespace Prisma {
     externalId: 'externalId',
     email: 'email',
     role: 'role',
+    onboarded: 'onboarded',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -5707,6 +5719,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -5759,6 +5778,7 @@ export namespace Prisma {
     externalId?: StringFilter<"User"> | string
     email?: StringNullableFilter<"User"> | string | null
     role?: EnumRoleFilter<"User"> | $Enums.Role
+    onboarded?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     doctor?: XOR<DoctorNullableRelationFilter, DoctorWhereInput> | null
@@ -5770,6 +5790,7 @@ export namespace Prisma {
     externalId?: SortOrder
     email?: SortOrder
     role?: SortOrder
+    onboarded?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     doctor?: DoctorOrderByWithRelationInput
@@ -5784,6 +5805,7 @@ export namespace Prisma {
     NOT?: UserWhereInput | UserWhereInput[]
     email?: StringNullableFilter<"User"> | string | null
     role?: EnumRoleFilter<"User"> | $Enums.Role
+    onboarded?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     doctor?: XOR<DoctorNullableRelationFilter, DoctorWhereInput> | null
@@ -5795,6 +5817,7 @@ export namespace Prisma {
     externalId?: SortOrder
     email?: SortOrder
     role?: SortOrder
+    onboarded?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
@@ -5810,6 +5833,7 @@ export namespace Prisma {
     externalId?: StringWithAggregatesFilter<"User"> | string
     email?: StringNullableWithAggregatesFilter<"User"> | string | null
     role?: EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
+    onboarded?: BoolWithAggregatesFilter<"User"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
@@ -5821,7 +5845,7 @@ export namespace Prisma {
     id?: StringFilter<"Doctor"> | string
     userId?: StringFilter<"Doctor"> | string
     specialtyId?: StringFilter<"Doctor"> | string
-    licenseMedicalNumber?: StringFilter<"Doctor"> | string
+    licenseMedicalNumber?: StringNullableFilter<"Doctor"> | string | null
     score?: FloatFilter<"Doctor"> | number
     educations?: EducationCompositeListFilter | EducationObjectEqualityInput[]
     experiences?: ExperienceCompositeListFilter | ExperienceObjectEqualityInput[]
@@ -5893,7 +5917,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Doctor"> | string
     userId?: StringWithAggregatesFilter<"Doctor"> | string
     specialtyId?: StringWithAggregatesFilter<"Doctor"> | string
-    licenseMedicalNumber?: StringWithAggregatesFilter<"Doctor"> | string
+    licenseMedicalNumber?: StringNullableWithAggregatesFilter<"Doctor"> | string | null
     score?: FloatWithAggregatesFilter<"Doctor"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Doctor"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Doctor"> | Date | string
@@ -6010,10 +6034,11 @@ export namespace Prisma {
   }
 
   export type UserCreateInput = {
-    id?: string
+    id: string
     externalId: string
     email?: string | null
     role?: $Enums.Role
+    onboarded?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     doctor?: DoctorCreateNestedOneWithoutUserInput
@@ -6021,10 +6046,11 @@ export namespace Prisma {
   }
 
   export type UserUncheckedCreateInput = {
-    id?: string
+    id: string
     externalId: string
     email?: string | null
     role?: $Enums.Role
+    onboarded?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     doctor?: DoctorUncheckedCreateNestedOneWithoutUserInput
@@ -6035,6 +6061,7 @@ export namespace Prisma {
     externalId?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    onboarded?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     doctor?: DoctorUpdateOneWithoutUserNestedInput
@@ -6045,6 +6072,7 @@ export namespace Prisma {
     externalId?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    onboarded?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     doctor?: DoctorUncheckedUpdateOneWithoutUserNestedInput
@@ -6052,10 +6080,11 @@ export namespace Prisma {
   }
 
   export type UserCreateManyInput = {
-    id?: string
+    id: string
     externalId: string
     email?: string | null
     role?: $Enums.Role
+    onboarded?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -6064,6 +6093,7 @@ export namespace Prisma {
     externalId?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    onboarded?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -6072,13 +6102,14 @@ export namespace Prisma {
     externalId?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    onboarded?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type DoctorCreateInput = {
     id?: string
-    licenseMedicalNumber: string
+    licenseMedicalNumber?: string | null
     score?: number
     educations?: XOR<EducationListCreateEnvelopeInput, EducationCreateInput> | EducationCreateInput[]
     experiences?: XOR<ExperienceListCreateEnvelopeInput, ExperienceCreateInput> | ExperienceCreateInput[]
@@ -6095,7 +6126,7 @@ export namespace Prisma {
     id?: string
     userId: string
     specialtyId: string
-    licenseMedicalNumber: string
+    licenseMedicalNumber?: string | null
     score?: number
     educations?: XOR<EducationListCreateEnvelopeInput, EducationCreateInput> | EducationCreateInput[]
     experiences?: XOR<ExperienceListCreateEnvelopeInput, ExperienceCreateInput> | ExperienceCreateInput[]
@@ -6107,7 +6138,7 @@ export namespace Prisma {
   }
 
   export type DoctorUpdateInput = {
-    licenseMedicalNumber?: StringFieldUpdateOperationsInput | string
+    licenseMedicalNumber?: NullableStringFieldUpdateOperationsInput | string | null
     score?: FloatFieldUpdateOperationsInput | number
     educations?: XOR<EducationListUpdateEnvelopeInput, EducationCreateInput> | EducationCreateInput[]
     experiences?: XOR<ExperienceListUpdateEnvelopeInput, ExperienceCreateInput> | ExperienceCreateInput[]
@@ -6123,7 +6154,7 @@ export namespace Prisma {
   export type DoctorUncheckedUpdateInput = {
     userId?: StringFieldUpdateOperationsInput | string
     specialtyId?: StringFieldUpdateOperationsInput | string
-    licenseMedicalNumber?: StringFieldUpdateOperationsInput | string
+    licenseMedicalNumber?: NullableStringFieldUpdateOperationsInput | string | null
     score?: FloatFieldUpdateOperationsInput | number
     educations?: XOR<EducationListUpdateEnvelopeInput, EducationCreateInput> | EducationCreateInput[]
     experiences?: XOR<ExperienceListUpdateEnvelopeInput, ExperienceCreateInput> | ExperienceCreateInput[]
@@ -6138,7 +6169,7 @@ export namespace Prisma {
     id?: string
     userId: string
     specialtyId: string
-    licenseMedicalNumber: string
+    licenseMedicalNumber?: string | null
     score?: number
     educations?: XOR<EducationListCreateEnvelopeInput, EducationCreateInput> | EducationCreateInput[]
     experiences?: XOR<ExperienceListCreateEnvelopeInput, ExperienceCreateInput> | ExperienceCreateInput[]
@@ -6149,7 +6180,7 @@ export namespace Prisma {
   }
 
   export type DoctorUpdateManyMutationInput = {
-    licenseMedicalNumber?: StringFieldUpdateOperationsInput | string
+    licenseMedicalNumber?: NullableStringFieldUpdateOperationsInput | string | null
     score?: FloatFieldUpdateOperationsInput | number
     educations?: XOR<EducationListUpdateEnvelopeInput, EducationCreateInput> | EducationCreateInput[]
     experiences?: XOR<ExperienceListUpdateEnvelopeInput, ExperienceCreateInput> | ExperienceCreateInput[]
@@ -6162,7 +6193,7 @@ export namespace Prisma {
   export type DoctorUncheckedUpdateManyInput = {
     userId?: StringFieldUpdateOperationsInput | string
     specialtyId?: StringFieldUpdateOperationsInput | string
-    licenseMedicalNumber?: StringFieldUpdateOperationsInput | string
+    licenseMedicalNumber?: NullableStringFieldUpdateOperationsInput | string | null
     score?: FloatFieldUpdateOperationsInput | number
     educations?: XOR<EducationListUpdateEnvelopeInput, EducationCreateInput> | EducationCreateInput[]
     experiences?: XOR<ExperienceListUpdateEnvelopeInput, ExperienceCreateInput> | ExperienceCreateInput[]
@@ -6309,6 +6340,11 @@ export namespace Prisma {
     not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -6340,6 +6376,7 @@ export namespace Prisma {
     externalId?: SortOrder
     email?: SortOrder
     role?: SortOrder
+    onboarded?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -6349,6 +6386,7 @@ export namespace Prisma {
     externalId?: SortOrder
     email?: SortOrder
     role?: SortOrder
+    onboarded?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -6358,6 +6396,7 @@ export namespace Prisma {
     externalId?: SortOrder
     email?: SortOrder
     role?: SortOrder
+    onboarded?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -6407,6 +6446,14 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRoleFilter<$PrismaModel>
     _max?: NestedEnumRoleFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -6684,6 +6731,10 @@ export namespace Prisma {
 
   export type EnumRoleFieldUpdateOperationsInput = {
     set?: $Enums.Role
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
@@ -6993,6 +7044,11 @@ export namespace Prisma {
     not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type NestedDateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -7070,6 +7126,14 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRoleFilter<$PrismaModel>
     _max?: NestedEnumRoleFilter<$PrismaModel>
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -7175,7 +7239,7 @@ export namespace Prisma {
 
   export type DoctorCreateWithoutUserInput = {
     id?: string
-    licenseMedicalNumber: string
+    licenseMedicalNumber?: string | null
     score?: number
     educations?: XOR<EducationListCreateEnvelopeInput, EducationCreateInput> | EducationCreateInput[]
     experiences?: XOR<ExperienceListCreateEnvelopeInput, ExperienceCreateInput> | ExperienceCreateInput[]
@@ -7190,7 +7254,7 @@ export namespace Prisma {
   export type DoctorUncheckedCreateWithoutUserInput = {
     id?: string
     specialtyId: string
-    licenseMedicalNumber: string
+    licenseMedicalNumber?: string | null
     score?: number
     educations?: XOR<EducationListCreateEnvelopeInput, EducationCreateInput> | EducationCreateInput[]
     experiences?: XOR<ExperienceListCreateEnvelopeInput, ExperienceCreateInput> | ExperienceCreateInput[]
@@ -7245,7 +7309,7 @@ export namespace Prisma {
   }
 
   export type DoctorUpdateWithoutUserInput = {
-    licenseMedicalNumber?: StringFieldUpdateOperationsInput | string
+    licenseMedicalNumber?: NullableStringFieldUpdateOperationsInput | string | null
     score?: FloatFieldUpdateOperationsInput | number
     educations?: XOR<EducationListUpdateEnvelopeInput, EducationCreateInput> | EducationCreateInput[]
     experiences?: XOR<ExperienceListUpdateEnvelopeInput, ExperienceCreateInput> | ExperienceCreateInput[]
@@ -7259,7 +7323,7 @@ export namespace Prisma {
 
   export type DoctorUncheckedUpdateWithoutUserInput = {
     specialtyId?: StringFieldUpdateOperationsInput | string
-    licenseMedicalNumber?: StringFieldUpdateOperationsInput | string
+    licenseMedicalNumber?: NullableStringFieldUpdateOperationsInput | string | null
     score?: FloatFieldUpdateOperationsInput | number
     educations?: XOR<EducationListUpdateEnvelopeInput, EducationCreateInput> | EducationCreateInput[]
     experiences?: XOR<ExperienceListUpdateEnvelopeInput, ExperienceCreateInput> | ExperienceCreateInput[]
@@ -7310,20 +7374,22 @@ export namespace Prisma {
   }
 
   export type UserCreateWithoutDoctorInput = {
-    id?: string
+    id: string
     externalId: string
     email?: string | null
     role?: $Enums.Role
+    onboarded?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     ratings?: RatingCreateNestedManyWithoutPatientInput
   }
 
   export type UserUncheckedCreateWithoutDoctorInput = {
-    id?: string
+    id: string
     externalId: string
     email?: string | null
     role?: $Enums.Role
+    onboarded?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     ratings?: RatingUncheckedCreateNestedManyWithoutPatientInput
@@ -7419,6 +7485,7 @@ export namespace Prisma {
     externalId?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    onboarded?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ratings?: RatingUpdateManyWithoutPatientNestedInput
@@ -7428,6 +7495,7 @@ export namespace Prisma {
     externalId?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    onboarded?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ratings?: RatingUncheckedUpdateManyWithoutPatientNestedInput
@@ -7470,7 +7538,7 @@ export namespace Prisma {
 
   export type DoctorCreateWithoutSpecialtyInput = {
     id?: string
-    licenseMedicalNumber: string
+    licenseMedicalNumber?: string | null
     score?: number
     educations?: XOR<EducationListCreateEnvelopeInput, EducationCreateInput> | EducationCreateInput[]
     experiences?: XOR<ExperienceListCreateEnvelopeInput, ExperienceCreateInput> | ExperienceCreateInput[]
@@ -7485,7 +7553,7 @@ export namespace Prisma {
   export type DoctorUncheckedCreateWithoutSpecialtyInput = {
     id?: string
     userId: string
-    licenseMedicalNumber: string
+    licenseMedicalNumber?: string | null
     score?: number
     educations?: XOR<EducationListCreateEnvelopeInput, EducationCreateInput> | EducationCreateInput[]
     experiences?: XOR<ExperienceListCreateEnvelopeInput, ExperienceCreateInput> | ExperienceCreateInput[]
@@ -7528,7 +7596,7 @@ export namespace Prisma {
     id?: StringFilter<"Doctor"> | string
     userId?: StringFilter<"Doctor"> | string
     specialtyId?: StringFilter<"Doctor"> | string
-    licenseMedicalNumber?: StringFilter<"Doctor"> | string
+    licenseMedicalNumber?: StringNullableFilter<"Doctor"> | string | null
     score?: FloatFilter<"Doctor"> | number
     createdAt?: DateTimeFilter<"Doctor"> | Date | string
     updatedAt?: DateTimeFilter<"Doctor"> | Date | string
@@ -7536,7 +7604,7 @@ export namespace Prisma {
 
   export type DoctorCreateWithoutRatingsInput = {
     id?: string
-    licenseMedicalNumber: string
+    licenseMedicalNumber?: string | null
     score?: number
     educations?: XOR<EducationListCreateEnvelopeInput, EducationCreateInput> | EducationCreateInput[]
     experiences?: XOR<ExperienceListCreateEnvelopeInput, ExperienceCreateInput> | ExperienceCreateInput[]
@@ -7552,7 +7620,7 @@ export namespace Prisma {
     id?: string
     userId: string
     specialtyId: string
-    licenseMedicalNumber: string
+    licenseMedicalNumber?: string | null
     score?: number
     educations?: XOR<EducationListCreateEnvelopeInput, EducationCreateInput> | EducationCreateInput[]
     experiences?: XOR<ExperienceListCreateEnvelopeInput, ExperienceCreateInput> | ExperienceCreateInput[]
@@ -7568,20 +7636,22 @@ export namespace Prisma {
   }
 
   export type UserCreateWithoutRatingsInput = {
-    id?: string
+    id: string
     externalId: string
     email?: string | null
     role?: $Enums.Role
+    onboarded?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     doctor?: DoctorCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutRatingsInput = {
-    id?: string
+    id: string
     externalId: string
     email?: string | null
     role?: $Enums.Role
+    onboarded?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     doctor?: DoctorUncheckedCreateNestedOneWithoutUserInput
@@ -7604,7 +7674,7 @@ export namespace Prisma {
   }
 
   export type DoctorUpdateWithoutRatingsInput = {
-    licenseMedicalNumber?: StringFieldUpdateOperationsInput | string
+    licenseMedicalNumber?: NullableStringFieldUpdateOperationsInput | string | null
     score?: FloatFieldUpdateOperationsInput | number
     educations?: XOR<EducationListUpdateEnvelopeInput, EducationCreateInput> | EducationCreateInput[]
     experiences?: XOR<ExperienceListUpdateEnvelopeInput, ExperienceCreateInput> | ExperienceCreateInput[]
@@ -7619,7 +7689,7 @@ export namespace Prisma {
   export type DoctorUncheckedUpdateWithoutRatingsInput = {
     userId?: StringFieldUpdateOperationsInput | string
     specialtyId?: StringFieldUpdateOperationsInput | string
-    licenseMedicalNumber?: StringFieldUpdateOperationsInput | string
+    licenseMedicalNumber?: NullableStringFieldUpdateOperationsInput | string | null
     score?: FloatFieldUpdateOperationsInput | number
     educations?: XOR<EducationListUpdateEnvelopeInput, EducationCreateInput> | EducationCreateInput[]
     experiences?: XOR<ExperienceListUpdateEnvelopeInput, ExperienceCreateInput> | ExperienceCreateInput[]
@@ -7644,6 +7714,7 @@ export namespace Prisma {
     externalId?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    onboarded?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     doctor?: DoctorUpdateOneWithoutUserNestedInput
@@ -7653,6 +7724,7 @@ export namespace Prisma {
     externalId?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    onboarded?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     doctor?: DoctorUncheckedUpdateOneWithoutUserNestedInput
@@ -7790,7 +7862,7 @@ export namespace Prisma {
   export type DoctorCreateManySpecialtyInput = {
     id?: string
     userId: string
-    licenseMedicalNumber: string
+    licenseMedicalNumber?: string | null
     score?: number
     educations?: XOR<EducationListCreateEnvelopeInput, EducationCreateInput> | EducationCreateInput[]
     experiences?: XOR<ExperienceListCreateEnvelopeInput, ExperienceCreateInput> | ExperienceCreateInput[]
@@ -7801,7 +7873,7 @@ export namespace Prisma {
   }
 
   export type DoctorUpdateWithoutSpecialtyInput = {
-    licenseMedicalNumber?: StringFieldUpdateOperationsInput | string
+    licenseMedicalNumber?: NullableStringFieldUpdateOperationsInput | string | null
     score?: FloatFieldUpdateOperationsInput | number
     educations?: XOR<EducationListUpdateEnvelopeInput, EducationCreateInput> | EducationCreateInput[]
     experiences?: XOR<ExperienceListUpdateEnvelopeInput, ExperienceCreateInput> | ExperienceCreateInput[]
@@ -7815,7 +7887,7 @@ export namespace Prisma {
 
   export type DoctorUncheckedUpdateWithoutSpecialtyInput = {
     userId?: StringFieldUpdateOperationsInput | string
-    licenseMedicalNumber?: StringFieldUpdateOperationsInput | string
+    licenseMedicalNumber?: NullableStringFieldUpdateOperationsInput | string | null
     score?: FloatFieldUpdateOperationsInput | number
     educations?: XOR<EducationListUpdateEnvelopeInput, EducationCreateInput> | EducationCreateInput[]
     experiences?: XOR<ExperienceListUpdateEnvelopeInput, ExperienceCreateInput> | ExperienceCreateInput[]
@@ -7828,7 +7900,7 @@ export namespace Prisma {
 
   export type DoctorUncheckedUpdateManyWithoutSpecialtyInput = {
     userId?: StringFieldUpdateOperationsInput | string
-    licenseMedicalNumber?: StringFieldUpdateOperationsInput | string
+    licenseMedicalNumber?: NullableStringFieldUpdateOperationsInput | string | null
     score?: FloatFieldUpdateOperationsInput | number
     educations?: XOR<EducationListUpdateEnvelopeInput, EducationCreateInput> | EducationCreateInput[]
     experiences?: XOR<ExperienceListUpdateEnvelopeInput, ExperienceCreateInput> | ExperienceCreateInput[]
