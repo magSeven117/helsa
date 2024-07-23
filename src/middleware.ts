@@ -1,8 +1,8 @@
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
-import { NextRequest, NextResponse } from 'next/server';
-const isOnboardingRoute = createRouteMatcher(['/select-user-type']);
-const publicRoutes = createRouteMatcher(['/sign(.*)']);
-const apiRoutes = createRouteMatcher(['/api(.*)']);
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { NextRequest, NextResponse } from "next/server";
+const isOnboardingRoute = createRouteMatcher(["/complete(.*)", "/onboarding(.*)"]);
+const publicRoutes = createRouteMatcher(["/sign(.*)"]);
+const apiRoutes = createRouteMatcher(["/api(.*)"]);
 export default clerkMiddleware((auth, req: NextRequest) => {
   if (apiRoutes(req)) {
     return NextResponse.next();
@@ -11,19 +11,17 @@ export default clerkMiddleware((auth, req: NextRequest) => {
   if (userId && isOnboardingRoute(req)) {
     return NextResponse.next();
   }
-
   if (!userId && !publicRoutes(req)) {
-    const signInUrl = new URL('/sign-in', req.url);
+    const signInUrl = new URL("/sign-in", req.url);
     return NextResponse.redirect(signInUrl);
   }
-
   if (userId && !sessionClaims?.metadata?.role) {
-    const onboardingUrl = new URL('/select-user-type', req.url);
+    const onboardingUrl = new URL("/complete/select-type", req.url);
     return NextResponse.redirect(onboardingUrl);
   }
   return NextResponse.next();
 });
 
 export const config = {
-  matcher: ['/((?!.*\\..*|_next).*)', '/', '/(api|trpc)(.*)'],
+  matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
 };

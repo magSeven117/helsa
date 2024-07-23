@@ -19,6 +19,7 @@ model User {
   externalId String   @unique
   email      String?
   role       Role     @default(PATIENT)
+  onboarded  Boolean  @default(false)
   doctor     Doctor?
   ratings    Rating[]
   createdAt  DateTime @default(now())
@@ -31,7 +32,7 @@ model Doctor {
   user                  User                   @relation(fields: [userId], references: [id])
   specialtyId           String                 @db.String
   specialty             Specialty              @relation(fields: [specialtyId], references: [id])
-  licenseMedicalNumber  String                 @unique
+  licenseMedicalNumber  String?                @unique
   score                 Float                  @default(0)
   educations            Education[]
   experiences           Experience[]

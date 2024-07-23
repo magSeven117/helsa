@@ -4,8 +4,9 @@ import { updateRole } from '@/modules/user/presentation/actions/updateUserRole';
 import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import doctorImage from '../../../../public/images/nutritionist.png';
-import patientImage from '../../../../public/images/ophthalmology.png';
+import toast from 'react-hot-toast';
+import doctorImage from '../../../../../../public/images/nutritionist.png';
+import patientImage from '../../../../../../public/images/ophthalmology.png';
 
 const SelectUserTypePage = () => {
   const [userType, setUserType] = useState('PATIENT');
@@ -15,13 +16,13 @@ const SelectUserTypePage = () => {
     try {
       const res = await updateRole(userType);
       if (res.error) {
-        console.log(res.error);
+        toast.error(res.error);
         return;
       }
       await user?.reload();
-      router.push('/');
+      router.push(`/onboarding-complete-${userType.toLowerCase()}`);
     } catch (error) {
-      
+      toast.error('An error occurred');
     }
   }
   return (
