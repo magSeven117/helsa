@@ -10,7 +10,7 @@ export default function RootLayout({
         <h1 className="text-3xl font-bold">Helsa</h1>
       </div>
       <p className="text-sm text-center my-5 text-muted-foreground">
-        Complete the form below to get started with Helsa. You can always skip
+        Complete the steps to create your account
       </p>
       <div className="w-full flex justify-center items-center">
         {children}
