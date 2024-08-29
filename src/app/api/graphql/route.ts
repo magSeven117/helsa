@@ -1,11 +1,9 @@
-import userResolvers from '@/modules/user/presentation/resolvers';
+import { schema } from '@/modules/shared/infrastructure/persistence/graphql/schema';
+import userResolvers, { schema as userSchema } from '@/modules/user/presentation/resolvers';
 import { ApolloServer } from '@apollo/server';
 import { startServerAndCreateNextHandler } from '@as-integrations/next';
-import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader';
-import { loadSchemaSync } from '@graphql-tools/load';
 import { DateTimeResolver, VoidResolver } from 'graphql-scalars';
 import { NextRequest } from 'next/server';
-import path from 'path';
 const resolvers = {
   Query: {
     ping: () => {
@@ -17,12 +15,7 @@ const resolvers = {
   },
 };
 const apolloServer = new ApolloServer({
-  typeDefs: loadSchemaSync(
-    path.resolve(process.cwd(), './src/modules/shared/infrastructure/persistence/graphql/schema/**/*.graphql'),
-    {
-      loaders: [new GraphQLFileLoader()],
-    }
-  ),
+  typeDefs: [userSchema, schema],
   resolvers: {
     DateTime: DateTimeResolver,
     Void: VoidResolver,
