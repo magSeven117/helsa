@@ -1,9 +1,9 @@
-import { Criteria } from "@/modules/shared/domain/core/Criteria";
-import { Primitives } from "@/modules/shared/domain/types/Primitives";
-import { PrismaClient } from "@/modules/shared/infrastructure/persistence/prisma/generated/client";
-import { PrismaCriteriaConverter } from "@/modules/shared/infrastructure/persistence/prisma/PrismaCriteriaConverter";
-import { Doctor } from "../../domain/Doctor";
-import { DoctorRepository } from "../../domain/DoctorRepository";
+import { Criteria } from '@/modules/shared/domain/core/Criteria';
+import { Primitives } from '@/modules/shared/domain/types/Primitives';
+import { PrismaCriteriaConverter } from '@/modules/shared/infrastructure/persistence/prisma/PrismaCriteriaConverter';
+import { PrismaClient } from '@prisma/client';
+import { Doctor } from '../../domain/Doctor';
+import { DoctorRepository } from '../../domain/DoctorRepository';
 
 export class PrismaDoctorRepository implements DoctorRepository {
   private converter: PrismaCriteriaConverter = new PrismaCriteriaConverter();
@@ -28,7 +28,7 @@ export class PrismaDoctorRepository implements DoctorRepository {
   async getByCriteria(criteria: Criteria): Promise<Doctor> {
     const { where } = this.converter.criteria(criteria);
     const doctor = await this.model.findFirst({ where });
-    if (!doctor) throw new Error("Doctor not found");
+    if (!doctor) throw new Error('Doctor not found');
     return Doctor.fromPrimitives(doctor as Primitives<Doctor>);
   }
 }

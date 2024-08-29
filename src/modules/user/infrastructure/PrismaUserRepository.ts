@@ -1,7 +1,7 @@
 import { NotFoundError } from '@/modules/shared/domain/core/errors/NotFoundError';
 import { Uuid } from '@/modules/shared/domain/core/value-objects/Uuid';
 import { Primitives } from '@/modules/shared/domain/types/Primitives';
-import { PrismaClient } from '@/modules/shared/infrastructure/persistence/prisma/generated/client';
+import { PrismaClient } from '@prisma/client';
 import { User } from '../domain/User';
 import { UserEmail } from '../domain/UserEmail';
 import { UserRepository } from '../domain/UserRepository';
