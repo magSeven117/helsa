@@ -18,7 +18,7 @@ const resolvers = {
 };
 const apolloServer = new ApolloServer({
   typeDefs: loadSchemaSync(
-    path.resolve('./src/modules/shared/infrastructure/persistence/graphql/schema/**/*.graphql'),
+    path.resolve(process.cwd(), './src/modules/shared/infrastructure/persistence/graphql/schema/**/*.graphql'),
     {
       loaders: [new GraphQLFileLoader()],
     }
