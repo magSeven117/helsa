@@ -4,6 +4,7 @@ export enum UserRoleValue {
   DOCTOR = 'DOCTOR',
   PATIENT = 'PATIENT',
   UNDEFINED = 'UNDEFINED',
+  HOSPITAL = 'HOSPITAL',
 }
 export class UserRole extends Enum<UserRoleValue> {
   constructor(value: UserRoleValue) {
@@ -12,5 +13,9 @@ export class UserRole extends Enum<UserRoleValue> {
 
   static Undefined(): UserRole {
     return new UserRole(UserRoleValue.UNDEFINED);
+  }
+
+  static Doctor(): UserRole {
+    return new UserRole(UserRoleValue.DOCTOR);
   }
 }

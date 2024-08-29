@@ -1,0 +1,21 @@
+enum Role {
+  HOSPITAL
+  PATIENT
+  DOCTOR
+  UNDEFINED
+}
+
+// User model to handle the users created on Clerk
+model User {
+  id         String   @id @map("_id") @db.String
+  externalId String   @unique
+  email      String?
+  role       Role     @default(PATIENT)
+  onboarded  Boolean  @default(false)
+  doctor     Doctor?
+  ratings    Rating[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([createdAt, id])
+}

@@ -1,31 +1,3 @@
-generator client {
-  provider = "prisma-client-js"
-  output   = "./generated/client"
-}
-
-datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL")
-}
-
-enum Role {
-  DOCTOR
-  PATIENT
-  UNDEFINED
-}
-
-model User {
-  id         String   @id @map("_id") @db.String
-  externalId String   @unique
-  email      String?
-  role       Role     @default(PATIENT)
-  onboarded  Boolean  @default(false)
-  doctor     Doctor?
-  ratings    Rating[]
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-}
-
 model Doctor {
   id                    String                 @id @default(uuid()) @map("_id") @db.String
   userId                String                 @unique @db.String
@@ -102,4 +74,58 @@ model Rating {
   comment   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Hospital {
+  id          String           @id @default(uuid()) @map("_id") @db.String
+  name        String           @unique
+  address     String
+  city        String
+  coordinates HospitalAddress?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+type HospitalAddress {
+  street      String
+  city        String
+  country     String
+  zipCode     String
+  coordinates HospitalCoordinates
+}
+
+type HospitalCoordinates {
+  latitude  Float
+  longitude Float
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  output          = "../generated/client"
+  previewFeatures = ["prismaSchemaFolder"]
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  HOSPITAL
+  PATIENT
+  DOCTOR
+  UNDEFINED
+}
+
+// User model to handle the users created on Clerk
+model User {
+  id         String   @id @map("_id") @db.String
+  externalId String   @unique
+  email      String?
+  role       Role     @default(PATIENT)
+  onboarded  Boolean  @default(false)
+  doctor     Doctor?
+  ratings    Rating[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }

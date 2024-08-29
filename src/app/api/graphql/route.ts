@@ -1,18 +1,31 @@
-import { schema } from '@/modules/shared/infrastructure/presentation/graphql/gql-schema';
+import userResolvers from '@/modules/user/presentation/resolvers';
 import { ApolloServer } from '@apollo/server';
 import { startServerAndCreateNextHandler } from '@as-integrations/next';
-import { DateTimeResolver } from 'graphql-scalars';
+import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader';
+import { loadSchemaSync } from '@graphql-tools/load';
+import { DateTimeResolver, VoidResolver } from 'graphql-scalars';
 import { NextRequest } from 'next/server';
+import path from 'path';
 const resolvers = {
   Query: {
-    hello: () => 'Word!',
-    date: () => new Date(),
+    ping: () => {
+      return 'pong';
+    },
+  },
+  Mutation: {
+    ...userResolvers.mutations,
   },
 };
 const apolloServer = new ApolloServer({
-  typeDefs: schema,
+  typeDefs: loadSchemaSync(
+    path.resolve('./src/modules/shared/infrastructure/persistence/graphql/schema/**/*.graphql'),
+    {
+      loaders: [new GraphQLFileLoader()],
+    }
+  ),
   resolvers: {
     DateTime: DateTimeResolver,
+    Void: VoidResolver,
     ...resolvers,
   },
 });

@@ -1,8 +1,5 @@
 import { Aggregate } from '@/modules/shared/domain/core/Aggregate';
-import {
-  DateValueObject,
-  StringValueObject,
-} from '@/modules/shared/domain/core/ValueObject';
+import { DateValueObject, StringValueObject } from '@/modules/shared/domain/core/ValueObject';
 import { Uuid } from '@/modules/shared/domain/core/value-objects/Uuid';
 import { Primitives } from '@/modules/shared/domain/types/Primitives';
 import { UserEmail } from './UserEmail';
@@ -20,12 +17,23 @@ export class User extends Aggregate {
     super(id, createdAt, updatedAt);
   }
 
-  public static Create(id: string, externalId: string, email: string): User {
+  public static Create(id: string, externalId: string, email: string, role: string): User {
     return new User(
       new Uuid(id),
       new StringValueObject(externalId),
       new UserEmail(email),
-      UserRole.Undefined(),
+      new UserRole(role as UserRoleValue),
+      DateValueObject.today(),
+      DateValueObject.today()
+    );
+  }
+
+  public static Doctor(id: string, externalId: string, email: string): User {
+    return new User(
+      new Uuid(id),
+      new StringValueObject(externalId),
+      new UserEmail(email),
+      UserRole.Doctor(),
       DateValueObject.today(),
       DateValueObject.today()
     );

@@ -4,11 +4,9 @@ import { Uuid } from './value-objects/Uuid';
 
 export abstract class Aggregate {
   private domainEvents: Array<DomainEvent>;
-  constructor(
-    public id: Uuid,
-    public createdAt: DateValueObject,
-    public updatedAt: DateValueObject
-  ) {
+  abstract toPrimitives(): any;
+  static fromPrimitives: (params: any) => Aggregate;
+  constructor(public id: Uuid, public createdAt: DateValueObject, public updatedAt: DateValueObject) {
     this.domainEvents = [];
   }
 

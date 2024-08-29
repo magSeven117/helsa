@@ -112,16 +112,6 @@ Prisma.NullTypes = {
  * Enums
  */
 
-exports.Prisma.UserScalarFieldEnum = {
-  id: 'id',
-  externalId: 'externalId',
-  email: 'email',
-  role: 'role',
-  onboarded: 'onboarded',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
 exports.Prisma.DoctorScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -147,6 +137,25 @@ exports.Prisma.RatingScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.HospitalScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  address: 'address',
+  city: 'city',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.UserScalarFieldEnum = {
+  id: 'id',
+  externalId: 'externalId',
+  email: 'email',
+  role: 'role',
+  onboarded: 'onboarded',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -157,16 +166,18 @@ exports.Prisma.QueryMode = {
   insensitive: 'insensitive'
 };
 exports.Role = exports.$Enums.Role = {
-  DOCTOR: 'DOCTOR',
+  HOSPITAL: 'HOSPITAL',
   PATIENT: 'PATIENT',
+  DOCTOR: 'DOCTOR',
   UNDEFINED: 'UNDEFINED'
 };
 
 exports.Prisma.ModelName = {
-  User: 'User',
   Doctor: 'Doctor',
   Specialty: 'Specialty',
-  Rating: 'Rating'
+  Rating: 'Rating',
+  Hospital: 'Hospital',
+  User: 'User'
 };
 
 /**
