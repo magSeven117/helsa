@@ -3,6 +3,7 @@
   "rules": {
     "@next/next/no-img-element": "off",
     "react-hooks/rules-of-hooks": "off",
-    "react-hooks/exhaustive-deps": "off"
+    "react-hooks/exhaustive-deps": "off",
+    "react/display-name": "off"
   }
 }

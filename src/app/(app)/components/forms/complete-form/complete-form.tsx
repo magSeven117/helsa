@@ -30,3 +30,4 @@ export default function CompleteForm() {
     </CompleteProvider>
   );
 }
+CompleteForm.displayName = 'CompleteForm';
