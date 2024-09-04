@@ -20,9 +20,10 @@ export const POSTCreateUser = async (req: NextRequest) => {
   if (evt.type !== 'user.created') {
     return new NextResponse('Error occurred', { status: 500 });
   }
-  const { id, email_addresses } = evt.data;
+  const { id, email_addresses, unsafe_metadata } = evt.data;
+  if (unsafe_metadata.provider !== 'oauth') return NextResponse.json({ message: 'User created' }, { status: 200 });
   try {
-    await useCase.run(Uuid.random().value, id, email_addresses?.[0].email_address, 'DOCTOR');
+    await useCase.run(Uuid.random().value, id, email_addresses?.[0].email_address, unsafe_metadata.role);
   } catch (error) {
     console.log(error);
     return new NextResponse('Error occurred', { status: 500 });

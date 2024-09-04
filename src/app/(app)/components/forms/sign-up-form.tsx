@@ -98,6 +98,7 @@ export default function SignUpForm() {
         unsafeMetadata: {
           name: values.name,
           role: 'DOCTOR',
+          provider: 'oauth',
         }
       });
     } catch (error) {}
