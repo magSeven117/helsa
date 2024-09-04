@@ -4,7 +4,7 @@
   box-sizing: border-box;
   height: 100%;
   width: 100%;
-  @media (min-width: 768px) {
+  @media (min-width: 1024px) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -38,6 +38,7 @@
   font-size: 1.875rem;
   line-height: 2.25rem;
   font-weight: 700;
+  
 }
 
 .auth_layout__content {
@@ -54,6 +55,10 @@
   flex-direction: column;
   box-sizing: border-box;
   width: 100%;
+  display: none;
+  @media (min-width: 1024px) {
+    display: inherit;
+  }
 }
 
 .auth_layout__banner {

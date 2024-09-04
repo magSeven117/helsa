@@ -3,7 +3,8 @@ import { currentUser } from '@clerk/nextjs/server';
 
 const Page = async () => {
   const user = await currentUser();
-  if(user.publicMetadata?.role === 'DOCTOR'){
+  console.log(user.unsafeMetadata);
+  if(user.publicMetadata?.role === 'DOCTOR' || user.unsafeMetadata.role === 'DOCTOR'){
     return <DoctorProfile user={user}/>
   }
   return (
