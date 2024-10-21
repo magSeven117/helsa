@@ -1,5 +1,5 @@
-import { schema } from '@/modules/shared/infrastructure/persistence/graphql/schema';
-import userResolvers, { schema as userSchema } from '@/modules/user/presentation/resolvers';
+import { getSchema } from '@/modules/shared/infrastructure/persistence/graphql/schema';
+import userResolvers from '@/modules/user/presentation/resolvers';
 import { ApolloServer } from '@apollo/server';
 import { startServerAndCreateNextHandler } from '@as-integrations/next';
 import { DateTimeResolver, VoidResolver } from 'graphql-scalars';
@@ -15,7 +15,7 @@ const resolvers = {
   },
 };
 const apolloServer = new ApolloServer({
-  typeDefs: [userSchema, schema],
+  typeDefs: [getSchema()],
   resolvers: {
     DateTime: DateTimeResolver,
     Void: VoidResolver,

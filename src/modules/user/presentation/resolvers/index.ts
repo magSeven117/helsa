@@ -16,9 +16,6 @@ export const schema = gql`
     PATIENT
   }
 
-  """
-  User type
-  """
   type User {
     id: ID!
     externalId: String!
