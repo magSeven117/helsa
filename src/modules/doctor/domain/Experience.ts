@@ -1,8 +1,10 @@
-import { DateValueObject, StringValueObject } from "@/modules/shared/domain/core/ValueObject";
-import { Primitives } from "@/modules/shared/domain/types/Primitives";
+import { Uuid } from '@/modules/shared/domain/core/value-objects/Uuid';
+import { DateValueObject, StringValueObject } from '@/modules/shared/domain/core/ValueObject';
+import { Primitives } from '@/modules/shared/domain/types/Primitives';
 
 export class Experience {
   constructor(
+    public id: Uuid,
     public title: StringValueObject,
     public institution: StringValueObject,
     public description: StringValueObject,
@@ -15,6 +17,7 @@ export class Experience {
 
   static fromPrimitives(data: Primitives<Experience>): Experience {
     return new Experience(
+      new Uuid(data.id),
       new StringValueObject(data.title),
       new StringValueObject(data.institution),
       new StringValueObject(data.description),
@@ -35,6 +38,7 @@ export class Experience {
     type: string
   ): Experience {
     return new Experience(
+      Uuid.random(),
       new StringValueObject(title),
       new StringValueObject(institution),
       new StringValueObject(description),
@@ -47,6 +51,7 @@ export class Experience {
   }
   toPrimitives(): Primitives<Experience> {
     return {
+      id: this.id.value,
       title: this.title.value,
       institution: this.institution.value,
       description: this.description.value,

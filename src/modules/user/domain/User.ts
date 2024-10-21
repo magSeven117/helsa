@@ -1,5 +1,5 @@
 import { Aggregate } from '@/modules/shared/domain/core/Aggregate';
-import { DateValueObject, StringValueObject } from '@/modules/shared/domain/core/ValueObject';
+import { BooleanValueObject, DateValueObject, StringValueObject } from '@/modules/shared/domain/core/ValueObject';
 import { Uuid } from '@/modules/shared/domain/core/value-objects/Uuid';
 import { Primitives } from '@/modules/shared/domain/types/Primitives';
 import { UserEmail } from './UserEmail';
@@ -11,6 +11,7 @@ export class User extends Aggregate {
     public externalId: StringValueObject,
     public email: UserEmail,
     public role: UserRole,
+    public onboarded: BooleanValueObject,
     createdAt: DateValueObject,
     updatedAt: DateValueObject
   ) {
@@ -23,6 +24,7 @@ export class User extends Aggregate {
       new StringValueObject(externalId),
       new UserEmail(email),
       new UserRole(role as UserRoleValue),
+      new BooleanValueObject(false),
       DateValueObject.today(),
       DateValueObject.today()
     );
@@ -34,6 +36,7 @@ export class User extends Aggregate {
       new StringValueObject(externalId),
       new UserEmail(email),
       UserRole.Doctor(),
+      new BooleanValueObject(false),
       DateValueObject.today(),
       DateValueObject.today()
     );
@@ -45,6 +48,7 @@ export class User extends Aggregate {
       new StringValueObject(data.externalId),
       new UserEmail(data.email),
       new UserRole(data.role),
+      new BooleanValueObject(data.onboarded),
       new DateValueObject(data.createdAt),
       new DateValueObject(data.updatedAt)
     );
@@ -56,6 +60,7 @@ export class User extends Aggregate {
       externalId: this.externalId.value,
       email: this.email.value,
       role: this.role.value,
+      onboarded: this.onboarded.value,
       createdAt: this.createdAt.value,
       updatedAt: this.updatedAt.value,
     };
