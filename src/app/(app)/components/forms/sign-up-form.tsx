@@ -101,7 +101,9 @@ export default function SignUpForm() {
           provider: 'oauth',
         }
       });
-    } catch (error) {}
+    } catch (error) {
+      alert('An error occurred. Please try again later.');
+    }
   };
 
   if (verification.state === 'pending') {

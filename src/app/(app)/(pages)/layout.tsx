@@ -2,7 +2,7 @@ import ToastProvider from "@/libs/ducen-ui/components/toast-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
-import "../../../../public/css/globals.css";
+import "../../../assets/global.css";
 
 const nunito = Nunito({ subsets: ["latin"] });
 

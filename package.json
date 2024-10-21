@@ -50,6 +50,7 @@
     "react-lottie": "^1.2.4",
     "react-quill": "^2.0.0",
     "svix": "^1.24.0",
+    "swiper": "^11.1.12",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^10.0.0",
