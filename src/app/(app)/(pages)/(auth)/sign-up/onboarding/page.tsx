@@ -1,5 +1,5 @@
 'use client'
-import { Button } from "@/libs/shadcn-ui/button";
+import { Button } from "@/libs/shadcn-ui/components/button";
 import { Swiper, SwiperSlide } from "swiper/react";
 // Import Swiper styles
 import { useState } from "react";

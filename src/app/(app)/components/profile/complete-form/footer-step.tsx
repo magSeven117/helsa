@@ -1,5 +1,5 @@
 import { useStepper } from '@/libs/ducen-ui/components/stepper';
-import { Button } from '@/libs/shadcn-ui/button';
+import { Button } from '@/libs/shadcn-ui/components/button';
 
 export const Footer = ({ form }: { form?: boolean }) => {
   const { prevStep, resetSteps, hasCompletedAllSteps, isLastStep, isDisabledStep, nextStep } = useStepper();

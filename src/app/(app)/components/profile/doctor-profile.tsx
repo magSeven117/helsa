@@ -1,20 +1,20 @@
-import { Avatar, AvatarImage } from '@/libs/shadcn-ui/avatar';
-import { Badge } from '@/libs/shadcn-ui/badge';
-import { Button } from '@/libs/shadcn-ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/libs/shadcn-ui/card';
-import { Icons } from '@/libs/shadcn-ui/icons';
+import { Avatar, AvatarImage } from '@/libs/shadcn-ui/components/avatar';
+import { Badge } from '@/libs/shadcn-ui/components/badge';
+import { Button } from '@/libs/shadcn-ui/components/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/libs/shadcn-ui/components/card';
+import { Icons } from '@/libs/shadcn-ui/components/icons';
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from '@/libs/shadcn-ui/tabs';
+} from '@/libs/shadcn-ui/components/tabs';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/libs/shadcn-ui/tooltip';
+} from '@/libs/shadcn-ui/components/tooltip';
 import { User } from '@clerk/nextjs/server';
 import {
   BadgeCheck,

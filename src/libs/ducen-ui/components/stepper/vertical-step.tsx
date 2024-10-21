@@ -1,5 +1,5 @@
-import { Collapsible, CollapsibleContent } from "@/libs/shadcn-ui/collapsible";
-import { cn } from "@/libs/utils/utils";
+import { Collapsible, CollapsibleContent } from "@/libs/shadcn-ui/components/collapsible";
+import { cn } from "@/libs/shadcn-ui/utils/utils";
 import { cva } from "class-variance-authority";
 import * as React from "react";
 import { StepButtonContainer } from "./step-button-container";

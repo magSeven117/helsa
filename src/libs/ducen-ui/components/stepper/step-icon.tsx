@@ -1,4 +1,4 @@
-import { cn } from "@/libs/utils/utils";
+import { cn } from "@/libs/shadcn-ui/utils/utils";
 import { cva } from "class-variance-authority";
 import { CheckIcon, Loader2, X } from "lucide-react";
 import * as React from "react";

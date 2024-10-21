@@ -1,9 +1,9 @@
 'use client';
-import { Button } from '@/libs/shadcn-ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/libs/shadcn-ui/card';
-import { Icons } from '@/libs/shadcn-ui/icons';
-import { Input } from '@/libs/shadcn-ui/input';
-import { Label } from '@/libs/shadcn-ui/label';
+import { Button } from '@/libs/shadcn-ui/components/button';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/libs/shadcn-ui/components/card';
+import { Icons } from '@/libs/shadcn-ui/components/icons';
+import { Input } from '@/libs/shadcn-ui/components/input';
+import { Label } from '@/libs/shadcn-ui/components/label';
 import * as Clerk from '@clerk/elements/common';
 import * as SignIn from '@clerk/elements/sign-in';
 import { Loader2 } from 'lucide-react';

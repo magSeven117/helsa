@@ -10,8 +10,8 @@ import {
   useFormContext,
 } from "react-hook-form"
 
-import { Label } from "@/libs/shadcn-ui/label"
-import { cn } from "@/libs/utils/utils"
+import { Label } from "@/libs/shadcn-ui/components/label"
+import { cn } from "@/libs/shadcn-ui/utils/utils"
 
 const Form = FormProvider
 

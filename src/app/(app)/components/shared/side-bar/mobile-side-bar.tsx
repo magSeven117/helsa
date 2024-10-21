@@ -1,11 +1,11 @@
 'use client'
-import { Button } from '@/libs/shadcn-ui/button';
+import { Button } from '@/libs/shadcn-ui/components/button';
 import {
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTrigger,
-} from '@/libs/shadcn-ui/sheet';
+} from '@/libs/shadcn-ui/components/sheet';
 import { useUser } from '@clerk/nextjs';
 import { Menu, Sheet } from 'lucide-react';
 import Link from 'next/link';

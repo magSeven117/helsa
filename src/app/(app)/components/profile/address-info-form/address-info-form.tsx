@@ -1,12 +1,12 @@
 'use client';
-import { Button } from '@/libs/shadcn-ui/button';
+import { Button } from '@/libs/shadcn-ui/components/button';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from '@/libs/shadcn-ui/card';
-import { Combobox } from '@/libs/shadcn-ui/combobox';
+} from '@/libs/shadcn-ui/components/card';
+import { Combobox } from '@/libs/shadcn-ui/components/combobox';
 import {
   Form,
   FormControl,
@@ -14,8 +14,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/libs/shadcn-ui/form';
-import { Input } from '@/libs/shadcn-ui/input';
+} from '@/libs/shadcn-ui/components/form';
+import { Input } from '@/libs/shadcn-ui/components/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Edit, Loader2, MapPin, Route, Save, X } from 'lucide-react';
 import { useState } from 'react';

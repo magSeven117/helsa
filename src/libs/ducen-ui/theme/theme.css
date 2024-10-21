@@ -11,7 +11,7 @@
   --color-complementary-warning: #F7CB45;
 }
 
-/* @media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: dark) {
   :root {
     --color-brand-primary: #8167EC;
     --color-brand-secondary: #dfcbfa;
@@ -23,4 +23,4 @@
     --color-complementary-success: #22A094;
     --color-complementary-warning: #F7CB45;
   }
-} */
+}

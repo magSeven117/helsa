@@ -10,8 +10,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/libs/shadcn-ui/alert-dialog';
-import { Button } from '@/libs/shadcn-ui/button';
+} from '@/libs/shadcn-ui/components/alert-dialog';
+import { Button } from '@/libs/shadcn-ui/components/button';
 import { Delete } from 'lucide-react';
 
 const DeleteAccount = ({}) => {

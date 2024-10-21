@@ -1,13 +1,13 @@
 'use client';
 import EditorRichText from '@/libs/ducen-ui/components/editor-rich-text';
 import ImagePicker from '@/libs/ducen-ui/components/image-picker';
-import { Button } from '@/libs/shadcn-ui/button';
+import { Button } from '@/libs/shadcn-ui/components/button';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from '@/libs/shadcn-ui/card';
+} from '@/libs/shadcn-ui/components/card';
 import {
   Form,
   FormControl,
@@ -15,8 +15,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/libs/shadcn-ui/form';
-import { Input } from '@/libs/shadcn-ui/input';
+} from '@/libs/shadcn-ui/components/form';
+import { Input } from '@/libs/shadcn-ui/components/input';
 import { useUser } from '@clerk/nextjs';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Edit, Loader2, Save, X } from 'lucide-react';

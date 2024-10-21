@@ -1,5 +1,5 @@
 'use client';
-import { Button } from '@/libs/shadcn-ui/button';
+import { Button } from '@/libs/shadcn-ui/components/button';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CircleX, Edit, UploadCloud, X } from 'lucide-react';
 import { useState } from 'react';

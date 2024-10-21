@@ -1,4 +1,4 @@
-import { cn } from "@/libs/utils/utils";
+import { cn } from "@/libs/shadcn-ui/utils/utils";
 import * as React from "react";
 import { StepButtonContainer } from "./step-button-container";
 import { StepIcon } from "./step-icon";

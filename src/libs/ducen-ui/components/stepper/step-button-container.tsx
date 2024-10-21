@@ -1,5 +1,5 @@
-import { Button } from "@/libs/shadcn-ui/button";
-import { cn } from "@/libs/utils/utils";
+import { Button } from "@/libs/shadcn-ui/components/button";
+import { cn } from "@/libs/shadcn-ui/utils/utils";
 import * as React from "react";
 import type { StepSharedProps } from "./types";
 import { useStepper } from "./use-stepper";

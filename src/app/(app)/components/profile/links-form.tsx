@@ -1,12 +1,12 @@
 'use client';
-import { Button } from '@/libs/shadcn-ui/button';
+import { Button } from '@/libs/shadcn-ui/components/button';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from '@/libs/shadcn-ui/card';
-import { Combobox } from '@/libs/shadcn-ui/combobox';
+} from '@/libs/shadcn-ui/components/card';
+import { Combobox } from '@/libs/shadcn-ui/components/combobox';
 import {
   Form,
   FormControl,
@@ -14,9 +14,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/libs/shadcn-ui/form';
-import { Icons } from '@/libs/shadcn-ui/icons';
-import { Input } from '@/libs/shadcn-ui/input';
+} from '@/libs/shadcn-ui/components/form';
+import { Icons } from '@/libs/shadcn-ui/components/icons';
+import { Input } from '@/libs/shadcn-ui/components/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   ClipboardCheck,

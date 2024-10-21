@@ -1,5 +1,6 @@
 'use client';
 import * as successAnimation from '@/assets/animations/success_animation.json';
+import { PasswordInput } from '@/libs/ducen-ui/components/password-input';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -8,15 +9,16 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/libs/shadcn-ui/alert-dialog';
-import { Button } from '@/libs/shadcn-ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/libs/shadcn-ui/card';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/libs/shadcn-ui/form';
-import { Icons } from '@/libs/shadcn-ui/icons';
-import { Input } from '@/libs/shadcn-ui/input';
-import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/libs/shadcn-ui/input-otp';
+} from '@/libs/shadcn-ui/components/alert-dialog';
+import { Button } from '@/libs/shadcn-ui/components/button';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/libs/shadcn-ui/components/card';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/libs/shadcn-ui/components/form';
+import { Icons } from '@/libs/shadcn-ui/components/icons';
+import { Input } from '@/libs/shadcn-ui/components/input';
+import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '@/libs/shadcn-ui/components/input-otp';
 import { useSignUp } from '@clerk/nextjs';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -26,10 +28,11 @@ import Lottie from 'react-lottie';
 import { z } from 'zod';
 
 const formSchema = z.object({
-  name: z.string().min(1, { message: 'Name is required' }),
-  email: z.string().email({ message: 'Invalid email' }),
+  name: z.string().min(3, { message: 'Name is required' }),
+  email: z.string().min(3, { message: 'Invalid email' }).email({ message: 'Invalid email' }),
   password: z.string().min(8, { message: 'Password must be at least 8 characters' }),
-});
+  confirmPassword: z.string().min(8, { message: 'Password must be at least 8 characters' }),
+})
 
 export default function SignUpForm() {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -38,10 +41,12 @@ export default function SignUpForm() {
       name: '',
       email: '',
       password: '',
+      confirmPassword: '',
     },
   });
 
   const { isLoaded, signUp, setActive } = useSignUp();
+  const { isSubmitting } = form.formState;
   const [verification, setVerification] = useState({
     state: '',
     code: '',
@@ -49,6 +54,9 @@ export default function SignUpForm() {
   });
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const router = useRouter();
+
+
+  const [verifying, setVerifying] = useState(false);
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     if (!isLoaded) return;
@@ -69,6 +77,7 @@ export default function SignUpForm() {
   const handleVerification = async () => {
     if (!isLoaded) return;
     try {
+      setVerifying(true);
       const completeSignUp = await signUp.attemptEmailAddressVerification({
         code: verification.code,
       });
@@ -77,10 +86,11 @@ export default function SignUpForm() {
         // TODO: Save info on the backend with the correct role
         await setActive({ session: completeSignUp.createdSessionId });
         setVerification({ ...verification, state: 'success' });
-        //router.push('/');
+        setShowSuccessModal(true);
       } else {
         console.error(JSON.stringify(completeSignUp, null, 2));
       }
+      setVerifying(false);
     } catch (error) {
       console.error(JSON.stringify(error, null, 2));
       toast.error('An error occurred. Please try again later.');
@@ -123,18 +133,21 @@ export default function SignUpForm() {
               onChange={(value) => setVerification({ ...verification, code: value })}
             >
               <InputOTPGroup className="w-full justify-center">
-                <InputOTPSlot index={0} className="border-color-brand-primary" />
-                <InputOTPSlot index={1} className="border-color-brand-primary" />
-                <InputOTPSlot index={2} className="border-color-brand-primary" />
-                <InputOTPSlot index={3} className="border-color-brand-primary" />
-                <InputOTPSlot index={4} className="border-color-brand-primary" />
-                <InputOTPSlot index={5} className="border-color-brand-primary" />
+                <InputOTPSlot index={0} className="border rounded-sm border-gray-300 mx-2" />
+                <InputOTPSlot index={1} className="border rounded-sm border-gray-300 mx-2" />
+                <InputOTPSlot index={2} className="border rounded-sm border-gray-300 mx-2" />
+                <InputOTPSeparator />
+                <InputOTPSlot index={3} className="border rounded-sm border-gray-300 mx-2" />
+                <InputOTPSlot index={4} className="border rounded-sm border-gray-300 mx-2" />
+                <InputOTPSlot index={5} className="border rounded-sm border-gray-300 mx-2" />
               </InputOTPGroup>
             </InputOTP>
           </CardContent>
           <CardFooter>
             <div className="grid w-full">
-              <Button onClick={handleVerification}>Verify</Button>
+              <Button onClick={handleVerification} disabled={verifying}>{
+                verifying ? <Loader2 className='h-4 w-4 animate-spin'/> : 'Verify'
+                }</Button>
             </div>
           </CardFooter>
         </Card>
@@ -148,10 +161,10 @@ export default function SignUpForm() {
         <form action="" className="w-full" onSubmit={form.handleSubmit(onSubmit)}>
           <Card className="border-none shadow-none w-full">
             <CardHeader>
-              <CardTitle>Welcome to Helsa</CardTitle>
-              <CardDescription>
-                Helsa is a platform that helps you keep track of your health. Get started by creating an account.
-              </CardDescription>
+              <CardTitle>Bienvenido a Helsa</CardTitle>
+                <CardDescription>
+                Helsa es una plataforma que te ayuda a mantener un seguimiento de tu salud. Comienza creando una cuenta.
+                </CardDescription>
             </CardHeader>
             <CardContent className="">
               <FormField
@@ -159,7 +172,7 @@ export default function SignUpForm() {
                 name="name"
                 render={({ field }) => (
                   <FormItem className="my-2">
-                    <FormLabel className="text-sm  font-bold text-color-foreground-secondary ">Name</FormLabel>
+                    <FormLabel className="text-sm  font-bold text-color-foreground-secondary ">Nombre</FormLabel>
                     <FormControl>
                       <Input {...field}></Input>
                     </FormControl>
@@ -185,9 +198,22 @@ export default function SignUpForm() {
                 name="password"
                 render={({ field }) => (
                   <FormItem className="my-2">
-                    <FormLabel className="text-sm  font-bold text-color-foreground-secondary ">Email</FormLabel>
+                    <FormLabel className="text-sm  font-bold text-color-foreground-secondary ">Contraseña</FormLabel>
                     <FormControl>
-                      <Input {...field} type="password"></Input>
+                      <PasswordInput {...field} autoComplete="current-password"></PasswordInput>
+                    </FormControl>
+                    <FormMessage></FormMessage>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem className="my-2">
+                    <FormLabel className="text-sm  font-bold text-color-foreground-secondary ">Confirma tu contraseña</FormLabel>
+                    <FormControl>
+                      <PasswordInput {...field} autoComplete="current-password"></PasswordInput>
                     </FormControl>
                     <FormMessage></FormMessage>
                   </FormItem>
@@ -209,7 +235,9 @@ export default function SignUpForm() {
             </CardContent>
             <CardFooter>
               <div className="grid w-full gap-y-4">
-                <Button>Sign Up</Button>
+                <Button type='submit' disabled={isSubmitting}>{
+                  isSubmitting ? <Loader2 className='h-4 w-4 animate-spin'/> : 'Crear cuenta'  
+                }</Button>
                 <Button variant="link" size="sm" asChild>
                   <Link href="/sign-in">Already have an account? Sign in</Link>
                 </Button>

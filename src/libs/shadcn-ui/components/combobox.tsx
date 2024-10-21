@@ -3,20 +3,20 @@
 import { Check, ChevronsUpDown } from "lucide-react"
 import * as React from "react"
 
-import { Button } from "@/libs/shadcn-ui/button"
+import { Button } from "@/libs/shadcn-ui/components/button"
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-} from "@/libs/shadcn-ui/command"
+} from "@/libs/shadcn-ui/components/command"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/libs/shadcn-ui/popover"
-import { cn } from "@/libs/utils/utils"
+} from "@/libs/shadcn-ui/components/popover"
+import { cn } from "@/libs/shadcn-ui/utils/utils"
 
 export interface ComboBoxProps {
   options: { label: string; value: string }[],

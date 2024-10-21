@@ -1,5 +1,5 @@
 'use client';
-import { Button } from '@/libs/shadcn-ui/button';
+import { Button } from '@/libs/shadcn-ui/components/button';
 import { UploadCloud } from 'lucide-react';
 import { forwardRef, useEffect, useRef } from 'react';
 

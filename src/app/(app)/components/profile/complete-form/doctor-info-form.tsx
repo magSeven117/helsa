@@ -1,9 +1,9 @@
 'use client';
 
 import { useStepper } from '@/libs/ducen-ui/components/stepper';
-import { Combobox } from '@/libs/shadcn-ui/combobox';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/libs/shadcn-ui/form';
-import { Input } from '@/libs/shadcn-ui/input';
+import { Combobox } from '@/libs/shadcn-ui/components/combobox';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/libs/shadcn-ui/components/form';
+import { Input } from '@/libs/shadcn-ui/components/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';

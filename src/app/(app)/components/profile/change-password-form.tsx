@@ -1,6 +1,6 @@
 'use client';
 import { PasswordInput } from '@/libs/ducen-ui/components/password-input';
-import { Button } from '@/libs/shadcn-ui/button';
+import { Button } from '@/libs/shadcn-ui/components/button';
 import {
   Form,
   FormControl,
@@ -8,7 +8,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/libs/shadcn-ui/form';
+} from '@/libs/shadcn-ui/components/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Edit, Loader2, X } from 'lucide-react';
 import { useState } from 'react';

@@ -1,5 +1,5 @@
 'use client';
-import { Button } from '@/libs/shadcn-ui/button';
+import { Button } from '@/libs/shadcn-ui/components/button';
 
 import {
   DropdownMenu,
@@ -8,9 +8,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/libs/shadcn-ui/dropdown-menu';
-import { Input } from '@/libs/shadcn-ui/input';
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTrigger } from '@/libs/shadcn-ui/sheet';
+} from '@/libs/shadcn-ui/components/dropdown-menu';
+import { Input } from '@/libs/shadcn-ui/components/input';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTrigger } from '@/libs/shadcn-ui/components/sheet';
 import { useClerk } from '@clerk/nextjs';
 import { Bell, CheckCheck, Edit, Loader2, LogOut, Menu, Search, User2, X } from 'lucide-react';
 import Link from 'next/link';
