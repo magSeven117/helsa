@@ -1,6 +1,5 @@
 model Hospital {
-  id          String           @id @default(uuid()) @map("_id") @db.String
-  name        String           @unique
+  id          String           @id @default(uuid())
   address     String
   city        String
   coordinates HospitalAddress?
@@ -8,15 +7,15 @@ model Hospital {
   updatedAt   DateTime         @updatedAt
 }
 
-type HospitalAddress {
+model HospitalAddress {
+  id         String @id @default(uuid())
   street     String
   city       String
   country    String
   zipCode    String
-  coordinates HospitalCoordinates
+  coordinates Json
+
+  hospitalId String @unique
+  hospital   Hospital @relation(fields: [hospitalId], references: [id])
 }
 
-type HospitalCoordinates {
-  latitude  Float
-  longitude Float
-}

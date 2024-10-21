@@ -1,8 +1,8 @@
 model Doctor {
-  id                    String                 @id @default(uuid()) @map("_id") @db.String
-  userId                String                 @unique @db.String
+  id                    String                 @id @default(uuid())
+  userId                String                 @unique 
   user                  User                   @relation(fields: [userId], references: [id])
-  specialtyId           String                 @db.String
+  specialtyId           String                 
   specialty             Specialty              @relation(fields: [specialtyId], references: [id])
   licenseMedicalNumber  String?                @unique
   score                 Float                  @default(0)
@@ -16,59 +16,58 @@ model Doctor {
 }
 
 model Specialty {
-  id     String   @id @default(uuid()) @map("_id") @db.String
+  id     String   @id @default(uuid())
   name   String   @unique
   doctor Doctor[]
 }
 
-type ConsultingRoomAddress {
+model ConsultingRoomAddress {
+  id              String @id @default(uuid())
+  doctorId        String @unique
+  doctor          Doctor @relation(fields: [doctorId], references: [id])
   city            String
   address         String
-  roomCoordinates RoomCoordinates
+  roomCoordinates Json
 }
 
-type RoomCoordinates {
-  latitude  Float
-  longitude Float
-}
-
-type Education {
+model Education {
+  id         String   @id @default(uuid())
   title       String
   institution String
   degree      String
   type        String
   startDate   DateTime
   endDate     DateTime
+
+  doctorId   String
+  doctor     Doctor   @relation(fields: [doctorId], references: [id])
 }
 
-type Experience {
+model Experience {
+  id         String   @id @default(uuid())
   title       String
   institution String
   description String
   startDate   DateTime
   endDate     DateTime
+  doctorId   String
+  doctor     Doctor   @relation(fields: [doctorId], references: [id])
 }
 
-type Schedule {
-  days                  Day[]
+model Schedule {
+  id                    String @id @default(uuid())
+  days                  Json[]
   appointmentDuration   Int
   maxAppointmentsPerDay Int
-}
-
-type Day {
-  day   String
-  hours Hour[]
-}
-
-type Hour {
-  hour String
+  doctorId              String @unique
+  doctor                Doctor @relation(fields: [doctorId], references: [id])
 }
 
 model Rating {
-  id        String   @id @default(uuid()) @map("_id") @db.String
-  doctorId  String   @db.String
+  id        String   @id @default(uuid())
+  doctorId  String   
   doctor    Doctor   @relation(fields: [doctorId], references: [id])
-  patientId String   @db.String
+  patientId String   
   patient   User     @relation(fields: [patientId], references: [id])
   score     Float
   comment   String?
