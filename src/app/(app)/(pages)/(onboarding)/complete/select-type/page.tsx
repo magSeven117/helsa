@@ -1,6 +1,6 @@
 'use client';
 
-import CompleteForm from "@/app/(app)/components/forms/complete-form/complete-form";
+import CompleteForm from "@/app/(app)/components/profile/complete-form/complete-form";
 
 const SelectUserTypePage = () => {
   

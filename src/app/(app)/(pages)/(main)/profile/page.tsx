@@ -1,4 +1,4 @@
-import DoctorProfile from '@/app/(app)/components/sections/doctor-profile';
+import DoctorProfile from '@/app/(app)/components/profile/doctor-profile';
 import { currentUser } from '@clerk/nextjs/server';
 
 const Page = async () => {
