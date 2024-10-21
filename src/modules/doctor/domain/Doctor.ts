@@ -1,11 +1,11 @@
-import { Aggregate } from "@/modules/shared/domain/core/Aggregate";
-import { Uuid } from "@/modules/shared/domain/core/value-objects/Uuid";
-import { DateValueObject, NumberValueObject, StringValueObject } from "@/modules/shared/domain/core/ValueObject";
-import { Primitives } from "@/modules/shared/domain/types/Primitives";
-import { ConsultingRoomAddress } from "./ConsultingRoomAddress";
-import { Education } from "./Educations";
-import { Experience } from "./Experience";
-import { Schedule } from "./Schedule";
+import { Aggregate } from '@/modules/shared/domain/core/Aggregate';
+import { Uuid } from '@/modules/shared/domain/core/value-objects/Uuid';
+import { DateValueObject, NumberValueObject, StringValueObject } from '@/modules/shared/domain/core/ValueObject';
+import { Primitives } from '@/modules/shared/domain/types/Primitives';
+import { ConsultingRoomAddress } from './ConsultingRoomAddress';
+import { Education } from './Educations';
+import { Experience } from './Experience';
+import { Schedule } from './Schedule';
 
 export class Doctor extends Aggregate {
   constructor(
@@ -14,12 +14,12 @@ export class Doctor extends Aggregate {
     public licenseMedicalNumber: StringValueObject,
     public specialtyId: Uuid,
     public score: NumberValueObject,
-    public educations: Education[],
-    public experiences: Experience[],
-    public schedule: Schedule,
-    public consultingRoomAddress: ConsultingRoomAddress,
     createdAt: DateValueObject,
-    updatedAt: DateValueObject
+    updatedAt: DateValueObject,
+    public schedule?: Schedule,
+    public consultingRoomAddress?: ConsultingRoomAddress,
+    public educations?: Education[],
+    public experiences?: Experience[]
   ) {
     super(id, createdAt, updatedAt);
   }
@@ -31,10 +31,6 @@ export class Doctor extends Aggregate {
       new StringValueObject(licenseMedicalNumber),
       new Uuid(specialtyId),
       new NumberValueObject(0),
-      Education.initialize(),
-      Experience.initialize(),
-      Schedule.initialize(),
-      ConsultingRoomAddress.initialize(),
       DateValueObject.today(),
       DateValueObject.today()
     );
@@ -47,12 +43,12 @@ export class Doctor extends Aggregate {
       new StringValueObject(data.licenseMedicalNumber),
       new Uuid(data.specialtyId),
       new NumberValueObject(data.score),
-      data.educations.map(Education.fromPrimitives),
-      data.experiences.map(Experience.fromPrimitives),
-      Schedule.fromPrimitives(data.schedule),
-      ConsultingRoomAddress.fromPrimitives(data.consultingRoomAddress),
       new DateValueObject(data.createdAt),
-      new DateValueObject(data.updatedAt)
+      new DateValueObject(data.updatedAt),
+      data.schedule ? Schedule.fromPrimitives(data.schedule) : undefined,
+      data.consultingRoomAddress ? ConsultingRoomAddress.fromPrimitives(data.consultingRoomAddress) : undefined,
+      data.educations ? data.educations.map((education) => Education.fromPrimitives(education)) : undefined,
+      data.experiences ? data.experiences.map((experience) => Experience.fromPrimitives(experience)) : undefined
     );
   }
 
@@ -63,12 +59,12 @@ export class Doctor extends Aggregate {
       licenseMedicalNumber: this.licenseMedicalNumber.value,
       specialtyId: this.specialtyId.value,
       score: this.score.value,
-      educations: this.educations.map((education) => education.toPrimitives()),
-      experiences: this.experiences.map((experience) => experience.toPrimitives()),
-      schedule: this.schedule.toPrimitives(),
-      consultingRoomAddress: this.consultingRoomAddress.toPrimitives(),
       createdAt: this.createdAt.value,
       updatedAt: this.updatedAt.value,
+      schedule: this.schedule ? this.schedule.toPrimitives() : undefined,
+      consultingRoomAddress: this.consultingRoomAddress ? this.consultingRoomAddress.toPrimitives() : undefined,
+      educations: this.educations ? this.educations.map((education) => education.toPrimitives()) : undefined,
+      experiences: this.experiences ? this.experiences.map((experience) => experience.toPrimitives()) : undefined,
     };
   }
 }

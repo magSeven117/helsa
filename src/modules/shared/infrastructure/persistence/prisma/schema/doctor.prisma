@@ -1,11 +1,11 @@
 model Doctor {
   id                    String                 @id @default(uuid())
   userId                String                 @unique 
-  user                  User                   @relation(fields: [userId], references: [id])
   specialtyId           String                 
-  specialty             Specialty              @relation(fields: [specialtyId], references: [id])
   licenseMedicalNumber  String?                @unique
   score                 Float                  @default(0)
+  user                  User                   @relation(fields: [userId], references: [id])
+  specialty             Specialty              @relation(fields: [specialtyId], references: [id])
   educations            Education[]
   experiences           Experience[]
   ratings               Rating[]
