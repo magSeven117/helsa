@@ -11,7 +11,7 @@
   --color-complementary-warning: #F7CB45;
 }
 
-@media (prefers-color-scheme: dark) {
+.dark {
   :root {
     --color-brand-primary: #8167EC;
     --color-brand-secondary: #dfcbfa;

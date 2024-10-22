@@ -3,7 +3,10 @@ import { loadSchemaSync } from '@graphql-tools/load';
 import { join } from 'path';
 
 export const getSchema = () => {
-  return loadSchemaSync(join(process.cwd(), '/src/modules/shared/infrastructure/graphql/schema/**/*.graphql'), {
-    loaders: [new GraphQLFileLoader()],
-  });
+  return loadSchemaSync(
+    join(process.cwd(), '/src/modules/shared/infrastructure/persistence/graphql/schema/**/*.graphql'),
+    {
+      loaders: [new GraphQLFileLoader()],
+    }
+  );
 };

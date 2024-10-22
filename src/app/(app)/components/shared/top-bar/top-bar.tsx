@@ -10,22 +10,17 @@ import {
   DropdownMenuTrigger,
 } from '@/libs/shadcn-ui/components/dropdown-menu';
 import { Input } from '@/libs/shadcn-ui/components/input';
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTrigger } from '@/libs/shadcn-ui/components/sheet';
 import { useClerk } from '@clerk/nextjs';
-import { Bell, CheckCheck, Edit, Loader2, LogOut, Menu, Search, User2, X } from 'lucide-react';
+import { Bell, CheckCheck, Edit, Loader2, LogOut, Search, User2, X } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { doctorSections, patientSections } from '../side-bar/side-bar';
+import { CustomTrigger } from '../side-bar/sidabar-trigger';
 import styles from './styles.module.css';
 
 const TopBar = ({ role }: { role: string }) => {
   return (
-    <div className="flex w-full justify-between items-center  p-8">
-      <div className=''>
-        <MobileSideBar role={role}/>
-        
-      </div>
+    <div className="flex w-full justify-between items-center pl-4  p-8">
+      <CustomTrigger/>
       <div className={styles.topbar_searcher_container}>
         <Searcher/>
       </div>
@@ -186,47 +181,3 @@ const Searcher = () => {
     </div>
   );
 }
-
-const MobileSideBar = ({ role }: { role: string }) => {
-  const pathName = usePathname();
-  const [sections, setSections] = useState(role === 'DOCTOR' ? doctorSections : patientSections);
-  return (
-    <div>
-      <Sheet>
-        <SheetTrigger asChild>
-          <Button className={styles.topbar_button_sidebar}>
-            <Menu className={styles.topbar_button_icon_sidebar} />
-          </Button>
-        </SheetTrigger>
-        <SheetContent side="left" className="bg-foreground border-none">
-          <SheetHeader>
-            <div className="w-full flex justify-center items-center gap-3">
-              <img src="/images/logo-simple.png" alt="" className="h-[30px]" />
-              <p className="text-primary font-bold">Helsa</p>
-            </div>
-          </SheetHeader>
-          <div className={styles.sidebar_sections}>
-          {sections.map((section, index) => (
-            <div key={section.title}>
-              <p className={styles.topbar_sidebar_section_title}>{section.title}</p>
-              <div className={styles.topbar_sidebar_section_content}>
-                {section.routes.map((route, index) => (
-                  <Link href={route.path} key={index} className={
-                    `${styles.topbar_sidebar_section_item} ${pathName.includes(route.path) ? styles.active : ''}`
-                  } >
-                    <div className={`${pathName.includes(route.path) ? styles.item_icon : ''}`}>
-                      {route.icon}
-                    </div>
-                    <p className={styles.sidebar_section_item_text}>{route.name}</p>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-          <SheetDescription></SheetDescription>
-        </SheetContent>
-      </Sheet>
-    </div>
-  );
-};

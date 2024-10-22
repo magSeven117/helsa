@@ -1,18 +1,17 @@
 'use client';
 import {
-  Calendar,
-  ChevronLeft,
-  ChevronRight,
-  CircleDollarSign,
-  LayoutDashboard,
-  MessagesSquare,
-  PieChart,
-  Users,
-} from 'lucide-react';
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from '@/libs/shadcn-ui/components/sidebar';
+import { Activity, Calendar, LayoutDashboard } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useState } from 'react';
-import styles from './style.module.css';
 
 export interface Section {
   title: string;
@@ -26,139 +25,67 @@ export interface SectionRoute {
 }
 
 const SideBar = ({ role }: { role: string }) => {
-  const [sections, _] = useState(
-    role === 'DOCTOR' ? doctorSections : patientSections
-  );
-  const [open, setOpen] = useState(true);
-  const pathName = usePathname();
   return (
-    <div className={styles.sidebar_container + ` ${open ? '' : styles.closed}`}>
-      <div
-        className={
-          styles.sidebar_main + ` ${open ? '' : styles.closed}` + ' no-scroll'
-        }
-      >
-        <Link
-          href={'/'}
-          className={styles.sidebar_brand + ` ${open ? '' : styles.closed}`}
-        >
-          <div className={styles.sidebar_brand_logo}>
-          <img
-            src="/images/logo-simple.png"
-            alt=""
-            className={
-              styles.sidebar_brand_image + ` ${open ? '' : styles.closed}`
-            }
-          />
-          {open && <p className={styles.sidebar_brand_text}>Helsa</p>}
+    <Sidebar>
+      <SidebarHeader className='pt-6 px-3 bg-foreground text-background'>
+        <Link href={'/'} className="flex items-center justify-center gap-[10px] mx-2">
+          <div className="flex justify-center items-center gap-3">
+           <Activity className='text-background overflow-hidden' />
+            <p className="text-background text-lg font-bold">Helsa</p>
           </div>
-          
         </Link>
-        <div
-            className={styles.sidebar_button_2}
-            onClick={() => setOpen((current) => !current)}
-          >
-            {open ? (
-              <ChevronLeft className="h-3 w-3" />
-            ) : (
-              <ChevronRight className="h-3 w-3" />
-            )}
-          </div>
-        <div className={styles.topbar_sidebar_sections}>
-          {sections.map((section, index) => (
-            <div key={section.title}>
-              <p
-                className={
-                  styles.sidebar_section_title + ` ${open ? '' : styles.closed}`
-                }
-              >
-                {section.title}
-              </p>
-              <div className={styles.sidebar_section_content}>
-                {section.routes.map((route, index) => (
-                  <Link
-                    href={route.path}
-                    key={index}
-                    className={`${styles.sidebar_section_item} ${
-                      pathName.includes(route.path) ? styles.active : ''
-                    }`}
-                  >
-                    <div
-                      className={`${
-                        pathName.includes(route.path) ? styles.item_icon : ''
-                      }`}
-                    >
-                      {route.icon}
-                    </div>
-                    {open && (
-                      <p className={styles.sidebar_section_item_text}>
-                        {route.name}
-                      </p>
-                    )}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
+      </SidebarHeader>
+      <SidebarContent className='px-3 bg-foreground text-background'>
+        <SidebarGroup>
+          <SidebarGroupLabel className='text-muted-foreground'>GENERAL</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {doctorSections.map((item) => (
+                <SidebarMenuItem key={item.title} className=''>
+                  <SidebarMenuButton asChild>
+                    <a href={item.url}>
+                      <item.icon />
+                      <span>{item.title}</span>
+                    </a>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel className='text-muted-foreground'>HERRAMIENTAS</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {doctorSections.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <a href={item.url}>
+                      <item.icon />
+                      <span>{item.title}</span>
+                    </a>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+    </Sidebar>
   );
 };
 
 export default SideBar;
 
-export const doctorSections: Section[] = [
+export const doctorSections = [
   {
-    title: 'General',
-    routes: [
-      {
-        icon: <LayoutDashboard className="w-5 h-5 item-icon" />,
-        name: 'Dashboard',
-        path: '/doctor/dashboard',
-      },
-      {
-        icon: <Calendar className="w-5 h-5 item-icon" />,
-        name: 'Schedule',
-        path: '/doctor/schedule',
-      },
-      {
-        icon: <Users className="w-5 h-5 item-icon" />,
-        name: 'Patients',
-        path: '/doctor/patients',
-      },
-      {
-        icon: <PieChart className="w-5 h-5 item-icon" />,
-        name: 'Statistics & Reports',
-        path: '/doctor/patients',
-      },
-    ],
+    icon: LayoutDashboard,
+    title: 'Dashboard',
+    url: '/dashboard',
   },
   {
-    title: 'Tools',
-    routes: [
-      {
-        icon: <MessagesSquare className="h-5 w-5 item-icon" />,
-        name: 'Chats & calls',
-        path: '/doctor/chats',
-      },
-      {
-        icon: <CircleDollarSign className="h-5 w-5 item-icon" />,
-        name: 'Billings',
-        path: '/doctor/billing',
-      },
-    ],
-  },
-];
-export const patientSections: Section[] = [
-  {
-    title: 'General',
-    routes: [
-      {
-        icon: <LayoutDashboard className="w-5 h-5 item-icon" />,
-        name: 'Dashboard',
-        path: '/patient/dashboard',
-      },
-    ],
+    icon: Calendar,
+    title: 'Schedule',
+    url: '/schedule',
   },
 ];

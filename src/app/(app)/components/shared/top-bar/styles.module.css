@@ -97,6 +97,7 @@
 }
 .topbar_searcher_container {
   width: 100%;
+  margin-left: 20px;
   @media not all and (min-width: 768px){
     display: inherit;
   }

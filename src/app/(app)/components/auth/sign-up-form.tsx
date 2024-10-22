@@ -11,20 +11,29 @@ import {
   AlertDialogTitle,
 } from '@/libs/shadcn-ui/components/alert-dialog';
 import { Button } from '@/libs/shadcn-ui/components/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/libs/shadcn-ui/components/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/libs/shadcn-ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/libs/shadcn-ui/components/form';
 import { Icons } from '@/libs/shadcn-ui/components/icons';
 import { Input } from '@/libs/shadcn-ui/components/input';
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '@/libs/shadcn-ui/components/input-otp';
+import { useRegister } from '@/modules/user/presentation/hooks/use-register';
 import { useSignUp } from '@clerk/nextjs';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2 } from 'lucide-react';
+import { Hospital, Loader2, Stethoscope, User } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import Lottie from 'react-lottie';
+import { v4 } from 'uuid';
 import { z } from 'zod';
 
 const formSchema = z.object({
@@ -32,7 +41,12 @@ const formSchema = z.object({
   email: z.string().min(3, { message: 'Invalid email' }).email({ message: 'Invalid email' }),
   password: z.string().min(8, { message: 'Password must be at least 8 characters' }),
   confirmPassword: z.string().min(8, { message: 'Password must be at least 8 characters' }),
-})
+}).superRefine((data) => {
+  if (data.password !== data.confirmPassword) {
+    return { confirmPassword: 'Passwords do not match' };
+  }
+  return {};
+});
 
 export default function SignUpForm() {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -45,18 +59,21 @@ export default function SignUpForm() {
     },
   });
 
-  const { isLoaded, signUp, setActive } = useSignUp();
   const { isSubmitting } = form.formState;
+
+  const router = useRouter();
+
+  const { isLoaded, signUp, setActive } = useSignUp();
+  const { register } = useRegister();
+
+  const [role, setRole] = useState(null);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [verifying, setVerifying] = useState(false);
   const [verification, setVerification] = useState({
     state: '',
     code: '',
     error: '',
   });
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const router = useRouter();
-
-
-  const [verifying, setVerifying] = useState(false);
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     if (!isLoaded) return;
@@ -83,7 +100,12 @@ export default function SignUpForm() {
       });
 
       if (completeSignUp.status === 'complete') {
-        // TODO: Save info on the backend with the correct role
+        await register({
+          email: form.getValues().email,
+          externalId: completeSignUp.createdUserId,
+          id: v4(),
+          role: role,
+        });
         await setActive({ session: completeSignUp.createdSessionId });
         setVerification({ ...verification, state: 'success' });
         setShowSuccessModal(true);
@@ -99,22 +121,58 @@ export default function SignUpForm() {
 
   const onOauthPress = async (strategy: 'oauth_google' | 'oauth_facebook') => {
     if (!isLoaded) return;
-    const values = form.getValues()
     try {
       await signUp.authenticateWithRedirect({
         strategy,
         redirectUrl: '/sign-up/sso-callback',
-        redirectUrlComplete: '/doctor/dashboard',
+        redirectUrlComplete: '/dashboard',
         unsafeMetadata: {
-          name: values.name,
-          role: 'DOCTOR',
+          role,
           provider: 'oauth',
-        }
+        },
       });
     } catch (error) {
       alert('An error occurred. Please try again later.');
     }
   };
+
+  if (!role) {
+    return (
+      <div className="grid w-full h-full grow items-center px-20">
+        <Card className="border-none shadow-none w-full">
+          <CardHeader>
+            <CardTitle>Elige tu rol</CardTitle>
+            <CardDescription>Por favor elige tu rol para continuar</CardDescription>
+          </CardHeader>
+          <CardContent className="my-5">
+            <div className="flex justify-around gap-2 w-full h-32">
+              <div
+                className="flex flex-col items-center justify-center p-4 w-1/3 border rounded-lg cursor-pointer hover:bg-primary hover:text-background transition-all duration-500"
+                onClick={() => setRole('PATIENT')}
+              >
+                <User className="mb-2 h-8 w-8" />
+                <span>Paciente</span>
+              </div>
+              <div
+                className="flex flex-col items-center justify-center p-4 w-1/3 border rounded-lg cursor-pointer hover:bg-primary hover:text-background transition-all duration-500"
+                onClick={() => setRole('DOCTOR')}
+              >
+                <Stethoscope className="mb-2 h-8 w-8" />
+                <span>Doctor</span>
+              </div>
+              <div
+                className="flex flex-col items-center justify-center p-4 w-1/3 border rounded-lg cursor-pointer hover:bg-primary hover:text-background transition-all duration-500"
+                onClick={() => setRole('HOSPITAL')}
+              >
+                <Hospital className="mb-2 h-8 w-8" />
+                <span>Hospital</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   if (verification.state === 'pending') {
     return (
@@ -145,9 +203,9 @@ export default function SignUpForm() {
           </CardContent>
           <CardFooter>
             <div className="grid w-full">
-              <Button onClick={handleVerification} disabled={verifying}>{
-                verifying ? <Loader2 className='h-4 w-4 animate-spin'/> : 'Verify'
-                }</Button>
+              <Button onClick={handleVerification} disabled={verifying}>
+                {verifying ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Verify'}
+              </Button>
             </div>
           </CardFooter>
         </Card>
@@ -162,9 +220,9 @@ export default function SignUpForm() {
           <Card className="border-none shadow-none w-full">
             <CardHeader>
               <CardTitle>Bienvenido a Helsa</CardTitle>
-                <CardDescription>
+              <CardDescription>
                 Helsa es una plataforma que te ayuda a mantener un seguimiento de tu salud. Comienza creando una cuenta.
-                </CardDescription>
+              </CardDescription>
             </CardHeader>
             <CardContent className="">
               <FormField
@@ -211,7 +269,9 @@ export default function SignUpForm() {
                 name="confirmPassword"
                 render={({ field }) => (
                   <FormItem className="my-2">
-                    <FormLabel className="text-sm  font-bold text-color-foreground-secondary ">Confirma tu contraseña</FormLabel>
+                    <FormLabel className="text-sm  font-bold text-color-foreground-secondary ">
+                      Confirma tu contraseña
+                    </FormLabel>
                     <FormControl>
                       <PasswordInput {...field} autoComplete="current-password"></PasswordInput>
                     </FormControl>
@@ -235,11 +295,11 @@ export default function SignUpForm() {
             </CardContent>
             <CardFooter>
               <div className="grid w-full gap-y-4">
-                <Button type='submit' disabled={isSubmitting}>{
-                  isSubmitting ? <Loader2 className='h-4 w-4 animate-spin'/> : 'Crear cuenta'  
-                }</Button>
+                <Button type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Crear cuenta'}
+                </Button>
                 <Button variant="link" size="sm" asChild>
-                  <Link href="/sign-in">Already have an account? Sign in</Link>
+                  <Link href="/sign-in">¿Ya tienes una cuenta? Inicia sesión</Link>
                 </Button>
               </div>
             </CardFooter>
@@ -260,21 +320,22 @@ export default function SignUpForm() {
             style={{ width: 300, height: 300 }}
           ></Lottie>
           <AlertDialogHeader className="my-0">
-            <AlertDialogTitle className="text-center text-2xl">Verified!</AlertDialogTitle>
+            <AlertDialogTitle className="text-center text-2xl">Verificado!</AlertDialogTitle>
             <AlertDialogDescription className="text-center text-lg">
-              You have successfully verified your email
+              Has verificado tu correo electrónico exitosamente
             </AlertDialogDescription>
           </AlertDialogHeader>
 
-          <AlertDialogFooter>
+          <AlertDialogFooter className='flex w-full sm:justify-center items-center'>
             <AlertDialogAction asChild>
               <Button
                 onClick={() => {
                   setShowSuccessModal(false);
-                  router.push('/doctor/dashboard');
+                  router.push('/dashboard');
                 }}
+                size='lg'
               >
-                Browse home
+                Ir al inicio
               </Button>
             </AlertDialogAction>
           </AlertDialogFooter>
