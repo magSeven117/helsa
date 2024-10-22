@@ -123,13 +123,18 @@ export default function SignInForm() {
               </div>
             </CardContent>
             <CardFooter>
-              <div className="grid w-full gap-y-4">
+              <div className="grid w-full">
                 <Button type="submit" disabled={isSubmitting}>
                   {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Iniciar sesión'}
                 </Button>
                 <Button variant="link" size="sm">
-                  <Link href="/sign-in">
+                  <Link href="/sign-up">
                     ¿No tienes una cuenta? Crea una
+                  </Link>
+                </Button>
+                <Button variant="link" size="sm">
+                  <Link href="/recovery-password">
+                    ¿Olvidaste tu contraseña? Recupérala aquí
                   </Link>
                 </Button>
               </div>

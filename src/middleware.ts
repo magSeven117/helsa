@@ -1,6 +1,6 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 import { NextRequest, NextResponse } from 'next/server';
-const publicRoutes = createRouteMatcher(['/sign(.*)']);
+const publicRoutes = createRouteMatcher(['/sign(.*)', '/recovery-password(.*)']);
 const apiRoutes = createRouteMatcher(['/api(.*)']);
 export default clerkMiddleware((auth, req: NextRequest) => {
   if (apiRoutes(req)) {
