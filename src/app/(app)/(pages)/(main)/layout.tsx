@@ -1,19 +1,17 @@
 import { SidebarProvider } from '@/libs/shadcn-ui/components/sidebar';
-import { auth } from '@clerk/nextjs/server';
-import { redirect } from 'next/navigation';
+import { getCurrentUser } from '@/modules/user/presentation/actions/get-current-user';
 import SideBar from '../../components/shared/side-bar/side-bar';
 import TopBar from '../../components/shared/top-bar/top-bar';
 
-const Layout = ({ children }) => {
-  const { userId, sessionClaims } = auth();
-  if (!userId) return redirect('/sign-in');
+const Layout = async ({ children }) => {
+  const user = await getCurrentUser();
   return (
     <div className="flex justify-start items-start w-full">
       <SidebarProvider>
-        <SideBar role={sessionClaims.metadata.role}></SideBar>
+        <SideBar role={user.role}></SideBar>
         <div className="flex flex-col items-start w-full">
           
-          <TopBar role={sessionClaims.metadata.role || ''}></TopBar>
+          <TopBar role={user.role}></TopBar>
           {children}
         </div>
       </SidebarProvider>
