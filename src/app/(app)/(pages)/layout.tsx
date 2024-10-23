@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <ApolloContextProvider>
-        <html lang="en">
+        <html lang="en" suppressHydrationWarning={true}>
           <link rel="icon" href="/images/logo-simple.png" sizes="any" />
           <body className={nunito.className} suppressHydrationWarning={true}>
             {children}
