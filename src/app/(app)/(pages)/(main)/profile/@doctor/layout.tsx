@@ -20,7 +20,7 @@ const sidebarNavItems = [
     href: "/profile/appearance",
   },
   {
-    title: "Notifications",
+    title: "Notificaciones",
     href: "/profile/notifications",
   },
   {
