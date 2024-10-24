@@ -3,6 +3,7 @@ import ToastProvider from '@/libs/ducen-ui/components/toast-provider';
 import { ApolloContextProvider } from '@/modules/shared/infrastructure/persistence/graphql/apollo-provider';
 import { ClerkProvider } from '@clerk/nextjs';
 import type { Metadata } from 'next';
+import { ThemeProvider } from 'next-themes';
 import { Nunito } from 'next/font/google';
 import { Toaster } from 'sonner';
 
@@ -24,9 +25,11 @@ export default function RootLayout({
         <html lang="en" suppressHydrationWarning={true}>
           <link rel="icon" href="/images/logo-simple.png" sizes="any" />
           <body className={nunito.className} suppressHydrationWarning={true}>
-            {children}
-            <ToastProvider></ToastProvider>
-            <Toaster />
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+              {children}
+              <ToastProvider></ToastProvider>
+              <Toaster />
+            </ThemeProvider>
           </body>
         </html>
       </ApolloContextProvider>

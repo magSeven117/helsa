@@ -13,10 +13,10 @@ const sidebarNavItems = [
   },
   {
     title: "Datos de contacto y profesionales",
-    href: "/profile/account",
+    href: "/profile/professional",
   },
   {
-    title: "Appearance",
+    title: "Apariencia",
     href: "/profile/appearance",
   },
   {
@@ -24,8 +24,8 @@ const sidebarNavItems = [
     href: "/profile/notifications",
   },
   {
-    title: "Display",
-    href: "/profile/display",
+    title: "Seguridad",
+    href: "/profile/security",
   },
 ]
 
