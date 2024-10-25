@@ -1,3 +1,4 @@
+import ChangePasswordForm from "@/app/(app)/components/profile/new/password/change-password-form";
 import { Separator } from "@/libs/shadcn-ui/components/separator";
 
 const Page = () => {
@@ -10,6 +11,7 @@ const Page = () => {
         </p>
       </div>
       <Separator />
+      <ChangePasswordForm />
     </div>
   );
 }
