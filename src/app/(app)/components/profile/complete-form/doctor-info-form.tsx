@@ -68,7 +68,7 @@ const DoctorInfoForm = () => {
               <FormItem className="flex justify-start items-start flex-col gap-1 mb-3">
                 <FormLabel className="text-sm text-color-foreground-secondary ">Especialidad</FormLabel>
                 <FormControl>
-                  <Combobox options={options} {...field} />
+                  <Combobox listOptions={options} {...field} />
                 </FormControl>
                 <FormMessage></FormMessage>
               </FormItem>

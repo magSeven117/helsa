@@ -2,8 +2,8 @@ import { SidebarNav } from '@/app/(app)/components/profile/new/side-bar-nav';
 import { Separator } from '@/libs/shadcn-ui/components/separator';
 import { Metadata } from 'next';
 export const metadata: Metadata = {
-  title: "Forms",
-  description: "Advanced form example using react-hook-form and Zod.",
+  title: "Helsa | Perfil",
+  description: "Actualiza tus datos personales, preferencias de notificación y más.",
 }
 
 const sidebarNavItems = [

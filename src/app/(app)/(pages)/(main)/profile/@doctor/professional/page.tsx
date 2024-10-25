@@ -1,3 +1,4 @@
+import ProfessionalInfo from "@/app/(app)/components/profile/new/professional-info/professional-info";
 import { Separator } from "@/libs/shadcn-ui/components/separator";
 
 const Page = () => {
@@ -10,6 +11,18 @@ const Page = () => {
         </p>
       </div>
       <Separator />
+      <ProfessionalInfo doctor={{
+        licenseMedicalNumber: "123456789",
+        consultingRoomAddress: {
+          city: "Bogotá",
+          address: "Cra 123 # 123 - 123",
+          id: "1",
+          roomCoordinates: {
+            latitude: 4.123456,
+            longitude: -74.123456
+          }
+        }
+      }} />
     </div>
   );
 }

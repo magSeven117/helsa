@@ -23,7 +23,7 @@ export default function RootLayout({
     <ClerkProvider>
       <ApolloContextProvider>
         <html lang="en" suppressHydrationWarning={true}>
-          <link rel="icon" href="/images/logo-simple.png" sizes="any" />
+          <link rel="icon" href="/images/activity.svg" sizes="any" />
           <body className={nunito.className} suppressHydrationWarning={true}>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
               {children}

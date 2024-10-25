@@ -87,7 +87,7 @@ const AddressInfoForm = ({ initialData }: AddressInfoFormProps) => {
                       State:
                     </FormLabel>
                     <FormControl>
-                      <Combobox options={options} {...field} />
+                      <Combobox listOptions={options} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -104,7 +104,7 @@ const AddressInfoForm = ({ initialData }: AddressInfoFormProps) => {
                     <FormControl>
                       <Combobox
                       
-                        options={options}
+                        listOptions={options}
                         {...field}
                       />
                     </FormControl>

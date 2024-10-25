@@ -25,7 +25,6 @@ import { cn } from '@/libs/shadcn-ui/utils/utils';
 import { useClerk, useUser } from '@clerk/nextjs';
 import {
   Activity,
-  BadgeCheck,
   Bell,
   Calendar,
   ChevronsUpDown,
@@ -36,7 +35,8 @@ import {
   MessagesSquare,
   PieChart,
   Sparkles,
-  Users,
+  User,
+  Users
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -93,7 +93,7 @@ const SideBar = ({  role }: { role: string }) => {
                   <SidebarMenuItem key={route.title}>
                     <SidebarMenuButton
                       asChild
-                      className={cn('hover:bg-color-brand-primary hover:text-color-background-primary', {
+                      className={cn('hover:bg-primary hover:text-primary-foreground', {
                         'text-color-brand-primary': path == route.url,
                       })}
                     >
@@ -157,8 +157,8 @@ const SideBar = ({  role }: { role: string }) => {
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                   <DropdownMenuItem className='gap-2 cursor-pointer' onClick={() => router.push('/profile')}>
-                    <BadgeCheck />
-                    Account
+                    <User />
+                    Profile
                   </DropdownMenuItem>
                   <DropdownMenuItem className='gap-2'>
                     <CreditCard />
