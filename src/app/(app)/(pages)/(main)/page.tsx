@@ -1,9 +1,9 @@
-import { getCurrentUser } from "@/modules/user/presentation/actions/get-current-user";
+import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
 const Page = async () => {
-  const user = await getCurrentUser();
-  if (!user) {
+  const { userId } = auth();
+  if (!userId) {
     return redirect("/auth/sign-in");
   }
   return redirect(`/dashboard`);

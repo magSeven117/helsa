@@ -21,7 +21,8 @@ const Page = () => {
             latitude: 4.123456,
             longitude: -74.123456
           }
-        }
+        },
+        experience: 5
       }} />
     </div>
   );

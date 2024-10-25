@@ -22,6 +22,7 @@ export class PrismaDoctorRepository implements DoctorRepository {
         licenseMedicalNumber: data.licenseMedicalNumber,
         specialtyId: data.specialtyId,
         score: data.score,
+        experience: data.experience,
       },
       create: {
         id: doctor.id.value,
@@ -29,18 +30,19 @@ export class PrismaDoctorRepository implements DoctorRepository {
         licenseMedicalNumber: data.licenseMedicalNumber,
         specialtyId: data.specialtyId,
         score: data.score,
+        experience: data.experience,
       },
     });
   }
   async findByCriteria(criteria: Criteria): Promise<Doctor[]> {
     const query = this.converter.criteria(criteria);
     const doctors = await this.model.findMany(query);
-    return doctors.map((doctor) => Doctor.fromPrimitives(doctor as Primitives<Doctor>));
+    return doctors.map((doctor) => Doctor.fromPrimitives(doctor as unknown as Primitives<Doctor>));
   }
   async getByCriteria(criteria: Criteria): Promise<Doctor> {
     const { where } = this.converter.criteria(criteria);
     const doctor = await this.model.findFirst({ where });
     if (!doctor) throw new Error('Doctor not found');
-    return Doctor.fromPrimitives(doctor as Primitives<Doctor>);
+    return Doctor.fromPrimitives(doctor as unknown as Primitives<Doctor>);
   }
 }

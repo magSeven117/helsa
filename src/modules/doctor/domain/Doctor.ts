@@ -4,7 +4,6 @@ import { DateValueObject, NumberValueObject, StringValueObject } from '@/modules
 import { Primitives } from '@/modules/shared/domain/types/Primitives';
 import { ConsultingRoomAddress } from './ConsultingRoomAddress';
 import { Education } from './Educations';
-import { Experience } from './Experience';
 import { Schedule } from './Schedule';
 
 export class Doctor extends Aggregate {
@@ -14,12 +13,12 @@ export class Doctor extends Aggregate {
     public licenseMedicalNumber: StringValueObject,
     public specialtyId: Uuid,
     public score: NumberValueObject,
+    public experience: NumberValueObject,
+    public educations: Education[],
     createdAt: DateValueObject,
     updatedAt: DateValueObject,
     public schedule?: Schedule,
-    public consultingRoomAddress?: ConsultingRoomAddress,
-    public educations?: Education[],
-    public experiences?: Experience[]
+    public consultingRoomAddress?: ConsultingRoomAddress
   ) {
     super(id, createdAt, updatedAt);
   }
@@ -31,6 +30,8 @@ export class Doctor extends Aggregate {
       new StringValueObject(licenseMedicalNumber),
       new Uuid(specialtyId),
       new NumberValueObject(0),
+      new NumberValueObject(1),
+      [],
       DateValueObject.today(),
       DateValueObject.today()
     );
@@ -43,12 +44,14 @@ export class Doctor extends Aggregate {
       new StringValueObject(data.licenseMedicalNumber),
       new Uuid(data.specialtyId),
       new NumberValueObject(data.score),
+      new NumberValueObject(data.experience),
+      data.educations
+        ? data.educations.map((education: Primitives<Education>) => Education.fromPrimitives(education))
+        : [],
       new DateValueObject(data.createdAt),
       new DateValueObject(data.updatedAt),
       data.schedule ? Schedule.fromPrimitives(data.schedule) : undefined,
-      data.consultingRoomAddress ? ConsultingRoomAddress.fromPrimitives(data.consultingRoomAddress) : undefined,
-      data.educations ? data.educations.map((education) => Education.fromPrimitives(education)) : undefined,
-      data.experiences ? data.experiences.map((experience) => Experience.fromPrimitives(experience)) : undefined
+      data.consultingRoomAddress ? ConsultingRoomAddress.fromPrimitives(data.consultingRoomAddress) : undefined
     );
   }
 
@@ -59,12 +62,12 @@ export class Doctor extends Aggregate {
       licenseMedicalNumber: this.licenseMedicalNumber.value,
       specialtyId: this.specialtyId.value,
       score: this.score.value,
+      experience: this.experience.value,
+      educations: this.educations.map((education) => education.toPrimitives()),
       createdAt: this.createdAt.value,
       updatedAt: this.updatedAt.value,
       schedule: this.schedule ? this.schedule.toPrimitives() : undefined,
       consultingRoomAddress: this.consultingRoomAddress ? this.consultingRoomAddress.toPrimitives() : undefined,
-      educations: this.educations ? this.educations.map((education) => education.toPrimitives()) : undefined,
-      experiences: this.experiences ? this.experiences.map((experience) => experience.toPrimitives()) : undefined,
     };
   }
 }

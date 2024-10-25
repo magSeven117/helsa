@@ -4,10 +4,10 @@ model Doctor {
   specialtyId           String                 
   licenseMedicalNumber  String?                @unique
   score                 Float                  @default(0)
+  experience            Int                    @default(1)
+  educations            Json[]
   user                  User                   @relation(fields: [userId], references: [id])
   specialty             Specialty              @relation(fields: [specialtyId], references: [id])
-  educations            Education[]
-  experiences           Experience[]
   ratings               Rating[]
   schedule              Schedule?
   consultingRoomAddress ConsultingRoomAddress?
@@ -30,29 +30,6 @@ model ConsultingRoomAddress {
   roomCoordinates Json
 }
 
-model Education {
-  id         String   @id @default(uuid())
-  title       String
-  institution String
-  degree      String
-  type        String
-  startDate   DateTime
-  endDate     DateTime
-
-  doctorId   String
-  doctor     Doctor   @relation(fields: [doctorId], references: [id])
-}
-
-model Experience {
-  id         String   @id @default(uuid())
-  title       String
-  institution String
-  description String
-  startDate   DateTime
-  endDate     DateTime
-  doctorId   String
-  doctor     Doctor   @relation(fields: [doctorId], references: [id])
-}
 
 model Schedule {
   id                    String @id @default(uuid())
