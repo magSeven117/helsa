@@ -24,7 +24,7 @@ const sidebarNavItems = [
     href: "/profile/notifications",
   },
   {
-    title: "Seguridad",
+    title: "Contraseña y seguridad",
     href: "/profile/security",
   },
 ]

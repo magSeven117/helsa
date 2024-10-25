@@ -2,12 +2,6 @@
 
 import { Button } from '@/libs/shadcn-ui/components/button';
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/libs/shadcn-ui/components/card';
-import {
   Form,
   FormControl,
   FormDescription,
@@ -17,7 +11,7 @@ import {
 } from '@/libs/shadcn-ui/components/form';
 import { Switch } from '@/libs/shadcn-ui/components/switch';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Edit, Loader2, Save, X } from 'lucide-react';
+import { Loader2, Pencil, X } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -39,36 +33,30 @@ const NotificationControl = ({}) => {
       security_emails: true,
     },
   });
+  const toggleEdit = () => setIsEditing((current) => !current);
   const { isValid, isSubmitting } = form.formState;
   const onSubmit = async (data: any) => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
   };
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex justify-between items-center">
-          Personal Info
-          <Button
-            variant="ghost"
-            className="gap-1 text-sm"
-            onClick={() => setIsEditing((prev) => !prev)}
-          >
-            {!isEditing ? (
-              <>
-                <Edit className="w-4 h-4" />
-                Edit
-              </>
-            ) : (
-              <>
-                <X className="w-4 h-4" />
-                Cancel
-              </>
-            )}
-          </Button>
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="flex flex-col mt-6 w-full justify-between py-2 px-4 ">
-        {isEditing ? (
+    <div className="mt-6 border-b pb-2">
+      <div className="font-bold flex items-center gap-3">
+          Notificaciones por correo
+          <Button variant="ghost" onClick={toggleEdit} className='w-6 h-6 p-1 flex justify-center items-center'>
+          {isEditing ? (
+            <>
+              <X className="size-3" />
+              
+            </>
+          ) : (
+            <>
+              <Pencil className="size-3" />
+              
+            </>
+          )}
+        </Button>
+      </div>
+      {isEditing ? (
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
@@ -78,7 +66,7 @@ const NotificationControl = ({}) => {
                 control={form.control}
                 name="communication_emails"
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-center justify-between rounded-lg  p-4">
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg  py-4">
                     <div className="space-y-0.5">
                       <FormLabel className="text-base">
                         Communication emails
@@ -100,7 +88,7 @@ const NotificationControl = ({}) => {
                 control={form.control}
                 name="marketing_emails"
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-center justify-between rounded-lg  p-4">
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg  py-4">
                     <div className="space-y-0.5">
                       <FormLabel className="text-base">
                         Marketing emails
@@ -122,7 +110,7 @@ const NotificationControl = ({}) => {
                 control={form.control}
                 name="social_emails"
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-center justify-between rounded-lg  p-4">
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg  py-4">
                     <div className="space-y-0.5">
                       <FormLabel className="text-base">Social emails</FormLabel>
                       <FormDescription>
@@ -142,7 +130,7 @@ const NotificationControl = ({}) => {
                 control={form.control}
                 name="security_emails"
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-center justify-between rounded-lg p-4">
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg py-4">
                     <div className="space-y-0.5">
                       <FormLabel className="text-base">
                         Security emails
@@ -161,26 +149,15 @@ const NotificationControl = ({}) => {
                 )}
               />
               <div className="flex items-center gap-x-2">
-                <Button
-                  disabled={!isValid || isSubmitting}
-                  type="submit"
-                  className="bg-background border border-border rounded-3xl text-foreground gap-1 text-sm p-4 hover:bg-foreground hover:text-background"
-                >
-                  {isSubmitting ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    <>
-                      <Save className="h-4 w-4" />
-                      Save
-                    </>
-                  )}
-                </Button>
-              </div>
+              <Button disabled={!isValid || isSubmitting} type="submit">
+                {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Save'}
+              </Button>
+            </div>
             </form>
           </Form>
         ) : (
           <div>
-            <div className="flex flex-row items-center justify-between p-4">
+            <div className="flex flex-row items-center justify-between py-4">
               <div className="space-y-0.5">
                 <p className="text-base">Communication emails</p>
                 <p className="text-sm italic">
@@ -193,7 +170,7 @@ const NotificationControl = ({}) => {
                 </p>
               </div>
             </div>
-            <div className="flex flex-row items-center justify-between p-4">
+            <div className="flex flex-row items-center justify-between py-4">
               <div className="space-y-0.5">
                 <p className="text-base">Marketing emails</p>
                 <p className="text-sm italic">
@@ -206,7 +183,7 @@ const NotificationControl = ({}) => {
                 </p>
               </div>
             </div>
-            <div className="flex flex-row items-center justify-between p-4">
+            <div className="flex flex-row items-center justify-between py-4">
               <div className="space-y-0.5">
                 <p className="text-base">Social emails</p>
                 <p className="text-sm italic">
@@ -219,7 +196,7 @@ const NotificationControl = ({}) => {
                 </p>
               </div>
             </div>
-            <div className="flex flex-row items-center justify-between p-4">
+            <div className="flex flex-row items-center justify-between py-4">
               <div className="space-y-0.5">
                 <p className="text-base">Security emails</p>
                 <p className="text-sm italic">
@@ -234,8 +211,7 @@ const NotificationControl = ({}) => {
             </div>
           </div>
         )}
-      </CardContent>
-    </Card>
+    </div>
   );
 };
 
