@@ -12,7 +12,10 @@ export const PersonalInfo = ({ user }: { user: any }) => {
       <ImageForm imageUrl={user.imageUrl} />
       <NameForm firstName={user.firstName} lastName={user.lastName} />
       <BioForm bio={user.bio} />
-      <LinksForm urls={[]} />
+      <LinksForm urls={[
+        { value: 'https://twitter.com/Ducen29' },
+        { value: 'https://github.com/Duccem'}
+      ]} />
     </div>
   )
 }

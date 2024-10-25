@@ -34,7 +34,7 @@ export const LinksForm = ({ urls }: NameFormValues) => {
   const toggleEdit = () => setIsEditing((current) => !current);
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: { urls: [...urls, { value: 'https://shadcn.com' }, { value: 'http://twitter.com/shadcn' }] },
+    defaultValues: { urls },
   });
   const { fields, append, remove } = useFieldArray({
     name: 'urls',

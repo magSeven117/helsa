@@ -10,6 +10,7 @@ interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
   items: {
     href: string
     title: string
+    icon?: React.ReactNode
   }[]
 }
 
@@ -36,6 +37,9 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
             "justify-start"
           )}
         >
+          {
+            item.icon
+          }
           {item.title}
         </Link>
       ))}

@@ -1,5 +1,6 @@
 import { SidebarNav } from '@/app/(app)/components/profile/new/side-bar-nav';
 import { Separator } from '@/libs/shadcn-ui/components/separator';
+import { Bell, Briefcase, KeyRound, Palette, User } from 'lucide-react';
 import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: "Helsa | Perfil",
@@ -10,22 +11,27 @@ const sidebarNavItems = [
   {
     title: "Datos personales",
     href: "/profile",
+    icon: <User className='size-4'/>
   },
   {
-    title: "Datos de contacto y profesionales",
+    title: "Datos profesionales",
     href: "/profile/professional",
+    icon: <Briefcase className='size-4'/>
   },
   {
     title: "Apariencia",
     href: "/profile/appearance",
+    icon: <Palette className='size-4'/>
   },
   {
     title: "Notificaciones",
     href: "/profile/notifications",
+    icon: <Bell className='size-4'/>
   },
   {
     title: "Contraseña y seguridad",
     href: "/profile/security",
+    icon: <KeyRound className='size-4'/>
   },
 ]
 
