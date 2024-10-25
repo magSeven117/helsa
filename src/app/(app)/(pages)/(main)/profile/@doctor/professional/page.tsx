@@ -22,7 +22,21 @@ const Page = () => {
             longitude: -74.123456
           }
         },
-        experience: 5
+        experience: 5,
+        educations: [
+          {
+            id: "1",
+            title: "Doctor en Medicina",
+            institution: "Universidad Nacional de Colombia",
+            graduateAt: new Date('2015-01-01')
+          },
+          {
+            id: "2",
+            title: "Especialista en Medicina Interna",
+            institution: "Universidad Nacional de Colombia",
+            graduateAt: new Date('2019-06-01')
+          }
+        ]
       }} />
     </div>
   );
