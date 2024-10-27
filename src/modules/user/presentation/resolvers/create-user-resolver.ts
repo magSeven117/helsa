@@ -2,7 +2,7 @@ import { InternalError } from '@/modules/shared/domain/core/errors/InternalError
 import { QStashEventBus } from '@/modules/shared/infrastructure/events/qstash/qstash-event-bus';
 import { db } from '@/modules/shared/infrastructure/persistence/prisma/PrismaConnection';
 import { RegisterUser } from '../../application/register-user';
-import { PrismaUserRepository } from '../../infrastructure/PrismaUserRepository';
+import { PrismaUserRepository } from '../../infrastructure/prisma-user-repository';
 
 export const CreateUserResolver = async (ctx, input) => {
   try {

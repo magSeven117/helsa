@@ -2,9 +2,9 @@ import { Aggregate } from '@/modules/shared/domain/core/Aggregate';
 import { BooleanValueObject, DateValueObject, StringValueObject } from '@/modules/shared/domain/core/ValueObject';
 import { Uuid } from '@/modules/shared/domain/core/value-objects/Uuid';
 import { Primitives } from '@/modules/shared/domain/types/Primitives';
-import { UserEmail } from './UserEmail';
-import { UserRole, UserRoleValue } from './UserRole';
 import { UserCreated } from './user-created';
+import { UserEmail } from './user-email';
+import { UserRole, UserRoleValue } from './user-role';
 
 export class User extends Aggregate {
   constructor(

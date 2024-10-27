@@ -4,7 +4,7 @@ import { db } from '@/modules/shared/infrastructure/persistence/prisma/PrismaCon
 import { headers } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 import { RegisterUser } from '../../application/register-user';
-import { PrismaUserRepository } from '../../infrastructure/PrismaUserRepository';
+import { PrismaUserRepository } from '../../infrastructure/prisma-user-repository';
 import { verifyWebhook } from '../guards/svix-guard';
 
 export const POSTCreateUser = async (req: NextRequest) => {

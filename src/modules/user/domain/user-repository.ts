@@ -1,6 +1,6 @@
 import { Uuid } from '@/modules/shared/domain/core/value-objects/Uuid';
-import { User } from './User';
-import { UserEmail } from './UserEmail';
+import { User } from './user';
+import { UserEmail } from './user-email';
 
 export interface UserRepository {
   save(user: User): Promise<void>;

@@ -3,7 +3,7 @@
 import { db } from '@/modules/shared/infrastructure/persistence/prisma/PrismaConnection';
 import { currentUser } from '@clerk/nextjs/server';
 import { GetUser } from '../../application/get-user';
-import { PrismaUserRepository } from '../../infrastructure/PrismaUserRepository';
+import { PrismaUserRepository } from '../../infrastructure/prisma-user-repository';
 
 export const getCurrentUser = async () => {
   const externalUser = await currentUser();

@@ -1,6 +1,6 @@
 import { Primitives } from '@/modules/shared/domain/types/Primitives';
-import { User } from '../domain/User';
-import { UserRepository } from '../domain/UserRepository';
+import { User } from '../domain/user';
+import { UserRepository } from '../domain/user-repository';
 
 export class GetUser {
   constructor(private readonly userRepository: UserRepository) {}
