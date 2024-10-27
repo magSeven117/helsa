@@ -1,7 +1,7 @@
 import { NumberValueObject } from '@/modules/shared/domain/core/value-object';
 import { Uuid } from '@/modules/shared/domain/core/value-objects/uuid';
-import { Primitives } from '@/modules/shared/domain/types/Primitives';
-import { Day } from './Day';
+import { Primitives } from '@/modules/shared/domain/types/primitives';
+import { Day } from './day';
 
 export class Schedule {
   constructor(

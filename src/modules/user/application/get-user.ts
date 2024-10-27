@@ -1,4 +1,4 @@
-import { Primitives } from '@/modules/shared/domain/types/Primitives';
+import { Primitives } from '@/modules/shared/domain/types/primitives';
 import { User } from '../domain/user';
 import { UserRepository } from '../domain/user-repository';
 

@@ -1,4 +1,4 @@
-import { PersonalInfo } from "@/app/(app)/components/profile/new/personal-info/personal-info";
+import { PersonalInfo } from "@/app/(app)/components/profile/personal-info/personal-info";
 import { Separator } from "@/libs/shadcn-ui/components/separator";
 import { currentUser } from "@clerk/nextjs/server";
 

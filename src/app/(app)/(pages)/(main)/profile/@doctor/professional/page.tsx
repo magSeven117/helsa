@@ -1,4 +1,4 @@
-import ProfessionalInfo from "@/app/(app)/components/profile/new/professional-info/professional-info";
+import ProfessionalInfo from "@/app/(app)/components/profile/professional-info/professional-info";
 import { Separator } from "@/libs/shadcn-ui/components/separator";
 
 const Page = () => {

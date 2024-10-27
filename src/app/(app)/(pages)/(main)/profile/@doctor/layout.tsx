@@ -1,4 +1,4 @@
-import { SidebarNav } from '@/app/(app)/components/profile/new/side-bar-nav';
+import { SidebarNav } from '@/app/(app)/components/profile/side-bar-nav';
 import { Separator } from '@/libs/shadcn-ui/components/separator';
 import { Bell, Briefcase, KeyRound, Palette, User } from 'lucide-react';
 import { Metadata } from 'next';

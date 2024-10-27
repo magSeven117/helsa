@@ -1,4 +1,4 @@
-import { AppearanceForm } from "@/app/(app)/components/profile/new/appearance/appearance-form";
+import { AppearanceForm } from "@/app/(app)/components/profile/appearance/appearance-form";
 import { Separator } from "@/libs/shadcn-ui/components/separator";
 
 const Page = () => {

@@ -1,6 +1,6 @@
 import { CreateDoctorOnUserCreated } from '@/modules/doctor/application/event-handlers/create-doctor-on-user-created';
 import { CreateDoctor } from '@/modules/doctor/application/services/create-doctor';
-import { PrismaDoctorRepository } from '@/modules/doctor/infrastructure/persistence/PrismaDoctorRepository';
+import { PrismaDoctorRepository } from '@/modules/doctor/infrastructure/persistence/prisma-doctor-repository';
 import { DomainEventPrimitives } from '@/modules/shared/domain/core/domain-event';
 import { db } from '@/modules/shared/infrastructure/persistence/prisma/PrismaConnection';
 import { UserCreated } from '@/modules/user/domain/user-created';

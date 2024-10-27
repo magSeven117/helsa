@@ -1,10 +1,10 @@
 import { Criteria } from '@/modules/shared/domain/core/criteria';
-import { Primitives } from '@/modules/shared/domain/types/Primitives';
+import { Primitives } from '@/modules/shared/domain/types/primitives';
 import { PrismaCriteriaConverter } from '@/modules/shared/infrastructure/persistence/prisma/PrismaCriteriaConverter';
 import { PrismaClient } from '@prisma/client';
-import { Doctor } from '../../domain/Doctor';
-import { DoctorRepository } from '../../domain/DoctorRepository';
-import { Specialty } from '../../domain/Specialty';
+import { Doctor } from '../../domain/doctor';
+import { DoctorRepository } from '../../domain/doctor-repository';
+import { Specialty } from '../../domain/specialty';
 
 export class PrismaDoctorRepository implements DoctorRepository {
   private converter: PrismaCriteriaConverter = new PrismaCriteriaConverter();

@@ -1,7 +1,7 @@
 import { Aggregate } from '@/modules/shared/domain/core/aggregate';
 import { BooleanValueObject, DateValueObject, StringValueObject } from '@/modules/shared/domain/core/value-object';
 import { Uuid } from '@/modules/shared/domain/core/value-objects/uuid';
-import { Primitives } from '@/modules/shared/domain/types/Primitives';
+import { Primitives } from '@/modules/shared/domain/types/primitives';
 import { UserCreated } from './user-created';
 import { UserEmail } from './user-email';
 import { UserRole, UserRoleValue } from './user-role';

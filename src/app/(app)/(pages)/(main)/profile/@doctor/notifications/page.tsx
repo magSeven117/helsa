@@ -1,4 +1,4 @@
-import NotificationControl from "@/app/(app)/components/profile/new/notifications/notification-control";
+import NotificationControl from "@/app/(app)/components/profile/notifications/notification-control";
 import { Separator } from "@/libs/shadcn-ui/components/separator";
 
 const Page = () => {

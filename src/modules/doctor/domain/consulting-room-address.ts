@@ -1,7 +1,7 @@
 import { StringValueObject } from '@/modules/shared/domain/core/value-object';
 import { Uuid } from '@/modules/shared/domain/core/value-objects/uuid';
-import { Primitives } from '@/modules/shared/domain/types/Primitives';
-import { RoomCoordinates } from './RoomCoordinates';
+import { Primitives } from '@/modules/shared/domain/types/primitives';
+import { RoomCoordinates } from './room-coordinates';
 
 export class ConsultingRoomAddress {
   constructor(

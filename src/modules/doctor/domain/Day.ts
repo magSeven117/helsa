@@ -1,6 +1,6 @@
 import { StringValueObject } from '@/modules/shared/domain/core/value-object';
-import { Primitives } from '@/modules/shared/domain/types/Primitives';
-import { Hour } from './Hour';
+import { Primitives } from '@/modules/shared/domain/types/primitives';
+import { Hour } from './hour';
 
 export class Day {
   constructor(public day: StringValueObject, public hours: Hour[]) {}

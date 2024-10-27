@@ -1,10 +1,10 @@
 import { Aggregate } from '@/modules/shared/domain/core/aggregate';
 import { DateValueObject, NumberValueObject, StringValueObject } from '@/modules/shared/domain/core/value-object';
 import { Uuid } from '@/modules/shared/domain/core/value-objects/uuid';
-import { Primitives } from '@/modules/shared/domain/types/Primitives';
-import { ConsultingRoomAddress } from './ConsultingRoomAddress';
-import { Education } from './Educations';
-import { Schedule } from './Schedule';
+import { Primitives } from '@/modules/shared/domain/types/primitives';
+import { ConsultingRoomAddress } from './consulting-room-address';
+import { Education } from './educations';
+import { Schedule } from './schedule';
 
 export class Doctor extends Aggregate {
   constructor(

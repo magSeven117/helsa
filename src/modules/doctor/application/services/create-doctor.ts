@@ -1,7 +1,7 @@
 import { Uuid } from '@/modules/shared/domain/core/value-objects/uuid';
-import { Primitives } from '@/modules/shared/domain/types/Primitives';
-import { Doctor } from '../../domain/Doctor';
-import { DoctorRepository } from '../../domain/DoctorRepository';
+import { Primitives } from '@/modules/shared/domain/types/primitives';
+import { Doctor } from '../../domain/doctor';
+import { DoctorRepository } from '../../domain/doctor-repository';
 
 export class CreateDoctor {
   constructor(private repository: DoctorRepository) {}

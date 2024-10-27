@@ -12,7 +12,7 @@ const TopBar = () => {
       <div className="md:hidden">
         <SidebarTrigger />
       </div>
-      <div className={styles.topbar_searcher_container}>
+      <div className='w-full ml-5 max-sm:hidden'>
         <Searcher />
       </div>
     </div>
