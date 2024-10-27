@@ -1,8 +1,8 @@
-# Helsa - Telemedicine Platform
+# Helsa - Healthcare Platform
 
 ## Table of Contents
 
-- [Helsa - Telemedicine Platform](#helsa---telemedicine-platform)
+- [Helsa - Healthcare Platform](#helsa---healthcare-platform)
   - [Table of Contents](#table-of-contents)
   - [Introduction](#introduction)
   - [Features](#features)
@@ -75,16 +75,16 @@ Before you begin, ensure you have the following installed:
    Create a `.env.local` file in the root directory and add the following variables:
 
    ```bash
-   DATABASE_URL=your-mongodb-connection-string
-   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your-clerk-public-key
-   CLERK_WEBHOOK=your-app-webhook-to-clerk
-   STRIPE_SECRET_KEY=your-stripe-secret-key
-   QSTASH_URL=upstash-url-to-push
-   QSTASH_APP_URL=your-webhook-url
-   QSTASH_TOKEN=your-qstash-token
-   QSTASH_CURRENT_SIGNING_KEY=sign-key
-   QSTASH_NEXT_SIGNING_KEY=sign-key
-   SECRET=your-secret-key
+    DATABASE_URL=postgresql://postgres:A12345678@postgres
+    NEXT_PUBLIC_BASE_URL=http://localhost:3000
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your-clerk-public-key
+    CLERK_SECRET_KEY=your-clerk-api-key
+    CLERK_WEBHOOK_SECRET=your-webhook-key
+    STRIPE_SECRET_KEY=your-stripe-secret-key
+    QSTASH_URL=upstash-url-to-push
+    QSTASH_APP_URL=your-webhook-url
+    QSTASH_TOKEN=your-qstash-token
+    SECRET=your-secret-key
    ```
 
 4. **Run the development server**:
@@ -110,32 +110,28 @@ You can run the Helsa project using Docker and Docker Compose, which simplifies 
         working_dir: /app
         volumes:
           - .:/app
-          - /app/node_modules
         ports:
           - '3000:3000'
         environment:
-          - DATABASE_URL=your-mongodb-connection-string
+          - DATABASE_URL=postgresql://postgres:A12345678@postgres
+          - NEXT_PUBLIC_BASE_URL=http://localhost:3000
           - NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your-clerk-public-key
-          - CLERK_WEBHOOK=your-app-webhook-to-clerk
+          - CLERK_SECRET_KEY=your-clerk-api-key
+          - CLERK_WEBHOOK_SECRET=your-webhook-key
           - STRIPE_SECRET_KEY=your-stripe-secret-key
           - QSTASH_URL=upstash-url-to-push
           - QSTASH_APP_URL=your-webhook-url
           - QSTASH_TOKEN=your-qstash-token
-          - QSTASH_CURRENT_SIGNING_KEY=sign-key
-          - QSTASH_NEXT_SIGNING_KEY=sign-key
           - SECRET=your-secret-key
-        command: sh -c "yarn install && yarn dev"
+        command: npm run dev
 
-      mongo:
-        image: mongo:4.4
-        container_name: helsa-mongo
-        ports:
-          - '27017:27017'
-        volumes:
-          - mongo-data:/data/db
-
-    volumes:
-      mongo-data:
+      postgres:
+        image: postgres
+        container_name: helsa-postgres
+        environment:
+          POSTGRES_DB: 'support-attachments'
+          POSTGRES_USER: 'postgres'
+          POSTGRES_PASSWORD: 'A12345678'
     ```
 
 2. **Run the application** using Docker Compose:
@@ -181,14 +177,13 @@ helsa/
 │   │       └── webhooks/            # Webhooks to third party services
 │   ├── libs/                        # Aux libraries
 │   │   ├── ducen-ui/                # Custom own ui library
-│   │   ├── shadcn-ui/               # shadcn ui components
-│   │   └── utils/                   # Utility functions
+│   │   └── shadcn-ui/               # shadcn ui components
 │   ├── modules/                     # Modules of DDD source code
 │   │   ├── shared/                  # Shared modules across all apps
 │   │   ├── doctor/                  
 │   │   └── user/                    
 │   ├── assets/                      
-│   └── middleware.js                # Function that its executed in all routes
+│   └── middleware.ts                # Function that its executed in all routes
 ├── .env.local                       
 ├── .eslintrc.json
 ├── .gitignore     
