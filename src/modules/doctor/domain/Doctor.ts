@@ -23,7 +23,7 @@ export class Doctor extends Aggregate {
     super(id, createdAt, updatedAt);
   }
 
-  static create(id: string, userId: string, licenseMedicalNumber: string, specialtyId: string): Doctor {
+  static create(id: string, userId: string, licenseMedicalNumber?: string, specialtyId?: string): Doctor {
     return new Doctor(
       new Uuid(id),
       new Uuid(userId),

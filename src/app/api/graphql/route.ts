@@ -1,4 +1,5 @@
 import { getSchema } from '@/modules/shared/infrastructure/persistence/graphql/schema';
+import { db } from '@/modules/shared/infrastructure/persistence/prisma/PrismaConnection';
 import userResolvers from '@/modules/user/presentation/resolvers';
 import { ApolloServer } from '@apollo/server';
 import { startServerAndCreateNextHandler } from '@as-integrations/next';
@@ -22,7 +23,13 @@ const apolloServer = new ApolloServer({
     ...resolvers,
   },
 });
-const handler = startServerAndCreateNextHandler<NextRequest>(apolloServer);
+const handler = startServerAndCreateNextHandler<NextRequest>(apolloServer, {
+  context: async (req, res) => ({
+    req,
+    res,
+    db,
+  }),
+});
 export async function GET(request: NextRequest) {
   return handler(request);
 }

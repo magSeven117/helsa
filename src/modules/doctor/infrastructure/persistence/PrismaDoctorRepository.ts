@@ -4,6 +4,7 @@ import { PrismaCriteriaConverter } from '@/modules/shared/infrastructure/persist
 import { PrismaClient } from '@prisma/client';
 import { Doctor } from '../../domain/Doctor';
 import { DoctorRepository } from '../../domain/DoctorRepository';
+import { Specialty } from '../../domain/Specialty';
 
 export class PrismaDoctorRepository implements DoctorRepository {
   private converter: PrismaCriteriaConverter = new PrismaCriteriaConverter();
@@ -44,5 +45,10 @@ export class PrismaDoctorRepository implements DoctorRepository {
     const doctor = await this.model.findFirst({ where });
     if (!doctor) throw new Error('Doctor not found');
     return Doctor.fromPrimitives(doctor as unknown as Primitives<Doctor>);
+  }
+
+  async getSpecialties() {
+    const specialties = await this.client.specialty.findMany();
+    return specialties.map((specialty) => Specialty.fromPrimitives(specialty));
   }
 }

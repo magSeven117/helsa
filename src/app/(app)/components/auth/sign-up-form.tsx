@@ -23,30 +23,35 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Icons } from '@/libs/shadcn-ui/components/icons';
 import { Input } from '@/libs/shadcn-ui/components/input';
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '@/libs/shadcn-ui/components/input-otp';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/libs/shadcn-ui/components/select';
 import { useRegister } from '@/modules/user/presentation/hooks/use-register';
 import { useSignUp } from '@clerk/nextjs';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Hospital, Loader2, Stethoscope, User } from 'lucide-react';
+import { Activity, Bone, Brain, Droplet, Heart, Hospital, Loader2, Shield, Stethoscope, Sun, User } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import Lottie from 'react-lottie';
 import { v4 } from 'uuid';
 import { z } from 'zod';
 
-const formSchema = z.object({
-  name: z.string().min(3, { message: 'Name is required' }),
-  email: z.string().min(3, { message: 'Invalid email' }).email({ message: 'Invalid email' }),
-  password: z.string().min(8, { message: 'Password must be at least 8 characters' }),
-  confirmPassword: z.string().min(8, { message: 'Password must be at least 8 characters' }),
-}).superRefine((data) => {
-  if (data.password !== data.confirmPassword) {
-    return { confirmPassword: 'Passwords do not match' };
-  }
-  return {};
-});
+const formSchema = z
+  .object({
+    name: z.string().min(3, { message: 'Name is required' }),
+    email: z.string().min(3, { message: 'Invalid email' }).email({ message: 'Invalid email' }),
+    password: z.string().min(8, { message: 'Password must be at least 8 characters' }),
+    confirmPassword: z.string().min(8, { message: 'Password must be at least 8 characters' }),
+    licenseMedicalNumber: z.string().optional(),
+    specialtyId: z.string().optional(),
+  })
+  .superRefine((data) => {
+    if (data.password !== data.confirmPassword) {
+      return { confirmPassword: 'Passwords do not match' };
+    }
+    return {};
+  });
 
 export default function SignUpForm() {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -56,7 +61,10 @@ export default function SignUpForm() {
       email: '',
       password: '',
       confirmPassword: '',
+      licenseMedicalNumber: '',
+      specialtyId: '',
     },
+    mode: 'all'
   });
 
   const { isSubmitting } = form.formState;
@@ -69,11 +77,22 @@ export default function SignUpForm() {
   const [role, setRole] = useState(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [verifying, setVerifying] = useState(false);
+  const [isPossibleOauth, setIsPossibleOauth] = useState(false);
   const [verification, setVerification] = useState({
     state: '',
     code: '',
     error: '',
   });
+
+  useEffect(() => {
+    if (role === 'DOCTOR' && form.getValues().specialtyId && form.getValues().licenseMedicalNumber) {
+      setIsPossibleOauth(true);
+      return;
+    }
+
+    setIsPossibleOauth(false);
+
+  }, [form.formState]);
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     if (!isLoaded) return;
@@ -105,6 +124,10 @@ export default function SignUpForm() {
           externalId: completeSignUp.createdUserId,
           id: v4(),
           role: role,
+          additionalData: {
+            licenseMedicalNumber: form.getValues().licenseMedicalNumber,
+            specialtyId: form.getValues().specialtyId
+          }
         });
         await setActive({ session: completeSignUp.createdSessionId });
         setVerification({ ...verification, state: 'success' });
@@ -129,6 +152,10 @@ export default function SignUpForm() {
         unsafeMetadata: {
           role,
           provider: 'oauth',
+          additionalData: {
+            licenseMedicalNumber: form.getValues().licenseMedicalNumber,
+            specialtyId: form.getValues().specialtyId
+          }
         },
       });
     } catch (error) {
@@ -225,6 +252,54 @@ export default function SignUpForm() {
               </CardDescription>
             </CardHeader>
             <CardContent className="">
+              {role === 'DOCTOR' && (
+                <>
+                  <FormField
+                    control={form.control}
+                    name="licenseMedicalNumber"
+                    render={({ field }) => (
+                      <FormItem className="my-2">
+                        <FormLabel className="text-sm  font-bold text-color-foreground-secondary ">
+                          Número de licencia médica
+                        </FormLabel>
+                        <FormControl>
+                          <Input {...field}></Input>
+                        </FormControl>
+                        <FormMessage></FormMessage>
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="specialtyId"
+                    render={({ field }) => (
+                      <FormItem className="flex-1">
+                        <FormLabel className="text-sm  font-bold text-color-foreground-secondary ">
+                          Especialidad
+                        </FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a verified email to display" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {specialties.map((specialty) => (
+                              <SelectItem key={specialty.id} value={specialty.id}>
+                                <span className="flex w-full justify-between items-center gap-3">
+                                  <specialty.icon className="size-4" />
+                                  {specialty.name}
+                                </span>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </>
+              )}
               <FormField
                 control={form.control}
                 name="name"
@@ -251,6 +326,7 @@ export default function SignUpForm() {
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="password"
@@ -279,19 +355,24 @@ export default function SignUpForm() {
                   </FormItem>
                 )}
               />
-              <p className="flex items-center gap-x-3 text-sm text-muted-foreground before:h-px before:flex-1 before:bg-border after:h-px after:flex-1 after:bg-border">
-                or
-              </p>
-              <div className="grid grid-cols-2 gap-x-4 mt-3">
-                <Button size="sm" variant="outline" type="button" onClick={() => onOauthPress('oauth_google')}>
-                  <Icons.google className="mr-2 size-4" />
-                  Google
-                </Button>
-                <Button onClick={() => onOauthPress('oauth_facebook')} size="sm" variant="outline" type="button">
-                  <Icons.facebook className="mr-2 size-4" />
-                  Facebook
-                </Button>
-              </div>
+
+              {isPossibleOauth && (
+                <>
+                  <p className="flex items-center gap-x-3 text-sm text-muted-foreground before:h-px before:flex-1 before:bg-border after:h-px after:flex-1 after:bg-border">
+                    or
+                  </p>
+                  <div className="grid grid-cols-2 gap-x-4 mt-3">
+                    <Button size="sm" variant="outline" type="button" onClick={() => onOauthPress('oauth_google')}>
+                      <Icons.google className="mr-2 size-4" />
+                      Google
+                    </Button>
+                    <Button onClick={() => onOauthPress('oauth_facebook')} size="sm" variant="outline" type="button">
+                      <Icons.facebook className="mr-2 size-4" />
+                      Facebook
+                    </Button>
+                  </div>
+                </>
+              )}
             </CardContent>
             <CardFooter>
               <div className="grid w-full gap-y-4">
@@ -326,14 +407,14 @@ export default function SignUpForm() {
             </AlertDialogDescription>
           </AlertDialogHeader>
 
-          <AlertDialogFooter className='flex w-full sm:justify-center items-center'>
+          <AlertDialogFooter className="flex w-full sm:justify-center items-center">
             <AlertDialogAction asChild>
               <Button
                 onClick={() => {
                   setShowSuccessModal(false);
                   router.push('/dashboard');
                 }}
-                size='lg'
+                size="lg"
               >
                 Ir al inicio
               </Button>
@@ -344,3 +425,15 @@ export default function SignUpForm() {
     </div>
   );
 }
+
+const specialties = [
+  { id: '1', name: 'Cardiología', icon: Heart },
+  { id: '2', name: 'Dermatología', icon: Sun },
+  { id: '3', name: 'Endocrinología', icon: Activity },
+  { id: '4', name: 'Gastroenterología', icon: Stethoscope },
+  { id: '5', name: 'Geriatría', icon: User },
+  { id: '6', name: 'Hematología', icon: Droplet },
+  { id: '7', name: 'Infectología', icon: Shield },
+  { id: '11', name: 'Neurología', icon: Brain },
+  { id: '15', name: 'Reumatología', icon: Bone },
+];

@@ -4,6 +4,7 @@ import { Uuid } from '@/modules/shared/domain/core/value-objects/Uuid';
 import { Primitives } from '@/modules/shared/domain/types/Primitives';
 import { UserEmail } from './UserEmail';
 import { UserRole, UserRoleValue } from './UserRole';
+import { UserCreated } from './user-created';
 
 export class User extends Aggregate {
   constructor(
@@ -18,8 +19,14 @@ export class User extends Aggregate {
     super(id, createdAt, updatedAt);
   }
 
-  public static Create(id: string, externalId: string, email: string, role: string): User {
-    return new User(
+  public static Create(
+    id: string,
+    externalId: string,
+    email: string,
+    role: string,
+    additionalData: Record<string, any>
+  ): User {
+    const user = new User(
       new Uuid(id),
       new StringValueObject(externalId),
       new UserEmail(email),
@@ -28,6 +35,15 @@ export class User extends Aggregate {
       DateValueObject.today(),
       DateValueObject.today()
     );
+    user.record(
+      new UserCreated({
+        userId: user.id.value,
+        role: user.role.value,
+        additionalData,
+      })
+    );
+
+    return user;
   }
 
   public static Doctor(id: string, externalId: string, email: string): User {
@@ -64,9 +80,5 @@ export class User extends Aggregate {
       createdAt: this.createdAt.value,
       updatedAt: this.updatedAt.value,
     };
-  }
-
-  updateRole(role: string): void {
-    this.role = new UserRole(role as UserRoleValue);
   }
 }

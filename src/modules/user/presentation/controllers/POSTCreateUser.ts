@@ -1,13 +1,14 @@
 import { Uuid } from '@/modules/shared/domain/core/value-objects/Uuid';
+import { QStashEventBus } from '@/modules/shared/infrastructure/events/qstash/qstash-event-bus';
 import { db } from '@/modules/shared/infrastructure/persistence/prisma/PrismaConnection';
 import { headers } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
-import { RegisterUser } from '../../application/RegisterUser';
+import { RegisterUser } from '../../application/register-user';
 import { PrismaUserRepository } from '../../infrastructure/PrismaUserRepository';
 import { verifyWebhook } from '../guards/svix-guard';
 
 export const POSTCreateUser = async (req: NextRequest) => {
-  const useCase = new RegisterUser(new PrismaUserRepository(db));
+  const useCase = new RegisterUser(new PrismaUserRepository(db), new QStashEventBus());
   const headerPayload = headers();
   const bodyPayload = await req.text();
   let evt;
@@ -23,7 +24,13 @@ export const POSTCreateUser = async (req: NextRequest) => {
   const { id, email_addresses, unsafe_metadata } = evt.data;
   if (unsafe_metadata.provider !== 'oauth') return NextResponse.json({ message: 'User created' }, { status: 200 });
   try {
-    await useCase.run(Uuid.random().value, id, email_addresses?.[0].email_address, unsafe_metadata.role);
+    await useCase.run(
+      Uuid.random().value,
+      id,
+      email_addresses?.[0].email_address,
+      unsafe_metadata.role,
+      unsafe_metadata.additionalData
+    );
   } catch (error) {
     console.log(error);
     return new NextResponse('Error occurred', { status: 500 });

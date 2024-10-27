@@ -1,7 +1,7 @@
 model Doctor {
   id                    String                 @id @default(uuid())
   userId                String                 @unique 
-  specialtyId           String                 
+  specialtyId           String                 @default(uuid())
   licenseMedicalNumber  String?                @unique
   score                 Float                  @default(0)
   experience            Int                    @default(1)

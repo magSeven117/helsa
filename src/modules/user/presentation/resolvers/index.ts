@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { CreateUserResolver } from './CreateUserResolver';
+import { CreateUserResolver } from './create-user-resolver';
 
 const resolvers = {
   queries: {},

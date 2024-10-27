@@ -17,7 +17,7 @@ export type DomainEventPrimitives = {
 export abstract class DomainEvent {
   static EVENT_NAME: string;
   static fromPrimitives: (params: any) => DomainEvent;
-  readonly aggregate: Record<string, unknown>;
+  readonly aggregate: Record<string, any>;
   readonly eventId: string;
   readonly occurredOn: Date;
   readonly eventName: string;
@@ -28,7 +28,7 @@ export abstract class DomainEvent {
     aggregate: Record<string, unknown>,
     eventId?: string,
     occurredOn?: Date,
-    extraData?: Record<string, unknown>,
+    extraData?: Record<string, unknown>
   ) {
     this.aggregate = aggregate;
     this.eventId = eventId;
