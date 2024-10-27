@@ -1,5 +1,5 @@
-import { NumberValueObject } from '../ValueObject';
 import { FormatError } from '../errors/FormatError';
+import { NumberValueObject } from '../value-object';
 
 export class Latitude extends NumberValueObject {
   public validation(value: number): void {

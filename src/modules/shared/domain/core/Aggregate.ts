@@ -1,6 +1,6 @@
-import { DomainEvent } from './DomainEvent';
-import { DateValueObject } from './ValueObject';
-import { Uuid } from './value-objects/Uuid';
+import { DomainEvent } from './domain-event';
+import { DateValueObject } from './value-object';
+import { Uuid } from './value-objects/uuid';
 
 export abstract class Aggregate {
   private domainEvents: Array<DomainEvent>;

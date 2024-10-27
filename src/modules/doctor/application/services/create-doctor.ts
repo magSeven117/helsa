@@ -1,4 +1,4 @@
-import { Uuid } from '@/modules/shared/domain/core/value-objects/Uuid';
+import { Uuid } from '@/modules/shared/domain/core/value-objects/uuid';
 import { Primitives } from '@/modules/shared/domain/types/Primitives';
 import { Doctor } from '../../domain/Doctor';
 import { DoctorRepository } from '../../domain/DoctorRepository';

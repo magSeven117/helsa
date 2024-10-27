@@ -1,4 +1,4 @@
-import { DomainEvent, DomainEventPrimitives } from '@/modules/shared/domain/core/DomainEvent';
+import { DomainEvent, DomainEventPrimitives } from '@/modules/shared/domain/core/domain-event';
 export type UserCreatedPrimitives = {
   userId: string;
   role: string;

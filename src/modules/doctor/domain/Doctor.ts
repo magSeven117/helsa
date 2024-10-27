@@ -1,6 +1,6 @@
-import { Aggregate } from '@/modules/shared/domain/core/Aggregate';
-import { Uuid } from '@/modules/shared/domain/core/value-objects/Uuid';
-import { DateValueObject, NumberValueObject, StringValueObject } from '@/modules/shared/domain/core/ValueObject';
+import { Aggregate } from '@/modules/shared/domain/core/aggregate';
+import { DateValueObject, NumberValueObject, StringValueObject } from '@/modules/shared/domain/core/value-object';
+import { Uuid } from '@/modules/shared/domain/core/value-objects/uuid';
 import { Primitives } from '@/modules/shared/domain/types/Primitives';
 import { ConsultingRoomAddress } from './ConsultingRoomAddress';
 import { Education } from './Educations';

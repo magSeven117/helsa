@@ -1,4 +1,4 @@
-import { EventBus } from '@/modules/shared/domain/core/DomainEvent';
+import { EventBus } from '@/modules/shared/domain/core/domain-event';
 
 import { User } from '../domain/user';
 import { UserRepository } from '../domain/user-repository';

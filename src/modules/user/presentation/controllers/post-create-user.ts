@@ -1,4 +1,4 @@
-import { Uuid } from '@/modules/shared/domain/core/value-objects/Uuid';
+import { Uuid } from '@/modules/shared/domain/core/value-objects/uuid';
 import { QStashEventBus } from '@/modules/shared/infrastructure/events/qstash/qstash-event-bus';
 import { db } from '@/modules/shared/infrastructure/persistence/prisma/PrismaConnection';
 import { headers } from 'next/headers';

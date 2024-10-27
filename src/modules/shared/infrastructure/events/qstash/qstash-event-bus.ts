@@ -1,4 +1,4 @@
-import { DomainEvent, EventBus } from '@/modules/shared/domain/core/DomainEvent';
+import { DomainEvent, EventBus } from '@/modules/shared/domain/core/domain-event';
 import { Client } from '@upstash/qstash';
 
 export class QStashEventBus implements EventBus {

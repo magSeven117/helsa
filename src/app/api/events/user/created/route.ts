@@ -1,7 +1,7 @@
 import { CreateDoctorOnUserCreated } from '@/modules/doctor/application/event-handlers/create-doctor-on-user-created';
 import { CreateDoctor } from '@/modules/doctor/application/services/create-doctor';
 import { PrismaDoctorRepository } from '@/modules/doctor/infrastructure/persistence/PrismaDoctorRepository';
-import { DomainEventPrimitives } from '@/modules/shared/domain/core/DomainEvent';
+import { DomainEventPrimitives } from '@/modules/shared/domain/core/domain-event';
 import { db } from '@/modules/shared/infrastructure/persistence/prisma/PrismaConnection';
 import { UserCreated } from '@/modules/user/domain/user-created';
 import { verifySignatureAppRouter } from '@upstash/qstash/dist/nextjs';

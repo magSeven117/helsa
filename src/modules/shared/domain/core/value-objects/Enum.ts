@@ -1,5 +1,5 @@
-import { ValueObject } from '../ValueObject';
 import { FormatError } from '../errors/FormatError';
+import { ValueObject } from '../value-object';
 
 export class Enum<T> extends ValueObject<T> {
   constructor(value: T, public readonly validValues: T[]) {

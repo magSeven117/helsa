@@ -1,6 +1,6 @@
 import { v4, validate } from 'uuid';
-import { StringValueObject } from '../ValueObject';
 import { FormatError } from '../errors/FormatError';
+import { StringValueObject } from '../value-object';
 
 export class Uuid extends StringValueObject {
   constructor(value: string) {

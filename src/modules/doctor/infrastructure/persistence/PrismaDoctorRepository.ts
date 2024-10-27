@@ -1,4 +1,4 @@
-import { Criteria } from '@/modules/shared/domain/core/Criteria';
+import { Criteria } from '@/modules/shared/domain/core/criteria';
 import { Primitives } from '@/modules/shared/domain/types/Primitives';
 import { PrismaCriteriaConverter } from '@/modules/shared/infrastructure/persistence/prisma/PrismaCriteriaConverter';
 import { PrismaClient } from '@prisma/client';

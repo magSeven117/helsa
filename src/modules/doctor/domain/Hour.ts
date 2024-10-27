@@ -1,5 +1,5 @@
-import { StringValueObject } from "@/modules/shared/domain/core/ValueObject";
-import { Primitives } from "@/modules/shared/domain/types/Primitives";
+import { StringValueObject } from '@/modules/shared/domain/core/value-object';
+import { Primitives } from '@/modules/shared/domain/types/Primitives';
 
 export class Hour {
   constructor(public hour: StringValueObject) {}

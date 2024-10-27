@@ -7,7 +7,7 @@ import {
   Operator,
   Order,
   Pagination,
-} from "@/modules/shared/domain/core/Criteria";
+} from '@/modules/shared/domain/core/criteria';
 interface TransformerFunction<T, K> {
   (value: T): K;
 }

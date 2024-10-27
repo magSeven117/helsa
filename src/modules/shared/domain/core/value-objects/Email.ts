@@ -1,5 +1,5 @@
-import { StringValueObject } from '../ValueObject';
 import { FormatError } from '../errors/FormatError';
+import { StringValueObject } from '../value-object';
 
 export class Email extends StringValueObject {
   protected validation(value: string): void {

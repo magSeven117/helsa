@@ -1,5 +1,5 @@
-import { Uuid } from '@/modules/shared/domain/core/value-objects/Uuid';
-import { DateValueObject, StringValueObject } from '@/modules/shared/domain/core/ValueObject';
+import { DateValueObject, StringValueObject } from '@/modules/shared/domain/core/value-object';
+import { Uuid } from '@/modules/shared/domain/core/value-objects/uuid';
 import { Primitives } from '@/modules/shared/domain/types/Primitives';
 export class Education {
   constructor(

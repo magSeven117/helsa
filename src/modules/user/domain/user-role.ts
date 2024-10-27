@@ -1,4 +1,4 @@
-import { Enum } from '@/modules/shared/domain/core/value-objects/Enum';
+import { Enum } from '@/modules/shared/domain/core/value-objects/enum';
 
 export enum UserRoleValue {
   DOCTOR = 'DOCTOR',

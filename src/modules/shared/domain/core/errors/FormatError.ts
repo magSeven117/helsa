@@ -1,4 +1,4 @@
-import { DomainError } from '../DomainError';
+import { DomainError } from '../domain-error';
 
 /**
  * Representation of a domain error that can be thrown when the format of a value is invalid.

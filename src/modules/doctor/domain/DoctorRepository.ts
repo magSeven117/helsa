@@ -1,4 +1,4 @@
-import { Criteria } from '@/modules/shared/domain/core/Criteria';
+import { Criteria } from '@/modules/shared/domain/core/criteria';
 import { Doctor } from './Doctor';
 import { Specialty } from './Specialty';
 

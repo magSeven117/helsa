@@ -1,6 +1,6 @@
-import { Aggregate } from '@/modules/shared/domain/core/Aggregate';
-import { BooleanValueObject, DateValueObject, StringValueObject } from '@/modules/shared/domain/core/ValueObject';
-import { Uuid } from '@/modules/shared/domain/core/value-objects/Uuid';
+import { Aggregate } from '@/modules/shared/domain/core/aggregate';
+import { BooleanValueObject, DateValueObject, StringValueObject } from '@/modules/shared/domain/core/value-object';
+import { Uuid } from '@/modules/shared/domain/core/value-objects/uuid';
 import { Primitives } from '@/modules/shared/domain/types/Primitives';
 import { UserCreated } from './user-created';
 import { UserEmail } from './user-email';

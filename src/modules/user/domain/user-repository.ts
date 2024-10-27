@@ -1,4 +1,4 @@
-import { Uuid } from '@/modules/shared/domain/core/value-objects/Uuid';
+import { Uuid } from '@/modules/shared/domain/core/value-objects/uuid';
 import { User } from './user';
 import { UserEmail } from './user-email';
 

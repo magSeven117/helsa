@@ -1,5 +1,5 @@
 import { NotFoundError } from '@/modules/shared/domain/core/errors/NotFoundError';
-import { Uuid } from '@/modules/shared/domain/core/value-objects/Uuid';
+import { Uuid } from '@/modules/shared/domain/core/value-objects/uuid';
 import { Primitives } from '@/modules/shared/domain/types/Primitives';
 import { PrismaClient } from '@prisma/client';
 import { User } from '../domain/user';

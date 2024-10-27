@@ -1,7 +1,7 @@
 import { createWriteStream } from 'fs';
 import { Readable } from 'stream';
 import { finished } from 'stream/promises';
-import { StringValueObject } from '../ValueObject';
+import { StringValueObject } from '../value-object';
 
 export class File extends StringValueObject {
   async toBase64(): Promise<string> {
