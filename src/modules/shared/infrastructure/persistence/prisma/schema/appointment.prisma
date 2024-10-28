@@ -52,7 +52,6 @@ model AppointmentRating {
 model AppointmentTelemetry {
   id            String      @id @default(uuid())
   weight        Float?
-  height        Float?
   temperature   Float?
   heartRate     Float?
   bloodPressure Float?

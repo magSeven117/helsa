@@ -9,14 +9,14 @@ model Patient {
   allergies   Allergy[]
   diseases    ChronicDisease[]
   contacts    PatientContact[]
-  ratings     Rating[]
-  diagnostics Diagnostic[]
-  treatments  Treatment[]
   vaccines    Vaccine[]
   surgeries   Surgery[]
+
+  diagnostics Diagnostic[]
+  treatments  Treatment[]
   tests       MedicalTest[]
   documents   MedicalDocument[]
-
+  ratings     Rating[]
   appointments Appointment[]
 
   createdAt DateTime @default(now())
