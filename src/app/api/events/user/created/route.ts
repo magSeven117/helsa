@@ -1,13 +1,19 @@
 import { CreateDoctorOnUserCreated } from '@/modules/doctor/application/event-handlers/create-doctor-on-user-created';
 import { CreateDoctor } from '@/modules/doctor/application/services/create-doctor';
 import { PrismaDoctorRepository } from '@/modules/doctor/infrastructure/persistence/prisma-doctor-repository';
+import { CreatePatientOnUserCreated } from '@/modules/patient/application/handlers/create-patient-on-user-created';
+import { CreatePatient } from '@/modules/patient/application/services/create-patient';
+import { PrismaPatientRepository } from '@/modules/patient/infrastructure/prisma-patient-repository';
 import { DomainEventPrimitives } from '@/modules/shared/domain/core/domain-event';
 import { db } from '@/modules/shared/infrastructure/persistence/prisma/PrismaConnection';
 import { UserCreated } from '@/modules/user/domain/user-created';
 import { verifySignatureAppRouter } from '@upstash/qstash/dist/nextjs';
 import { NextRequest, NextResponse } from 'next/server';
 
-const handlers = [new CreateDoctorOnUserCreated(new CreateDoctor(new PrismaDoctorRepository(db)))];
+const handlers = [
+  new CreateDoctorOnUserCreated(new CreateDoctor(new PrismaDoctorRepository(db))),
+  new CreatePatientOnUserCreated(new CreatePatient(new PrismaPatientRepository(db))),
+];
 
 export const POST = verifySignatureAppRouter(async (req: NextRequest) => {
   try {

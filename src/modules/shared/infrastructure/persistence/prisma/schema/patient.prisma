@@ -33,7 +33,7 @@ model Allergy {
   id             String          @id @default(uuid())
   name           String
   description    String
-  severety       AllergySeverity
+  severity       AllergySeverity
   reaction       String
   diagnosticDate DateTime
   patientId      String
