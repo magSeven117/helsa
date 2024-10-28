@@ -1,19 +1,26 @@
 model Patient {
-  id         String           @id @default(uuid())
+  id          String @id @default(uuid())
   demographic Json
-  biometric  Json
+  biometric   Json
 
-  userId     String          @unique
-  user       User @relation(fields: [userId], references: [id])
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
 
-  allergies  Allergy[]
-  diseases   ChronicDisease[]
-  contacts   PatientContact[]
-  ratings    Rating[]
+  allergies   Allergy[]
+  diseases    ChronicDisease[]
+  contacts    PatientContact[]
+  ratings     Rating[]
   diagnostics Diagnostic[]
+  treatments  Treatment[]
+  vaccines    Vaccine[]
+  surgeries   Surgery[]
+  tests       MedicalTest[]
+  documents   MedicalDocument[]
 
-  createdAt  DateTime         @default(now())
-  updatedAt  DateTime         @updatedAt
+  appointments Appointment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum AllergySeverity {
@@ -23,14 +30,15 @@ enum AllergySeverity {
 }
 
 model Allergy {
-  id        String           @id @default(uuid())
-  name      String
-  description String
-  severety  AllergySeverity
-  reaction String
+  id             String          @id @default(uuid())
+  name           String
+  description    String
+  severety       AllergySeverity
+  reaction       String
   diagnosticDate DateTime
-  patientId String
-  patient   Patient @relation(fields: [patientId], references: [id])
+  patientId      String
+  patient        Patient         @relation(fields: [patientId], references: [id])
+  treatments      Treatment[]      @relation("AllergyTreatment")
 }
 
 enum ChronicDiseaseType {
@@ -41,20 +49,45 @@ enum ChronicDiseaseType {
 }
 
 model ChronicDisease {
-  id        String           @id @default(uuid())
-  type      ChronicDiseaseType
-  description String
+  id             String             @id @default(uuid())
+  type           ChronicDiseaseType
+  description    String
   diagnosticDate DateTime
-  actualState String
+  actualState    String
+  patientId      String
+  patient        Patient            @relation(fields: [patientId], references: [id])
+  treatments      Treatment[]       @relation("DiseaseTreatment")
+}
+
+model PatientContact {
+  id           String  @id @default(uuid())
+  name         String
+  phone        String
+  relationship String
+  patientId    String
+  patient      Patient @relation(fields: [patientId], references: [id])
+}
+
+model Vaccine {
+  id          String @id @default(uuid())
+  name        String
+  dose        Int
+  date       DateTime
+  notes       String?
+  nextDose    DateTime?
+
   patientId String
   patient   Patient @relation(fields: [patientId], references: [id])
 }
 
-model PatientContact {
-  id         String           @id @default(uuid())
-  name String
-  phone String
-  relationship String
+model Surgery {
+  id          String @id @default(uuid())
+  date        DateTime
+  type        String
+  details     String
+  surgeon     String
+  hospital    String
+
   patientId String
   patient   Patient @relation(fields: [patientId], references: [id])
 }

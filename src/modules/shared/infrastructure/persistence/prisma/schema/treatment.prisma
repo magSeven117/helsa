@@ -1,0 +1,51 @@
+enum TreatmentType {
+  MEDICATION
+  SURGERY
+  PHYSIOTHERAPY
+}
+
+enum TreatmentStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+model Treatment {
+  id         String           @id @default(uuid())
+  description String
+  type        TreatmentType
+  instructions String
+  status      TreatmentStatus
+  startDate   DateTime
+  endDate     DateTime
+
+  patientId     String
+  doctorId      String
+  recipeId String
+  diagnosticId  String
+
+  patient      Patient    @relation(fields: [patientId], references: [id])
+  doctor       Doctor     @relation(fields: [doctorId], references: [id])
+  diagnostic   Diagnostic  @relation(fields: [diagnosticId], references: [id])
+  recipe  AppointmentRecipe @relation(fields: [recipeId], references: [id])
+
+  medications Medication[]
+  allergies  Allergy[] @relation("AllergyTreatment")
+  diseases   ChronicDisease[] @relation("DiseaseTreatment")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Medication {
+  id         String   @id @default(uuid())
+  name        String
+  description String
+  dose      String
+  frequency   String
+  duration    String
+  treatmentId String
+
+  treatment Treatment @relation(fields: [treatmentId], references: [id])
+}

@@ -14,11 +14,11 @@ export class Doctor extends Aggregate {
     public specialtyId: Uuid,
     public score: NumberValueObject,
     public experience: NumberValueObject,
-    public educations: Education[],
     createdAt: DateValueObject,
     updatedAt: DateValueObject,
     public schedule?: Schedule,
-    public consultingRoomAddress?: ConsultingRoomAddress
+    public consultingRoomAddress?: ConsultingRoomAddress,
+    public educations?: Education[]
   ) {
     super(id, createdAt, updatedAt);
   }
@@ -31,7 +31,6 @@ export class Doctor extends Aggregate {
       new Uuid(specialtyId),
       new NumberValueObject(0),
       new NumberValueObject(1),
-      [],
       DateValueObject.today(),
       DateValueObject.today()
     );
@@ -45,13 +44,13 @@ export class Doctor extends Aggregate {
       new Uuid(data.specialtyId),
       new NumberValueObject(data.score),
       new NumberValueObject(data.experience),
-      data.educations
-        ? data.educations.map((education: Primitives<Education>) => Education.fromPrimitives(education))
-        : [],
       new DateValueObject(data.createdAt),
       new DateValueObject(data.updatedAt),
       data.schedule ? Schedule.fromPrimitives(data.schedule) : undefined,
-      data.consultingRoomAddress ? ConsultingRoomAddress.fromPrimitives(data.consultingRoomAddress) : undefined
+      data.consultingRoomAddress ? ConsultingRoomAddress.fromPrimitives(data.consultingRoomAddress) : undefined,
+      data.educations
+        ? data.educations.map((education: Primitives<Education>) => Education.fromPrimitives(education))
+        : []
     );
   }
 
@@ -63,11 +62,11 @@ export class Doctor extends Aggregate {
       specialtyId: this.specialtyId.value,
       score: this.score.value,
       experience: this.experience.value,
-      educations: this.educations.map((education) => education.toPrimitives()),
       createdAt: this.createdAt.value,
       updatedAt: this.updatedAt.value,
       schedule: this.schedule ? this.schedule.toPrimitives() : undefined,
       consultingRoomAddress: this.consultingRoomAddress ? this.consultingRoomAddress.toPrimitives() : undefined,
+      educations: this.educations ? this.educations.map((education) => education.toPrimitives()) : [],
     };
   }
 }

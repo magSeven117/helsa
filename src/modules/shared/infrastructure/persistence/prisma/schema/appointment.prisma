@@ -1,0 +1,93 @@
+model Appointment {
+  id       String            @id @default(uuid())
+  type     String
+  initDate DateTime
+  endDate  DateTime
+  status   AppointmentStatus
+
+  patientId String
+  patient   Patient @relation(fields: [patientId], references: [id])
+
+  doctorId String
+  doctor   Doctor @relation(fields: [doctorId], references: [id])
+
+  room        AppointmentRoom?
+  rating      AppointmentRating?
+  telemetry   AppointmentTelemetry?
+  recipes     AppointmentRecipe?
+  notes       AppointmentNote[]
+  diagnostics Diagnostic[]
+  
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  RESCHEDULED
+  CONFIRMED
+  LATE
+  CANCELLED
+  WAITING_DOCTOR
+  WAITING_PATIENT
+  STARTED
+  MISSED
+  FINISHED
+}
+
+model AppointmentRoom {
+  id            String      @id @default(uuid())
+  token         String
+  url           String
+  appointmentId String      @unique
+  appointment   Appointment @relation(fields: [appointmentId], references: [id])
+}
+
+model AppointmentRating {
+  id            String      @id @default(uuid())
+  rating        Int
+  comment       String?
+  appointmentId String      @unique
+  appointment   Appointment @relation(fields: [appointmentId], references: [id])
+}
+
+model AppointmentTelemetry {
+  id            String      @id @default(uuid())
+  weight        Float?
+  height        Float?
+  temperature   Float?
+  heartRate     Float?
+  bloodPressure Float?
+  imc           Float?
+  appointmentId String      @unique
+  appointment   Appointment @relation(fields: [appointmentId], references: [id])
+}
+
+model AppointmentRecipe {
+  id            String      @id @default(uuid())
+  date          DateTime
+  description   String
+  treatments  Treatment[]
+  tests       MedicalTest[]
+  references  MedicalReference[]
+  appointmentId String      @unique
+  appointment   Appointment @relation(fields: [appointmentId], references: [id])
+}
+
+model MedicalReference {
+  id      String   @id @default(uuid())
+  reason  String
+  observations String?
+
+  referencedId String
+  referenced Doctor @relation(fields: [referencedId], references: [id])
+
+  recipeId String 
+  recipe   AppointmentRecipe @relation(fields: [recipeId], references: [id])
+}
+
+model AppointmentNote {
+  id           String      @id @default(uuid())
+  date         DateTime
+  description  String
+  appointmentId String      
+  appointment   Appointment @relation(fields: [appointmentId], references: [id])
+}
