@@ -1,21 +1,22 @@
 model Hospital {
-  id          String           @id @default(uuid())
-  address     String
-  city        String
-  coordinates HospitalAddress?
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
+  id        String           @id @default(uuid())
+  city      String
+  address   HospitalAddress?
+  adminId   String
+  admin     User             @relation(fields: [adminId], references: [id])
+  doctors   Doctor[]         @relation("DoctorHospital")
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
 }
 
 model HospitalAddress {
-  id         String @id @default(uuid())
-  street     String
-  city       String
-  country    String
-  zipCode    String
+  id          String @id @default(uuid())
+  street      String
+  city        String
+  country     String
+  zipCode     String
   coordinates Json
 
-  hospitalId String @unique
+  hospitalId String   @unique
   hospital   Hospital @relation(fields: [hospitalId], references: [id])
 }
-

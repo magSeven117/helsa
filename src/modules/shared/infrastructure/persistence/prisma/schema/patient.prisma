@@ -1,0 +1,60 @@
+model Patient {
+  id         String           @id @default(uuid())
+  demographic Json
+  biometric  Json
+
+  userId     String          @unique
+  user       User @relation(fields: [userId], references: [id])
+
+  allergies  Allergy[]
+  diseases   ChronicDisease[]
+  contacts   PatientContact[]
+  ratings    Rating[]
+  diagnostics Diagnostic[]
+
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+}
+
+enum AllergySeverity {
+  MILD
+  MODERATE
+  SEVERE
+}
+
+model Allergy {
+  id        String           @id @default(uuid())
+  name      String
+  description String
+  severety  AllergySeverity
+  reaction String
+  diagnosticDate DateTime
+  patientId String
+  patient   Patient @relation(fields: [patientId], references: [id])
+}
+
+enum ChronicDiseaseType {
+  GENETIC
+  AMBIENTAL
+  INFECTIOUS
+  HABITUAL
+}
+
+model ChronicDisease {
+  id        String           @id @default(uuid())
+  type      ChronicDiseaseType
+  description String
+  diagnosticDate DateTime
+  actualState String
+  patientId String
+  patient   Patient @relation(fields: [patientId], references: [id])
+}
+
+model PatientContact {
+  id         String           @id @default(uuid())
+  name String
+  phone String
+  relationship String
+  patientId String
+  patient   Patient @relation(fields: [patientId], references: [id])
+}
