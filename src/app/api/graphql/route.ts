@@ -1,3 +1,4 @@
+import doctorResolvers from '@/modules/doctor/presentation/resolvers';
 import { getSchema } from '@/modules/shared/infrastructure/persistence/graphql/schema';
 import { db } from '@/modules/shared/infrastructure/persistence/prisma/PrismaConnection';
 import userResolvers from '@/modules/user/presentation/resolvers';
@@ -13,6 +14,7 @@ const resolvers = {
   },
   Mutation: {
     ...userResolvers.mutations,
+    ...doctorResolvers.mutations,
   },
 };
 const apolloServer = new ApolloServer({
