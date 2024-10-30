@@ -1,6 +1,6 @@
-import { Doctor } from '@/modules/doctor/domain/doctor';
 import { DoctorRepository } from '@/modules/doctor/domain/doctor-repository';
 import { Primitives } from '@/modules/shared/domain/types/primitives';
+import { Doctor } from '../../domain/doctor';
 
 export class CreateDoctor {
   constructor(private repository: DoctorRepository) {}
