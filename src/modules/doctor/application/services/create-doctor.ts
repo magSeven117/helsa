@@ -1,4 +1,4 @@
-import { Doctor } from '@/modules/doctor/domain/Doctor';
+import { Doctor } from '@/modules/doctor/domain/doctor';
 import { DoctorRepository } from '@/modules/doctor/domain/doctor-repository';
 import { Primitives } from '@/modules/shared/domain/types/primitives';
 
