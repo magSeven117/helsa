@@ -1,5 +1,5 @@
-import { Doctor } from "@/modules/doctor/domain/Doctor";
-import { Primitives } from "@/modules/shared/domain/types/Primitives";
+import { Doctor } from "@/modules/doctor/domain/doctor";
+import { Primitives } from "@/modules/shared/domain/types/primitives";
 import { AddressInfoForm } from "./forms/address-info";
 import { EducationForm } from "./forms/education-form";
 import { ExperienceForm } from "./forms/experience-form";

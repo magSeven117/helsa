@@ -1,5 +1,5 @@
 import { Latitude } from '@/modules/shared/domain/core/value-objects/latitude';
-import { Primitives } from '@/modules/shared/domain/types/Primitives';
+import { Primitives } from '@/modules/shared/domain/types/primitives';
 
 export class RoomCoordinates {
   constructor(public latitude: Latitude, public longitude: Latitude) {}
