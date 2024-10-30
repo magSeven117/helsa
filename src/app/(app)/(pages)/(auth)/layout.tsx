@@ -11,7 +11,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
         <div className='w-full'>{children}</div>
       </div>
       <div className='overflow-hidden hidden flex-row box-border w-full lg:flex'>
-        <div className='hidden bg-primary w-full h-full justify-center items-center lg:flex'>
+        <div className='hidden bg-color-brand-primary w-full h-full justify-center items-center lg:flex'>
           <img
             src={banner.src}
             alt="banner"
