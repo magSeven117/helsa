@@ -4,6 +4,7 @@ import ToastProvider from '@/libs/ducen-ui/components/toast-provider';
 import { ApolloContextProvider } from '@/modules/shared/infrastructure/persistence/graphql/apollo-provider';
 import { ClerkProvider } from '@clerk/nextjs';
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata } from 'next';
 import { ThemeProvider } from 'next-themes';
 import { Nunito } from 'next/font/google';
@@ -30,6 +31,7 @@ export default function RootLayout({
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
               {children}
               <Analytics />
+              <SpeedInsights />
               <ToastProvider></ToastProvider>
               <Toaster />
             </ThemeProvider>
