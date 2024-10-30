@@ -25,8 +25,8 @@ const SelectRoleForm = ({ userId }: { userId: string }) => {
         <CardContent className="my-5">
           <div className="flex flex-col items-center justify-around gap-4 w-full">
             <div
-              className={cn("flex items-center justify-start gap-4 p-4 w-2/3 border rounded-lg cursor-pointer hover:bg-primary hover:text-background transition-all duration-500 group", {
-                'bg-primary text-background': role === 'PATIENT',
+              className={cn("flex items-center justify-start gap-4 p-4 w-2/3 border rounded-lg cursor-pointer transition-all duration-500 group", {
+                'ring-2 ring-color-brand-primary': role === 'PATIENT',
               })}
               onClick={() => setRole('PATIENT')}
             >
@@ -37,8 +37,8 @@ const SelectRoleForm = ({ userId }: { userId: string }) => {
               </div>
             </div>
             <div
-              className={cn("flex items-center justify-start gap-4 p-4 w-2/3 border rounded-lg cursor-pointer hover:bg-primary hover:text-background transition-all duration-500 group", {
-                'bg-primary text-background': role === 'DOCTOR',
+              className={cn("flex items-center justify-start gap-4 p-4 w-2/3 border rounded-lg cursor-pointer transition-all duration-500 group", {
+                'ring-2 ring-color-brand-primary': role === 'DOCTOR',
               })}
               onClick={() => setRole('DOCTOR')}
             >
@@ -51,8 +51,8 @@ const SelectRoleForm = ({ userId }: { userId: string }) => {
               </div>
             </div>
             <div
-              className={cn("flex items-center justify-start gap-4 p-4 w-2/3 border rounded-lg cursor-pointer hover:bg-primary hover:text-background transition-all duration-500 group", {
-                'bg-primary text-background': role === 'HOSPITAL',
+              className={cn("flex items-center justify-start gap-4 p-4 w-2/3 border rounded-lg cursor-pointer transition-all duration-500 group", {
+                'ring-2 ring-color-brand-primary': role === 'HOSPITAL',
               })}
               onClick={() => setRole('HOSPITAL')}
             >
