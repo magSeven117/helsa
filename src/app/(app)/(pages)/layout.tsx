@@ -1,4 +1,5 @@
 import '@/assets/globals.css';
+import icon from '@/assets/images/Helsa Logo black - white.png';
 import ToastProvider from '@/libs/ducen-ui/components/toast-provider';
 import { ApolloContextProvider } from '@/modules/shared/infrastructure/persistence/graphql/apollo-provider';
 import { ClerkProvider } from '@clerk/nextjs';
@@ -23,7 +24,7 @@ export default function RootLayout({
     <ClerkProvider>
       <ApolloContextProvider>
         <html lang="en" suppressHydrationWarning={true}>
-          <link rel="icon" href="/images/activity.svg" sizes="any" />
+          <link rel="icon" href={icon.src} sizes="any" />
           <body className={nunito.className} suppressHydrationWarning={true}>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
               {children}

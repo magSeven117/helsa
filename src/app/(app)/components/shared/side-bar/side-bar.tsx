@@ -1,4 +1,5 @@
 'use client';
+import logo from '@/assets/images/Helsa Logo brand white.png';
 import { Avatar, AvatarFallback, AvatarImage } from '@/libs/shadcn-ui/components/avatar';
 import {
   DropdownMenu,
@@ -24,7 +25,6 @@ import {
 import { cn } from '@/libs/shadcn-ui/utils/utils';
 import { useClerk, useUser } from '@clerk/nextjs';
 import {
-  Activity,
   Bell,
   Calendar,
   ChevronsUpDown,
@@ -75,9 +75,9 @@ const SideBar = ({  role }: { role: string }) => {
           size="lg"
           className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
         >
-          <Link href="/dashboard" className="flex items-center justify-center">
+          <Link href="/dashboard" className="flex items-center justify-center gap-2">
             <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
-              <Activity className="overflow-hidden" />
+              <img src={logo.src} alt="" className='rounded-lg'/>
             </div>
             <p className="text-lg font-bold">Helsa</p>
           </Link>
