@@ -1,5 +1,5 @@
-import { InternalError } from '@/modules/shared/domain/core/errors/InternalError';
-import { db } from '@/modules/shared/infrastructure/persistence/prisma/PrismaConnection';
+import { InternalError } from '@/modules/shared/domain/core/errors/internal-error';
+import { db } from '@/modules/shared/infrastructure/persistence/prisma/prisma-connection';
 import { UpdateRole } from '@/modules/user/application/update-role';
 import { UserRoleValue } from '@/modules/user/domain/user-role';
 import { PrismaUserRepository } from '@/modules/user/infrastructure/prisma-user-repository';

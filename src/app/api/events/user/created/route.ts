@@ -2,13 +2,13 @@ import { CreateDoctorOnUserCreated } from '@/modules/doctor/application/event-ha
 import { CreateDoctor } from '@/modules/doctor/application/services/create-doctor';
 import { PrismaDoctorRepository } from '@/modules/doctor/infrastructure/persistence/prisma-doctor-repository';
 import { CreateHospitalOnUserCreated } from '@/modules/hospital/application/handlers/create-hospital-on-user-created';
-import { CreateHospital } from '@/modules/hospital/application/services/CreateHospital';
+import { CreateHospital } from '@/modules/hospital/application/services/create-hospital';
 import { PrismaHospitalRepository } from '@/modules/hospital/infrastructure/prisma-hospital-repository';
 import { CreatePatientOnUserCreated } from '@/modules/patient/application/handlers/create-patient-on-user-created';
 import { CreatePatient } from '@/modules/patient/application/services/create-patient';
 import { PrismaPatientRepository } from '@/modules/patient/infrastructure/prisma-patient-repository';
 import { DomainEventPrimitives } from '@/modules/shared/domain/core/domain-event';
-import { db } from '@/modules/shared/infrastructure/persistence/prisma/PrismaConnection';
+import { db } from '@/modules/shared/infrastructure/persistence/prisma/prisma-connection';
 import { UserCreated } from '@/modules/user/domain/user-created';
 import { verifySignatureAppRouter } from '@upstash/qstash/dist/nextjs';
 import { NextRequest, NextResponse } from 'next/server';

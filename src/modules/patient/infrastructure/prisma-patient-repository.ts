@@ -1,7 +1,7 @@
 import { Criteria } from '@/modules/shared/domain/core/criteria';
 import { Uuid } from '@/modules/shared/domain/core/value-objects/uuid';
 import { Primitives } from '@/modules/shared/domain/types/primitives';
-import { PrismaCriteriaConverter } from '@/modules/shared/infrastructure/persistence/prisma/PrismaCriteriaConverter';
+import { PrismaCriteriaConverter } from '@/modules/shared/infrastructure/persistence/prisma/prisma-criteria-converter';
 import { PrismaClient } from '@prisma/client';
 import { Allergy } from '../domain/members/allergy';
 import { ChronicDisease } from '../domain/members/chronic-disease';

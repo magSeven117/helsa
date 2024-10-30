@@ -1,6 +1,6 @@
 'use server';
 
-import { db } from '@/modules/shared/infrastructure/persistence/prisma/PrismaConnection';
+import { db } from '@/modules/shared/infrastructure/persistence/prisma/prisma-connection';
 import { currentUser } from '@clerk/nextjs/server';
 import { GetUser } from '../../application/get-user';
 import { PrismaUserRepository } from '../../infrastructure/prisma-user-repository';

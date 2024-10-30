@@ -1,6 +1,6 @@
-import { InternalError } from '@/modules/shared/domain/core/errors/InternalError';
+import { InternalError } from '@/modules/shared/domain/core/errors/internal-error';
 import { QStashEventBus } from '@/modules/shared/infrastructure/events/qstash/qstash-event-bus';
-import { db } from '@/modules/shared/infrastructure/persistence/prisma/PrismaConnection';
+import { db } from '@/modules/shared/infrastructure/persistence/prisma/prisma-connection';
 import { RegisterUser } from '../../application/register-user';
 import { PrismaUserRepository } from '../../infrastructure/prisma-user-repository';
 

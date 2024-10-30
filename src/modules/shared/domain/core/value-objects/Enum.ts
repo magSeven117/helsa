@@ -1,4 +1,4 @@
-import { FormatError } from '../errors/FormatError';
+import { FormatError } from '../errors/format-error';
 import { ValueObject } from '../value-object';
 
 export class Enum<T> extends ValueObject<T> {

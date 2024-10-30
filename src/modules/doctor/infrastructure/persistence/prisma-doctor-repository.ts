@@ -1,6 +1,6 @@
 import { Criteria } from '@/modules/shared/domain/core/criteria';
 import { Primitives } from '@/modules/shared/domain/types/primitives';
-import { PrismaCriteriaConverter } from '@/modules/shared/infrastructure/persistence/prisma/PrismaCriteriaConverter';
+import { PrismaCriteriaConverter } from '@/modules/shared/infrastructure/persistence/prisma/prisma-criteria-converter';
 import { PrismaClient } from '@prisma/client';
 import { Doctor } from '../../domain/doctor';
 import { DoctorRepository } from '../../domain/doctor-repository';

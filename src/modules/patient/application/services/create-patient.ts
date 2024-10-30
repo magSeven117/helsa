@@ -1,4 +1,4 @@
-import { FormatError } from '@/modules/shared/domain/core/errors/FormatError';
+import { FormatError } from '@/modules/shared/domain/core/errors/format-error';
 import { Uuid } from '@/modules/shared/domain/core/value-objects/uuid';
 import { Primitives } from '@/modules/shared/domain/types/primitives';
 import { Patient } from '../../domain/patient';

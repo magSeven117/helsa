@@ -1,4 +1,4 @@
-import { FormatError } from '../errors/FormatError';
+import { FormatError } from '../errors/format-error';
 import { NumberValueObject } from '../value-object';
 
 export class Longitude extends NumberValueObject {

@@ -1,6 +1,6 @@
 import { Uuid } from '@/modules/shared/domain/core/value-objects/uuid';
 import { QStashEventBus } from '@/modules/shared/infrastructure/events/qstash/qstash-event-bus';
-import { db } from '@/modules/shared/infrastructure/persistence/prisma/PrismaConnection';
+import { db } from '@/modules/shared/infrastructure/persistence/prisma/prisma-connection';
 import { headers } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 import { RegisterUser } from '../../application/register-user';

@@ -1,5 +1,5 @@
 import { UserCreated } from '@/modules/user/domain/user-created';
-import { CreateHospital } from '../services/CreateHospital';
+import { CreateHospital } from '../services/create-hospital';
 
 export class CreateHospitalOnUserCreated {
   constructor(private creator: CreateHospital) {}

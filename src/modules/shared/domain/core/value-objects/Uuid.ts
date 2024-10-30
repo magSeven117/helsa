@@ -1,5 +1,5 @@
 import { v4, validate } from 'uuid';
-import { FormatError } from '../errors/FormatError';
+import { FormatError } from '../errors/format-error';
 import { StringValueObject } from '../value-object';
 
 export class Uuid extends StringValueObject {

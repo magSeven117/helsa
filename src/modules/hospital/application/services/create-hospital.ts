@@ -1,4 +1,4 @@
-import { FormatError } from '@/modules/shared/domain/core/errors/FormatError';
+import { FormatError } from '@/modules/shared/domain/core/errors/format-error';
 import { Hospital } from '../../domain/hospital';
 import { HospitalCriteria } from '../../domain/hospital-criteria';
 import { HospitalRepository } from '../../domain/hospital-repository';

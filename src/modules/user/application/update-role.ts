@@ -1,4 +1,4 @@
-import { NotFoundError } from '@/modules/shared/domain/core/errors/NotFoundError';
+import { NotFoundError } from '@/modules/shared/domain/core/errors/not-found-error';
 import { Uuid } from '@/modules/shared/domain/core/value-objects/uuid';
 import { UserRepository } from '../domain/user-repository';
 import { UserRoleValue } from '../domain/user-role';
