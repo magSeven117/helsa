@@ -1,4 +1,5 @@
 import { doctorSchema } from '@/modules/doctor/presentation/graphql/definitions';
+import { patientSchema } from '@/modules/patient/presentation/graphql/definitions';
 import { userSchema } from '@/modules/user/presentation/graphql/definitions';
 import gql from 'graphql-tag';
 
@@ -55,5 +56,5 @@ const indexSchema = gql`
 `;
 
 export const getSchema = () => {
-  return [userSchema, doctorSchema, indexSchema];
+  return [userSchema, doctorSchema, patientSchema, indexSchema];
 };

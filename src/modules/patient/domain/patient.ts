@@ -59,12 +59,25 @@ export class Patient extends Aggregate {
     );
   }
 
-  static create(id: string, userId: string): Patient {
+  static create(
+    id: string,
+    userId: string,
+    demographic: {
+      civilStatus?: string;
+      occupation?: string;
+      educationLevel?: string;
+    },
+    biometric: {
+      height: number;
+      bloodType: BloodTypes;
+      organDonor: OrganDonors;
+    }
+  ): Patient {
     return new Patient(
       new Uuid(id),
       new Uuid(userId),
-      PatientDemographic.create('NN', 'NN', 'NN'),
-      PatientBiometric.create(180, BloodTypes.OPositive, OrganDonors.No),
+      PatientDemographic.create(demographic.civilStatus, demographic.occupation, demographic.educationLevel),
+      PatientBiometric.create(biometric.height, biometric.bloodType, biometric.organDonor),
       [],
       [],
       [],

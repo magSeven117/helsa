@@ -12,7 +12,7 @@ export class CreatePatient {
     if (exist) {
       throw new FormatError('Patient already exists');
     }
-    const patient = Patient.create(Uuid.random().value, data.userId);
+    const patient = Patient.create(Uuid.random().value, data.userId, data.demographic, data.biometric);
     await this.patientRepository.save(patient);
   }
 }

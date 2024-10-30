@@ -34,9 +34,9 @@ export class ChronicDisease {
 }
 
 export enum DiseaseStates {
-  ACTIVE = 'active',
-  INACTIVE = 'inactive',
-  CONTROLLED = 'controlled',
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+  CONTROLLED = 'CONTROLLED',
 }
 export class DiseaseState extends Enum<DiseaseStates> {
   constructor(value: DiseaseStates) {

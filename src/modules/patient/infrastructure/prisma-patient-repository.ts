@@ -120,7 +120,7 @@ export class PrismaPatientRepository implements PatientRepository {
 
   async find(criteria: Criteria): Promise<Patient | null> {
     const { where } = this.converter.criteria(criteria);
-    const patient = await this.model.findUnique({
+    const patient = await this.model.findFirst({
       where,
       include: {
         allergies: true,
