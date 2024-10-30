@@ -23,7 +23,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Icons } from '@/libs/shadcn-ui/components/icons';
 import { Input } from '@/libs/shadcn-ui/components/input';
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '@/libs/shadcn-ui/components/input-otp';
-import { useRegister } from '@/modules/user/presentation/hooks/use-register';
+import { useRegister } from '@/modules/user/presentation/graphql/hooks/use-register';
 import { useSignUp } from '@clerk/nextjs';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';

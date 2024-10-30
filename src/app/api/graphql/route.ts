@@ -1,7 +1,7 @@
-import doctorResolvers from '@/modules/doctor/presentation/resolvers';
+import doctorResolvers from '@/modules/doctor/presentation/graphql/resolvers';
 import { getSchema } from '@/modules/shared/infrastructure/persistence/graphql/schema';
 import { db } from '@/modules/shared/infrastructure/persistence/prisma/prisma-connection';
-import userResolvers from '@/modules/user/presentation/resolvers';
+import userResolvers from '@/modules/user/presentation/graphql/resolvers';
 import { ApolloServer } from '@apollo/server';
 import { startServerAndCreateNextHandler } from '@as-integrations/next';
 import { DateTimeResolver, VoidResolver } from 'graphql-scalars';

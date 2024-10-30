@@ -3,8 +3,8 @@ import { db } from '@/modules/shared/infrastructure/persistence/prisma/prisma-co
 import { UpdateRole } from '@/modules/user/application/update-role';
 import { UserRoleValue } from '@/modules/user/domain/user-role';
 import { PrismaUserRepository } from '@/modules/user/infrastructure/prisma-user-repository';
-import { CreateDoctor } from '../../application/services/create-doctor';
-import { PrismaDoctorRepository } from '../../infrastructure/persistence/prisma-doctor-repository';
+import { CreateDoctor } from '../../../application/services/create-doctor';
+import { PrismaDoctorRepository } from '../../../infrastructure/persistence/prisma-doctor-repository';
 
 export const CreateDoctorResolver = async (ctx, input) => {
   try {

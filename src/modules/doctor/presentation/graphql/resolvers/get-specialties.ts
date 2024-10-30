@@ -1,7 +1,7 @@
 import { InternalError } from '@/modules/shared/domain/core/errors/internal-error';
 import { db } from '@/modules/shared/infrastructure/persistence/prisma/prisma-connection';
-import { GetSpecialties } from '../../application/services/get-specialties';
-import { PrismaDoctorRepository } from '../../infrastructure/persistence/prisma-doctor-repository';
+import { GetSpecialties } from '../../../application/services/get-specialties';
+import { PrismaDoctorRepository } from '../../../infrastructure/persistence/prisma-doctor-repository';
 
 export const GetSpecialtiesResolver = async (ctx, input) => {
   try {

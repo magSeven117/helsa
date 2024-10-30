@@ -13,8 +13,8 @@ import {
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/libs/shadcn-ui/components/form';
 import { Input } from '@/libs/shadcn-ui/components/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/libs/shadcn-ui/components/select';
-import { useCreateDoctor } from '@/modules/doctor/presentation/hooks/use-create-doctor';
-import { useGetSpecialties } from '@/modules/doctor/presentation/hooks/use-get-specialties';
+import { useCreateDoctor } from '@/modules/doctor/presentation/graphql/hooks/use-create-doctor';
+import { useGetSpecialties } from '@/modules/doctor/presentation/graphql/hooks/use-get-specialties';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
