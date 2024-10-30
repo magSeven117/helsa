@@ -3,6 +3,7 @@ import icon from '@/assets/images/Helsa Logo black - white.png';
 import ToastProvider from '@/libs/ducen-ui/components/toast-provider';
 import { ApolloContextProvider } from '@/modules/shared/infrastructure/persistence/graphql/apollo-provider';
 import { ClerkProvider } from '@clerk/nextjs';
+import { Analytics } from '@vercel/analytics/react';
 import type { Metadata } from 'next';
 import { ThemeProvider } from 'next-themes';
 import { Nunito } from 'next/font/google';
@@ -28,6 +29,7 @@ export default function RootLayout({
           <body className={nunito.className} suppressHydrationWarning={true}>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
               {children}
+              <Analytics />
               <ToastProvider></ToastProvider>
               <Toaster />
             </ThemeProvider>
