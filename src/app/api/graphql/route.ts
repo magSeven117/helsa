@@ -11,6 +11,7 @@ const resolvers = {
     ping: () => {
       return 'pong';
     },
+    ...doctorResolvers.queries,
   },
   Mutation: {
     ...userResolvers.mutations,

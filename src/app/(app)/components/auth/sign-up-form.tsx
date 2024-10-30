@@ -38,7 +38,6 @@ import { z } from 'zod';
 
 const formSchema = z
   .object({
-    name: z.string().min(3, { message: 'Name is required' }),
     email: z.string().min(3, { message: 'Invalid email' }).email({ message: 'Invalid email' }),
     password: z.string().min(8, { message: 'Password must be at least 8 characters' }),
     confirmPassword: z.string().min(8, { message: 'Password must be at least 8 characters' }),
@@ -54,7 +53,6 @@ export default function SignUpForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: '',
       email: '',
       password: '',
       confirmPassword: '',
@@ -127,7 +125,7 @@ export default function SignUpForm() {
       await signUp.authenticateWithRedirect({
         strategy,
         redirectUrl: '/sign-up/sso-callback',
-        redirectUrlComplete: '/dashboard',
+        redirectUrlComplete: '/',
         unsafeMetadata: {
           role: 'UNDEFINED',
           provider: 'oauth',
@@ -284,7 +282,7 @@ export default function SignUpForm() {
               <Button
                 onClick={() => {
                   setShowSuccessModal(false);
-                  router.push('/dashboard');
+                  router.push('/');
                 }}
                 size="lg"
               >

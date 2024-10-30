@@ -14,13 +14,15 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/libs/shadcn-ui/components/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/libs/shadcn-ui/components/select';
 import { useCreateDoctor } from '@/modules/doctor/presentation/hooks/use-create-doctor';
+import { useGetSpecialties } from '@/modules/doctor/presentation/hooks/use-get-specialties';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Activity, Bone, Brain, Droplet, Heart, Shield, Stethoscope, Sun, User } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Lottie from 'react-lottie';
 import { toast } from 'sonner';
+import { v4 } from 'uuid';
 import { z } from 'zod';
 
 const formSchema = z.object({
@@ -37,14 +39,24 @@ const DoctorForm = ({ userId }: { userId: string }) => {
     },
     mode: 'all',
   });
+  const { isSubmitting } = form.formState;
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [specialties, setSpecialties] = useState([]);
 
   const { createDoctor } = useCreateDoctor()
+  const { getSpecialties } = useGetSpecialties()
   const router = useRouter();
+
+  useEffect(() => {
+    getSpecialties()
+      .then((spe) => setSpecialties(spe))
+      .catch(console.error);
+  }, [])
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       await createDoctor({
+        id: v4(),
         licenseMedicalNumber: data.licenseMedicalNumber,
         specialtyId: data.specialtyId,
         userId: userId,
@@ -97,7 +109,6 @@ const DoctorForm = ({ userId }: { userId: string }) => {
                         {specialties.map((specialty) => (
                           <SelectItem key={specialty.id} value={specialty.id}>
                             <span className="flex w-full justify-between items-center gap-3">
-                              <specialty.icon className="size-4" />
                               {specialty.name}
                             </span>
                           </SelectItem>
@@ -111,7 +122,9 @@ const DoctorForm = ({ userId }: { userId: string }) => {
             </CardContent>
             <CardFooter>
               <div className="grid w-full gap-y-4">
-                <Button type="submit">Continuar</Button>
+                <Button type="submit">
+                  {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Continuar'}
+                </Button>
               </div>
             </CardFooter>
           </Card>
@@ -157,15 +170,3 @@ const DoctorForm = ({ userId }: { userId: string }) => {
 };
 
 export default DoctorForm;
-
-const specialties = [
-  { id: '1', name: 'Cardiología', icon: Heart },
-  { id: '2', name: 'Dermatología', icon: Sun },
-  { id: '3', name: 'Endocrinología', icon: Activity },
-  { id: '4', name: 'Gastroenterología', icon: Stethoscope },
-  { id: '5', name: 'Geriatría', icon: User },
-  { id: '6', name: 'Hematología', icon: Droplet },
-  { id: '7', name: 'Infectología', icon: Shield },
-  { id: '11', name: 'Neurología', icon: Brain },
-  { id: '15', name: 'Reumatología', icon: Bone },
-];

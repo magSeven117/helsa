@@ -64,7 +64,7 @@ export default function SignInForm() {
       await signIn.authenticateWithRedirect({
         strategy,
         redirectUrl: '/sign-up/sso-callback',
-        redirectUrlComplete: '/dashboard',
+        redirectUrlComplete: '/',
       });
     } catch (error) {
       toast.error('An error occurred while trying to sign in with Google');

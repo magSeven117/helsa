@@ -1,11 +1,11 @@
-import { Activity } from 'lucide-react';
-import banner from '../../../../../public/images/banner2-removebg.png';
+import logo from '@/assets/images/Helsa Logo brand white.png';
+import banner from '@/assets/images/banner.png';
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className='grid grid-cols-1 box-border h-full w-full lg:grid-cols-2'>
       <div className='flex flex-col h-full justify-center items-center gap-10'>
         <div className='flex justify-center gap-2 mt-2 items-center'>
-          <Activity className='text-color-foreground-primary overflow-hidden' />
+        <img src={logo.src} alt="logo" className='h-10 w-10 rounded-lg' />
           <h1 className='text-3xl font-semibold'>Helsa</h1>
         </div>
         <div className='w-full'>{children}</div>

@@ -9,7 +9,7 @@ model Doctor {
   consultingRoomAddress ConsultingRoomAddress?
 
   userId      String @unique
-  specialtyId String @unique
+  specialtyId String 
 
   user      User      @relation(fields: [userId], references: [id])
   specialty Specialty @relation(fields: [specialtyId], references: [id])

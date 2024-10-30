@@ -1,10 +1,9 @@
 import SelectRoleForm from "@/app/(app)/components/onboarding/select-role-form";
 
-const Page = () => {
+const Page = ({ searchParams }) => {
+  const userId = searchParams.userId;
   return (
-    <div>
-      <SelectRoleForm />
-    </div>
+    <SelectRoleForm userId={userId} />
   );
 }
 

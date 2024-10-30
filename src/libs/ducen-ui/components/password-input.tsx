@@ -10,7 +10,6 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
   ({ className, ...props }: PasswordInputProps, ref) => {
     const [showPassword, setShowPassword] = useState(false);
     const disabled = props.value === '' || props.value === undefined || props.disabled;
-    console.log(props.type);
     return (
       <div className="relative">
         <Input
@@ -27,7 +26,6 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
           className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
           onClick={() =>
             setShowPassword((prev) => {
-              console.log('prev', prev);
               return !prev;
             })
           }

@@ -1,6 +1,8 @@
 enum Role {
   DOCTOR
   PATIENT
+  HOSPITAL
+  UNDEFINED
 }
 
 type User {

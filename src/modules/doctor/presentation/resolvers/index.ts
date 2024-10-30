@@ -1,9 +1,12 @@
 import { CreateDoctorResolver } from './create-doctor';
+import { GetSpecialtiesResolver } from './get-specialties';
 
 const resolvers = {
-  queries: {},
+  queries: {
+    specialties: GetSpecialtiesResolver,
+  },
   mutations: {
-    createUser: CreateDoctorResolver,
+    createDoctor: CreateDoctorResolver,
   },
 };
 

@@ -81,6 +81,6 @@
   },
   "prisma": {
     "schema": "./src/modules/shared/infrastructure/persistence/prisma/",
-    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} .src/schemas/prisma/seed.ts"
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} ./src/modules/shared/infrastructure/persistence/prisma/seed.ts"
   }
 }

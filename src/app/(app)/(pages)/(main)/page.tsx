@@ -9,7 +9,7 @@ const Page = async () => {
     if (!user) {
       return redirect("/sign-in");
     } else if (user.role === 'UNDEFINED') {
-      return redirect("/select-role");
+      return redirect(`/select-role?userId=${user.id}`);
     }
     return redirect("/dashboard");
   }
