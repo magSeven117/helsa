@@ -125,7 +125,7 @@ export default function SignUpForm() {
       await signUp.authenticateWithRedirect({
         strategy,
         redirectUrl: '/sign-up/sso-callback',
-        redirectUrlComplete: '/',
+        redirectUrlComplete: '/select-role',
         unsafeMetadata: {
           role: 'UNDEFINED',
           provider: 'oauth',
@@ -282,7 +282,7 @@ export default function SignUpForm() {
               <Button
                 onClick={() => {
                   setShowSuccessModal(false);
-                  router.push('/');
+                  router.push('/select-role');
                 }}
                 size="lg"
               >
