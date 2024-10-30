@@ -1,5 +1,6 @@
 model Hospital {
   id        String           @id @default(uuid())
+  name      String
   address   HospitalAddress?
   adminId   String
   admin     User             @relation(fields: [adminId], references: [id])

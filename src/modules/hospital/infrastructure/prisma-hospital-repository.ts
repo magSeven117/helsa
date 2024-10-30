@@ -21,6 +21,7 @@ export class PrismaHospitalRepository implements HospitalRepository {
       where: { id: data.id },
       update: {
         adminId: data.adminId,
+        name: data.name,
         address: {
           update: hospital.address.toPrimitives(),
         },
@@ -28,6 +29,7 @@ export class PrismaHospitalRepository implements HospitalRepository {
       create: {
         id: data.id,
         adminId: data.adminId,
+        name: data.name,
         address: {
           create: hospital.address.toPrimitives(),
         },

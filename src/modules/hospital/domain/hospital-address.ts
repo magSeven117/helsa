@@ -36,14 +36,20 @@ export class HospitalAddress {
     );
   }
 
-  static create(): HospitalAddress {
+  static create(
+    street: string,
+    city: string,
+    country: string,
+    zipCode: string,
+    coordinates: Primitives<HospitalAddressCoordinates>
+  ): HospitalAddress {
     return new HospitalAddress(
       Uuid.random(),
-      new StringValueObject('N/D'),
-      new StringValueObject('N/D'),
-      new StringValueObject('N/D'),
-      new StringValueObject('N/D'),
-      new HospitalAddressCoordinates(new Latitude(0), new Longitude(0))
+      new StringValueObject(street),
+      new StringValueObject(city),
+      new StringValueObject(country),
+      new StringValueObject(zipCode),
+      HospitalAddressCoordinates.fromPrimitives(coordinates)
     );
   }
 }

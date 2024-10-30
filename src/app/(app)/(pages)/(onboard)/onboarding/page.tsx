@@ -1,4 +1,5 @@
 import DoctorForm from "@/app/(app)/components/onboarding/doctor-form";
+import HospitalForm from "@/app/(app)/components/onboarding/hospital-form";
 import PatientForm from "@/app/(app)/components/onboarding/patient-form";
 
 const Page = ({ searchParams }) => {
@@ -11,6 +12,9 @@ const Page = ({ searchParams }) => {
       }
       {
         role === 'PATIENT' && (<PatientForm userId={userId}/>)
+      }
+      {
+        role === 'HOSPITAL' && (<HospitalForm userId={userId}/>)
       }
     </div>
   );
