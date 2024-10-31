@@ -6,7 +6,7 @@ const Layout = async ({
 }) => {
   const user = await getCurrentUser();
   return (
-    <div className="w-full">
+    <div className="w-full h-full">
       {user && user.role === 'DOCTOR' ? doctor : patient}
     </div>
   );

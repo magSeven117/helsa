@@ -1,5 +1,5 @@
 'use client';
-import logo from '@/assets/images/Helsa Logo brand white.png';
+import logo from '@/assets/images/Helsa Logo white - black.png';
 import { Avatar, AvatarFallback, AvatarImage } from '@/libs/shadcn-ui/components/avatar';
 import {
   DropdownMenu,
@@ -94,7 +94,7 @@ const SideBar = ({  role }: { role: string }) => {
                     <SidebarMenuButton
                       asChild
                       className={cn('hover:bg-primary hover:text-primary-foreground', {
-                        'text-color-brand-primary': path == route.url,
+                        'bg-primary text-primary-foreground': path == route.url,
                       })}
                     >
                       <Link href={route.url}>
