@@ -1,4 +1,6 @@
 'use client';
+import Editor from '@/libs/ducen-ui/components/editor/editor';
+import ImagePicker from '@/libs/ducen-ui/components/image-picker';
 import { Button } from '@/libs/shadcn-ui/components/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/libs/shadcn-ui/components/form';
 import { Input } from '@/libs/shadcn-ui/components/input';
@@ -10,6 +12,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 const formSchema = z.object({
+  imageUrl: z.string().optional(),
   firstName: z.string().min(3, { message: 'Invalid email' }),
   lastName: z.string(),
   biography: z.string(),
@@ -24,10 +27,12 @@ const MainInfoForm = () => {
       lastName: 'Véliz',
       biography: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sequi, modi?',
       phoneNumber: '+584121802961',
+      imageUrl: '',
     },
     mode: 'all',
   });
   const { isSubmitting } = form.formState;
+  const [profileImageFile, setProfileImageFile] = useState<File>(null);
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     console.log(data);
   };
@@ -45,7 +50,29 @@ const MainInfoForm = () => {
         </SheetHeader>
         <Form {...form}>
           <form action="" className="w-full" onSubmit={form.handleSubmit(onSubmit)}>
-            <div className='grid md:grid-cols-2 grid-cols-1 gap-3'>
+            <div className='my-6'>
+              <FormField
+                control={form.control}
+                name="imageUrl"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormControl>
+                      <div className="">
+                        <ImagePicker
+                          value={field.value || ''}
+                          onChange={(url) => {
+                            field.onChange(url);
+                          }}
+                          onSelectFile={(file: File) => setProfileImageFile(file)}
+                        />
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="grid md:grid-cols-2 grid-cols-1 gap-3">
               <FormField
                 control={form.control}
                 name="firstName"
@@ -86,24 +113,21 @@ const MainInfoForm = () => {
                 )}
               />
             </div>
-            <div className='flex justify-center items-center gap-3 max-sm:flex-col w-full'>
-              
-              
-            </div>
+            <div className="flex justify-center items-center gap-3 max-sm:flex-col w-full"></div>
             <FormField
-                control={form.control}
-                name="biography"
-                render={({ field }) => (
-                  <FormItem className="my-2 flex-1 max-sm:w-full">
-                    <FormLabel className="text-sm">Biografía</FormLabel>
-                    <FormControl>
-                      <Input {...field}></Input>
-                    </FormControl>
-                    <FormMessage></FormMessage>
-                  </FormItem>
-                )}
-              />
-            <Button className='mt-10' type="submit" disabled={isSubmitting}>
+              control={form.control}
+              name="biography"
+              render={({ field }) => (
+                <FormItem className="my-2 flex-1 max-sm:w-full">
+                  <FormLabel className="text-sm">Biografía</FormLabel>
+                  <FormControl>
+                    <Editor {...field} />
+                  </FormControl>
+                  <FormMessage></FormMessage>
+                </FormItem>
+              )}
+            />
+            <Button className="mt-10" type="submit" disabled={isSubmitting}>
               {isSubmitting ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (

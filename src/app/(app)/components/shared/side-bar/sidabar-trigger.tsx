@@ -32,12 +32,12 @@ export function SidebarTrigger() {
       data-sidebar="trigger"
       variant="ghost"
       size="icon"
-      className={cn('rounded-full bg-white w-10 h-10')}
+      className={cn('rounded-full w-10 h-10 border p-4')}
       onClick={(event) => {
         toggleSidebar()
       }}
     >
-      <Menu />
+      <Menu className='size-10'/>
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   );

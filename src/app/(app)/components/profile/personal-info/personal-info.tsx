@@ -1,21 +1,17 @@
 'use client'
-import { BioForm } from "./forms/bio-form"
-import { EmailData } from "./forms/email-form"
-import { ImageForm } from "./forms/image-form"
-import { LinksForm } from "./forms/links-form"
-import { NameForm } from "./forms/name-form"
+import AvatarSection from "./sections/avatar"
 
 export const PersonalInfo = ({ user }: { user: any }) => {
   return (
     <div>
-      <EmailData email={user.email} />
-      <ImageForm imageUrl={user.imageUrl} />
+      <AvatarSection imageUrl={user.imageUrl}/>
+      {/* <EmailData email={user.email} />
       <NameForm firstName={user.firstName} lastName={user.lastName} />
       <BioForm bio={user.bio} />
       <LinksForm urls={[
         { value: 'https://twitter.com/Ducen29' },
         { value: 'https://github.com/Duccem'}
-      ]} />
+      ]} /> */}
     </div>
   )
 }

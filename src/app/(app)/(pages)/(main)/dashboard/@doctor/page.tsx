@@ -1,4 +1,3 @@
-import { UserButton } from "@clerk/nextjs";
 
 const Page = () => {
   return (
@@ -6,7 +5,6 @@ const Page = () => {
       <p>
         Hello, doctor!
       </p>
-      <UserButton></UserButton>
     </div>
   );
 }
