@@ -5,7 +5,7 @@ const Page = async () => {
   const user = await currentUser();
   if(!user) return null;
   return (
-    <div className="space-y-6 px-9 w-full">
+    <div className="space-y-6 w-full">
 
       <PersonalInfo user={{
         firstName: user.firstName,
