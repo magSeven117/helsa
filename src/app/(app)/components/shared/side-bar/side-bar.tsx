@@ -1,5 +1,5 @@
 'use client';
-import logo from '@/assets/images/Helsa Logo white - black.png';
+import logo from '@/assets/images/Helsa Logo white.png';
 import {
   Sidebar,
   SidebarContent,

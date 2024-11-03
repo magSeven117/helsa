@@ -191,7 +191,7 @@ const ProfileButton = ({ user }: { user: any }) => {
           className="w-10 h-10 rounded-full p-0 outline-none border-none focus-visible:outline-none focus:outline-none"
         >
           <Avatar className="h-10 w-10 rounded-full">
-            <AvatarImage src={user?.imageUrl || ''} alt={user?.fullName || '' } />
+            <AvatarImage src={user?.imageUrl || ''} alt={user?.fullName || '' }  className='object-contain'/>
             <AvatarFallback className="rounded-lg">CN</AvatarFallback>
           </Avatar>
         </Button>
