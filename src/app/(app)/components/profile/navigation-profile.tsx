@@ -37,7 +37,7 @@ interface NavProps {
 export function Nav({ links }: NavProps) {
   const pathname = usePathname();
   return (
-    <div className="flex  gap-5 py-2 justify-start items-center ">
+    <div className="flex  gap-5 py-2 justify-start items-center max-sm:max-w-full max-sm:overflow-x-scroll no-scroll">
       {links.map((link, index) => (
         <Link href={link.href} key={link.title} className={cn('text-muted-foreground', {
           'text-primary font-bold': pathname === link.href,
