@@ -1,5 +1,5 @@
 'use client'
-import AvatarSection from "./sections/avatar"
+import AvatarSection from "./sections/avatar-section"
 
 export const PersonalInfo = ({ user }: { user: any }) => {
   return (
