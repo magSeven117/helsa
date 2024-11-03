@@ -1,4 +1,5 @@
 'use client';
+import logo2 from '@/assets/images/Helsa Logo black.png';
 import logo from '@/assets/images/Helsa Logo white.png';
 import {
   Sidebar,
@@ -12,7 +13,7 @@ import {
   SidebarMenuItem
 } from '@/libs/shadcn-ui/components/sidebar';
 import { cn } from '@/libs/shadcn-ui/utils/utils';
-import { useClerk, useUser } from '@clerk/nextjs';
+import { useUser } from '@clerk/nextjs';
 import {
   Calendar,
   CircleDollarSign,
@@ -21,8 +22,9 @@ import {
   PieChart,
   Users
 } from 'lucide-react';
+import { useTheme } from 'next-themes';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 export interface Section {
   title: string;
@@ -36,22 +38,15 @@ export interface SectionRoute {
 }
 
 const SideBar = ({  role }: { role: string }) => {
-  const {user, isSignedIn} = useUser();
+  const {isSignedIn} = useUser();
   const sections = role === 'DOCTOR' ? doctorSections : patientSections;
   const path = usePathname();
-  const { signOut } = useClerk();
-  const router = useRouter();
-  const onClick = () => {
-    signOut({ redirectUrl: '/sign-in' });
-  };
+  const theme = useTheme();
   if(!isSignedIn) {
     return null;
   }
   return (
     <Sidebar collapsible="icon" className='bg-background'>
-      {/* <div className="absolute -right-2.5 top-11 max-sm:hidden">
-        <CustomTrigger />
-      </div> */}
       <SidebarHeader className="bg-background">
         <SidebarMenuButton
           size="lg"
@@ -59,7 +54,9 @@ const SideBar = ({  role }: { role: string }) => {
         >
           <Link href="/dashboard" className="flex items-center justify-center gap-2">
             <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
-              <img src={logo.src} alt="" className='rounded-lg'/>
+              {
+                theme.theme === 'dark' ? (<img src={logo.src} alt="" className='rounded-lg'/>) : (<img src={logo2.src} alt="" className='rounded-lg'/>)
+              }
             </div>
             <p className="text-lg font-bold">Helsa</p>
           </Link>

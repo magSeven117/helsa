@@ -116,3 +116,12 @@ html, body, :root {
 .tiptap.ProseMirror {
   outline: none;
 }
+
+.logo {
+  rect {
+    stroke: var(--primary);
+  }
+  circle {
+    fill: var(--primary);
+  }
+}
