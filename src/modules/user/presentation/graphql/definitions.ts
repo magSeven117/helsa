@@ -32,5 +32,6 @@ export const userSchema = gql`
 
   type Mutation {
     createUser(user: UserInput!): Void
+    updateBio(bio: String!): Void
   }
 `;

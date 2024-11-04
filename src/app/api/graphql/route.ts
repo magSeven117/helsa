@@ -5,6 +5,7 @@ import { db } from '@/modules/shared/infrastructure/persistence/prisma/prisma-co
 import userResolvers from '@/modules/user/presentation/graphql/resolvers';
 import { ApolloServer } from '@apollo/server';
 import { startServerAndCreateNextHandler } from '@as-integrations/next';
+import { auth } from '@clerk/nextjs/server';
 import { DateTimeResolver, VoidResolver } from 'graphql-scalars';
 import { NextRequest } from 'next/server';
 const resolvers = {
@@ -33,6 +34,7 @@ const handler = startServerAndCreateNextHandler<NextRequest>(apolloServer, {
     req,
     res,
     db,
+    user: auth(),
   }),
 });
 export async function GET(request: NextRequest) {
