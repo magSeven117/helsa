@@ -32,7 +32,7 @@ const formSchema = z.object({
 
 type EducationFormValues = z.infer<typeof formSchema>;
 
-export const EducationForm = ({ educations }: EducationFormValues) => {
+export const EducationSection = ({ educations }: EducationFormValues) => {
   const [isEditing, setIsEditing] = useState(false);
   const toggleEdit = () => setIsEditing((current) => !current);
   const form = useForm({

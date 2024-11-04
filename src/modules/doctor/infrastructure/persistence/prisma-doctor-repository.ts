@@ -34,6 +34,16 @@ export class PrismaDoctorRepository implements DoctorRepository {
         experience: data.experience,
       },
     });
+    if (doctor.consultingRoomAddress) {
+      await this.client.consultingRoomAddress.upsert({
+        where: { doctorId: doctor.id.value },
+        update: doctor.consultingRoomAddress.toPrimitives(),
+        create: {
+          ...doctor.consultingRoomAddress.toPrimitives(),
+          doctorId: doctor.id.value,
+        },
+      });
+    }
   }
   async findByCriteria(criteria: Criteria): Promise<Doctor[]> {
     const query = this.converter.criteria(criteria);
@@ -42,7 +52,7 @@ export class PrismaDoctorRepository implements DoctorRepository {
   }
   async getByCriteria(criteria: Criteria): Promise<Doctor> {
     const { where } = this.converter.criteria(criteria);
-    const doctor = await this.model.findFirst({ where });
+    const doctor = await this.model.findFirst({ where, include: { consultingRoomAddress: true } });
     if (!doctor) throw new Error('Doctor not found');
     return Doctor.fromPrimitives(doctor as unknown as Primitives<Doctor>);
   }

@@ -69,4 +69,14 @@ export class Doctor extends Aggregate {
       educations: this.educations ? this.educations.map((education) => education.toPrimitives()) : [],
     };
   }
+
+  update(data: Partial<Primitives<Doctor>>) {
+    const before = this.toPrimitives();
+    const after = { ...before, ...data };
+    return Doctor.fromPrimitives(after);
+  }
+
+  createConsultingRoomAddress(city: string, address: string) {
+    this.consultingRoomAddress = ConsultingRoomAddress.create(city, address, { latitude: 0, longitude: 0 });
+  }
 }

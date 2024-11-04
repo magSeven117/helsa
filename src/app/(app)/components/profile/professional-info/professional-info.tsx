@@ -1,19 +1,19 @@
 import { Doctor } from "@/modules/doctor/domain/doctor";
 import { Primitives } from "@/modules/shared/domain/types/primitives";
-import { AddressInfoForm } from "./forms/address-info";
-import { EducationForm } from "./forms/education-form";
-import { ExperienceForm } from "./forms/experience-form";
-import { LicenseNumberForm } from "./forms/license-number-form";
-import { SpecialtyForm } from "./forms/specialty-form";
+import { EducationSection } from "./sections/education-section";
+import { AddressSection } from "./sections/address-section";
+import { ExperienceSection } from "./sections/experience-section";
+import { LicenseNumberSection } from "./sections/license-number";
+import { SpecialtySection } from "./sections/specialty-section";
 
 const ProfessionalInfo = ({ doctor }: { doctor: Partial<Primitives<Doctor>> }) => {
   return (
-    <div>
-      <LicenseNumberForm licenseMedicalNumber={doctor.licenseMedicalNumber}/>
-      <SpecialtyForm specialtyId="3" />
-      <AddressInfoForm  city={doctor.consultingRoomAddress.city} address={doctor.consultingRoomAddress.address}  />
-      <ExperienceForm experience={doctor.experience} />
-      <EducationForm educations={doctor.educations} />
+    <div className="flex flex-col w-full gap-10">
+      <LicenseNumberSection licenseMedicalNumber={doctor.licenseMedicalNumber} id={doctor.id} />
+      <SpecialtySection specialtyId={doctor.specialtyId} id={doctor.id} />
+      <AddressSection consultingRoom={doctor.consultingRoomAddress || { city: '', address: '' }} id={doctor.id}/>
+      <ExperienceSection experience={doctor.experience.toString()} id={doctor.id} />
+      <EducationSection educations={doctor.educations} />
     </div>
   );
 }
