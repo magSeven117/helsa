@@ -12,9 +12,11 @@ import {
   DropdownMenuTrigger,
 } from '@/libs/shadcn-ui/components/dropdown-menu';
 import { Input } from '@/libs/shadcn-ui/components/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/libs/shadcn-ui/components/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/libs/shadcn-ui/components/tabs';
 import { useClerk } from '@clerk/nextjs';
-import { Bell, Command, CreditCard, Inbox, Loader2, LogOut, Search, Settings, Sparkles, User, X } from 'lucide-react';
+import { Bell, Command, Inbox, Loader2, LogOut, Search, Settings, Sparkles, SunMoon, User, X } from 'lucide-react';
+import { useTheme } from 'next-themes';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { SidebarTrigger } from '../side-bar/sidabar-trigger';
@@ -46,6 +48,7 @@ const Searcher = () => {
   const handleChange = (e: any) => {
     setTerm(e.target.value);
   };
+  const router = useRouter();
   const searchResults = async (search: string) => {
     await new Promise((resolve) => setTimeout(resolve, 500));
     setResults([
@@ -81,6 +84,10 @@ const Searcher = () => {
       clearTimeout(timeout);
     };
   }, [term]);
+  const navigate = (id: string) => {
+    router.push(`/patients/${id}`);
+    setTerm('');
+  }
   return (
     <div className="rounded-full flex-1 flex relative items-center gap-2">
       <div className="w-full pr-10 relative">
@@ -116,7 +123,7 @@ const Searcher = () => {
         <div className="absolute w-full pr-10 z-50 bg-background left-0 top-[50px]">
           <div className="w-full h-[250px] rounded-none shadow border p-2 space-y-2">
             {results.map((result, index) => (
-              <div key={index} className="flex gap-2 p-2 cursor-pointer hover:bg-border border">
+              <div key={index} className="flex gap-2 p-2 cursor-pointer hover:bg-border border" onClick={() => navigate(result.title)}>
                 <img src={result.image} alt={result.title} className="h-[50px] w-[50px] rounded-full" />
                 <div className="flex flex-col justify-center">
                   <div className="font-bold text-[1rem]">
@@ -209,6 +216,10 @@ const ProfileButton = ({ user }: { user: any }) => {
   const onClick = () => {
     signOut({ redirectUrl: '/sign-in' });
   };
+  const { setTheme, theme } = useTheme()
+  const changeTheme = (theme: string) => {
+    setTheme(theme)
+  }
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -240,28 +251,50 @@ const ProfileButton = ({ user }: { user: any }) => {
         <DropdownMenuGroup>
           <DropdownMenuItem className="gap-2 text-sm rounded-xs cursor-pointer">
             <Sparkles className="size-4" />
-            Upgrade to Pro
+            Mejora a pro
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem className="gap-2 text-sm rounded-xs cursor-pointer" onClick={() => router.push('/profile')}>
             <User className="size-4" />
-            Profile
+            Perfil
           </DropdownMenuItem>
-          <DropdownMenuItem className="gap-2 text-sm rounded-xs cursor-pointer">
-            <CreditCard className="size-4" />
-            Billing
-          </DropdownMenuItem>
+
           <DropdownMenuItem className="gap-2 text-sm rounded-xs cursor-pointer">
             <Bell className="size-4" />
-            Notifications
+            Notificaciones
           </DropdownMenuItem>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <div className="flex justify-between items-center gap-3 py-3 pr-3">
+            <div className="ml-2 flex justify-start items-center gap-2">
+              <SunMoon className="size-4" />
+              Tema
+            </div>
+            <Select defaultValue={theme} onValueChange={changeTheme}>
+              <SelectTrigger className="rounded-none w-1/2 p-2 h-[25px]">
+                <SelectValue placeholder="select" />
+              </SelectTrigger>
+              <SelectContent className="rounded-none">
+                <SelectItem value={'light'}>
+                  <span className="flex w-full justify-between items-center gap-3">Light</span>
+                </SelectItem>
+                <SelectItem value={'dark'}>
+                  <span className="flex w-full justify-between items-center gap-3">Dark</span>
+                </SelectItem>
+                <SelectItem value={'system'}>
+                  <span className="flex w-full justify-between items-center gap-3">System</span>
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="gap-2 text-sm rounded-xs cursor-pointer" onClick={onClick}>
           <LogOut className="size-4" />
-          Log out
+          Salir
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

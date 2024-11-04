@@ -6,7 +6,7 @@ import { UpdateRole } from '@/modules/user/application/update-role';
 import { UserRoleValue } from '@/modules/user/domain/user-role';
 import { PrismaUserRepository } from '@/modules/user/infrastructure/prisma-user-repository';
 
-export const createHospital = async (_, input) => {
+export const CreateHospitalResolver = async (_, input) => {
   try {
     const { hospital } = input;
     const service = new CreateHospital(new PrismaHospitalRepository(db));

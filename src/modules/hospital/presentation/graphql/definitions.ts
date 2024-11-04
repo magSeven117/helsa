@@ -42,6 +42,6 @@ export const hospitalSchema = gql`
   }
 
   type Mutation {
-    createHospital(input: HospitalInput!): Void
+    createHospital(hospital: HospitalInput!): Void
   }
 `;

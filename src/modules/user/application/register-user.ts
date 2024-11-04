@@ -12,6 +12,5 @@ export class RegisterUser {
     }
     const user = User.Create(id, externalId, email, role, additionalData);
     await this.repository.save(user);
-    await this.eventBus.publish(user.pullDomainEvents());
   }
 }

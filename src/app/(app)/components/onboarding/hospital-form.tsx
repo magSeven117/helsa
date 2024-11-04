@@ -28,7 +28,6 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Lottie from 'react-lottie';
 import { toast } from 'sonner';
-import { v4 } from 'uuid';
 import { z } from 'zod';
 
 const formSchema = z.object({
@@ -60,11 +59,9 @@ const HospitalForm = ({ userId }: { userId: string }) => {
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       await createHospital({
-        id: v4(),
         adminId: userId,
         name: data.name,
         address: {
-          id: '',
           street: data.street,
           city: data.city,
           country: data.country,
@@ -112,7 +109,7 @@ const HospitalForm = ({ userId }: { userId: string }) => {
                   control={form.control}
                   name="street"
                   render={({ field }) => (
-                    <FormItem className="my-2">
+                    <FormItem className="my-2 flex-1">
                       <FormLabel className="text-sm">Dirección</FormLabel>
                       <FormControl>
                         <Input {...field}></Input>
@@ -125,7 +122,7 @@ const HospitalForm = ({ userId }: { userId: string }) => {
                   control={form.control}
                   name="city"
                   render={({ field }) => (
-                    <FormItem className="my-2">
+                    <FormItem className="my-2 flex-1">
                       <FormLabel className="text-sm">Ciudad</FormLabel>
                       <FormControl>
                         <Input {...field}></Input>
@@ -140,7 +137,7 @@ const HospitalForm = ({ userId }: { userId: string }) => {
                   control={form.control}
                   name="country"
                   render={({ field }) => (
-                    <FormItem className="my-2">
+                    <FormItem className="my-2 flex-1">
                       <FormLabel className="text-sm">Altura</FormLabel>
                       <FormControl>
                         <Input {...field}></Input>
@@ -153,7 +150,7 @@ const HospitalForm = ({ userId }: { userId: string }) => {
                   control={form.control}
                   name="zipCode"
                   render={({ field }) => (
-                    <FormItem className="my-2">
+                    <FormItem className="my-2 flex-1">
                       <FormLabel className="text-sm">Código postal</FormLabel>
                       <FormControl>
                         <Input {...field} type="number"></Input>

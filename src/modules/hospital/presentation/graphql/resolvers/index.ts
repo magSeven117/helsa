@@ -1,6 +1,10 @@
+import { CreateHospitalResolver } from './create-hospital';
+
 const resolvers = {
   queries: {},
   mutations: {
-    createHospital: () => {},
+    createHospital: CreateHospitalResolver,
   },
 };
+
+export default resolvers;

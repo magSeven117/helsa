@@ -46,7 +46,7 @@ export class PrismaUserRepository implements UserRepository {
       where: { externalId },
     });
     if (!user) {
-      throw new NotFoundError('User not found');
+      return null;
     }
     return User.fromPrimitives(user as Primitives<User>);
   }
