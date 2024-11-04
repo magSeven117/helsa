@@ -1,4 +1,5 @@
 import { AppointmentTypes } from '@/app/(app)/components/dashboard/doctor-dash/appointment-types';
+import PatientsTable from '@/app/(app)/components/dashboard/doctor-dash/patients-table';
 import { Revenue } from '@/app/(app)/components/dashboard/doctor-dash/revenue';
 import { UpcomingAppointments } from '@/app/(app)/components/dashboard/doctor-dash/upcoming-appointments';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/libs/shadcn-ui/components/card';
@@ -10,7 +11,8 @@ const Page = () => {
   return (
     <div className="px-9 py-5 w-full h-full">
       <div className="w-full flex-col h-full flex gap-10">
-        <div className="flex justify-start items-center">
+        <div className="flex justify-between items-center">
+          <p className='text-lg font-semibold'>Welcome Back, Dr José Véliz</p>
           <DateRangePicker />
         </div>
         <div className="grid gap-3 md:grid-cols-4">
@@ -70,6 +72,9 @@ const Page = () => {
               <UpcomingAppointments />
             </CardContent>
           </Card>
+        </div>
+        <div className='grid gap-4 grid-cols-1'>
+          <PatientsTable />
         </div>
       </div>
     </div>
