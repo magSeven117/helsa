@@ -116,7 +116,7 @@ export const doctorSections = [
       {
         icon: PieChart,
         title: 'Reportes',
-        url: '/patients',
+        url: '/reports',
       },
     ],
   },
@@ -125,13 +125,13 @@ export const doctorSections = [
     routes: [
       {
         icon: MessagesSquare,
-        title: 'Mensajeria',
-        url: '/doctor/chats',
+        title: 'Mensajería',
+        url: '/chats',
       },
       {
         icon: CircleDollarSign,
         title: 'Facturación',
-        url: '/doctor/billing',
+        url: '/billing',
       },
     ],
   },
