@@ -44,6 +44,7 @@ export class PrismaDoctorRepository implements DoctorRepository {
         },
       });
     }
+    await this.saveEducations(doctor.id.value, data.educations);
   }
   async findByCriteria(criteria: Criteria): Promise<Doctor[]> {
     const query = this.converter.criteria(criteria);
@@ -52,7 +53,7 @@ export class PrismaDoctorRepository implements DoctorRepository {
   }
   async getByCriteria(criteria: Criteria): Promise<Doctor> {
     const { where } = this.converter.criteria(criteria);
-    const doctor = await this.model.findFirst({ where, include: { consultingRoomAddress: true } });
+    const doctor = await this.model.findFirst({ where, include: { consultingRoomAddress: true, educations: true } });
     if (!doctor) throw new Error('Doctor not found');
     return Doctor.fromPrimitives(doctor as unknown as Primitives<Doctor>);
   }
@@ -60,5 +61,25 @@ export class PrismaDoctorRepository implements DoctorRepository {
   async getSpecialties() {
     const specialties = await this.client.specialty.findMany();
     return specialties.map((specialty) => Specialty.fromPrimitives(specialty));
+  }
+
+  async saveEducations(doctorId: string, educations: Primitives<Doctor>['educations']): Promise<void> {
+    for (const education of educations) {
+      await this.client.education.upsert({
+        where: { id: education.id },
+        update: {
+          title: education.title,
+          institution: education.institution,
+          graduatedAt: education.graduatedAt,
+        },
+        create: {
+          id: education.id,
+          title: education.title,
+          institution: education.institution,
+          graduatedAt: education.graduatedAt,
+          doctorId,
+        },
+      });
+    }
   }
 }

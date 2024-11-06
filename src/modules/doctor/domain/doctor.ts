@@ -79,4 +79,11 @@ export class Doctor extends Aggregate {
   createConsultingRoomAddress(city: string, address: string) {
     this.consultingRoomAddress = ConsultingRoomAddress.create(city, address, { latitude: 0, longitude: 0 });
   }
+
+  addEducation(education: Partial<Primitives<Education>>) {
+    if (!this.educations) {
+      this.educations = [];
+    }
+    this.educations.push(Education.create(education.title, education.institution, education.graduatedAt.toString()));
+  }
 }

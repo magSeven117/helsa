@@ -8,6 +8,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/libs/shadcn-ui/components/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/libs/shadcn-ui/components/popover';
 import { cn } from '@/libs/shadcn-ui/utils/utils';
+import { useAddEducation } from '@/modules/doctor/presentation/graphql/hooks/use-add-education';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { CalendarIcon, Loader2, Pencil, Trash2 } from 'lucide-react';
@@ -20,7 +21,7 @@ const formSchema = z.object({
   education: z.object({
     title: z.string().min(2, { message: 'Title must be at least 2 characters.' }),
     institution: z.string().min(2, { message: 'Institution must be at least 2 characters.' }),
-    graduateAt: z.date(),
+    graduatedAt: z.date(),
   }),
 });
 
@@ -30,7 +31,7 @@ export const EducationsSection = ({
   educations,
   id,
 }: {
-  educations: { title: string; institution: string; graduateAt: Date, id: string }[];
+  educations: { title: string; institution: string; graduatedAt: Date, id: string }[];
   id: string;
 }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -44,17 +45,19 @@ export const EducationsSection = ({
       education: {
         title: '',
         institution: '',
-        graduateAt: new Date(),
+        graduatedAt: new Date(),
       },
     },
   });
   const { isSubmitting, isValid } = form.formState;
 
-  const setEditData = (education: { title: string; institution: string; graduateAt: Date, id: string }) => {
+  const { addEducation } = useAddEducation();
+
+  const setEditData = (education: { title: string; institution: string; graduatedAt: Date, id: string }) => {
     setEditingEducationId(education.id);
     form.setValue('education.title', education.title);
     form.setValue('education.institution', education.institution);
-    form.setValue('education.graduateAt', education.graduateAt);
+    form.setValue('education.graduatedAt', education.graduatedAt);
   }
 
   const onSubmit = async (data: EducationsValue) => {
@@ -62,7 +65,10 @@ export const EducationsSection = ({
       if (isEditing) {
         console.log('updating', data);
       } else {
-        console.log('creating', data);
+        await addEducation(id, data.education);
+        toast.success('Education added successfully.');
+        setIsCreating(false);
+        form.reset();
       }
     } catch (error) {
       console.log(error);
@@ -84,7 +90,7 @@ export const EducationsSection = ({
                 {educations.map((education, index) => (
                   <div key={index} className="flex justify-between items-center gap-2 rounded-none border p-3">
                     <p className="flex items-center gap-3 text-sm text-muted-foreground">
-                      {education.title} - {format(education.graduateAt, 'PP')}
+                      {education.title} - {format(education.graduatedAt, 'PP')}
                     </p>
                     <div className="flex items-center justify-between gap-3">
                       <Button className="rounded-none bg-sidebar" size="icon" variant="outline" 
@@ -153,7 +159,7 @@ export const EducationsSection = ({
                   />
                   <FormField
                     control={form.control}
-                    name="education.graduateAt"
+                    name="education.graduatedAt"
                     render={({ field }) => (
                       <FormItem className="flex flex-1 flex-col">
                         <FormLabel className="mb-2">Fecha de graduación</FormLabel>

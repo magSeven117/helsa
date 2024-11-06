@@ -6,7 +6,7 @@ export class Education {
     public id: Uuid,
     public title: StringValueObject,
     public institution: StringValueObject,
-    public graduateAt: DateValueObject
+    public graduatedAt: DateValueObject
   ) {}
 
   static fromPrimitives(data: Primitives<Education>): Education {
@@ -14,16 +14,16 @@ export class Education {
       new Uuid(data.id),
       new StringValueObject(data.title),
       new StringValueObject(data.institution),
-      new DateValueObject(data.graduateAt)
+      new DateValueObject(data.graduatedAt)
     );
   }
 
-  static create(title: string, institution: string, graduateAt: string): Education {
+  static create(title: string, institution: string, graduatedAt: string): Education {
     return new Education(
       Uuid.random(),
       new StringValueObject(title),
       new StringValueObject(institution),
-      new DateValueObject(graduateAt)
+      new DateValueObject(graduatedAt)
     );
   }
 
@@ -32,7 +32,7 @@ export class Education {
       id: this.id.value,
       title: this.title.value,
       institution: this.institution.value,
-      graduateAt: this.graduateAt.value,
+      graduatedAt: this.graduatedAt.value,
     };
   }
 

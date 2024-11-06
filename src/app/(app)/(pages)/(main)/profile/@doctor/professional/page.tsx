@@ -13,20 +13,7 @@ const Page = async () => {
         consultingRoomAddress: doctor.consultingRoomAddress,
         experience: doctor.experience,
         specialtyId: doctor.specialtyId,
-        educations: [
-          {
-            id: "1",
-            title: "Doctor en Medicina",
-            institution: "Universidad Nacional de Colombia",
-            graduateAt: new Date('2015-01-01')
-          },
-          {
-            id: "2",
-            title: "Especialista en Medicina Interna",
-            institution: "Universidad Nacional de Colombia",
-            graduateAt: new Date('2019-06-01')
-          }
-        ]
+        educations: doctor.educations
       }} />
     </div>
   );

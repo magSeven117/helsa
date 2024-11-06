@@ -67,10 +67,17 @@ export const doctorSchema = gql`
     address: String
   }
 
+  input EducationInput {
+    title: String
+    institution: String
+    graduatedAt: DateTime
+  }
+
   type Mutation {
     createDoctor(doctor: DoctorInput!): Void
     updateDoctor(doctorId: ID, doctor: DoctorInput!): Void
     setConsultingRoom(doctorId: ID, consultingRoomAddress: ConsultingRoomAddressInput!): Void
+    addEducation(doctorId: ID, education: EducationInput!): Void
   }
 
   type Query {
