@@ -148,24 +148,24 @@ export default function SignUpForm() {
           </CardHeader>
           <CardContent className="my-5">
             <InputOTP
-              className="w-full items-center justify-center"
+              className="w-full items-center justify-center rounded-none"
               maxLength={6}
               onChange={(value) => setVerification({ ...verification, code: value })}
             >
-              <InputOTPGroup className="w-full justify-center">
-                <InputOTPSlot index={0} className="border rounded-sm border-gray-300 mx-2" />
-                <InputOTPSlot index={1} className="border rounded-sm border-gray-300 mx-2" />
-                <InputOTPSlot index={2} className="border rounded-sm border-gray-300 mx-2" />
+              <InputOTPGroup className="w-full justify-center rounded-none">
+                <InputOTPSlot index={0} className="border rounded-none border-gray-300 mx-2 first:rounded-none" />
+                <InputOTPSlot index={1} className="border rounded-none border-gray-300 mx-2" />
+                <InputOTPSlot index={2} className="border rounded-none border-gray-300 mx-2" />
                 <InputOTPSeparator />
-                <InputOTPSlot index={3} className="border rounded-sm border-gray-300 mx-2" />
-                <InputOTPSlot index={4} className="border rounded-sm border-gray-300 mx-2" />
-                <InputOTPSlot index={5} className="border rounded-sm border-gray-300 mx-2" />
+                <InputOTPSlot index={3} className="border rounded-none border-gray-300 mx-2" />
+                <InputOTPSlot index={4} className="border rounded-none border-gray-300 mx-2" />
+                <InputOTPSlot index={5} className="border rounded-none border-gray-300 mx-2 last:rounded-none" />
               </InputOTPGroup>
             </InputOTP>
           </CardContent>
           <CardFooter>
             <div className="grid w-full">
-              <Button onClick={handleVerification} disabled={verifying}>
+              <Button onClick={handleVerification} disabled={verifying} className='rounded-none'>
                 {verifying ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Verify'}
               </Button>
             </div>
@@ -194,7 +194,7 @@ export default function SignUpForm() {
                   <FormItem className="my-2">
                     <FormLabel className="text-sm">Email</FormLabel>
                     <FormControl>
-                      <Input {...field}></Input>
+                      <Input {...field} className='rounded-none'></Input>
                     </FormControl>
                     <FormMessage></FormMessage>
                   </FormItem>
@@ -208,7 +208,7 @@ export default function SignUpForm() {
                   <FormItem className="my-2">
                     <FormLabel className="text-sm">Contraseña</FormLabel>
                     <FormControl>
-                      <PasswordInput {...field} autoComplete="current-password"></PasswordInput>
+                      <PasswordInput {...field} autoComplete="current-password" className='rounded-none'></PasswordInput>
                     </FormControl>
                     <FormMessage></FormMessage>
                   </FormItem>
@@ -223,7 +223,7 @@ export default function SignUpForm() {
                       Confirma tu contraseña
                     </FormLabel>
                     <FormControl>
-                      <PasswordInput {...field} autoComplete="current-password"></PasswordInput>
+                      <PasswordInput {...field} autoComplete="current-password" className='rounded-none'></PasswordInput>
                     </FormControl>
                     <FormMessage></FormMessage>
                   </FormItem>
@@ -234,12 +234,12 @@ export default function SignUpForm() {
                 or
               </p>
               <div className="grid grid-cols-2 gap-x-4 mt-3">
-                <Button size="sm" variant="outline" type="button" onClick={() => onOauthPress('oauth_google')}>
+                <Button size="sm" variant="outline" type="button" className='rounded-none' onClick={() => onOauthPress('oauth_google')}>
                   <Icons.google className="mr-2 size-4" />
                   Google
                 </Button>
-                <Button onClick={() => onOauthPress('oauth_facebook')} size="sm" variant="outline" type="button">
-                  <Icons.facebook className="mr-2 size-4" />
+                <Button onClick={() => onOauthPress('oauth_facebook')} className='rounded-none' size="sm" variant="outline" type="button">
+                  <Icons.facebook className="mr-2 size-4" color='white' />
                   Facebook
                 </Button>
               </div>

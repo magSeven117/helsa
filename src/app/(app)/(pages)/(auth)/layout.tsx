@@ -1,4 +1,4 @@
-import logo from '@/assets/images/Helsa Logo brand white.png';
+import logo from '@/assets/images/Helsa Logo white - black.png';
 import banner from '@/assets/images/banner.png';
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -11,7 +11,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
         <div className='w-full'>{children}</div>
       </div>
       <div className='overflow-hidden hidden flex-row box-border w-full lg:flex'>
-        <div className='hidden bg-color-brand-primary w-full h-full justify-center items-center lg:flex'>
+        <div className='hidden bg-sidebar w-full h-full justify-center items-center lg:flex'>
           <img
             src={banner.src}
             alt="banner"

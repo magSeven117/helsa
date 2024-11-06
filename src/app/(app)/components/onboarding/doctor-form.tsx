@@ -87,7 +87,7 @@ const DoctorForm = ({ userId }: { userId: string }) => {
                   <FormItem className="my-2">
                     <FormLabel className="text-sm">Número de licencia médica</FormLabel>
                     <FormControl>
-                      <Input {...field}></Input>
+                      <Input {...field} className='rounded-none'></Input>
                     </FormControl>
                     <FormMessage></FormMessage>
                   </FormItem>
@@ -101,13 +101,13 @@ const DoctorForm = ({ userId }: { userId: string }) => {
                     <FormLabel className="text-sm">Especialidad</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className='rounded-none'>
                           <SelectValue placeholder="Select a verified email to display" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent>
+                      <SelectContent className='rounded-none'>
                         {specialties.map((specialty) => (
-                          <SelectItem key={specialty.id} value={specialty.id}>
+                          <SelectItem key={specialty.id} value={specialty.id} className='rounded-none'>
                             <span className="flex w-full justify-between items-center gap-3">
                               {specialty.name}
                             </span>
@@ -122,7 +122,7 @@ const DoctorForm = ({ userId }: { userId: string }) => {
             </CardContent>
             <CardFooter>
               <div className="grid w-full gap-y-4">
-                <Button type="submit">
+                <Button type="submit" className='rounded-none'>
                   {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Continuar'}
                 </Button>
               </div>
@@ -131,7 +131,7 @@ const DoctorForm = ({ userId }: { userId: string }) => {
         </form>
       </Form>
       <AlertDialog open={showSuccessModal}>
-        <AlertDialogContent>
+        <AlertDialogContent className='sm:rounded-none'>
           <Lottie
             options={{
               autoplay: true,
@@ -158,6 +158,7 @@ const DoctorForm = ({ userId }: { userId: string }) => {
                   router.push('/dashboard');
                 }}
                 size="lg"
+                className='rounded-none'
               >
                 Ir al inicio
               </Button>

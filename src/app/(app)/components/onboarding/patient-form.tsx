@@ -109,13 +109,13 @@ const PatientForm = ({ userId }: { userId: string }) => {
                       <FormLabel className="text-sm">Estado civil</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
-                          <SelectTrigger>
+                          <SelectTrigger className='rounded-none'>
                             <SelectValue placeholder="Select a verified email to display" />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent>
+                        <SelectContent className='rounded-none'>
                           {civilStatusOptions.map((specialty) => (
-                            <SelectItem key={specialty.id} value={specialty.id}>
+                            <SelectItem key={specialty.id} value={specialty.id} className='rounded-none'>
                               <span className="flex w-full justify-between items-center gap-3">{specialty.name}</span>
                             </SelectItem>
                           ))}
@@ -133,13 +133,13 @@ const PatientForm = ({ userId }: { userId: string }) => {
                       <FormLabel className="text-sm">Educación</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
-                          <SelectTrigger>
+                          <SelectTrigger className='rounded-none'>
                             <SelectValue placeholder="Select a verified email to display" />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent>
+                        <SelectContent className='rounded-none'>
                           {educationLevels.map((specialty) => (
-                            <SelectItem key={specialty.id} value={specialty.id}>
+                            <SelectItem key={specialty.id} value={specialty.id} className='rounded-none'>
                               <span className="flex w-full justify-between items-center gap-3">{specialty.name}</span>
                             </SelectItem>
                           ))}
@@ -154,9 +154,9 @@ const PatientForm = ({ userId }: { userId: string }) => {
                   name="demographic.occupation"
                   render={({ field }) => (
                     <FormItem className="my-2">
-                      <FormLabel className="text-sm">Ocupación</FormLabel>
+                      <FormLabel className="text-sm" >Ocupación</FormLabel>
                       <FormControl>
-                        <Input {...field}></Input>
+                        <Input {...field} className='rounded-none'></Input>
                       </FormControl>
                       <FormMessage></FormMessage>
                     </FormItem>
@@ -173,13 +173,13 @@ const PatientForm = ({ userId }: { userId: string }) => {
                       <FormLabel className="text-sm">Tipo de sangre</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
-                          <SelectTrigger>
+                          <SelectTrigger className='rounded-none'>
                             <SelectValue placeholder="Select a verified email to display" />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent>
+                        <SelectContent className='rounded-none'>
                           {bloodTypeOptions.map((specialty) => (
-                            <SelectItem key={specialty.id} value={specialty.id}>
+                            <SelectItem key={specialty.id} value={specialty.id} className='rounded-none'>
                               <span className="flex w-full justify-between items-center gap-3">{specialty.name}</span>
                             </SelectItem>
                           ))}
@@ -197,13 +197,13 @@ const PatientForm = ({ userId }: { userId: string }) => {
                       <FormLabel className="text-sm">Donador de órganos?</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
-                          <SelectTrigger>
+                          <SelectTrigger className='rounded-none'>
                             <SelectValue placeholder="Select a verified email to display" />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent>
+                        <SelectContent className='rounded-none'>
                           {organDonorOptions.map((specialty) => (
-                            <SelectItem key={specialty.id} value={specialty.id}>
+                            <SelectItem key={specialty.id} value={specialty.id} className='rounded-none'>
                               <span className="flex w-full justify-between items-center gap-3">{specialty.name}</span>
                             </SelectItem>
                           ))}
@@ -220,7 +220,7 @@ const PatientForm = ({ userId }: { userId: string }) => {
                     <FormItem className="my-2">
                       <FormLabel className="text-sm">Altura</FormLabel>
                       <FormControl>
-                        <Input {...field} type="number"></Input>
+                        <Input {...field} type="number" className='rounded-none'></Input>
                       </FormControl>
                       <FormMessage></FormMessage>
                     </FormItem>
@@ -230,7 +230,7 @@ const PatientForm = ({ userId }: { userId: string }) => {
             </CardContent>
             <CardFooter>
               <div className="grid w-full gap-y-4">
-                <Button type="submit">
+                <Button type="submit" className='rounded-none'>
                   {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Continuar'}
                 </Button>
               </div>
@@ -239,7 +239,7 @@ const PatientForm = ({ userId }: { userId: string }) => {
         </form>
       </Form>
       <AlertDialog open={showSuccessModal}>
-        <AlertDialogContent>
+        <AlertDialogContent className='sm:rounded-none'>
           <Lottie
             options={{
               autoplay: true,
@@ -266,6 +266,7 @@ const PatientForm = ({ userId }: { userId: string }) => {
                   router.push('/dashboard');
                 }}
                 size="lg"
+                className='rounded-none'
               >
                 Ir al inicio
               </Button>

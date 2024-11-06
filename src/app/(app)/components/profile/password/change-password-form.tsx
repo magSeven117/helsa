@@ -1,7 +1,8 @@
 'use client';
-import { PasswordInput } from '@/libs/ducen-ui/components/password-input';
 import { Button } from '@/libs/shadcn-ui/components/button';
+import { Card, CardFooter, CardHeader, CardTitle } from '@/libs/shadcn-ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/libs/shadcn-ui/components/form';
+import { Input } from '@/libs/shadcn-ui/components/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useState } from 'react';
@@ -34,54 +35,57 @@ const ChangePasswordForm = ({}) => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
   };
   return (
-    <div className="mt-6 border-b pb-2">
-      <div className="flex flex-col mt-6 w-3/4 justify-between py-0 px-4 ">
-        {!isEditing ? (
-          <Button variant="destructive" onClick={toggleEdit}>
-            Cambiar contraseña
-          </Button>
-        ) : (
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mt-4">
-              <FormField
-                control={form.control}
-                name="newPassword"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>New Password</FormLabel>
-                    <FormControl>
-                      <PasswordInput disabled={isSubmitting} {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="confirmPassword"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Confirm new password</FormLabel>
-                    <FormControl>
-                      <PasswordInput disabled={isSubmitting} {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <div className="flex items-center gap-x-2">
-                <Button disabled={!isValid || isSubmitting} type="submit">
-                  {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Guardar'}
-                </Button>
-                <Button variant="secondary" onClick={toggleEdit}>
-                  Cancelar
-                </Button>
+    <Card className="rounded-none bg-transparent">
+      <Form {...form}>
+        <form action="" onSubmit={form.handleSubmit(onSubmit)}>
+          <CardHeader className="">
+            <div>
+              <CardTitle>Contraseña</CardTitle>
+              <p className="text-muted-foreground text-sm mt-5">
+                Cambia tu contraseña para mantener tu cuenta segura.
+              </p>
+              <div className="flex flex-col w-full justify-between items-center gap-3 mt-6">
+                <FormField
+                  control={form.control}
+                  name="newPassword"
+                  render={({ field }) => (
+                    <FormItem className="flex-1 w-full">
+                      <FormLabel>Nueva contraseña</FormLabel>
+                      <FormControl>
+                        <Input {...field} className="rounded-none"></Input>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="confirmPassword"
+                  render={({ field }) => (
+                    <FormItem className="flex-1  w-full">
+                      <FormLabel>Confirma la contraseña</FormLabel>
+                      <FormControl>
+                        <Input {...field} className="rounded-none"></Input>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
-            </form>
-          </Form>
-        )}
-      </div>
-    </div>
+            </div>
+          </CardHeader>
+          <CardFooter className="border-t pt-4 flex justify-between items-start gap-2 md:items-center flex-col md:flex-row">
+            <p className="text-muted-foreground text-xs">
+              Al hacer clic en Guardar, aceptas nuestra Política de privacidad y nuestros Términos de
+              servicio.
+            </p>
+            <Button disabled={!isValid || isSubmitting} variant='destructive' type="submit" className="rounded-none">
+              {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Guardar'}
+            </Button>
+          </CardFooter>
+        </form>
+      </Form>
+    </Card>
   );
 };
 
