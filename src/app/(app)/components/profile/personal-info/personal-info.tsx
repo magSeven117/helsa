@@ -6,7 +6,6 @@ import { EmailSection } from "./sections/email-section"
 import { NameSection } from "./sections/name-section"
 
 export const PersonalInfo = ({ user }: { user: any }) => {
-  console.log(user);
   return (
     <div className="flex flex-col w-full gap-10">
       <AvatarSection imageUrl={user.imageUrl}/>

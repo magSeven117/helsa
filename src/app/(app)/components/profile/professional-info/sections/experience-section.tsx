@@ -7,6 +7,7 @@ import { Input } from '@/libs/shadcn-ui/components/input';
 import { useUpdateDoctor } from '@/modules/doctor/presentation/graphql/hooks/use-update-doctor';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -26,12 +27,14 @@ export const ExperienceSection = ({ experience, id }: ExperienceValue & { id: st
     defaultValues: { experience },
   });
   const { isSubmitting, isValid } = form.formState;
+  const router = useRouter();
   const { updateDoctor } = useUpdateDoctor();
 
   const onSubmit = async (data: ExperienceValue) => {
     try {
       await updateDoctor(id, { experience: Number(data.experience) });
       setIsEditing(false);
+      router.refresh();
     } catch (error) {
       console.log(error);
       toast.error('An error occurred. Please try again.');

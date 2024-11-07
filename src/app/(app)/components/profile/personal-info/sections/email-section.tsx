@@ -7,6 +7,7 @@ import { Input } from '@/libs/shadcn-ui/components/input';
 import { useUser } from '@clerk/nextjs';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -29,6 +30,7 @@ export const EmailSection = ({ email }: EmailFormValues) => {
   });
   const { isSubmitting, isValid } = form.formState;
   const { user } = useUser();
+  const router = useRouter();
 
   const onSubmit = async (data: EmailFormValues) => {
     try {
@@ -36,6 +38,8 @@ export const EmailSection = ({ email }: EmailFormValues) => {
         email: data.email,
       });
       await user.update({ primaryEmailAddressId: address.id });
+      setIsEditing(false);
+      router.refresh();
     } catch (error) {
       console.log(error);
       toast.error('An error occurred. Please try again.');

@@ -6,6 +6,7 @@ import { Form, FormControl, FormField, FormItem } from '@/libs/shadcn-ui/compone
 import { useUser } from '@clerk/nextjs';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -23,9 +24,11 @@ const AvatarSection = ({ imageUrl }: AvatarSectionValues) => {
   });
   const { isSubmitting, isValid } = form.formState;
   const { user } = useUser();
+  const router = useRouter();
   const onSubmit = async (_values: AvatarSectionValues) => {
     if(avatarFile) {
       await user.setProfileImage({file: avatarFile});
+      router.refresh();
     }
   };
   return (

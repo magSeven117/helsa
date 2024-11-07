@@ -7,6 +7,7 @@ import { Textarea } from '@/libs/shadcn-ui/components/textarea';
 import { useUpdateBio } from '@/modules/user/presentation/graphql/hooks/use-update-bio';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -29,11 +30,13 @@ export const BioSection = ({ bio }: BioFormValues) => {
   });
   const { isSubmitting, isValid } = form.formState;
   const { updateBio } = useUpdateBio();
+  const router = useRouter();
 
   const onSubmit = async (data: BioFormValues) => {
     try {
       await updateBio(data.bio);
       setIsEditing(false);
+      router.refresh();
     } catch (error) {
       console.log(error);
       toast.error('An error occurred. Please try again.');
@@ -51,7 +54,7 @@ export const BioSection = ({ bio }: BioFormValues) => {
                 {isEditing ? 'Escribe una breve descripción sobre ti.' : 'Esto es lo que otros verán sobre ti.'}
               </p>
               {!isEditing ? (
-                <p className="text-primary font-bold mt-3">{form.getValues('bio')}</p>
+                <p className="text-primary font-bold mt-3">{bio}</p>
               ) : (
                 <FormField
                   control={form.control}

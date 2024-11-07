@@ -7,4 +7,5 @@ export interface DoctorRepository {
   findByCriteria(criteria: Criteria): Promise<Doctor[]>;
   getByCriteria(criteria: Criteria): Promise<Doctor>;
   getSpecialties(): Promise<Specialty[]>;
+  removeEducation(doctorId: string, educationId: string): Promise<void>;
 }

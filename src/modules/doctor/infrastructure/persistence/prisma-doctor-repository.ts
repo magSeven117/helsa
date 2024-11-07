@@ -82,4 +82,8 @@ export class PrismaDoctorRepository implements DoctorRepository {
       });
     }
   }
+
+  async removeEducation(doctorId: string, educationId: string): Promise<void> {
+    await this.client.education.delete({ where: { id: educationId, doctorId } });
+  }
 }

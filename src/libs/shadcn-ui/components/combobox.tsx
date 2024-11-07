@@ -24,7 +24,6 @@ export interface ComboBoxProps {
 export const Combobox = React.forwardRef<any, ComboBoxProps>(
   ({ options, placeholder = 'Select item', value, onChange, ...props }, ref) => {
     const [open, setOpen] = React.useState(false);
-    console.log(options);
     return (
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>

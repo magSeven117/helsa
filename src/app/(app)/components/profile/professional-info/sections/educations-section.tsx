@@ -10,9 +10,11 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/libs/shadcn-ui/compon
 import { cn } from '@/libs/shadcn-ui/utils/utils';
 import { useAddEducation } from '@/modules/doctor/presentation/graphql/hooks/use-add-education';
 import { useEditEducation } from '@/modules/doctor/presentation/graphql/hooks/use-edit-education';
+import { useRemoveEducation } from '@/modules/doctor/presentation/graphql/hooks/use-remove-education';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { CalendarIcon, Loader2, Pencil, Trash2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -51,9 +53,11 @@ export const EducationsSection = ({
     },
   });
   const { isSubmitting, isValid } = form.formState;
+  const router = useRouter();
 
   const { addEducation } = useAddEducation();
   const { editEducation } = useEditEducation();
+  const { removeEducation } = useRemoveEducation();
 
   const setEditData = (education: { title: string; institution: string; graduatedAt: Date, id: string }) => {
     setEditingEducationId(education.id);
@@ -74,11 +78,22 @@ export const EducationsSection = ({
         setIsCreating(false);
       }
       form.reset();
+      router.refresh();
     } catch (error) {
       console.log(error);
       toast.error('An error occurred. Please try again.');
     }
   };
+
+  const deleteEducation = async (educationId: string) => {
+    try {
+      await removeEducation(id, educationId);
+      toast.success('Education deleted successfully.');
+    } catch (error) {
+      console.log(error);
+      toast.error('An error occurred. Please try again.');
+    }
+  }
 
   return (
     <Card className="rounded-none bg-transparent">
@@ -122,7 +137,7 @@ export const EducationsSection = ({
                           <AlertDialogFooter className="flex w-full justify-end items-center">
                             <AlertDialogCancel className="rounded-none max-sm:w-full">Cancelar</AlertDialogCancel>
                             <AlertDialogAction asChild className="bg-destructive text-primary">
-                              <Button variant="destructive" className="rounded-none max-sm:w-full" onClick={() => console.log('deleted')}>
+                              <Button variant="destructive" className="rounded-none max-sm:w-full" onClick={() => deleteEducation(education.id)}>
                                 Eliminar
                               </Button>
                             </AlertDialogAction>

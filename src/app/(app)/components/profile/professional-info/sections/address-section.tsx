@@ -7,6 +7,7 @@ import { Input } from '@/libs/shadcn-ui/components/input';
 import { useSetConsultingRoom } from '@/modules/doctor/presentation/graphql/hooks/use-set-consulting-room';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2, MapPin } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -34,6 +35,7 @@ export const AddressSection = ({ consultingRoom, id }: AddressFormValues & { id:
   });
   const { isSubmitting, isValid } = form.formState;
   const { setConsultingRoom } = useSetConsultingRoom();
+  const router = useRouter();
 
   const onSubmit = async (data: AddressFormValues) => {
     try {
@@ -41,6 +43,7 @@ export const AddressSection = ({ consultingRoom, id }: AddressFormValues & { id:
         city: data.consultingRoom.city,
         address: data.consultingRoom.address,
       });
+      router.refresh();
     } catch (error) {
       console.log(error);
       toast.error('Error updating consulting room');

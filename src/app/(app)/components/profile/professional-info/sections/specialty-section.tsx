@@ -8,6 +8,7 @@ import { useGetSpecialties } from '@/modules/doctor/presentation/graphql/hooks/u
 import { useUpdateDoctor } from '@/modules/doctor/presentation/graphql/hooks/use-update-doctor';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -38,10 +39,14 @@ export const SpecialtySection = ({ specialtyId, id }: SpecialtyValue & { id: str
     });
   }, []);
 
+  const router = useRouter();
+
   const onSubmit = async (data: SpecialtyValue) => {
     try {
       await updateDoctor(id, { specialtyId: data.specialtyId });
       setIsEditing(false);
+      toast.success('Specialty updated successfully');
+      router.refresh();
     } catch (error) {
       console.log(error);
       toast.error('An error occurred. Please try again.');

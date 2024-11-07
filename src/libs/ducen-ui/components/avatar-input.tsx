@@ -16,7 +16,6 @@ const AvatarInput = forwardRef<HTMLInputElement, AvatarInputProps>(({ onChange, 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files[0];
     if (file) {
-      console.log(file);
       onChange(URL.createObjectURL(file));
       onSelectFile(file);
     }
