@@ -55,7 +55,7 @@ const SideBar = ({  role }: { role: string }) => {
           <Link href="/dashboard" className="flex items-center justify-center gap-2">
             <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
               {
-                theme.theme === 'dark' ? (<img src={logo.src} alt="" className='rounded-lg'/>) : (<img src={logo2.src} alt="" className='rounded-lg'/>)
+                theme.theme === 'dark' || theme.theme === 'system' ? (<img src={logo.src} alt="" className='rounded-lg'/>) : (<img src={logo2.src} alt="" className='rounded-lg'/>)
               }
             </div>
             <p className="text-lg font-bold">Helsa</p>
