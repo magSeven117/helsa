@@ -9,6 +9,7 @@ import { Input } from '@/libs/shadcn-ui/components/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/libs/shadcn-ui/components/popover';
 import { cn } from '@/libs/shadcn-ui/utils/utils';
 import { useAddEducation } from '@/modules/doctor/presentation/graphql/hooks/use-add-education';
+import { useEditEducation } from '@/modules/doctor/presentation/graphql/hooks/use-edit-education';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { CalendarIcon, Loader2, Pencil, Trash2 } from 'lucide-react';
@@ -52,6 +53,7 @@ export const EducationsSection = ({
   const { isSubmitting, isValid } = form.formState;
 
   const { addEducation } = useAddEducation();
+  const { editEducation } = useEditEducation();
 
   const setEditData = (education: { title: string; institution: string; graduatedAt: Date, id: string }) => {
     setEditingEducationId(education.id);
@@ -63,13 +65,15 @@ export const EducationsSection = ({
   const onSubmit = async (data: EducationsValue) => {
     try {
       if (isEditing) {
-        console.log('updating', data);
-      } else {
+        await editEducation(id, editingEducationId!, data.education);
+        toast.success('Education edited successfully.');
+        setIsEditing(false);
+      } else if (isCreating) {
         await addEducation(id, data.education);
         toast.success('Education added successfully.');
         setIsCreating(false);
-        form.reset();
       }
+      form.reset();
     } catch (error) {
       console.log(error);
       toast.error('An error occurred. Please try again.');

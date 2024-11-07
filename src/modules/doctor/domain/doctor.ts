@@ -86,4 +86,20 @@ export class Doctor extends Aggregate {
     }
     this.educations.push(Education.create(education.title, education.institution, education.graduatedAt.toString()));
   }
+
+  editEducation(educationId: string, education: Partial<Primitives<Education>>) {
+    if (!this.educations) {
+      return;
+    }
+    const index = this.educations.findIndex((edu) => edu.id.value === educationId);
+    if (index >= 0) {
+      this.educations[index] = this.educations[index].update(
+        education.title,
+        education.institution,
+        education.graduatedAt.toString()
+      );
+    } else {
+      throw new Error('Education not found');
+    }
+  }
 }

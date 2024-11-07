@@ -39,4 +39,13 @@ export class Education {
   static initialize(): Education[] {
     return [];
   }
+
+  update(title: string, institution: string, graduatedAt: string): Education {
+    return new Education(
+      this.id,
+      new StringValueObject(title),
+      new StringValueObject(institution),
+      new DateValueObject(graduatedAt)
+    );
+  }
 }

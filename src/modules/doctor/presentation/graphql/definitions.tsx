@@ -78,6 +78,7 @@ export const doctorSchema = gql`
     updateDoctor(doctorId: ID, doctor: DoctorInput!): Void
     setConsultingRoom(doctorId: ID, consultingRoomAddress: ConsultingRoomAddressInput!): Void
     addEducation(doctorId: ID, education: EducationInput!): Void
+    editEducation(doctorId: ID, educationId: ID, education: EducationInput!): Void
   }
 
   type Query {
