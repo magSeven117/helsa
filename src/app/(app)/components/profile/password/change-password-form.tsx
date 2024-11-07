@@ -3,10 +3,12 @@ import { Button } from '@/libs/shadcn-ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@/libs/shadcn-ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/libs/shadcn-ui/components/form';
 import { Input } from '@/libs/shadcn-ui/components/input';
+import { useUser } from '@clerk/nextjs';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 const formSchema = z
@@ -20,7 +22,6 @@ const formSchema = z
   });
 
 const ChangePasswordForm = ({}) => {
-  const [isEditing, setIsEditing] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -30,9 +31,18 @@ const ChangePasswordForm = ({}) => {
     mode: 'all',
   });
   const { isValid, isSubmitting } = form.formState;
-  const toggleEdit = () => setIsEditing((current) => !current);
+  const user = useUser();
+  const router = useRouter();
   const onSubmit = async (data: any) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      await user.user.updatePassword({ newPassword: data.newPassword });
+      form.reset();
+      toast.success('Password updated successfully');
+      router.push('/profile');
+    } catch (error) {
+      console.log(error);
+      toast.error('Error updating password');
+    }
   };
   return (
     <Card className="rounded-none bg-transparent">
