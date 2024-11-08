@@ -17,9 +17,11 @@ import { useUser } from '@clerk/nextjs';
 import {
   Calendar,
   CircleDollarSign,
+  History,
   LayoutDashboard,
   MessagesSquare,
   PieChart,
+  Stethoscope,
   Users
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
@@ -38,8 +40,11 @@ export interface SectionRoute {
 }
 
 const SideBar = ({  role }: { role: string }) => {
-  const {isSignedIn} = useUser();
-  const sections = role === 'DOCTOR' ? doctorSections : patientSections;
+  const { isSignedIn } = useUser();
+  const sections = sideBarItems.map((section) => ({
+    title: section.title,
+    routes: section.routes.filter((route) => route.roles.includes(role)),
+  }));
   const path = usePathname();
   const theme = useTheme();
   if(!isSignedIn) {
@@ -94,7 +99,7 @@ const SideBar = ({  role }: { role: string }) => {
 
 export default SideBar;
 
-export const doctorSections = [
+export const sideBarItems = [
   {
     title: 'General',
     routes: [
@@ -102,21 +107,37 @@ export const doctorSections = [
         icon: LayoutDashboard,
         title: 'Inicio',
         url: '/dashboard',
+        roles: ['DOCTOR', 'PATIENT', 'HOSPITAL'],
       },
       {
         icon: Calendar,
         title: 'Calendario',
         url: '/schedule',
+        roles: ['DOCTOR', 'PATIENT', 'HOSPITAL'],
+      },
+      {
+        icon: History,
+        title: 'Historial medico',
+        url: '/medical-history',
+        roles: ['PATIENT']
       },
       {
         icon: Users,
         title: 'Pacientes',
         url: '/patients',
+        roles: ['DOCTOR', 'HOSPITAL'],
+      },
+      {
+        icon: Stethoscope,
+        title: 'Doctores',
+        url: '/patients',
+        roles: ['HOSPITAL'],
       },
       {
         icon: PieChart,
         title: 'Reportes',
         url: '/reports',
+        roles: ['DOCTOR', 'PATIENT', 'HOSPITAL'],
       },
     ],
   },
@@ -127,24 +148,14 @@ export const doctorSections = [
         icon: MessagesSquare,
         title: 'Mensajería',
         url: '/chats',
+        roles: ['DOCTOR', 'PATIENT', 'HOSPITAL'],
       },
       {
         icon: CircleDollarSign,
         title: 'Facturación',
         url: '/billing',
+        roles: ['DOCTOR', 'PATIENT', 'HOSPITAL'],
       },
     ],
   },
-];
-export const patientSections = [
-  {
-    title: 'General',
-    routes: [
-      {
-        icon: LayoutDashboard,
-        title: 'Inicio',
-        url: '/patient/dashboard',
-      },
-    ],
-  },
-];
+]

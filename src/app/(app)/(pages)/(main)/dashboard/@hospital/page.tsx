@@ -3,7 +3,7 @@ const Page = () => {
   return (
     <div className="p-5">
       <p>
-        Hello, patient!
+        Hello, hospital!
       </p>
     </div>
   );
