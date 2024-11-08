@@ -127,5 +127,6 @@ export const patientSchema = gql`
   type Mutation {
     createPatient(patient: PatientInput!): Void
     updateDemographic(patientId: String!, demographic: PatientDemographicInput!): Void
+    updateBiometric(patientId: String!, biometric: PatientBiometricInput!): Void
   }
 `;

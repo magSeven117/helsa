@@ -3,7 +3,7 @@
 import { Button } from '@/libs/shadcn-ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@/libs/shadcn-ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/libs/shadcn-ui/components/form';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/libs/shadcn-ui/components/select';
+import { Input } from '@/libs/shadcn-ui/components/input';
 import { useUpdateDemographic } from '@/modules/patient/presentation/graphql/hooks/use-update-demographic';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
@@ -14,28 +14,28 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 
 const formSchema = z.object({
-  civilStatus: z.enum(['SINGLE', 'MARRIED', 'DIVORCED', 'WIDOWED'])
+  occupation: z.string().min(3, { message: 'Occupation must be at least 3 characters long' }),
 });
 
-type CivilStatusValue = z.infer<typeof formSchema> ;
+type OccupationValue = z.infer<typeof formSchema> ;
 
-export const CivilStatusSection = ({ civilStatus, id }: CivilStatusValue & { id: string}) => {
+export const OccupationSection = ({ occupation, id }: OccupationValue & { id: string}) => {
   const [isEditing, setIsEditing] = useState(false);
   const toggleEdit = () => setIsEditing((current) => !current);
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: { civilStatus },
+    defaultValues: { occupation },
     mode: 'all'
   });
   const { isSubmitting, isValid } = form.formState;
   const router = useRouter();
   const { updateDemographic } = useUpdateDemographic();
 
-  const onSubmit = async (data: CivilStatusValue) => {
+  const onSubmit = async (data: OccupationValue) => {
     try {
       await updateDemographic({ variables: { patientId: id, demographic: data } });
       setIsEditing(false);
-      toast.success('Estado civil actualizado correctamente');
+      toast.success('Ocupación actualizada correctamente');
       router.refresh();
     } catch (error) {
       console.log(error);
@@ -43,7 +43,6 @@ export const CivilStatusSection = ({ civilStatus, id }: CivilStatusValue & { id:
     }
   };
 
-  const selectedCivilStatus = civilStatusOptions.find((option) => option.id === form.getValues('civilStatus'));
 
   return (
     <Card className="rounded-none bg-transparent">
@@ -51,34 +50,23 @@ export const CivilStatusSection = ({ civilStatus, id }: CivilStatusValue & { id:
         <form action="" onSubmit={form.handleSubmit(onSubmit)}>
           <CardHeader className="">
             <div>
-              <CardTitle>Estado civil</CardTitle>
+              <CardTitle>Ocupación</CardTitle>
               <p className="text-muted-foreground text-sm mt-5">
                 {isEditing
-                  ? 'Selecciona tu estado civil.'
-                  : 'Tu estado civil es importante para nosotros'}
+                  ? 'Ingresa tu ocupación. Este dato es público.'
+                  : 'Tu ocupación es pública.'}
               </p>
               {!isEditing ? (
-                <p className="text-primary font-bold mt-3">{selectedCivilStatus.name}</p>
+                <p className="text-primary font-bold mt-3">{form.getValues('occupation')}</p>
               ) : (
                 <FormField
                   control={form.control}
-                  name="civilStatus"
+                  name="occupation"
                   render={({ field }) => (
                     <FormItem className="flex-1 mt-5">
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger className='rounded-none'>
-                            <SelectValue placeholder="Select a verified email to display" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent className='rounded-none'>
-                          {civilStatusOptions.map((specialty) => (
-                            <SelectItem key={specialty.id} value={specialty.id} className='rounded-none'>
-                              <span className="flex w-full justify-between items-center gap-3">{specialty.name}</span>
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <FormControl>
+                        <Input {...field} className="rounded-none"></Input>
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -88,7 +76,7 @@ export const CivilStatusSection = ({ civilStatus, id }: CivilStatusValue & { id:
           </CardHeader>
           <CardFooter className="border-t pt-4 flex justify-between items-start gap-2 md:items-center flex-col md:flex-row">
             <p className="text-muted-foreground text-xs">
-              Puedes actualizar tu estado civil en cualquier momento.
+              Esta información ayuda a proporcionar una mejor atención médica.
             </p>
             {isEditing ? (
               <div className="flex justify-end items-center gap-3">

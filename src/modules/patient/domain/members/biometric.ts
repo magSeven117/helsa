@@ -23,6 +23,14 @@ export class PatientBiometric {
   static create(height: number, bloodType: BloodTypes, organDonor: OrganDonors): PatientBiometric {
     return new PatientBiometric(new NumberValueObject(height), new BloodType(bloodType), new OrganDonor(organDonor));
   }
+
+  update(data: Primitives<PatientBiometric>): PatientBiometric {
+    return new PatientBiometric(
+      data.height ? new NumberValueObject(data.height) : this.height,
+      data.bloodType ? new BloodType(data.bloodType) : this.bloodType,
+      data.organDonor ? new OrganDonor(data.organDonor) : this.organDonor
+    );
+  }
 }
 
 export enum BloodTypes {

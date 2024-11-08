@@ -94,4 +94,11 @@ export class Patient extends Aggregate {
       ...demographic,
     });
   }
+
+  updateBiometric(biometric: Partial<Primitives<PatientBiometric>>): void {
+    this.biometric = this.biometric.update({
+      ...this.biometric.toPrimitives(),
+      ...biometric,
+    });
+  }
 }
