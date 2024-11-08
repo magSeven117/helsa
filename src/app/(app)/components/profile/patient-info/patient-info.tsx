@@ -1,5 +1,6 @@
 import { Patient } from "@/modules/patient/domain/patient";
 import { Primitives } from "@/modules/shared/domain/types/primitives";
+import { BloodTypeSection } from "./sections/blood-type-section";
 import { CivilStatusSection } from "./sections/civil-status-section";
 import { EducationLevelSection } from "./sections/education-level-section";
 import { HeightSection } from "./sections/height-section";
@@ -12,6 +13,7 @@ const PatientInfo = ({ patient }: { patient: Partial<Primitives<Patient>> }) => 
       <OccupationSection occupation={patient.demographic.occupation} id={patient.id} />
       <EducationLevelSection educationLevel={patient.demographic.educativeLevel as any} id={patient.id}/>
       <HeightSection height={patient.biometric.height.toString()} id={patient.id} />
+      <BloodTypeSection bloodType={patient.biometric.bloodType} id={patient.id} />
     </div>
   );
 }
