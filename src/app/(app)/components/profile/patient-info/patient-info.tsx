@@ -5,6 +5,7 @@ import { CivilStatusSection } from "./sections/civil-status-section";
 import { EducationLevelSection } from "./sections/education-level-section";
 import { HeightSection } from "./sections/height-section";
 import { OccupationSection } from "./sections/occupation-section";
+import { OrganDonorSection } from "./sections/organ-donor-section";
 
 const PatientInfo = ({ patient }: { patient: Partial<Primitives<Patient>> }) => {
   return (
@@ -14,6 +15,7 @@ const PatientInfo = ({ patient }: { patient: Partial<Primitives<Patient>> }) => 
       <EducationLevelSection educationLevel={patient.demographic.educativeLevel as any} id={patient.id}/>
       <HeightSection height={patient.biometric.height.toString()} id={patient.id} />
       <BloodTypeSection bloodType={patient.biometric.bloodType} id={patient.id} />
+      <OrganDonorSection organDonor={patient.biometric.organDonor} id={patient.id} />
     </div>
   );
 }
