@@ -27,6 +27,14 @@ export class PatientDemographic {
       new EducativeLevel(educativeLevel)
     );
   }
+
+  update(primitives: Primitives<PatientDemographic>): PatientDemographic {
+    return new PatientDemographic(
+      new CivilStatus(primitives.civilStatus),
+      new Occupation(primitives.occupation),
+      new EducativeLevel(primitives.educativeLevel)
+    );
+  }
 }
 
 export class CivilStatus extends StringValueObject {}

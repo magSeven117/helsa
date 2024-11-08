@@ -87,4 +87,11 @@ export class Patient extends Aggregate {
       DateValueObject.today()
     );
   }
+
+  updateDemographic(demographic: Partial<Primitives<PatientDemographic>>): void {
+    this.demographic = this.demographic.update({
+      ...this.demographic.toPrimitives(),
+      ...demographic,
+    });
+  }
 }
