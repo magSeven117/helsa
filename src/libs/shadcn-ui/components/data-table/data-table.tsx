@@ -54,7 +54,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
   return (
     <div className="space-y-4 rounded-none border p-4">
       <div className='flex flex-col gap-1 mb-4'>
-        <p className="text-lg font-semibold">Tus historial de citas</p>
+        <p className="text-lg font-semibold">Pacientes</p>
         <p className="text-sm text-muted-foreground">Aquí puedes ver el historial de citas de tus pacientes</p>
       </div>
       <DataTableSearcher table={table} />
