@@ -36,12 +36,13 @@ export const hospitalSchema = gql`
   }
 
   input HospitalInput {
-    adminId: ID!
-    name: String!
-    address: HospitalAddressInput!
+    adminId: ID
+    name: String
+    address: HospitalAddressInput
   }
 
   type Mutation {
     createHospital(hospital: HospitalInput!): Void
+    updateHospital(hospitalId: ID!, hospital: HospitalInput!): Void
   }
 `;

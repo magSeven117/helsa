@@ -52,6 +52,17 @@ export class HospitalAddress {
       HospitalAddressCoordinates.fromPrimitives(coordinates)
     );
   }
+
+  update(data: Partial<Primitives<HospitalAddress>>): HospitalAddress {
+    return new HospitalAddress(
+      this.id,
+      data.street ? new StringValueObject(data.street) : this.street,
+      data.city ? new StringValueObject(data.city) : this.city,
+      data.country ? new StringValueObject(data.country) : this.country,
+      data.zipCode ? new StringValueObject(data.zipCode) : this.zipCode,
+      data.coordinates ? HospitalAddressCoordinates.fromPrimitives(data.coordinates) : this.coordinates
+    );
+  }
 }
 
 export class HospitalAddressCoordinates {

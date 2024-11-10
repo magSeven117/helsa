@@ -48,4 +48,10 @@ export class Hospital extends Aggregate {
       DateValueObject.today()
     );
   }
+
+  update(data: Partial<Primitives<Hospital>>): void {
+    this.name = data.name ? new StringValueObject(data.name) : this.name;
+    this.address = data.address ? this.address.update(data.address) : this.address;
+    this.updatedAt = DateValueObject.today();
+  }
 }
