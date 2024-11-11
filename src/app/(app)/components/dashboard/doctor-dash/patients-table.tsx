@@ -2,10 +2,25 @@
 import { Button } from '@/libs/shadcn-ui/components/button';
 import { Checkbox } from '@/libs/shadcn-ui/components/checkbox';
 import { DataTable } from '@/libs/shadcn-ui/components/data-table/data-table';
+import { DataTableButtonReset } from '@/libs/shadcn-ui/components/data-table/data-table-button-reset';
 import { DataTableColumnHeader } from '@/libs/shadcn-ui/components/data-table/data-table-column-header';
+import { DataTablePagination } from '@/libs/shadcn-ui/components/data-table/data-table-pagination';
+import { DataTableSearcher } from '@/libs/shadcn-ui/components/data-table/data-table-searcher';
+import DataTableTagFilter from '@/libs/shadcn-ui/components/data-table/data-table-tag-filter';
+import { DataTableViewOptions } from '@/libs/shadcn-ui/components/data-table/data-table-view-options';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/libs/shadcn-ui/components/dropdown-menu';
-import { ColumnDef } from '@tanstack/react-table';
-import { MoreHorizontal } from 'lucide-react';
+import {
+  ColumnDef, ColumnFiltersState,
+  getCoreRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  SortingState, useReactTable, VisibilityState,
+} from '@tanstack/react-table';
+import { AlertCircle, EyeIcon, MoreHorizontal, PencilIcon } from 'lucide-react';
+import { useState } from 'react';
 
 type Patient = {
   id: string;
@@ -101,6 +116,24 @@ const patientsColumns: ColumnDef<Patient>[] = [
   },
 ];
 
+export const statuses = [
+  {
+    value: "Consulta",
+    label: "Consulta",
+    icon: PencilIcon,
+  },
+  {
+    value: "Revision",
+    label: "Revision",
+    icon: EyeIcon,
+  },
+  {
+    value: "Emergencia",
+    label: "Emergencia",
+    icon: AlertCircle,
+  },
+]
+
 const data = [
   {
     id: '1',
@@ -140,7 +173,51 @@ const data = [
 ];
 
 const PatientsTable = () => {
-  return <DataTable columns={patientsColumns} data={data} />;
+  const [rowSelection, setRowSelection] = useState({});
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const table = useReactTable({
+    data,
+    columns: patientsColumns,
+    state: {
+      sorting,
+      columnVisibility,
+      rowSelection,
+      columnFilters,
+    },
+    enableRowSelection: true,
+    onRowSelectionChange: setRowSelection,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
+  });
+  return (
+    <div className="space-y-4 rounded-none border p-4">
+      <div className='flex flex-col gap-1 mb-4'>
+        <p className="text-lg font-semibold">Pacientes</p>
+        <p className="text-sm text-muted-foreground">Aquí puedes ver el historial de citas de tus pacientes</p>
+      </div>
+      <div className='flex justify-between items-center'>
+        <div className='flex flex-1 items-center space-x-2'>
+          <DataTableSearcher searchColumn='name' table={table} />
+          <DataTableTagFilter table={table} columnFilterTagName='type'  columnTags={statuses} title='Tipo' />
+          <DataTableButtonReset table={table} />
+        </div>
+        <DataTableViewOptions table={table} />
+      </div>
+      <div className="rounded-none border">
+        <DataTable table={table} />
+      </div>
+      <DataTablePagination table={table} />
+    </div>
+  )
 };
 
 export default PatientsTable;
