@@ -16,13 +16,16 @@ import { Separator } from '@/libs/shadcn-ui/components/separator';
 import { cn } from '@/libs/shadcn-ui/utils/utils';
 import { useGetSpecialties } from '@/modules/doctor/presentation/graphql/hooks/use-get-specialties';
 import { CheckIcon, FilterX, ListFilter, Loader2, LucideIcon, Search, X } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-const SearchDoctor = () => {
+const SearchDoctor = ({ setSelectedDoctor }) => {
   const [specialties, setSpecialties] = useState([]);
   const { getSpecialties } = useGetSpecialties();
   const [textSearch, setTextSearch] = useState('');
   const [isSearching, setIsSearching] = useState(false);
+  const [results, setResults] = useState<any[]>([]);
+  const [selectedIndex, setSelectedIndex] = useState(-1)
+  const resultsRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     getSpecialties().then((data) => {
@@ -30,13 +33,49 @@ const SearchDoctor = () => {
     });
   }, []);
 
+  const searchResults = async (search: string) => {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    setResults(doctors);
+    setSelectedIndex(-1)
+    setIsSearching(false);
+  };
+
   useEffect(() => {
-    if (textSearch.length < 3) return;
-    setIsSearching(true);
-    setTimeout(() => {
+    if (!textSearch || textSearch === '') {
+      setResults([]);
       setIsSearching(false);
-    }, 1000);
+      setSelectedIndex(-1)
+      return;
+    }
+    setIsSearching(true);
+    const timeout = setTimeout(async () => {
+      await searchResults(textSearch);
+    }, 500);
+
+    return () => {
+      clearTimeout(timeout);
+    };
   }, [textSearch]);
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      setSelectedIndex(prev => (prev < results.length - 1 ? prev + 1 : prev))
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      setSelectedIndex(prev => (prev > 0 ? prev - 1 : prev))
+    } else if (e.key === 'Enter' && selectedIndex >= 0) {
+      setSelectedDoctor(results[selectedIndex])
+      setResults([])
+    }
+  }
+
+  useEffect(() => {
+    if (resultsRef.current && selectedIndex >= 0) {
+      const selectedElement = resultsRef.current.children[selectedIndex] as HTMLDivElement
+      selectedElement.scrollIntoView({ block: 'nearest' })
+    }
+  }, [selectedIndex])
 
   return (
     <div className="flex justify-between items-center">
@@ -47,6 +86,7 @@ const SearchDoctor = () => {
             placeholder="Buscar"
             value={textSearch}
             onChange={(e) => setTextSearch(e.target.value)}
+            onKeyDown={handleKeyDown}
           />
           {isSearching && (
             <div className="absolute z-20 left-[8px] top-[7px] bg-sidebar p-1 flex justify-center items-center border rounded-none text-xs">
@@ -66,10 +106,36 @@ const SearchDoctor = () => {
               <Search className="size-4" />
             </div>
           )}
+          {!isSearching && textSearch && results.length === 0 && (
+            <div className="absolute z-50 bg-background w-full h-[250px] rounded shadow border left-[0px] top-[50px]">
+              <div className="flex justify-center items-center h-full text-xl font-bold">No results found</div>
+            </div>
+          )}
+          {!isSearching && textSearch && results.length > 0 && (
+            <div className="absolute w-full z-50 bg-background left-0 top-[50px]">
+              <div className="w-full h-[300px] overflow-y-scroll styled-scroll rounded-none shadow border p-2 space-y-2" ref={resultsRef}>
+                {results.map((result, index) => (
+                  <div key={index} className={cn("flex gap-2 w-full p-2 cursor-pointer hover:bg-border border", {
+                    'bg-primary-foreground text-primary': selectedIndex === index
+                  })} onClick={() => setSelectedDoctor(result)}>
+                    <img src={result.avatar} alt={result.name} className="h-[50px] w-[50px] rounded-full" />
+                    <div className="flex flex-col justify-center">
+                      <div className="font-bold text-[1rem]">
+                        {result.name} - <span className="font-bold">{result.specialty}</span>
+                      </div>
+                      <div className="text-xs">
+                        {result.availability} - <span className="italic">Rate {result.rating}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
         <div className="flex">
           <FacetedFilter
-            title="Especialidades"
+            title="Filtros"
             options={specialties.map((specialty) => ({
               label: specialty.name,
               value: specialty.id,
@@ -165,9 +231,52 @@ function FacetedFilter({ title, options }: FacetedFilterProps) {
           </Command>
         </PopoverContent>
       </Popover>
-      <Button variant="outline" className="border rounded-none h-10" size='icon' onClick={() => setSelectedValues([])}>
+      <Button variant="outline" className="border rounded-none h-10" size="icon" onClick={() => setSelectedValues([])}>
         <FilterX />
       </Button>
     </div>
   );
 }
+
+const doctors = [
+  {
+    id: '1',
+    name: 'Dr. Jose Veliz',
+    specialty: 'Internal Medicine',
+    avatar: 'https://avatars.githubusercontent.com/u/1403241?v=4',
+    rating: 4.5,
+    availability: '2021-10-10',
+  },
+  {
+    id: '2',
+    name: 'Dr. Maria Lopez',
+    specialty: 'Cardiology',
+    avatar: 'https://avatars.githubusercontent.com/u/14032?v=4',
+    rating: 4.7,
+    availability: '2021-11-12',
+  },
+  {
+    id: '3',
+    name: 'Dr. John Doe',
+    specialty: 'Neurology',
+    avatar: 'https://avatars.githubusercontent.com/u/98182988?v=4',
+    rating: 4.8,
+    availability: '2021-12-15',
+  },
+  {
+    id: '4',
+    name: 'Dr. Jane Smith',
+    specialty: 'Pediatrics',
+    avatar: 'https://avatars.githubusercontent.com/u/1403242?v=4',
+    rating: 4.6,
+    availability: '2022-01-20',
+  },
+  {
+    id: '5',
+    name: 'Dr. Emily Davis',
+    specialty: 'Dermatology',
+    avatar: 'https://avatars.githubusercontent.com/u/659832?v=4',
+    rating: 4.9,
+    availability: '2022-02-25',
+  },
+];

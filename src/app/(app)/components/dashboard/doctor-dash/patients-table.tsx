@@ -1,9 +1,10 @@
 'use client'
 import { Button } from '@/libs/shadcn-ui/components/button';
-import { Checkbox } from '@/libs/shadcn-ui/components/checkbox';
 import { DataTable } from '@/libs/shadcn-ui/components/data-table/data-table';
 import { DataTableButtonReset } from '@/libs/shadcn-ui/components/data-table/data-table-button-reset';
 import { DataTableColumnHeader } from '@/libs/shadcn-ui/components/data-table/data-table-column-header';
+import { DataTableIdColumn } from '@/libs/shadcn-ui/components/data-table/data-table-id-column';
+import { DataTableIdHeader } from '@/libs/shadcn-ui/components/data-table/data-table-id-header';
 import { DataTablePagination } from '@/libs/shadcn-ui/components/data-table/data-table-pagination';
 import { DataTableSearcher } from '@/libs/shadcn-ui/components/data-table/data-table-searcher';
 import DataTableTagFilter from '@/libs/shadcn-ui/components/data-table/data-table-tag-filter';
@@ -33,23 +34,10 @@ const patientsColumns: ColumnDef<Patient>[] = [
   {
     id: "select",
     header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected())
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-        className="translate-y-[2px] rounded-none"
-      />
+      <DataTableIdHeader table={table}/>
     ),
     cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-        className="translate-y-[2px] rounded-none"
-      />
+      <DataTableIdColumn row={row}/>
     ),
     enableSorting: false,
     enableHiding: false,
