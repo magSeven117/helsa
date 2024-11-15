@@ -1,9 +1,9 @@
 import { Activities } from "@/app/(app)/components/dashboard/patient-dash/activities";
-import Appoint from "@/app/(app)/components/dashboard/patient-dash/schudule-appoint/appoint-button";
 import BloodPressure from "@/app/(app)/components/dashboard/patient-dash/blood-pressure";
 import Glucose from "@/app/(app)/components/dashboard/patient-dash/glucose";
 import { HealthAverage } from "@/app/(app)/components/dashboard/patient-dash/health-average";
 import HeartRate from "@/app/(app)/components/dashboard/patient-dash/heart-rate";
+import Appoint from "@/app/(app)/components/dashboard/patient-dash/schudule-appoint/appoint-button";
 import Temperature from "@/app/(app)/components/dashboard/patient-dash/temperature";
 import { UpcomingAppointments } from "@/app/(app)/components/dashboard/patient-dash/upcoming-appointments";
 import { Button } from "@/libs/shadcn-ui/components/button";

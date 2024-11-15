@@ -125,3 +125,8 @@ html, body, :root {
     fill: var(--primary);
   }
 }
+
+.styled-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) var(--destructive);
+}
