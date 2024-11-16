@@ -14,24 +14,17 @@ import { Input } from '@/libs/shadcn-ui/components/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/libs/shadcn-ui/components/popover';
 import { Separator } from '@/libs/shadcn-ui/components/separator';
 import { cn } from '@/libs/shadcn-ui/utils/utils';
-import { useGetSpecialties } from '@/modules/doctor/presentation/graphql/hooks/use-get-specialties';
+import { useSpecialties } from '@/modules/doctor/presentation/graphql/hooks/use-get-specialties';
 import { CheckIcon, FilterX, ListFilter, Loader2, LucideIcon, Search, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
 const SearchDoctor = ({ setSelectedDoctor }) => {
-  const [specialties, setSpecialties] = useState([]);
-  const { getSpecialties } = useGetSpecialties();
+  const { specialties } = useSpecialties();
   const [textSearch, setTextSearch] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [results, setResults] = useState<any[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(-1)
   const resultsRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    getSpecialties().then((data) => {
-      setSpecialties(data);
-    });
-  }, []);
 
   const searchResults = async (search: string) => {
     await new Promise((resolve) => setTimeout(resolve, 500));

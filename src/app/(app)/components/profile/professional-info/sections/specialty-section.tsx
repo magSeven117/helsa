@@ -4,12 +4,12 @@ import { Button } from '@/libs/shadcn-ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@/libs/shadcn-ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/libs/shadcn-ui/components/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/libs/shadcn-ui/components/select';
-import { useGetSpecialties } from '@/modules/doctor/presentation/graphql/hooks/use-get-specialties';
+import { useSpecialties } from '@/modules/doctor/presentation/graphql/hooks/use-get-specialties';
 import { useUpdateDoctor } from '@/modules/doctor/presentation/graphql/hooks/use-update-doctor';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -22,7 +22,6 @@ type SpecialtyValue = z.infer<typeof formSchema>;
 
 export const SpecialtySection = ({ specialtyId, id }: SpecialtyValue & { id: string }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [specialties, setSpecialties] = useState([]);
   const toggleEdit = () => setIsEditing((current) => !current);
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -31,13 +30,7 @@ export const SpecialtySection = ({ specialtyId, id }: SpecialtyValue & { id: str
   });
   const { isSubmitting, isValid } = form.formState;
   const { updateDoctor } = useUpdateDoctor();
-  const { getSpecialties } = useGetSpecialties();
-
-  useEffect(() => {
-    getSpecialties().then((data) => {
-      setSpecialties(data);
-    });
-  }, []);
+  const { specialties } = useSpecialties();
 
   const router = useRouter();
 

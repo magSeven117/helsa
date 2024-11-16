@@ -1,23 +1,21 @@
-import { gql, useApolloClient } from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
 
-export const useGetSpecialties = () => {
-  const client = useApolloClient();
-  const getSpecialties = async () => {
-    const { data } = await client.query({
-      query: gql`
-        query GetSpecialties {
-          specialties {
-            id
-            name
-          }
-        }
-      `,
-    });
-
-    return data.specialties;
+const GET_SPECIALTIES = gql`
+  query GetSpecialties {
+    specialties {
+      id
+      name
+    }
   }
+`;
+
+export const useSpecialties = () => {
+  const { data, loading, refetch, error } = useQuery(GET_SPECIALTIES)
 
   return {
-    getSpecialties
+    specialties: data?.specialties || [],
+    loading,
+    refetch,
+    error
   }
 }

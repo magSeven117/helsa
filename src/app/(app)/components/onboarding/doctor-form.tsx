@@ -14,11 +14,11 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/libs/shadcn-ui/components/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/libs/shadcn-ui/components/select';
 import { useCreateDoctor } from '@/modules/doctor/presentation/graphql/hooks/use-create-doctor';
-import { useGetSpecialties } from '@/modules/doctor/presentation/graphql/hooks/use-get-specialties';
+import { useSpecialties } from '@/modules/doctor/presentation/graphql/hooks/use-get-specialties';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Lottie from 'react-lottie';
 import { toast } from 'sonner';
@@ -41,17 +41,10 @@ const DoctorForm = ({ userId }: { userId: string }) => {
   });
   const { isSubmitting } = form.formState;
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [specialties, setSpecialties] = useState([]);
+  const {specialties} = useSpecialties();
 
   const { createDoctor } = useCreateDoctor()
-  const { getSpecialties } = useGetSpecialties()
   const router = useRouter();
-
-  useEffect(() => {
-    getSpecialties()
-      .then((spe) => setSpecialties(spe))
-      .catch(console.error);
-  }, [])
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
