@@ -1,6 +1,7 @@
 'use client';
 import { Badge } from '@/libs/shadcn-ui/components/badge';
 import { Button } from '@/libs/shadcn-ui/components/button';
+import { Calendar } from '@/libs/shadcn-ui/components/calendar';
 import {
   Command,
   CommandEmpty,
@@ -13,23 +14,28 @@ import {
 import { Input } from '@/libs/shadcn-ui/components/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/libs/shadcn-ui/components/popover';
 import { Separator } from '@/libs/shadcn-ui/components/separator';
+import { useClickOutside } from '@/libs/shadcn-ui/hooks/use-click-outside';
 import { cn } from '@/libs/shadcn-ui/utils/utils';
 import { useSpecialties } from '@/modules/doctor/presentation/graphql/hooks/use-get-specialties';
+import { addDays } from 'date-fns';
 import { CheckIcon, FilterX, ListFilter, Loader2, LucideIcon, Search, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { DateRange } from 'react-day-picker';
 
 const SearchDoctor = ({ setSelectedDoctor }) => {
   const { specialties } = useSpecialties();
+  const [open, setOpen] = useState(false);
   const [textSearch, setTextSearch] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [results, setResults] = useState<any[]>([]);
-  const [selectedIndex, setSelectedIndex] = useState(-1)
-  const resultsRef = useRef<HTMLDivElement>(null)
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const resultsRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const searchResults = async (search: string) => {
     await new Promise((resolve) => setTimeout(resolve, 500));
     setResults(doctors);
-    setSelectedIndex(-1)
+    setSelectedIndex(-1);
     setIsSearching(false);
   };
 
@@ -37,12 +43,14 @@ const SearchDoctor = ({ setSelectedDoctor }) => {
     if (!textSearch || textSearch === '') {
       setResults([]);
       setIsSearching(false);
-      setSelectedIndex(-1)
+      setSelectedIndex(-1);
+      setOpen(false);
       return;
     }
     setIsSearching(true);
     const timeout = setTimeout(async () => {
       await searchResults(textSearch);
+      setOpen(true);
     }, 500);
 
     return () => {
@@ -52,23 +60,41 @@ const SearchDoctor = ({ setSelectedDoctor }) => {
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'ArrowDown') {
-      e.preventDefault()
-      setSelectedIndex(prev => (prev < results.length - 1 ? prev + 1 : prev))
+      e.preventDefault();
+      setSelectedIndex((prev) => (prev < results.length - 1 ? prev + 1 : prev));
     } else if (e.key === 'ArrowUp') {
-      e.preventDefault()
-      setSelectedIndex(prev => (prev > 0 ? prev - 1 : prev))
+      e.preventDefault();
+      setSelectedIndex((prev) => (prev > 0 ? prev - 1 : prev));
     } else if (e.key === 'Enter' && selectedIndex >= 0) {
-      setSelectedDoctor(results[selectedIndex])
-      setResults([])
+      setSelectedDoctor(results[selectedIndex]);
+      setResults([]);
     }
-  }
+  };
 
   useEffect(() => {
     if (resultsRef.current && selectedIndex >= 0) {
-      const selectedElement = resultsRef.current.children[selectedIndex] as HTMLDivElement
-      selectedElement.scrollIntoView({ block: 'nearest' })
+      const selectedElement = resultsRef.current.children[selectedIndex] as HTMLDivElement;
+      selectedElement.scrollIntoView({ block: 'nearest' });
     }
-  }, [selectedIndex])
+  }, [selectedIndex]);
+
+  useClickOutside(resultsRef, () => {
+    setOpen(false);
+    setResults([]);
+  });
+
+  useEffect(() => {
+    const handleKeyDown = (e: MouseEvent) => {
+      setOpen(true);
+    };
+    inputRef.current.addEventListener('focus', handleKeyDown);
+
+    return () => {
+      if (inputRef.current) {
+        inputRef.current.removeEventListener('focus', handleKeyDown);
+      }
+    };
+  }, [inputRef]);
 
   return (
     <div className="flex justify-between items-center">
@@ -80,6 +106,7 @@ const SearchDoctor = ({ setSelectedDoctor }) => {
             value={textSearch}
             onChange={(e) => setTextSearch(e.target.value)}
             onKeyDown={handleKeyDown}
+            ref={inputRef}
           />
           {isSearching && (
             <div className="absolute z-20 left-[8px] top-[7px] bg-sidebar p-1 flex justify-center items-center border rounded-none text-xs">
@@ -99,30 +126,40 @@ const SearchDoctor = ({ setSelectedDoctor }) => {
               <Search className="size-4" />
             </div>
           )}
-          {!isSearching && textSearch && results.length === 0 && (
-            <div className="absolute z-50 bg-background w-full h-[250px] rounded shadow border left-[0px] top-[50px]">
-              <div className="flex justify-center items-center h-full text-xl font-bold">No results found</div>
-            </div>
-          )}
-          {!isSearching && textSearch && results.length > 0 && (
-            <div className="absolute w-full z-50 bg-background left-0 top-[50px]">
-              <div className="w-full h-[300px] overflow-y-scroll styled-scroll rounded-none shadow border p-2 space-y-2" ref={resultsRef}>
-                {results.map((result, index) => (
-                  <div key={index} className={cn("flex gap-2 w-full p-2 cursor-pointer hover:bg-border border", {
-                    'bg-primary-foreground text-primary': selectedIndex === index
-                  })} onClick={() => setSelectedDoctor(result)}>
-                    <img src={result.avatar} alt={result.name} className="h-[50px] w-[50px] rounded-full" />
-                    <div className="flex flex-col justify-center">
-                      <div className="font-bold text-[1rem]">
-                        {result.name} - <span className="font-bold">{result.specialty}</span>
+          {open && (
+            <div ref={resultsRef}>
+              {results.length > 0 ? (
+                <div className="absolute w-full z-50 bg-background left-0 top-[50px]">
+                  <div className="w-full max-h-[300px] overflow-y-scroll styled-scroll rounded-none shadow border p-2 space-y-2">
+                    {results.map((result, index) => (
+                      <div
+                        key={index}
+                        className={cn('flex gap-2 w-full p-2 cursor-pointer hover:bg-border border', {
+                          'bg-primary-foreground text-primary': selectedIndex === index,
+                        })}
+                        onClick={() => {
+                          setSelectedDoctor(result)
+                          setOpen(false)
+                        }}
+                      >
+                        <img src={result.avatar} alt={result.name} className="h-[50px] w-[50px] rounded-full" />
+                        <div className="flex flex-col justify-center">
+                          <div className="font-bold text-[1rem]">
+                            {result.name} - <span className="font-bold">{result.specialty}</span>
+                          </div>
+                          <div className="text-xs">
+                            {result.availability} - <span className="italic">Rate {result.rating}</span>
+                          </div>
+                        </div>
                       </div>
-                      <div className="text-xs">
-                        {result.availability} - <span className="italic">Rate {result.rating}</span>
-                      </div>
-                    </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                </div>
+              ) : (
+                <div className="absolute z-50 bg-background w-full py-10 max-h-[250px] rounded shadow border left-[0px] top-[50px]">
+                  <div className="flex justify-center items-center h-full text-xl font-bold">No results found</div>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -150,6 +187,10 @@ interface FacetedFilterProps {
 function FacetedFilter({ title, options }: FacetedFilterProps) {
   const [open, setOpen] = useState(false);
   const [selectedValues, setSelectedValues] = useState([]);
+  const [date, setDate] = useState<DateRange | undefined>({
+    from: new Date(2022, 0, 20),
+    to: addDays(new Date(2022, 0, 20), 1),
+  })
 
   const handleSelect = (value: string) => {
     if (selectedValues.includes(value)) {
@@ -187,46 +228,63 @@ function FacetedFilter({ title, options }: FacetedFilterProps) {
             )}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className=" p-0 rounded-none w-full" align="end">
-          <Command>
-            <CommandInput placeholder={title} className="h-8" />
-            <CommandEmpty>No results found.</CommandEmpty>
-            <CommandList>
-              <CommandGroup>
-                {options.map((option) => {
-                  const isSelected = selectedValues.includes(option.value);
-                  return (
-                    <CommandItem key={option.value} onSelect={() => handleSelect(option.value)}>
-                      <div
-                        className={cn(
-                          'mr-2 flex h-4 w-4 items-center justify-center rounded-none border border-primary',
-                          isSelected ? 'bg-primary text-primary-foreground' : 'opacity-50 [&_svg]:invisible'
-                        )}
-                      >
-                        <CheckIcon className={cn('h-4 w-4')} />
-                      </div>
-                      <span>{option.label}</span>
-                    </CommandItem>
-                  );
-                })}
-              </CommandGroup>
-              {selectedValues.length > 0 && (
-                <>
-                  <CommandSeparator />
-                  <CommandGroup>
-                    <CommandItem onSelect={() => setSelectedValues([])} className="justify-center text-center">
-                      Clear filters
-                    </CommandItem>
-                  </CommandGroup>
-                </>
-              )}
-            </CommandList>
-          </Command>
+        <PopoverContent className=" p-0 rounded-none w-full flex flex-col" align="end">
+          <div className="flex justify-between items-center p-2 border-b">
+            <div className="font-bold">{title}</div>
+            <Button variant="outline" size="icon" className='rounded-none' onClick={() => setSelectedValues([])}>
+              <FilterX />
+            </Button>
+          </div>
+          <div className="flex justify-start items-start">
+            <Command className='pr-3 py-0 h-full'>
+              <CommandInput placeholder='Especialidad' className="h-8" />
+              <CommandEmpty>No results found.</CommandEmpty>
+              <CommandList className='styled-scroll h-full'>
+                <CommandGroup>
+                  {options.map((option) => {
+                    const isSelected = selectedValues.includes(option.value);
+                    return (
+                      <CommandItem key={option.value} onSelect={() => handleSelect(option.value)}>
+                        <div
+                          className={cn(
+                            'mr-2 flex h-4 w-4 items-center justify-center rounded-none border border-primary',
+                            isSelected ? 'bg-primary text-primary-foreground' : 'opacity-50 [&_svg]:invisible'
+                          )}
+                        >
+                          <CheckIcon className={cn('h-4 w-4')} />
+                        </div>
+                        <span>{option.label}</span>
+                      </CommandItem>
+                    );
+                  })}
+                </CommandGroup>
+                {selectedValues.length > 0 && (
+                  <>
+                    <CommandSeparator />
+                    <CommandGroup>
+                      <CommandItem onSelect={() => setSelectedValues([])} className="justify-center text-center">
+                        Clear filters
+                      </CommandItem>
+                    </CommandGroup>
+                  </>
+                )}
+              </CommandList>
+            </Command>
+            <div className='p-4 box-border border-l'>
+              <p>
+                Disponibilidad de citas
+              </p>
+              <Calendar 
+                initialFocus
+                mode="range"
+                defaultMonth={date?.from}
+                selected={date}
+                onSelect={setDate}
+              />
+            </div>
+          </div>
         </PopoverContent>
       </Popover>
-      <Button variant="outline" className="border rounded-none h-10" size="icon" onClick={() => setSelectedValues([])}>
-        <FilterX />
-      </Button>
     </div>
   );
 }
