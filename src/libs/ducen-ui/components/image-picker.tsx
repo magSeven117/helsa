@@ -1,12 +1,12 @@
 'use client';
 import { Button } from '@/libs/shadcn-ui/components/button';
-import { UploadCloud } from 'lucide-react';
+import { Paperclip } from 'lucide-react';
 import { forwardRef, useEffect, useRef } from 'react';
 
 interface ImagePickerProps {
-  value: string;
-  onChange: (value: string) => void;
-  onSelectFile: (file: File) => void;
+  value?: string;
+  onChange?: (value: string) => void;
+  onSelectFile?: (file: File) => void;
 }
 const ImagePicker = forwardRef<HTMLInputElement, ImagePickerProps>(
   ({ onChange, value, onSelectFile }, ref) => {
@@ -39,9 +39,9 @@ const ImagePicker = forwardRef<HTMLInputElement, ImagePickerProps>(
             />
           </div>
         )}
-        <Button type='button' className="bg-muted text-foreground gap-1 text-sm hover:bg-foreground hover:text-background" onClick={openFilePicker}>
-          <UploadCloud className=""></UploadCloud>
-          Upload new image
+        <Button type='button' className="w-full bg-background border rounded-none text-foreground hover:bg-sidebar" onClick={openFilePicker}>
+          <Paperclip className=""></Paperclip>
+          Agrega documentos o imágenes
         </Button>
         <input ref={inputFileRef} type="file" className="hidden " />
       </div>
