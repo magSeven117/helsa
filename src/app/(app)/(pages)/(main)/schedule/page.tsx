@@ -1,9 +1,9 @@
-import ComingSoon from "@/app/(app)/components/shared/coming-soon";
+import DoctorScheduleModal from "./components/create-schedule";
 
 const Page = () => {
   return (
     <div className="flex w-full h-full">
-      <ComingSoon />
+      <DoctorScheduleModal />
     </div>
   );
 }
