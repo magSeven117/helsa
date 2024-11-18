@@ -63,11 +63,11 @@ const CompleteData = () => {
             </div>
             <div>
               <ImagePicker value="" />
-              <div className="grid grid-cols-5 gap-3">
+              <div className="grid grid-cols-4 gap-3">
                 <div className="flex flex-col items-center justify-center border rounded-none p-3 hover:bg-sidebar hover:border-color-brand-primary cursor-pointer">
                   <File />
                   <div>
-                    <p className="text-sm text-muted-foreground text-center">Examenes de orine</p>
+                    <p className="text-sm text-muted-foreground text-center">Exámenes de orine</p>
                   </div>
                 </div>
               </div>

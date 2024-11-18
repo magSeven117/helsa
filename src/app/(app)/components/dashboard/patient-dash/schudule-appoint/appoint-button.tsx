@@ -24,30 +24,33 @@ const Appoint = () => {
           Agendar <Calendar />{' '}
         </Button>
       </SheetTrigger>
-      <SheetContent className="sm:w-1/2 sm:max-w-full overflow-y-scroll styled-scroll">
+      <SheetContent className="sm:w-1/2 sm:max-w-full overflow-y-scroll styled-scroll focus-visible:outline-none">
         <SheetHeader>
           <SheetTitle>Agenda una cita</SheetTitle>
           <SheetDescription>Encuentra al profesional adecuado para ayudarte</SheetDescription>
         </SheetHeader>
-        <div className="my-3">
-          <SearchDoctor setSelectedDoctor={setSelectedDoctor} />
-        </div>
-        {selectedDoctor && (
-          <>
-            <div className="flex gap-2 w-full p-2">
-              <img src={selectedDoctor.avatar} alt={selectedDoctor.name} className="h-[50px] w-[50px] rounded-full" />
-              <div className="flex flex-col justify-center">
-                <div className="font-bold text-[1rem]">
-                  {selectedDoctor.name} - <span className="font-bold">{selectedDoctor.specialty}</span>
-                </div>
-                <div className="text-xs">
-                  <span className="italic">Rate {selectedDoctor.rating}</span>
+        <div className='w-full'>
+          <div className="my-3">
+            <SearchDoctor setSelectedDoctor={setSelectedDoctor} />
+          </div>
+          {selectedDoctor && (
+            <>
+              <div className="flex gap-2 w-full p-2">
+                <img src={selectedDoctor.avatar} alt={selectedDoctor.name} className="h-[50px] w-[50px] rounded-full" />
+                <div className="flex flex-col justify-center">
+                  <div className="font-bold text-[1rem]">
+                    {selectedDoctor.name} - <span className="font-bold">{selectedDoctor.specialty}</span>
+                  </div>
+                  <div className="text-xs">
+                    <span className="italic">Rate {selectedDoctor.rating}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-            <CompleteData />
-          </>
-        )}
+              <CompleteData />
+            </>
+          )}
+        </div>
+
         <SheetFooter>
           <Button onClick={() => setOpen(false)} className="rounded-none" variant="outline">
             Cancelar
