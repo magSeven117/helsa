@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { Button } from '@/libs/shadcn-ui/components/button';
 import { DataTable } from '@/libs/shadcn-ui/components/data-table/data-table';
 import { DataTableButtonReset } from '@/libs/shadcn-ui/components/data-table/data-table-button-reset';
@@ -9,16 +9,26 @@ import { DataTablePagination } from '@/libs/shadcn-ui/components/data-table/data
 import { DataTableSearcher } from '@/libs/shadcn-ui/components/data-table/data-table-searcher';
 import DataTableTagFilter from '@/libs/shadcn-ui/components/data-table/data-table-tag-filter';
 import { DataTableViewOptions } from '@/libs/shadcn-ui/components/data-table/data-table-view-options';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/libs/shadcn-ui/components/dropdown-menu';
 import {
-  ColumnDef, ColumnFiltersState,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/libs/shadcn-ui/components/dropdown-menu';
+import {
+  ColumnDef,
+  ColumnFiltersState,
   getCoreRowModel,
   getFacetedRowModel,
   getFacetedUniqueValues,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  SortingState, useReactTable, VisibilityState,
+  SortingState,
+  useReactTable,
+  VisibilityState,
 } from '@tanstack/react-table';
 import { AlertCircle, EyeIcon, MoreHorizontal, PencilIcon } from 'lucide-react';
 import { useState } from 'react';
@@ -32,53 +42,41 @@ type Patient = {
 };
 const patientsColumns: ColumnDef<Patient>[] = [
   {
-    id: "select",
-    header: ({ table }) => (
-      <DataTableIdHeader table={table}/>
-    ),
-    cell: ({ row }) => (
-      <DataTableIdColumn row={row}/>
-    ),
+    id: 'select',
+    header: ({ table }) => <DataTableIdHeader table={table} />,
+    cell: ({ row }) => <DataTableIdColumn row={row} />,
     enableSorting: false,
     enableHiding: false,
   },
   {
     accessorKey: 'name',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Nombre" />
-    ),
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Nombre" />,
     enableSorting: true,
     enableHiding: true,
   },
   {
     accessorKey: 'age',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Edad" />
-    ),
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Edad" />,
     enableSorting: true,
     enableHiding: true,
   },
   {
     accessorKey: 'type',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Tipo" />
-    ),
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Tipo" />,
     enableSorting: true,
     enableHiding: true,
   },
   {
     accessorKey: 'lastVisit',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Ultima Visita" />
-    ),
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Ultima Visita" />,
     enableSorting: true,
     enableHiding: true,
   },
   {
-    id: "actions",
+    id: 'actions',
     cell: ({ row }) => {
-      const payment = row.original
- 
+      const payment = row.original;
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -87,11 +85,9 @@ const patientsColumns: ColumnDef<Patient>[] = [
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className='rounded-none'>
+          <DropdownMenuContent align="end" className="rounded-none">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
+            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(payment.id)}>
               Copy payment ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
@@ -99,28 +95,28 @@ const patientsColumns: ColumnDef<Patient>[] = [
             <DropdownMenuItem>View payment details</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      )
+      );
     },
   },
 ];
 
 export const statuses = [
   {
-    value: "Consulta",
-    label: "Consulta",
+    value: 'Consulta',
+    label: 'Consulta',
     icon: PencilIcon,
   },
   {
-    value: "Revision",
-    label: "Revision",
+    value: 'Revision',
+    label: 'Revision',
     icon: EyeIcon,
   },
   {
-    value: "Emergencia",
-    label: "Emergencia",
+    value: 'Emergencia',
+    label: 'Emergencia',
     icon: AlertCircle,
   },
-]
+];
 
 const data = [
   {
@@ -188,14 +184,14 @@ const PatientsTable = () => {
   });
   return (
     <div className="space-y-4 rounded-none border p-4">
-      <div className='flex flex-col gap-1 mb-4'>
+      <div className="flex flex-col gap-1 mb-4">
         <p className="text-lg font-semibold">Pacientes</p>
         <p className="text-sm text-muted-foreground">Aquí puedes ver el historial de citas de tus pacientes</p>
       </div>
-      <div className='flex justify-between items-center'>
-        <div className='flex flex-1 items-center space-x-2'>
-          <DataTableSearcher searchColumn='name' table={table} />
-          <DataTableTagFilter table={table} columnFilterTagName='type'  columnTags={statuses} title='Tipo' />
+      <div className="flex justify-between items-center">
+        <div className="flex flex-1 items-center space-x-2">
+          <DataTableSearcher searchColumn="name" table={table} />
+          <DataTableTagFilter table={table} columnFilterTagName="type" columnTags={statuses} title="Tipo" />
           <DataTableButtonReset table={table} />
         </div>
         <DataTableViewOptions table={table} />
@@ -205,7 +201,7 @@ const PatientsTable = () => {
       </div>
       <DataTablePagination table={table} />
     </div>
-  )
+  );
 };
 
 export default PatientsTable;

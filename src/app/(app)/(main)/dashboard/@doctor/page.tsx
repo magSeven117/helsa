@@ -9,7 +9,7 @@ import { UpcomingAppointments } from './components/upcoming-appointments';
 const Page = () => {
   return (
     <div className="md:pl-9 w-full h-full">
-      <div className="h-full flex justify-between items-center max-sm:flex-col">
+      <div className="h-full flex justify-between items-center max-sm:flex-col mb-3">
         <div className="flex justify-start flex-col w-full h-full pt-5 pr-9 gap-5">
           <div className="w-full flex justify-between items-center gap-4">
             <p className="text-lg font-semibold">Welcome Back, Dr José Véliz</p>
@@ -46,7 +46,7 @@ const Page = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">33</div>
-                  <p className="text-xs text-muted-foreground">La mayoría esta por debajo de los 40</p>
+                  <p className="text-xs text-muted-foreground">Por debajo de los 40</p>
                 </CardContent>
               </Card>
               <Card className="rounded-none w-1/4">
@@ -56,18 +56,16 @@ const Page = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">Revision</div>
-                  <p className="text-xs text-muted-foreground">La mayoría ha venido con anterioridad</p>
+                  <p className="text-xs text-muted-foreground">Pacientes</p>
                 </CardContent>
               </Card>
             </div>
           </div>
           <div className="w-full grid grid-cols-2 max-sm:grid-cols-1 gap-4 mb-5">
-            <div className="flex flex-col gap-3">
-              <AppointmentTypes />
-              <Revenue />
-            </div>
-            <PatientsTable />
+            <AppointmentTypes />
+            <Revenue />
           </div>
+          <PatientsTable />
         </div>
         <div className="max-sm:w-full border-l px-3 h-full justify-center">
           <UpcomingAppointments />
