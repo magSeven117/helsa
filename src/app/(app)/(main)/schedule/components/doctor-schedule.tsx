@@ -75,15 +75,19 @@ export default function DoctorSchedule() {
   };
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5 flex-1 max-h-[calc(100vh-10%)] px-10 pt-10 overflow-y-scroll styled-scroll">
+      <p className="text-xs text-muted-foreground">
+        Establece tu disponibilidad para cada dia de la semana. Puedes agregar horas a tu dia y establecer tu horario de
+        trabajo.
+      </p>
       {Object.entries(enabledDays).map(([day, enabled]) => (
         <div key={day} className="space-y-4">
           <div className="flex items-center justify-between gap-3">
             <div className="flex justify-between items-center w-1/5">
-              <Label htmlFor={day} className="text-base capitalize ">
+              <Label htmlFor={day} className="text-sm capitalize ">
                 {day}
               </Label>
-              <Switch id={day} checked={enabled} onCheckedChange={() => toggleDay(day)} />
+              <Switch className="" id={day} checked={enabled} onCheckedChange={() => toggleDay(day)} />
             </div>
 
             {enabled ? (

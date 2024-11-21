@@ -1,5 +1,6 @@
 import { AddEducationResolver } from './add-education';
 import { CreateDoctorResolver } from './create-doctor';
+import { CreateScheduleResolver } from './create-schedule';
 import { EditEducationResolver } from './edit-education';
 import { GetSpecialtiesResolver } from './get-specialties';
 import { RemoveEducationResolver } from './remove-education';
@@ -17,6 +18,7 @@ const resolvers = {
     addEducation: AddEducationResolver,
     editEducation: EditEducationResolver,
     removeEducation: RemoveEducationResolver,
+    createSchedule: CreateScheduleResolver,
   },
 };
 

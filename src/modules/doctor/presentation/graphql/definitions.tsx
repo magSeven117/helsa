@@ -80,6 +80,7 @@ export const doctorSchema = gql`
     addEducation(doctorId: ID, education: EducationInput!): Void
     editEducation(doctorId: ID, educationId: ID, education: EducationInput!): Void
     removeEducation(doctorId: ID, educationId: ID): Void
+    createSchedule(doctorId: ID, days: [Day]): Void
   }
 
   type Query {

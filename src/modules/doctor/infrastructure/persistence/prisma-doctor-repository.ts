@@ -44,6 +44,16 @@ export class PrismaDoctorRepository implements DoctorRepository {
         },
       });
     }
+    if (doctor.schedule) {
+      await this.client.schedule.upsert({
+        where: { doctorId: doctor.id.value },
+        update: doctor.schedule.toPrimitives(),
+        create: {
+          ...doctor.schedule.toPrimitives(),
+          doctorId: doctor.id.value,
+        },
+      });
+    }
     await this.saveEducations(doctor.id.value, data.educations);
   }
   async findByCriteria(criteria: Criteria): Promise<Doctor[]> {

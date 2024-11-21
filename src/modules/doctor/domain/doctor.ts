@@ -3,6 +3,7 @@ import { DateValueObject, NumberValueObject, StringValueObject } from '@/modules
 import { Uuid } from '@/modules/shared/domain/core/value-objects/uuid';
 import { Primitives } from '@/modules/shared/domain/types/primitives';
 import { ConsultingRoomAddress } from './consulting-room-address';
+import { Day } from './day';
 import { Education } from './educations';
 import { Schedule } from './schedule';
 
@@ -101,5 +102,9 @@ export class Doctor extends Aggregate {
     } else {
       throw new Error('Education not found');
     }
+  }
+
+  createSchedule(days: Primitives<Day>[]) {
+    this.schedule = Schedule.create(1, 24, days);
   }
 }
