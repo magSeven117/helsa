@@ -2,7 +2,7 @@ import { useMutation } from '@apollo/client';
 import gql from 'graphql-tag';
 
 const CREATE_SCHEDULE = gql`
-  mutation createSchedule($doctorId: String!, $days: [Day]!) {
+  mutation createSchedule($doctorId: String!, $days: [DayInput]!) {
     createSchedule(doctorId: $doctorId, days: $days)
   }
 `;

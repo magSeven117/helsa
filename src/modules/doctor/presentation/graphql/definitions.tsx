@@ -73,6 +73,15 @@ export const doctorSchema = gql`
     graduatedAt: DateTime
   }
 
+  input HourInput {
+    hour: String
+  }
+
+  input DayInput {
+    day: String
+    hours: [HourInput]
+  }
+
   type Mutation {
     createDoctor(doctor: DoctorInput!): Void
     updateDoctor(doctorId: ID, doctor: DoctorInput!): Void
@@ -80,7 +89,7 @@ export const doctorSchema = gql`
     addEducation(doctorId: ID, education: EducationInput!): Void
     editEducation(doctorId: ID, educationId: ID, education: EducationInput!): Void
     removeEducation(doctorId: ID, educationId: ID): Void
-    createSchedule(doctorId: ID, days: [Day]): Void
+    createSchedule(doctorId: ID, days: [DayInput]): Void
   }
 
   type Query {
