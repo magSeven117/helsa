@@ -12,7 +12,7 @@ export const POST = verifySignatureAppRouter(async (request: NextRequest) => {
 
     // Get the config for the event
     const config = eventsConfig.find((conf) => conf.aggregate === aggregate);
-    const taskKeys = [...config.globalTasks, ...config.events[event].task];
+    const taskKeys = [...config.globalTasks, ...config.events[event].tasks];
 
     //Setup and execute the jobs
     const jobs = taskKeys.map((key) => tasks.trigger(key, extra_data));

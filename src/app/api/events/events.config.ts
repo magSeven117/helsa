@@ -1,9 +1,14 @@
 import { helloWorldTask } from '@/app/tasks/example';
+import { UpdateDoctorVectorTask } from '@/app/tasks/update-doctor-vector';
 export const eventsConfig: EventConfig[] = [
   {
     aggregate: 'doctor',
     globalTasks: [helloWorldTask.id],
-    events: {},
+    events: {
+      created: {
+        tasks: [UpdateDoctorVectorTask.id],
+      },
+    },
   },
 ];
 
@@ -12,7 +17,7 @@ type EventConfig = {
   globalTasks: string[];
   events: {
     [key: string]: {
-      task: string[];
+      tasks: string[];
     };
   };
 };
