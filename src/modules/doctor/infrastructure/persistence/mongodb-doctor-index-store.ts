@@ -1,3 +1,4 @@
+import { Appointment } from '@/modules/appointment/domain/appointment';
 import { User } from '@/modules/user/domain/user';
 import { format } from 'date-fns';
 import { MongoClient } from 'mongodb';
@@ -18,7 +19,7 @@ export class MongoDBDoctorIndexStore implements DoctorIndexStore {
     await this.collection.createIndex(index as any, { name: 'doctor_search' });
   }
 
-  async save(doctor: Doctor, user: User, appointments: any[]) {
+  async save(doctor: Doctor, user: User, appointments: Appointment[]) {
     const primitives = doctor.toPrimitives();
     const userPrimitives = user.toPrimitives();
 
