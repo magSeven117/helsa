@@ -11,7 +11,7 @@ export class QStashEventBus implements EventBus {
   async publish(events: DomainEvent[]): Promise<void> {
     await this.qstashClient.batchJSON(
       events.map((event) => ({
-        url: `${process.env.QSTASH_APP_URL}/api/webhooks/events/${event.eventName}`,
+        url: `${process.env.QSTASH_APP_URL}/api/webhooks/events`,
         body: event.toPrimitive(),
       }))
     );

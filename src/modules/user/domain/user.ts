@@ -12,6 +12,7 @@ export class User extends Aggregate {
     public externalId: StringValueObject,
     public email: UserEmail,
     public role: UserRole,
+    public fullName: StringValueObject,
     createdAt: DateValueObject,
     updatedAt: DateValueObject
   ) {
@@ -23,6 +24,7 @@ export class User extends Aggregate {
     externalId: string,
     email: string,
     role: string,
+    fullName: string,
     additionalData: Record<string, any>
   ): User {
     const user = new User(
@@ -30,6 +32,7 @@ export class User extends Aggregate {
       new StringValueObject(externalId),
       new UserEmail(email),
       new UserRole(role as UserRoleValue),
+      new StringValueObject(fullName),
       DateValueObject.today(),
       DateValueObject.today()
     );
@@ -44,12 +47,13 @@ export class User extends Aggregate {
     return user;
   }
 
-  public static Doctor(id: string, externalId: string, email: string): User {
+  public static Doctor(id: string, externalId: string, email: string, name: string): User {
     return new User(
       new Uuid(id),
       new StringValueObject(externalId),
       new UserEmail(email),
       UserRole.Doctor(),
+      new StringValueObject(name),
       DateValueObject.today(),
       DateValueObject.today()
     );
@@ -61,6 +65,7 @@ export class User extends Aggregate {
       new StringValueObject(data.externalId),
       new UserEmail(data.email),
       new UserRole(data.role),
+      new StringValueObject(data.fullName),
       new DateValueObject(data.createdAt),
       new DateValueObject(data.updatedAt)
     );
@@ -72,6 +77,7 @@ export class User extends Aggregate {
       externalId: this.externalId.value,
       email: this.email.value,
       role: this.role.value,
+      fullName: this.fullName.value,
       createdAt: this.createdAt.value,
       updatedAt: this.updatedAt.value,
     };

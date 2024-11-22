@@ -16,8 +16,15 @@ import { Label } from '@/libs/shadcn-ui/components/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/libs/shadcn-ui/components/popover';
 import { Switch } from '@/libs/shadcn-ui/components/switch';
 import { cn } from '@/libs/shadcn-ui/utils/utils';
+import { useCreateSchedule } from '@/modules/doctor/presentation/graphql/hooks/use-create-schedule';
+import { toast } from 'sonner';
 
-export default function DoctorSchedule() {
+type DoctorScheduleProps = {
+  doctorId: string;
+};
+
+export default function DoctorSchedule({ doctorId }: DoctorScheduleProps) {
+  const { createSchedule } = useCreateSchedule();
   const [selectedHours, setSelectedHours] = React.useState<{ [key: string]: string[] }>({
     lunes: [],
     martes: [],
@@ -29,13 +36,13 @@ export default function DoctorSchedule() {
   });
 
   const [enabledDays, setEnabledDays] = React.useState<{ [key: string]: boolean }>({
-    lunes: true,
-    martes: true,
+    lunes: false,
+    martes: false,
     miercoles: false,
     jueves: false,
-    viernes: true,
-    sabado: true,
-    domingo: true,
+    viernes: false,
+    sabado: false,
+    domingo: false,
   });
 
   const hours = Array.from({ length: 24 }, (_, i) => {
@@ -74,12 +81,24 @@ export default function DoctorSchedule() {
     }
   };
 
+  const save = async () => {
+    try {
+      await createSchedule({
+        variables: {
+          doctorId: doctorId,
+          days: Object.entries(selectedHours).map(([day, hours]) => ({
+            day,
+            hours: hours.map((hour) => ({ hour })),
+          })),
+        },
+      });
+    } catch (error) {
+      toast.error('Error al guardar el horario');
+    }
+  };
+
   return (
-    <div className="flex flex-col gap-5 flex-1 max-h-[calc(100vh-10%)] px-10 pt-10 overflow-y-scroll styled-scroll">
-      <p className="text-xs text-muted-foreground">
-        Establece tu disponibilidad para cada dia de la semana. Puedes agregar horas a tu dia y establecer tu horario de
-        trabajo.
-      </p>
+    <div className="flex flex-col gap-5 flex-1 px-10">
       {Object.entries(enabledDays).map(([day, enabled]) => (
         <div key={day} className="space-y-4">
           <div className="flex items-center justify-between gap-3">
@@ -142,6 +161,9 @@ export default function DoctorSchedule() {
           </div>
         </div>
       ))}
+      <Button className="mt-4 w-full" onClick={save}>
+        Save Schedule
+      </Button>
     </div>
   );
 }

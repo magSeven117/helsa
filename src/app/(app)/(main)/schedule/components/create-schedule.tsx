@@ -2,7 +2,7 @@
 
 import { Button } from '@/libs/shadcn-ui/components/button';
 import { DialogTitle } from '@/libs/shadcn-ui/components/dialog';
-import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTrigger } from '@/libs/shadcn-ui/components/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTrigger } from '@/libs/shadcn-ui/components/sheet';
 import { useState } from 'react';
 import DoctorSchedule from './doctor-schedule';
 
@@ -10,7 +10,7 @@ type DaySchedule = {
   [key: string]: string[];
 };
 
-export default function DoctorScheduleModal() {
+export default function DoctorScheduleModal({ doctorId }: { doctorId: string }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -18,16 +18,15 @@ export default function DoctorScheduleModal() {
       <SheetTrigger asChild>
         <Button variant="outline">Create Doctor Schedule</Button>
       </SheetTrigger>
-      <SheetContent className="sm:w-1/2 sm:max-w-full p-0 h-full flex flex-col">
-        <SheetHeader className="border-b px-10">
+      <SheetContent className="sm:w-1/2 sm:max-w-full p-0 h-full flex flex-col overflow-y-scroll styled-scroll pb-3">
+        <SheetHeader className="py-5 px-10">
           <DialogTitle className="my-3 text-xl">Modifica y establece tu disponibilidad</DialogTitle>
+          <p className="text-xs text-muted-foreground">
+            Establece tu disponibilidad para cada dia de la semana. Puedes agregar horas a tu dia y establecer tu
+            horario de trabajo.
+          </p>
         </SheetHeader>
-        <DoctorSchedule />
-        <SheetFooter className="px-10 py-5">
-          <Button className="mt-4 w-full" onClick={() => setIsOpen(false)}>
-            Save Schedule
-          </Button>
-        </SheetFooter>
+        <DoctorSchedule doctorId={doctorId} />
       </SheetContent>
     </Sheet>
   );

@@ -7,15 +7,16 @@ enum Role {
 
 // User model to handle the users created on Clerk
 model User {
-  id         String   @id @default(uuid())
-  externalId String   @unique
+  id         String     @id @default(uuid())
+  externalId String     @unique
   email      String?
-  role       Role     @default(PATIENT)
+  fullName   String?
+  role       Role       @default(PATIENT)
   doctor     Doctor?
   patient    Patient?
   hospital   Hospital[]
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
 
   @@index([createdAt, id])
 }

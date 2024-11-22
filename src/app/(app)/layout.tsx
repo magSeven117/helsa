@@ -27,7 +27,7 @@ export default function RootLayout({
       <ApolloContextProvider>
         <html lang="en" suppressHydrationWarning={true}>
           <link rel="icon" href={icon.src} sizes="any" />
-          <body className={nunito.className} suppressHydrationWarning={true}>
+          <body className={nunito.className + ' styled-scroll'} suppressHydrationWarning={true}>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
               {children}
               <Analytics />

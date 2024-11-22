@@ -8,10 +8,10 @@ const Layout = async ({ children }) => {
   const { role } = await getCurrentUser();
   const user = await currentUser();
   return (
-    <div className="flex justify-start items-start w-full">
+    <div className="flex justify-start items-start w-full styled-scroll">
       <SidebarProvider>
         <SideBar role={role as string} />
-        <div className="flex flex-col items-start w-full">
+        <div className="flex flex-col items-start w-full styled-scroll">
           <TopBar />
           {children}
         </div>
