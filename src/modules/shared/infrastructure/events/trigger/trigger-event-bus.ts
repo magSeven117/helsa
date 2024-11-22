@@ -10,10 +10,10 @@ export class TriggerEventBus {
   }
 
   private trigger(event: DomainEvent) {
-    const [aggregate, eventType] = event.eventName.split('.');
+    const [aggregate, eventType] = event.name.split('.');
     const configs = eventsConfig.find((config) => config.aggregate === aggregate);
     const taskKeys = [...configs.globalTasks, ...configs.events[eventType].tasks];
-    const jobs = taskKeys.map((key) => tasks.trigger(key, event.extraData));
+    const jobs = taskKeys.map((key) => tasks.trigger(key, event.data));
     return jobs;
   }
 }
