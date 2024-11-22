@@ -40,7 +40,7 @@ This repository contains both, backend and frontend web source code, destined to
 - **Backend**: [Next.js](https://nextjs.org/), [GraphQL](https://graphql.org)
 - **Database**: [MongoDB](https://mongodb.com), [Prisma](https://www.prisma.io)
 - **Authentication**: [Clerk](https://clerk.com)
-- **Message Queue**: [Qstash](https://upstash.com)
+- **Background jobs**: [Qstash](https://trigger.dev)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com)
 - **Deployment**: [Vercel](https://vercel.com/home)
 
@@ -81,10 +81,9 @@ Before you begin, ensure you have the following installed:
     CLERK_SECRET_KEY=your-clerk-api-key
     CLERK_WEBHOOK_SECRET=your-webhook-key
     STRIPE_SECRET_KEY=your-stripe-secret-key
-    QSTASH_URL=upstash-url-to-push
-    QSTASH_APP_URL=your-webhook-url
-    QSTASH_TOKEN=your-qstash-token
     SECRET=your-secret-key
+    TRIGGER_SECRET_KEY=your-trigger-api-key
+    MONGO_URI=mongodb://mongo:1427/helsa
    ```
 
 4. **Run the development server**:
@@ -119,10 +118,9 @@ You can run the Helsa project using Docker and Docker Compose, which simplifies 
           - CLERK_SECRET_KEY=your-clerk-api-key
           - CLERK_WEBHOOK_SECRET=your-webhook-key
           - STRIPE_SECRET_KEY=your-stripe-secret-key
-          - QSTASH_URL=upstash-url-to-push
-          - QSTASH_APP_URL=your-webhook-url
-          - QSTASH_TOKEN=your-qstash-token
           - SECRET=your-secret-key
+          - TRIGGER_SECRET_KEY=your-trigger-api-key
+          - MONGO_URI=mongodb://mongo:1427/helsa
         command: npm run dev
 
       postgres:
