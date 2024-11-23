@@ -1,4 +1,5 @@
 import { Uuid } from '@/modules/shared/domain/core/value-objects/uuid';
+import { env } from '@/modules/shared/infrastructure/config/env';
 import { TriggerEventBus } from '@/modules/shared/infrastructure/events/trigger/trigger-event-bus';
 import { db } from '@/modules/shared/infrastructure/persistence/prisma/prisma-connection';
 import { headers } from 'next/headers';
@@ -13,7 +14,7 @@ export const POSTCreateUser = async (req: NextRequest) => {
   const bodyPayload = await req.text();
   let evt;
   try {
-    evt = await verifyWebhook(headerPayload, bodyPayload, process.env.CLERK_WEBHOOK_SECRET);
+    evt = await verifyWebhook(headerPayload, bodyPayload, env.CLERK_WEBHOOK_SECRET);
   } catch (error) {
     console.log(error);
     return new NextResponse('Error occurred', { status: 500 });
