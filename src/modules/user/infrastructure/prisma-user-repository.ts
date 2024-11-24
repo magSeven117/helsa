@@ -41,16 +41,6 @@ export class PrismaUserRepository implements UserRepository {
     await this.model.delete({ where: { id: id.value } });
   }
 
-  async findByExternalId(externalId: string): Promise<User> {
-    const user = await this.model.findFirst({
-      where: { externalId },
-    });
-    if (!user) {
-      return null;
-    }
-    return User.fromPrimitives(user as Primitives<User>);
-  }
-
   async findAll(): Promise<User[]> {
     const users = await this.model.findMany({
       cursor: { id: '' },

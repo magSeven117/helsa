@@ -4,7 +4,7 @@ import { Button } from '@/libs/shadcn-ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@/libs/shadcn-ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/libs/shadcn-ui/components/form';
 import { Input } from '@/libs/shadcn-ui/components/input';
-import { useUser } from '@clerk/nextjs';
+import { authClient } from '@/modules/shared/infrastructure/auth/auth-client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -32,12 +32,14 @@ export const NameSection = ({ firstName, lastName }: NameFormValues) => {
     defaultValues: { firstName, lastName },
   });
   const { isSubmitting, isValid } = form.formState;
-  const { user } = useUser();
+
   const router = useRouter();
 
   const onSubmit = async (data: NameFormValues) => {
     try {
-      await user.update({ firstName: data.firstName, lastName: data.lastName });
+      await authClient.updateUser({
+        name: `${data.firstName} ${data.lastName}`,
+      });
       setIsEditing(false);
       router.refresh();
     } catch (error) {
@@ -69,7 +71,7 @@ export const NameSection = ({ firstName, lastName }: NameFormValues) => {
                       <FormItem className="flex-1">
                         <FormLabel>Nombre</FormLabel>
                         <FormControl>
-                          <Input {...field} className='rounded-none'></Input>
+                          <Input {...field} className="rounded-none"></Input>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -82,7 +84,7 @@ export const NameSection = ({ firstName, lastName }: NameFormValues) => {
                       <FormItem className="flex-1">
                         <FormLabel>Apellido</FormLabel>
                         <FormControl>
-                          <Input {...field} className='rounded-none'></Input>
+                          <Input {...field} className="rounded-none"></Input>
                         </FormControl>
                         <FormMessage />
                       </FormItem>

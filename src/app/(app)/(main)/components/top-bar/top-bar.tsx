@@ -14,7 +14,7 @@ import {
 import { Input } from '@/libs/shadcn-ui/components/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/libs/shadcn-ui/components/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/libs/shadcn-ui/components/tabs';
-import { useClerk } from '@clerk/nextjs';
+import { authClient } from '@/modules/shared/infrastructure/auth/auth-client';
 import { Bell, Command, Inbox, Loader2, LogOut, Search, Settings, Sparkles, SunMoon, User, X } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { useRouter } from 'next/navigation';
@@ -22,7 +22,7 @@ import { useEffect, useState } from 'react';
 import { SidebarTrigger } from '../side-bar/sidabar-trigger';
 
 const TopBar = () => {
-  const { user } = useClerk();
+  const { data } = authClient.useSession();
   return (
     <div className="flex w-full justify-between items-center  px-8 py-5 border-b">
       <div className="flex w-1/2 items-center gap-3">
@@ -33,7 +33,7 @@ const TopBar = () => {
         <AIButton />
         <CommandButton />
         <NotificationButton />
-        <ProfileButton user={user} />
+        <ProfileButton user={data?.user!} />
       </div>
     </div>
   );
@@ -87,7 +87,7 @@ const Searcher = () => {
   const navigate = (id: string) => {
     router.push(`/patients/${id}`);
     setTerm('');
-  }
+  };
   return (
     <div className="rounded-full flex-1 flex relative items-center gap-2">
       <div className="w-full pr-10 relative">
@@ -123,7 +123,11 @@ const Searcher = () => {
         <div className="absolute w-full pr-10 z-50 bg-background left-0 top-[50px]">
           <div className="w-full h-[250px] rounded-none shadow border p-2 space-y-2">
             {results.map((result, index) => (
-              <div key={index} className="flex gap-2 p-2 cursor-pointer hover:bg-border border" onClick={() => navigate(result.title)}>
+              <div
+                key={index}
+                className="flex gap-2 p-2 cursor-pointer hover:bg-border border"
+                onClick={() => navigate(result.title)}
+              >
                 <img src={result.image} alt={result.title} className="h-[50px] w-[50px] rounded-full" />
                 <div className="flex flex-col justify-center">
                   <div className="font-bold text-[1rem]">
@@ -212,14 +216,19 @@ const NotificationButton = () => {
 
 const ProfileButton = ({ user }: { user: any }) => {
   const router = useRouter();
-  const { signOut } = useClerk();
-  const onClick = () => {
-    signOut({ redirectUrl: '/sign-in' });
+  const onClick = async () => {
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          router.push('/sign-in');
+        },
+      },
+    });
   };
-  const { setTheme, theme } = useTheme()
+  const { setTheme, theme } = useTheme();
   const changeTheme = (theme: string) => {
-    setTheme(theme)
-  }
+    setTheme(theme);
+  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -229,8 +238,10 @@ const ProfileButton = ({ user }: { user: any }) => {
           className="w-10 h-10 rounded-full p-0 outline-none border-none focus-visible:outline-none focus:outline-none"
         >
           <Avatar className="h-10 w-10 rounded-full">
-            <AvatarImage src={user?.imageUrl || ''} alt={user?.fullName || ''} className="object-contain" />
-            <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+            <AvatarImage src={user?.image || ''} alt={user?.name || ''} className="object-contain" />
+            <AvatarFallback className="rounded-lg">
+              <User className="size-10" />
+            </AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
@@ -242,8 +253,8 @@ const ProfileButton = ({ user }: { user: any }) => {
         <DropdownMenuLabel className="p-0 font-normal">
           <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
             <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-semibold">{user?.fullName || 'Jose Veliz'}</span>
-              <span className="truncate text-xs">{user?.emailAddresses[0]?.emailAddress || ''}</span>
+              <span className="truncate font-semibold">{user?.name || 'Jose Veliz'}</span>
+              <span className="truncate text-xs">{user?.email}</span>
             </div>
           </div>
         </DropdownMenuLabel>

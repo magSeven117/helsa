@@ -1,12 +1,12 @@
 import doctorResolvers from '@/modules/doctor/presentation/graphql/resolvers';
 import hospitalResolvers from '@/modules/hospital/presentation/graphql/resolvers';
 import patientResolvers from '@/modules/patient/presentation/graphql/resolvers';
+import { auth } from '@/modules/shared/infrastructure/auth/better-auth';
 import { getSchema } from '@/modules/shared/infrastructure/persistence/graphql/schema';
 import { db } from '@/modules/shared/infrastructure/persistence/prisma/prisma-connection';
 import userResolvers from '@/modules/user/presentation/graphql/resolvers';
 import { ApolloServer } from '@apollo/server';
 import { startServerAndCreateNextHandler } from '@as-integrations/next';
-import { auth } from '@clerk/nextjs/server';
 import { DateTimeResolver, VoidResolver } from 'graphql-scalars';
 import { NextRequest } from 'next/server';
 const resolvers = {
@@ -36,7 +36,9 @@ const handler = startServerAndCreateNextHandler<NextRequest>(apolloServer, {
     req,
     res,
     db,
-    user: auth(),
+    user: await auth.api.getSession({
+      headers: req.headers,
+    }),
   }),
 });
 export async function GET(request: NextRequest) {

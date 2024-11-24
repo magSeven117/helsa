@@ -24,7 +24,7 @@ export class Doctor extends Aggregate {
     super(id, createdAt, updatedAt);
   }
 
-  static create(id: string, userId: string, licenseMedicalNumber?: string, specialtyId?: string): Doctor {
+  static create(id: string, userId: string, licenseMedicalNumber: string, specialtyId: string): Doctor {
     return new Doctor(
       new Uuid(id),
       new Uuid(userId),
@@ -81,20 +81,20 @@ export class Doctor extends Aggregate {
     this.consultingRoomAddress = ConsultingRoomAddress.create(city, address, { latitude: 0, longitude: 0 });
   }
 
-  addEducation(education: Partial<Primitives<Education>>) {
+  addEducation(education: Primitives<Education>) {
     if (!this.educations) {
       this.educations = [];
     }
     this.educations.push(Education.create(education.title, education.institution, education.graduatedAt.toString()));
   }
 
-  editEducation(educationId: string, education: Partial<Primitives<Education>>) {
+  editEducation(educationId: string, education: Primitives<Education>) {
     if (!this.educations) {
       return;
     }
     const index = this.educations.findIndex((edu) => edu.id.value === educationId);
     if (index >= 0) {
-      this.educations[index] = this.educations[index].update(
+      this.educations[index] = this.educations[index]!.update(
         education.title,
         education.institution,
         education.graduatedAt.toString()

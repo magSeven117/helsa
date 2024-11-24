@@ -5,18 +5,68 @@ enum Role {
   UNDEFINED
 }
 
-// User model to handle the users created on Clerk
 model User {
-  id         String     @id @default(uuid())
-  externalId String     @unique
-  email      String?
-  fullName   String?
-  role       Role       @default(PATIENT)
-  doctor     Doctor?
-  patient    Patient?
-  hospital   Hospital[]
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  id String @id @default(uuid())
 
-  @@index([createdAt, id])
+  email         String  @unique
+  emailVerified Boolean @default(false)
+
+  name  String
+  image String?
+  role  Role    @default(UNDEFINED)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Account Account[]
+  Session Session[]
+
+  hospital Hospital[]
+  patient  Patient?
+  doctor   Doctor?
+
+  @@map("user")
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  expiresAt DateTime
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  createdAt DateTime
+  updatedAt DateTime
+
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id @default(uuid())
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  expiresAt             DateTime?
+  password              String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  createdAt             DateTime
+  updatedAt             DateTime
+
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id @default(uuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }

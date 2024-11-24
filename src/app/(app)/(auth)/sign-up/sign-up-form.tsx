@@ -23,8 +23,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Icons } from '@/libs/shadcn-ui/components/icons';
 import { Input } from '@/libs/shadcn-ui/components/input';
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '@/libs/shadcn-ui/components/input-otp';
-import { useRegister } from '@/modules/user/presentation/graphql/hooks/use-register';
-import { useSignUp } from '@clerk/nextjs';
+import { authClient } from '@/modules/shared/infrastructure/auth/auth-client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import Link from 'next/link';
@@ -33,7 +32,6 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import Lottie from 'react-lottie';
-import { v4 } from 'uuid';
 import { z } from 'zod';
 
 const formSchema = z
@@ -41,6 +39,8 @@ const formSchema = z
     email: z.string().min(3, { message: 'Invalid email' }).email({ message: 'Invalid email' }),
     password: z.string().min(8, { message: 'Password must be at least 8 characters' }),
     confirmPassword: z.string().min(8, { message: 'Password must be at least 8 characters' }),
+    firstName: z.string().min(3, { message: 'First name must be at least 3 characters' }),
+    lastName: z.string().min(3, { message: 'Last name must be at least 3 characters' }),
   })
   .superRefine((data) => {
     if (data.password !== data.confirmPassword) {
@@ -56,6 +56,8 @@ export default function SignUpForm() {
       email: '',
       password: '',
       confirmPassword: '',
+      firstName: '',
+      lastName: '',
     },
     mode: 'all',
   });
@@ -64,26 +66,24 @@ export default function SignUpForm() {
 
   const router = useRouter();
 
-  const { isLoaded, signUp, setActive } = useSignUp();
-  const { register } = useRegister();
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [verifying, setVerifying] = useState(false);
+  const [userId, setUserId] = useState('');
   const [verification, setVerification] = useState({
     state: '',
     code: '',
     error: '',
   });
 
-
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    if (!isLoaded) return;
-
     try {
-      await signUp.create({
-        emailAddress: data.email,
+      const res = await authClient.signUp.email({
+        email: data.email,
         password: data.password,
+        name: data.firstName + ' ' + data.lastName,
+        image: undefined,
       });
-      await signUp.prepareEmailAddressVerification({ strategy: 'email_code' });
+      setUserId(res.data?.user.id || '');
       setVerification({ ...verification, state: 'pending' });
     } catch (error) {
       console.error(JSON.stringify(error, null, 2));
@@ -92,25 +92,18 @@ export default function SignUpForm() {
   };
 
   const handleVerification = async () => {
-    if (!isLoaded) return;
     try {
       setVerifying(true);
-      const completeSignUp = await signUp.attemptEmailAddressVerification({
-        code: verification.code,
+      const user = await authClient.emailOtp.verifyEmail({
+        email: form.getValues().email,
+        otp: verification.code,
       });
 
-      if (completeSignUp.status === 'complete') {
-        await register({
-          email: form.getValues().email,
-          externalId: completeSignUp.createdUserId,
-          id: v4(),
-          role: 'UNDEFINED',
-        });
-        await setActive({ session: completeSignUp.createdSessionId });
+      if (!user.error) {
         setVerification({ ...verification, state: 'success' });
         setShowSuccessModal(true);
       } else {
-        console.error(JSON.stringify(completeSignUp, null, 2));
+        console.error(user.error.message);
       }
       setVerifying(false);
     } catch (error) {
@@ -119,17 +112,11 @@ export default function SignUpForm() {
     }
   };
 
-  const onOauthPress = async (strategy: 'oauth_google' | 'oauth_facebook') => {
-    if (!isLoaded) return;
+  const onOauthPress = async (strategy: 'google' | 'facebook') => {
     try {
-      await signUp.authenticateWithRedirect({
-        strategy,
-        redirectUrl: '/sign-up/sso-callback',
-        redirectUrlComplete: '/select-role',
-        unsafeMetadata: {
-          role: 'UNDEFINED',
-          provider: 'oauth',
-        },
+      await authClient.signIn.social({
+        provider: strategy,
+        callbackURL: `${window.location.origin}/select-role`,
       });
     } catch (error) {
       alert('An error occurred. Please try again later.');
@@ -165,7 +152,7 @@ export default function SignUpForm() {
           </CardContent>
           <CardFooter>
             <div className="grid w-full">
-              <Button onClick={handleVerification} disabled={verifying} className='rounded-none'>
+              <Button onClick={handleVerification} disabled={verifying} className="rounded-none">
                 {verifying ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Verify'}
               </Button>
             </div>
@@ -181,12 +168,37 @@ export default function SignUpForm() {
         <form action="" className="w-full" onSubmit={form.handleSubmit(onSubmit)}>
           <Card className="border-none shadow-none w-full">
             <CardHeader>
-              <CardTitle>Bienvenido a Helsa</CardTitle>
-              <CardDescription>
-                Helsa es una plataforma que te ayuda a mantener un seguimiento de tu salud. Comienza creando una cuenta.
-              </CardDescription>
+              <CardTitle>Regístrate en Helsa</CardTitle>
             </CardHeader>
             <CardContent className="">
+              <div className="flex justify-between gap-5">
+                <FormField
+                  control={form.control}
+                  name="firstName"
+                  render={({ field }) => (
+                    <FormItem className="my-2 flex-1">
+                      <FormLabel className="text-sm">Nombre</FormLabel>
+                      <FormControl>
+                        <Input {...field} className="rounded-none"></Input>
+                      </FormControl>
+                      <FormMessage></FormMessage>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="lastName"
+                  render={({ field }) => (
+                    <FormItem className="my-2 flex-1">
+                      <FormLabel className="text-sm">Apellido</FormLabel>
+                      <FormControl>
+                        <Input {...field} className="rounded-none"></Input>
+                      </FormControl>
+                      <FormMessage></FormMessage>
+                    </FormItem>
+                  )}
+                />
+              </div>
               <FormField
                 control={form.control}
                 name="email"
@@ -194,7 +206,7 @@ export default function SignUpForm() {
                   <FormItem className="my-2">
                     <FormLabel className="text-sm">Email</FormLabel>
                     <FormControl>
-                      <Input {...field} className='rounded-none'></Input>
+                      <Input {...field} className="rounded-none"></Input>
                     </FormControl>
                     <FormMessage></FormMessage>
                   </FormItem>
@@ -208,7 +220,11 @@ export default function SignUpForm() {
                   <FormItem className="my-2">
                     <FormLabel className="text-sm">Contraseña</FormLabel>
                     <FormControl>
-                      <PasswordInput {...field} autoComplete="current-password" className='rounded-none'></PasswordInput>
+                      <PasswordInput
+                        {...field}
+                        autoComplete="current-password"
+                        className="rounded-none"
+                      ></PasswordInput>
                     </FormControl>
                     <FormMessage></FormMessage>
                   </FormItem>
@@ -219,11 +235,13 @@ export default function SignUpForm() {
                 name="confirmPassword"
                 render={({ field }) => (
                   <FormItem className="my-2">
-                    <FormLabel className="text-sm">
-                      Confirma tu contraseña
-                    </FormLabel>
+                    <FormLabel className="text-sm">Confirma tu contraseña</FormLabel>
                     <FormControl>
-                      <PasswordInput {...field} autoComplete="current-password" className='rounded-none'></PasswordInput>
+                      <PasswordInput
+                        {...field}
+                        autoComplete="current-password"
+                        className="rounded-none"
+                      ></PasswordInput>
                     </FormControl>
                     <FormMessage></FormMessage>
                   </FormItem>
@@ -234,12 +252,24 @@ export default function SignUpForm() {
                 or
               </p>
               <div className="grid grid-cols-2 gap-x-4 mt-3">
-                <Button size="sm" variant="outline" type="button" className='rounded-none' onClick={() => onOauthPress('oauth_google')}>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  type="button"
+                  className="rounded-none"
+                  onClick={() => onOauthPress('google')}
+                >
                   <Icons.google className="mr-2 size-4" />
                   Google
                 </Button>
-                <Button onClick={() => onOauthPress('oauth_facebook')} className='rounded-none' size="sm" variant="outline" type="button">
-                  <Icons.facebook className="mr-2 size-4" color='white' />
+                <Button
+                  onClick={() => onOauthPress('facebook')}
+                  className="rounded-none"
+                  size="sm"
+                  variant="outline"
+                  type="button"
+                >
+                  <Icons.facebook className="mr-2 size-4" color="white" />
                   Facebook
                 </Button>
               </div>
@@ -282,11 +312,11 @@ export default function SignUpForm() {
               <Button
                 onClick={() => {
                   setShowSuccessModal(false);
-                  router.push('/select-role');
+                  router.push(`/select-role?userId=${userId}`);
                 }}
                 size="lg"
               >
-                Ir al inicio
+                Continuar
               </Button>
             </AlertDialogAction>
           </AlertDialogFooter>

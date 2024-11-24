@@ -4,7 +4,13 @@ import DoctorScheduleModal from './components/create-schedule';
 
 const Page = async () => {
   const user = await getCurrentUser();
+  if (!user) {
+    return null;
+  }
   const doctor = await getDoctor(user.id);
+  if (!doctor) {
+    return null;
+  }
   return (
     <div className="flex w-full h-full">
       <DoctorScheduleModal doctorId={doctor.id} />

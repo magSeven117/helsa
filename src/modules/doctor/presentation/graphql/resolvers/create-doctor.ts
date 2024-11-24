@@ -1,4 +1,6 @@
+import { Doctor } from '@/modules/doctor/domain/doctor';
 import { InternalError } from '@/modules/shared/domain/core/errors/internal-error';
+import { Primitives } from '@/modules/shared/domain/types/primitives';
 import { db } from '@/modules/shared/infrastructure/persistence/prisma/prisma-connection';
 import { UpdateRole } from '@/modules/user/application/update-role';
 import { UserRoleValue } from '@/modules/user/domain/user-role';
@@ -6,7 +8,7 @@ import { PrismaUserRepository } from '@/modules/user/infrastructure/prisma-user-
 import { CreateDoctor } from '../../../application/services/create-doctor';
 import { PrismaDoctorRepository } from '../../../infrastructure/persistence/prisma-doctor-repository';
 
-export const CreateDoctorResolver = async (ctx, input) => {
+export const CreateDoctorResolver = async (_: unknown, input: { doctor: Primitives<Doctor> }) => {
   try {
     const { doctor } = input;
     const service = new CreateDoctor(new PrismaDoctorRepository(db));

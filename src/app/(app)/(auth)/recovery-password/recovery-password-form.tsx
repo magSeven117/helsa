@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import * as successAnimation from '@/assets/animations/success_animation.json';
 import { PasswordInput } from '@/libs/ducen-ui/components/password-input';
 import {
@@ -21,7 +21,7 @@ import {
 } from '@/libs/shadcn-ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/libs/shadcn-ui/components/form';
 import { Input } from '@/libs/shadcn-ui/components/input';
-import { useAuth, useSignIn } from '@clerk/nextjs';
+import { authClient } from '@/modules/shared/infrastructure/auth/auth-client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -50,23 +50,15 @@ const RecoveryPasswordForm = () => {
   const { isSubmitting } = form.formState;
 
   const router = useRouter();
+  const { data } = authClient.useSession();
 
-  const { isLoaded, signIn, setActive } = useSignIn();
-  const { isSignedIn } = useAuth();
-
-  if (isSignedIn) {
+  if (data) {
     router.push('/');
   }
 
   const sendVerificationCode = async () => {
-    if (!isLoaded) {
-      return null;
-    }
     try {
-      await signIn.create({
-        strategy: 'reset_password_email_code',
-        identifier: email,
-      });
+      await authClient.emailOtp.sendVerificationOtp({ email, type: 'forget-password' });
       setSuccessfulCreation(true);
     } catch (error) {
       toast.error('Error al enviar el código de verificación');
@@ -75,13 +67,12 @@ const RecoveryPasswordForm = () => {
 
   const resetPassword = async (data: z.infer<typeof formSchema>) => {
     try {
-      const result = await signIn.attemptFirstFactor({
-        strategy: 'reset_password_email_code',
-        code: data.code,
+      await authClient.emailOtp.resetPassword({
+        email,
         password: data.password,
+        otp: data.code,
       });
       setShowSuccessModal(true);
-      setActive({ session: result.createdSessionId })
     } catch (error) {
       toast.error('Error al cambiar la contraseña');
     }

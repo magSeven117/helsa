@@ -1,16 +1,14 @@
 'use server';
 
-import { db } from '@/modules/shared/infrastructure/persistence/prisma/prisma-connection';
-import { currentUser } from '@clerk/nextjs/server';
-import { GetUser } from '../../application/get-user';
-import { PrismaUserRepository } from '../../infrastructure/prisma-user-repository';
+import { auth } from '@/modules/shared/infrastructure/auth/better-auth';
+import { headers } from 'next/headers';
 
 export const getCurrentUser = async () => {
-  const externalUser = await currentUser();
-  const useCase = new GetUser(new PrismaUserRepository(db));
-  const user = await useCase.run(externalUser.id);
-  if (!user) {
+  const data = await auth.api.getSession({
+    headers: headers(),
+  });
+  if (!data) {
     return null;
   }
-  return user;
+  return data.user;
 };

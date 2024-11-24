@@ -13,7 +13,7 @@ import {
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/libs/shadcn-ui/components/form';
 import { Icons } from '@/libs/shadcn-ui/components/icons';
 import { Input } from '@/libs/shadcn-ui/components/input';
-import { useSignIn } from '@clerk/nextjs';
+import { authClient } from '@/modules/shared/infrastructure/auth/auth-client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import Link from 'next/link';
@@ -35,21 +35,15 @@ export default function SignInForm() {
     },
   });
   const { isSubmitting } = form.formState;
-  const { isLoaded, signIn, setActive } = useSignIn();
   const router = useRouter();
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    if (!isLoaded) {
-      return;
-    }
-
     try {
-      const signInAttempt = await signIn.create({
-        identifier: data.email,
+      const signInAttempt = await authClient.signIn.email({
+        email: data.email,
         password: data.password,
       });
 
-      if (signInAttempt.status === 'complete') {
-        await setActive({ session: signInAttempt.createdSessionId });
+      if (signInAttempt.data) {
         router.push('/dashboard');
       } else {
         toast.error('Invalid email or password');
@@ -58,14 +52,9 @@ export default function SignInForm() {
       toast.error(err.message);
     }
   };
-  const onOauthPress = async (strategy: 'oauth_google' | 'oauth_facebook') => {
-    if (!isLoaded) return;
+  const onOauthPress = async (strategy: 'google' | 'facebook') => {
     try {
-      await signIn.authenticateWithRedirect({
-        strategy,
-        redirectUrl: '/sign-up/sso-callback',
-        redirectUrlComplete: '/',
-      });
+      await authClient.signIn.social({ provider: strategy, callbackURL: '/dashboard' });
     } catch (error) {
       toast.error('An error occurred while trying to sign in with Google');
     }
@@ -89,7 +78,7 @@ export default function SignInForm() {
                   <FormItem className="my-2">
                     <FormLabel className="text-sm  font-bold ">Email</FormLabel>
                     <FormControl>
-                      <Input {...field} className='rounded-none'></Input>
+                      <Input {...field} className="rounded-none"></Input>
                     </FormControl>
                     <FormMessage></FormMessage>
                   </FormItem>
@@ -102,7 +91,11 @@ export default function SignInForm() {
                   <FormItem className="my-2">
                     <FormLabel className="text-sm  font-bold">Contraseña</FormLabel>
                     <FormControl>
-                      <PasswordInput {...field} autoComplete="current-password" className='rounded-none'></PasswordInput>
+                      <PasswordInput
+                        {...field}
+                        autoComplete="current-password"
+                        className="rounded-none"
+                      ></PasswordInput>
                     </FormControl>
                     <FormMessage></FormMessage>
                   </FormItem>
@@ -112,11 +105,23 @@ export default function SignInForm() {
                 or
               </p>
               <div className="grid grid-cols-2 gap-x-4 mt-3">
-                <Button size="sm" variant="outline" type="button" className='rounded-none' onClick={() => onOauthPress('oauth_google')}>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  type="button"
+                  className="rounded-none"
+                  onClick={() => onOauthPress('google')}
+                >
                   <Icons.google className="mr-2 size-4" />
                   Google
                 </Button>
-                <Button onClick={() => onOauthPress('oauth_facebook')} className='rounded-none' size="sm" variant="outline" type="button">
+                <Button
+                  onClick={() => onOauthPress('facebook')}
+                  className="rounded-none"
+                  size="sm"
+                  variant="outline"
+                  type="button"
+                >
                   <Icons.facebook className="mr-2 size-4" />
                   Facebook
                 </Button>
@@ -124,18 +129,14 @@ export default function SignInForm() {
             </CardContent>
             <CardFooter>
               <div className="grid w-full">
-                <Button type="submit" disabled={isSubmitting} className='rounded-none'>
+                <Button type="submit" disabled={isSubmitting} className="rounded-none">
                   {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Iniciar sesión'}
                 </Button>
                 <Button variant="link" size="sm">
-                  <Link href="/sign-up">
-                    ¿No tienes una cuenta? Crea una
-                  </Link>
+                  <Link href="/sign-up">¿No tienes una cuenta? Crea una</Link>
                 </Button>
                 <Button variant="link" size="sm">
-                  <Link href="/recovery-password">
-                    ¿Olvidaste tu contraseña? Recupérala aquí
-                  </Link>
+                  <Link href="/recovery-password">¿Olvidaste tu contraseña? Recupérala aquí</Link>
                 </Button>
               </div>
             </CardFooter>

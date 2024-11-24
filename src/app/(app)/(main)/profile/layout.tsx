@@ -1,8 +1,11 @@
 import { getCurrentUser } from '@/modules/user/presentation/actions/get-current-user';
+import { redirect } from 'next/navigation';
+import React from 'react';
 import { NavigationProfile } from './components/navigation-profile';
 
-const Layout = async ({ children }) => {
+const Layout = async ({ children }: { children: React.ReactNode }) => {
   const user = await getCurrentUser();
+  if (!user) return redirect('/sign-in');
   return (
     <div className="w-full h-full pt-10">
       <div className="space-y-6 px-9  w-full h-full">
