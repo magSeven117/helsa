@@ -29,7 +29,7 @@ const CompleteData = () => {
             <div className="w-full flex justify-center">
               <Calendar
                 selected={date}
-                onSelect={setDate}
+                onSelect={(date) => setDate(date!)}
                 mode="single"
                 className="h-full w-full flex border rounded-none"
                 classNames={{
@@ -77,7 +77,7 @@ const CompleteData = () => {
                 <SelectTrigger className="w-full rounded-none">
                   <SelectValue placeholder="Selecciona un método de pago" />
                 </SelectTrigger>
-                <SelectContent className='rounded-none'>
+                <SelectContent className="rounded-none">
                   {paymentMethods.map((method) => (
                     <SelectItem key={method.value} value={method.value}>
                       {method.label}

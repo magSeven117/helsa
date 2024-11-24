@@ -16,7 +16,12 @@ import SearchDoctor from './search-doctor';
 
 const Appoint = () => {
   const [open, setOpen] = useState(false);
-  const [selectedDoctor, setSelectedDoctor] = useState(null);
+  const [selectedDoctor, setSelectedDoctor] = useState<{
+    name: string;
+    specialty: string;
+    rating: number;
+    avatar: string;
+  } | null>(null);
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
@@ -29,7 +34,7 @@ const Appoint = () => {
           <SheetTitle>Agenda una cita</SheetTitle>
           <SheetDescription>Encuentra al profesional adecuado para ayudarte</SheetDescription>
         </SheetHeader>
-        <div className='w-full'>
+        <div className="w-full">
           <div className="my-3">
             <SearchDoctor setSelectedDoctor={setSelectedDoctor} />
           </div>
