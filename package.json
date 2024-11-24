@@ -17,8 +17,6 @@
     "@apollo/client": "^3.10.8",
     "@apollo/server": "^4.10.4",
     "@as-integrations/next": "^3.0.0",
-    "@clerk/elements": "^0.10.0",
-    "@clerk/nextjs": "^5.2.0",
     "@graphql-tools/graphql-file-loader": "^8.0.1",
     "@graphql-tools/load": "^8.0.2",
     "@hookform/resolvers": "^3.7.0",
