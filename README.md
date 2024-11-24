@@ -39,7 +39,7 @@ This repository contains both, backend and frontend web source code, destined to
 - **Frontend**: [Next.js](https://nextjs.org/)
 - **Backend**: [Next.js](https://nextjs.org/), [GraphQL](https://graphql.org)
 - **Database**: [MongoDB](https://mongodb.com), [Prisma](https://www.prisma.io)
-- **Authentication**: [Clerk](https://clerk.com)
+- **Authentication**: [Better-auth](https://better-auth.com)
 - **Background jobs**: [Qstash](https://trigger.dev)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com)
 - **Deployment**: [Vercel](https://vercel.com/home)
@@ -77,13 +77,12 @@ Before you begin, ensure you have the following installed:
    ```bash
     DATABASE_URL=postgresql://postgres:A12345678@postgres
     NEXT_PUBLIC_BASE_URL=http://localhost:3000
-    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your-clerk-public-key
-    CLERK_SECRET_KEY=your-clerk-api-key
-    CLERK_WEBHOOK_SECRET=your-webhook-key
     STRIPE_SECRET_KEY=your-stripe-secret-key
     SECRET=your-secret-key
     TRIGGER_SECRET_KEY=your-trigger-api-key
     MONGO_URI=mongodb://mongo:1427/helsa
+    BETTER_AUTH_SECRET=random-secret-string
+    RESEND_API_KEY=your-resend-api-key
    ```
 
 4. **Run the development server**:
@@ -114,13 +113,12 @@ You can run the Helsa project using Docker and Docker Compose, which simplifies 
         environment:
           - DATABASE_URL=postgresql://postgres:A12345678@postgres
           - NEXT_PUBLIC_BASE_URL=http://localhost:3000
-          - NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your-clerk-public-key
-          - CLERK_SECRET_KEY=your-clerk-api-key
-          - CLERK_WEBHOOK_SECRET=your-webhook-key
           - STRIPE_SECRET_KEY=your-stripe-secret-key
           - SECRET=your-secret-key
           - TRIGGER_SECRET_KEY=your-trigger-api-key
           - MONGO_URI=mongodb://mongo:1427/helsa
+          - BETTER_AUTH_SECRET=random-secret-string
+          - RESEND_API_KEY=your-resend-api-key
         command: npm run dev
 
       postgres:

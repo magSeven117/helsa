@@ -10,10 +10,10 @@ import {
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
-  SidebarMenuItem
+  SidebarMenuItem,
 } from '@/libs/shadcn-ui/components/sidebar';
 import { cn } from '@/libs/shadcn-ui/utils/utils';
-import { useUser } from '@clerk/nextjs';
+import { authClient } from '@/modules/shared/infrastructure/auth/auth-client';
 import {
   Calendar,
   CircleDollarSign,
@@ -22,7 +22,7 @@ import {
   MessagesSquare,
   PieChart,
   Stethoscope,
-  Users
+  Users,
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import Link from 'next/link';
@@ -39,19 +39,19 @@ export interface SectionRoute {
   path: string;
 }
 
-const SideBar = ({  role }: { role: string }) => {
-  const { isSignedIn } = useUser();
+const SideBar = ({ role }: { role: string }) => {
+  const { data } = authClient.useSession();
   const sections = sideBarItems.map((section) => ({
     title: section.title,
     routes: section.routes.filter((route) => route.roles.includes(role)),
   }));
   const path = usePathname();
   const theme = useTheme();
-  if(!isSignedIn) {
+  if (!data?.session) {
     return null;
   }
   return (
-    <Sidebar collapsible="icon" className='bg-background'>
+    <Sidebar collapsible="icon" className="bg-background">
       <SidebarHeader className="bg-background">
         <SidebarMenuButton
           size="lg"
@@ -59,9 +59,11 @@ const SideBar = ({  role }: { role: string }) => {
         >
           <Link href="/dashboard" className="flex items-center justify-center gap-2">
             <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
-              {
-                theme.theme === 'dark' || theme.theme === 'system' ? (<img src={logo.src} alt="" className='rounded-lg'/>) : (<img src={logo2.src} alt="" className='rounded-lg'/>)
-              }
+              {theme.theme === 'dark' || theme.theme === 'system' ? (
+                <img src={logo.src} alt="" className="rounded-lg" />
+              ) : (
+                <img src={logo2.src} alt="" className="rounded-lg" />
+              )}
             </div>
             <p className="text-lg font-bold">Helsa</p>
           </Link>
@@ -119,7 +121,7 @@ export const sideBarItems = [
         icon: History,
         title: 'Historial medico',
         url: '/medical-history',
-        roles: ['PATIENT']
+        roles: ['PATIENT'],
       },
       {
         icon: Users,
@@ -158,4 +160,4 @@ export const sideBarItems = [
       },
     ],
   },
-]
+];

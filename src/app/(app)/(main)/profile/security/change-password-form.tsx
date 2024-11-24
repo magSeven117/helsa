@@ -3,7 +3,6 @@ import { Button } from '@/libs/shadcn-ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@/libs/shadcn-ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/libs/shadcn-ui/components/form';
 import { Input } from '@/libs/shadcn-ui/components/input';
-import { useUser } from '@clerk/nextjs';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -31,11 +30,9 @@ const ChangePasswordForm = ({}) => {
     mode: 'all',
   });
   const { isValid, isSubmitting } = form.formState;
-  const user = useUser();
   const router = useRouter();
   const onSubmit = async (data: any) => {
     try {
-      await user.user.updatePassword({ newPassword: data.newPassword });
       form.reset();
       toast.success('Password updated successfully');
       router.push('/profile');
@@ -51,9 +48,7 @@ const ChangePasswordForm = ({}) => {
           <CardHeader className="">
             <div>
               <CardTitle>Contraseña</CardTitle>
-              <p className="text-muted-foreground text-sm mt-5">
-                Cambia tu contraseña para mantener tu cuenta segura.
-              </p>
+              <p className="text-muted-foreground text-sm mt-5">Cambia tu contraseña para mantener tu cuenta segura.</p>
               <div className="flex flex-col w-full justify-between items-center gap-3 mt-6">
                 <FormField
                   control={form.control}
@@ -86,10 +81,9 @@ const ChangePasswordForm = ({}) => {
           </CardHeader>
           <CardFooter className="border-t pt-4 flex justify-between items-start gap-2 md:items-center flex-col md:flex-row">
             <p className="text-muted-foreground text-xs">
-              Al hacer clic en Guardar, aceptas nuestra Política de privacidad y nuestros Términos de
-              servicio.
+              Al hacer clic en Guardar, aceptas nuestra Política de privacidad y nuestros Términos de servicio.
             </p>
-            <Button disabled={!isValid || isSubmitting} variant='destructive' type="submit" className="rounded-none">
+            <Button disabled={!isValid || isSubmitting} variant="destructive" type="submit" className="rounded-none">
               {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Guardar'}
             </Button>
           </CardFooter>

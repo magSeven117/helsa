@@ -2,7 +2,7 @@ import DoctorForm from '../components/doctor-form';
 import HospitalForm from '../components/hospital-form';
 import PatientForm from '../components/patient-form';
 
-const Page = ({ searchParams }) => {
+const Page = ({ searchParams }: { searchParams: { role: string; userId: string } }) => {
   const role = searchParams.role;
   const userId = searchParams.userId;
   return (
