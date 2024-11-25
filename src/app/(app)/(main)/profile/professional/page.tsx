@@ -4,19 +4,16 @@ import ProfessionalInfo from './components/professional-info';
 
 const Page = async () => {
   const user = await getCurrentUser();
+  if (!user) {
+    return null;
+  }
   const doctor = await getDoctor(user.id);
+  if (!doctor) {
+    return null;
+  }
   return (
     <div className="space-y-6 w-full">
-      <ProfessionalInfo
-        doctor={{
-          id: doctor.id,
-          licenseMedicalNumber: doctor.licenseMedicalNumber,
-          consultingRoomAddress: doctor.consultingRoomAddress,
-          experience: doctor.experience,
-          specialtyId: doctor.specialtyId,
-          educations: doctor.educations,
-        }}
-      />
+      <ProfessionalInfo doctor={doctor} />
     </div>
   );
 };

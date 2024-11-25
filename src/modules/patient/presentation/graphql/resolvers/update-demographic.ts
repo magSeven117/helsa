@@ -3,7 +3,17 @@ import { PrismaPatientRepository } from '@/modules/patient/infrastructure/prisma
 import { InternalError } from '@/modules/shared/domain/core/errors/internal-error';
 import { db } from '@/modules/shared/infrastructure/persistence/prisma/prisma-connection';
 
-export const UpdateDemographicResolver = async (parent, input, context) => {
+export const UpdateDemographicResolver = async (
+  _: unknown,
+  input: {
+    patientId: string;
+    demographic: {
+      civilStatus: string;
+      occupation: string;
+      educativeLevel: string;
+    };
+  }
+) => {
   try {
     const { patientId, demographic } = input;
     const service = new UpdateDemographic(new PrismaPatientRepository(db));

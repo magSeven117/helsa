@@ -45,7 +45,9 @@ export const SpecialtySection = ({ specialtyId, id }: SpecialtyValue & { id: str
       toast.error('An error occurred. Please try again.');
     }
   };
-  const selectedSpecialty = specialties.find((specialty) => specialty.id === form.getValues('specialtyId'));
+  const selectedSpecialty = specialties.find(
+    (specialty: { id: string; name: string }) => specialty.id === form.getValues('specialtyId')
+  );
 
   return (
     <Card className="rounded-none bg-transparent">
@@ -74,7 +76,7 @@ export const SpecialtySection = ({ specialtyId, id }: SpecialtyValue & { id: str
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {specialties.map((specialty) => (
+                          {specialties.map((specialty: { id: string; name: string }) => (
                             <SelectItem key={specialty.id} value={specialty.id}>
                               <span className="flex w-full justify-between items-center gap-3">{specialty.name}</span>
                             </SelectItem>

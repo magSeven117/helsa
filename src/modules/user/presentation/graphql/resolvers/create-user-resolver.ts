@@ -4,11 +4,21 @@ import { db } from '@/modules/shared/infrastructure/persistence/prisma/prisma-co
 import { RegisterUser } from '../../../application/register-user';
 import { PrismaUserRepository } from '../../../infrastructure/prisma-user-repository';
 
-export const CreateUserResolver = async (ctx, input) => {
+export const CreateUserResolver = async (
+  _: unknown,
+  input: {
+    user: {
+      id: string;
+      email: string;
+      role: string;
+      name: string;
+    };
+  }
+) => {
   try {
     const { user } = input;
     const useCase = new RegisterUser(new PrismaUserRepository(db), new TriggerEventBus());
-    await useCase.run(user.id, user.externalId, user.email, user.role, user.name, user.additionalData);
+    await useCase.run(user.id, user.email, user.role, user.name);
   } catch (error) {
     console.log(error);
     throw new InternalError('Error occurred');

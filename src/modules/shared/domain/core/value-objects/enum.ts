@@ -21,8 +21,4 @@ export class Enum<T> extends ValueObject<T> {
   public getValue(): T {
     return this.value;
   }
-
-  public toString(): string {
-    return this.value.toString();
-  }
 }

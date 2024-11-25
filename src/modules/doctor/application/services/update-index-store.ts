@@ -20,6 +20,10 @@ export class UpdateIndexStore {
     const appointments = await this.getAppointments.run(doctorId);
     const user = await this.getUser.run(doctor.userId.toString());
 
+    if (!doctor || !user) {
+      return;
+    }
+
     await this.doctorIndexStore.save(doctor, User.fromPrimitives(user), appointments);
   }
 }

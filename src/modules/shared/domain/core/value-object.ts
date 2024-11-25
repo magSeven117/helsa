@@ -10,10 +10,6 @@ export abstract class ValueObject<T> {
     return other.constructor.name === this.constructor.name && other.value === this.value;
   }
 
-  toString(): string {
-    return this.value.toString();
-  }
-
   getValue(): T {
     return this.value;
   }

@@ -4,6 +4,9 @@ import HospitalInfo from './components/hospital-info';
 
 const Page = async () => {
   const user = await getCurrentUser();
+  if (!user) {
+    return null;
+  }
   const hospital = await getHospital(user.id);
   return (
     <div className="space-y-6 w-full">

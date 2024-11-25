@@ -14,18 +14,18 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 
 const formSchema = z.object({
-  civilStatus: z.enum(['SINGLE', 'MARRIED', 'DIVORCED', 'WIDOWED'])
+  civilStatus: z.enum(['SINGLE', 'MARRIED', 'DIVORCED', 'WIDOWED']),
 });
 
-type CivilStatusValue = z.infer<typeof formSchema> ;
+type CivilStatusValue = z.infer<typeof formSchema>;
 
-export const CivilStatusSection = ({ civilStatus, id }: CivilStatusValue & { id: string}) => {
+export const CivilStatusSection = ({ civilStatus, id }: CivilStatusValue & { id: string }) => {
   const [isEditing, setIsEditing] = useState(false);
   const toggleEdit = () => setIsEditing((current) => !current);
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: { civilStatus },
-    mode: 'all'
+    mode: 'all',
   });
   const { isSubmitting, isValid } = form.formState;
   const router = useRouter();
@@ -53,12 +53,10 @@ export const CivilStatusSection = ({ civilStatus, id }: CivilStatusValue & { id:
             <div>
               <CardTitle>Estado civil</CardTitle>
               <p className="text-muted-foreground text-sm mt-5">
-                {isEditing
-                  ? 'Selecciona tu estado civil.'
-                  : 'Tu estado civil es importante para nosotros'}
+                {isEditing ? 'Selecciona tu estado civil.' : 'Tu estado civil es importante para nosotros'}
               </p>
               {!isEditing ? (
-                <p className="text-primary font-bold mt-3">{selectedCivilStatus.name}</p>
+                <p className="text-primary font-bold mt-3">{selectedCivilStatus?.name}</p>
               ) : (
                 <FormField
                   control={form.control}
@@ -67,13 +65,13 @@ export const CivilStatusSection = ({ civilStatus, id }: CivilStatusValue & { id:
                     <FormItem className="flex-1 mt-5">
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
-                          <SelectTrigger className='rounded-none'>
+                          <SelectTrigger className="rounded-none">
                             <SelectValue placeholder="Select a verified email to display" />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent className='rounded-none'>
+                        <SelectContent className="rounded-none">
                           {civilStatusOptions.map((specialty) => (
-                            <SelectItem key={specialty.id} value={specialty.id} className='rounded-none'>
+                            <SelectItem key={specialty.id} value={specialty.id} className="rounded-none">
                               <span className="flex w-full justify-between items-center gap-3">{specialty.name}</span>
                             </SelectItem>
                           ))}
@@ -87,15 +85,16 @@ export const CivilStatusSection = ({ civilStatus, id }: CivilStatusValue & { id:
             </div>
           </CardHeader>
           <CardFooter className="border-t pt-4 flex justify-between items-start gap-2 md:items-center flex-col md:flex-row">
-            <p className="text-muted-foreground text-xs">
-              Puedes actualizar tu estado civil en cualquier momento.
-            </p>
+            <p className="text-muted-foreground text-xs">Puedes actualizar tu estado civil en cualquier momento.</p>
             {isEditing ? (
               <div className="flex justify-end items-center gap-3">
-                <Button onClick={() => {
-                  form.reset();
-                  toggleEdit();
-                }} className="rounded-none">
+                <Button
+                  onClick={() => {
+                    form.reset();
+                    toggleEdit();
+                  }}
+                  className="rounded-none"
+                >
                   Cancelar
                 </Button>
                 <Button disabled={!isValid || isSubmitting} type="submit" className="rounded-none">

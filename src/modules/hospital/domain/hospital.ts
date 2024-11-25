@@ -38,7 +38,7 @@ export class Hospital extends Aggregate {
     );
   }
 
-  static create(adminId: string, name: string, address: Partial<Primitives<HospitalAddress>>): Hospital {
+  static create(adminId: string, name: string, address: Primitives<HospitalAddress>): Hospital {
     return new Hospital(
       Uuid.random(),
       new StringValueObject(name),

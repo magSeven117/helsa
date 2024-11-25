@@ -7,7 +7,7 @@ import { Education } from '../../domain/educations';
 export class EditEducation {
   constructor(private readonly doctorRepository: DoctorRepository) {}
 
-  async run(doctorId: string, educationId: string, education: Partial<Primitives<Education>>) {
+  async run(doctorId: string, educationId: string, education: Primitives<Education>) {
     const doctor = await this.doctorRepository.getByCriteria(
       Criteria.fromValues([{ field: 'id', value: doctorId, operator: Operator.EQUAL }])
     );

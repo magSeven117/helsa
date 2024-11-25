@@ -31,7 +31,12 @@ export class MedicalReference {
     };
   }
 
-  static create(reason: string, observation: string | null, referencedId: string, recipeId: string): MedicalReference {
+  static create(
+    reason: string,
+    observation: string | undefined,
+    referencedId: string,
+    recipeId: string
+  ): MedicalReference {
     return new MedicalReference(
       Uuid.random(),
       new StringValueObject(reason),

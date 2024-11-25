@@ -17,15 +17,15 @@ const formSchema = z.object({
   bloodType: z.enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']),
 });
 
-type BloodTypeLevel = z.infer<typeof formSchema> ;
+type BloodTypeLevel = z.infer<typeof formSchema>;
 
-export const BloodTypeSection = ({ bloodType, id }: BloodTypeLevel & { id: string}) => {
+export const BloodTypeSection = ({ bloodType, id }: BloodTypeLevel & { id: string }) => {
   const [isEditing, setIsEditing] = useState(false);
   const toggleEdit = () => setIsEditing((current) => !current);
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: { bloodType },
-    mode: 'all'
+    mode: 'all',
   });
   const { isSubmitting, isValid } = form.formState;
   const router = useRouter();
@@ -53,12 +53,10 @@ export const BloodTypeSection = ({ bloodType, id }: BloodTypeLevel & { id: strin
             <div>
               <CardTitle>Tipo de sangre</CardTitle>
               <p className="text-muted-foreground text-sm mt-5">
-                {isEditing
-                  ? 'Selecciona tu tipo de sangre.'
-                  : 'Tu tipo de sangre es importante para nosotros'}
+                {isEditing ? 'Selecciona tu tipo de sangre.' : 'Tu tipo de sangre es importante para nosotros'}
               </p>
               {!isEditing ? (
-                <p className="text-primary font-bold mt-3">{bloodTypeSelected.name}</p>
+                <p className="text-primary font-bold mt-3">{bloodTypeSelected?.name}</p>
               ) : (
                 <FormField
                   control={form.control}
@@ -67,13 +65,13 @@ export const BloodTypeSection = ({ bloodType, id }: BloodTypeLevel & { id: strin
                     <FormItem className="flex-1 mt-5">
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
-                          <SelectTrigger className='rounded-none'>
+                          <SelectTrigger className="rounded-none">
                             <SelectValue placeholder="Select a verified email to display" />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent className='rounded-none'>
+                        <SelectContent className="rounded-none">
                           {bloodTypeOptions.map((specialty) => (
-                            <SelectItem key={specialty.id} value={specialty.id} className='rounded-none'>
+                            <SelectItem key={specialty.id} value={specialty.id} className="rounded-none">
                               <span className="flex w-full justify-between items-center gap-3">{specialty.name}</span>
                             </SelectItem>
                           ))}
@@ -92,10 +90,13 @@ export const BloodTypeSection = ({ bloodType, id }: BloodTypeLevel & { id: strin
             </p>
             {isEditing ? (
               <div className="flex justify-end items-center gap-3">
-                <Button onClick={() => {
-                  form.reset();
-                  toggleEdit();
-                }} className="rounded-none">
+                <Button
+                  onClick={() => {
+                    form.reset();
+                    toggleEdit();
+                  }}
+                  className="rounded-none"
+                >
                   Cancelar
                 </Button>
                 <Button disabled={!isValid || isSubmitting} type="submit" className="rounded-none">

@@ -7,7 +7,7 @@ import { DoctorRepository } from '../../domain/doctor-repository';
 export class SetConsultingRoom {
   constructor(private doctorRepository: DoctorRepository) {}
 
-  async run(doctorId: string, consultingRoomAddress: Partial<Primitives<ConsultingRoomAddress>>): Promise<void> {
+  async run(doctorId: string, consultingRoomAddress: Primitives<ConsultingRoomAddress>): Promise<void> {
     const doctor = await this.doctorRepository.getByCriteria(
       Criteria.fromValues([{ field: 'id', value: doctorId, operator: Operator.EQUAL }])
     );

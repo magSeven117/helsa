@@ -44,7 +44,7 @@ export class Appointment extends Aggregate {
       rating: this.rating ? this.rating.toPrimitives() : undefined,
       telemetry: this.telemetry ? this.telemetry.toPrimitives() : undefined,
       recipe: this.recipe ? this.recipe.toPrimitives() : undefined,
-      notes: this.notes.map((note) => note.toPrimitives()),
+      notes: this.notes ? this.notes.map((note) => note.toPrimitives()) : undefined,
     };
   }
 

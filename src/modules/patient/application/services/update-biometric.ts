@@ -7,7 +7,7 @@ import { PatientRepository } from '../../domain/patient-repository';
 export class UpdateBiometric {
   constructor(private readonly repository: PatientRepository) {}
 
-  async run(patientId: string, data: Partial<Primitives<PatientBiometric>>) {
+  async run(patientId: string, data: Primitives<PatientBiometric>) {
     const patient = await this.repository.find(
       Criteria.fromValues([{ field: 'id', value: patientId, operator: Operator.EQUAL }])
     );

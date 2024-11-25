@@ -63,9 +63,9 @@ export class Patient extends Aggregate {
     id: string,
     userId: string,
     demographic: {
-      civilStatus?: string;
-      occupation?: string;
-      educationLevel?: string;
+      civilStatus: string;
+      occupation: string;
+      educativeLevel: string;
     },
     biometric: {
       height: number;
@@ -76,7 +76,7 @@ export class Patient extends Aggregate {
     return new Patient(
       new Uuid(id),
       new Uuid(userId),
-      PatientDemographic.create(demographic.civilStatus, demographic.occupation, demographic.educationLevel),
+      PatientDemographic.create(demographic.civilStatus, demographic.occupation, demographic.educativeLevel),
       PatientBiometric.create(biometric.height, biometric.bloodType, biometric.organDonor),
       [],
       [],

@@ -28,7 +28,7 @@ export class MongoDBDoctorIndexStore implements DoctorIndexStore {
       {
         $set: {
           doctorId: primitives.id,
-          name: userPrimitives.fullName,
+          name: userPrimitives.name,
           specialty: primitives.specialtyId,
           address: primitives.consultingRoomAddress,
           schedule: primitives.schedule,

@@ -4,6 +4,9 @@ import PatientInfo from './components/patient-info';
 
 const Page = async () => {
   const user = await getCurrentUser();
+  if (!user) {
+    return null;
+  }
   const patient = await getPatient({ id: user.id });
   return (
     <div className="space-y-6 w-full">

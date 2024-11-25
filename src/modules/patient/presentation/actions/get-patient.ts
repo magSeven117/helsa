@@ -4,7 +4,7 @@ import { db } from '@/modules/shared/infrastructure/persistence/prisma/prisma-co
 import { GetPatient } from '../../application/services/get-patient';
 import { PrismaPatientRepository } from '../../infrastructure/prisma-patient-repository';
 
-export async function getPatient({ id }) {
+export async function getPatient({ id }: { id: string }) {
   const service = new GetPatient(new PrismaPatientRepository(db));
   return await service.run(id);
 }

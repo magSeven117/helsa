@@ -74,6 +74,7 @@ export class PrismaDoctorRepository implements DoctorRepository {
   }
 
   async saveEducations(doctorId: string, educations: Primitives<Doctor>['educations']): Promise<void> {
+    if (!educations) return;
     for (const education of educations) {
       await this.client.education.upsert({
         where: { id: education.id },

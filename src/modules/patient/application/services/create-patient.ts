@@ -7,7 +7,7 @@ import { PatientRepository } from '../../domain/patient-repository';
 
 export class CreatePatient {
   constructor(private patientRepository: PatientRepository) {}
-  async run(data: Partial<Primitives<Patient>>) {
+  async run(data: Primitives<Patient>) {
     const exist = await this.patientRepository.find(PatientCriteria.getByUserId(data.userId));
     if (exist) {
       throw new FormatError('Patient already exists');

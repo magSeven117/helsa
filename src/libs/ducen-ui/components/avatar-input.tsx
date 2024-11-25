@@ -14,21 +14,20 @@ const AvatarInput = forwardRef<HTMLInputElement, AvatarInputProps>(({ onChange, 
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files[0];
+    const file = e.target.files?.[0];
     if (file) {
       onChange(URL.createObjectURL(file));
       onSelectFile(file);
     }
   };
 
-
   return (
     <div className="cursor-pointer">
       <Avatar className="h-14 w-14 rounded-full" onClick={openFilePicker}>
-        <AvatarImage src={value || ''} alt={'avatar'} className='object-contain'/>
+        <AvatarImage src={value || ''} alt={'avatar'} className="object-contain" />
         <AvatarFallback className="rounded-lg">CN</AvatarFallback>
       </Avatar>
-      <input ref={inputFileRef} type="file" className="hidden " onChange={handleChange}/>
+      <input ref={inputFileRef} type="file" className="hidden " onChange={handleChange} />
     </div>
   );
 });

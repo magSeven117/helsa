@@ -51,20 +51,20 @@ export default function DoctorSchedule({ doctorId }: DoctorScheduleProps) {
   });
 
   const handleHourAdd = (day: string, hour: string) => {
-    if (selectedHours[day].includes(hour)) {
+    if (selectedHours[day]?.includes(hour)) {
       handleHourRemove(day, hour);
       return;
     }
     setSelectedHours((prev) => ({
       ...prev,
-      [day]: [...prev[day], hour].sort(),
+      [day]: [...prev[day]!, hour].sort(),
     }));
   };
 
   const handleHourRemove = (day: string, hour: string) => {
     setSelectedHours((prev) => ({
       ...prev,
-      [day]: prev[day].filter((h) => h !== hour),
+      [day]: prev[day]!.filter((h) => h !== hour),
     }));
   };
 
@@ -129,7 +129,7 @@ export default function DoctorSchedule({ doctorId }: DoctorScheduleProps) {
                               <Check
                                 className={cn(
                                   'mr-2 h-4 w-4',
-                                  selectedHours[day].includes(hour.value) ? 'opacity-100' : 'opacity-0'
+                                  selectedHours[day]?.includes(hour.value) ? 'opacity-100' : 'opacity-0'
                                 )}
                               />
                               {hour.label}
@@ -146,7 +146,7 @@ export default function DoctorSchedule({ doctorId }: DoctorScheduleProps) {
             )}
           </div>
           <div className="flex flex-wrap gap-2">
-            {selectedHours[day].map((hour) => (
+            {selectedHours[day]?.map((hour) => (
               <Button
                 key={hour}
                 variant="outline"

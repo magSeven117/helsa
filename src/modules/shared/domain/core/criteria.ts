@@ -1,19 +1,19 @@
 export enum Operator {
-  EQUAL = "=",
-  NOT_EQUAL = "!=",
-  GT = ">",
-  LT = "<",
-  CONTAINS = "CONTAINS",
-  NOT_CONTAINS = "NOT_CONTAINS",
+  EQUAL = '=',
+  NOT_EQUAL = '!=',
+  GT = '>',
+  LT = '<',
+  CONTAINS = 'CONTAINS',
+  NOT_CONTAINS = 'NOT_CONTAINS',
 }
 export enum Direction {
-  ASC = "ASC",
-  DESC = "DESC",
+  ASC = 'ASC',
+  DESC = 'DESC',
 }
 export enum FilterType {
-  AND = "AND",
-  OR = "OR",
-  NOT = "NOT",
+  AND = 'AND',
+  OR = 'OR',
+  NOT = 'NOT',
 }
 export type Filter = { field: string; value: any; operator: Operator };
 export type Filters = { filters: (Filter | Filters)[]; type: FilterType };
@@ -33,8 +33,8 @@ export interface CriteriaConverter {
 }
 export class Criteria {
   protected filters: Filters;
-  protected order: Order;
-  protected pagination: Pagination;
+  protected order?: Order;
+  protected pagination?: Pagination;
 
   constructor(filters?: Filters, order?: Order, pagination?: Pagination) {
     this.filters = filters || { filters: [], type: FilterType.AND };
@@ -53,10 +53,10 @@ export class Criteria {
   getFilters(): Filters {
     return this.filters;
   }
-  getOrder(): Order {
+  getOrder(): Order | undefined {
     return this.order;
   }
-  getPagination(): Pagination {
+  getPagination(): Pagination | undefined {
     return this.pagination;
   }
 
@@ -86,12 +86,12 @@ export class Criteria {
   }
 
   limit(limit: number): Criteria {
-    this.pagination = this.hasPagination() ? { ...this.pagination, limit } : { limit, offset: 0 };
+    this.pagination = this.hasPagination() ? { ...this.pagination!, limit } : { limit, offset: 0 };
     return this;
   }
 
   offset(offset: number): Criteria {
-    this.pagination = this.hasPagination() ? { ...this.pagination, offset } : { limit: 50, offset };
+    this.pagination = this.hasPagination() ? { ...this.pagination!, offset } : { limit: 50, offset };
     return this;
   }
 

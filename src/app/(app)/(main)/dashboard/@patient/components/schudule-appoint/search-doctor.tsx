@@ -16,13 +16,26 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/libs/shadcn-ui/compon
 import { Separator } from '@/libs/shadcn-ui/components/separator';
 import { useClickOutside } from '@/libs/shadcn-ui/hooks/use-click-outside';
 import { cn } from '@/libs/shadcn-ui/utils/utils';
+import { Specialty } from '@/modules/doctor/domain/specialty';
 import { useSpecialties } from '@/modules/doctor/presentation/graphql/hooks/use-get-specialties';
+import { Primitives } from '@/modules/shared/domain/types/primitives';
 import { addDays } from 'date-fns';
 import { CheckIcon, FilterX, ListFilter, Loader2, LucideIcon, Search, X } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { DateRange } from 'react-day-picker';
 
-const SearchDoctor = ({ setSelectedDoctor }) => {
+const SearchDoctor = ({
+  setSelectedDoctor,
+}: {
+  setSelectedDoctor: Dispatch<
+    SetStateAction<{
+      name: string;
+      specialty: string;
+      rating: number;
+      avatar: string;
+    } | null>
+  >;
+}) => {
   const { specialties } = useSpecialties();
   const [open, setOpen] = useState(false);
   const [textSearch, setTextSearch] = useState('');
@@ -84,14 +97,15 @@ const SearchDoctor = ({ setSelectedDoctor }) => {
   });
 
   useEffect(() => {
-    const handleKeyDown = (e: MouseEvent) => {
+    const handleKeyDown = (e: FocusEvent) => {
       setOpen(true);
     };
-    inputRef.current.addEventListener('focus', handleKeyDown);
+
+    inputRef.current!.addEventListener('focus', handleKeyDown);
 
     return () => {
       if (inputRef.current) {
-        inputRef.current.removeEventListener('focus', handleKeyDown);
+        inputRef.current!.removeEventListener('focus', handleKeyDown);
       }
     };
   }, [inputRef]);
@@ -138,8 +152,8 @@ const SearchDoctor = ({ setSelectedDoctor }) => {
                           'bg-primary-foreground text-primary': selectedIndex === index,
                         })}
                         onClick={() => {
-                          setSelectedDoctor(result)
-                          setOpen(false)
+                          setSelectedDoctor(result);
+                          setOpen(false);
                         }}
                       >
                         <img src={result.avatar} alt={result.name} className="h-[50px] w-[50px] rounded-full" />
@@ -166,7 +180,7 @@ const SearchDoctor = ({ setSelectedDoctor }) => {
         <div className="flex">
           <FacetedFilter
             title="Filtros"
-            options={specialties.map((specialty) => ({
+            options={specialties.map((specialty: Primitives<Specialty>) => ({
               label: specialty.name,
               value: specialty.id,
             }))}
@@ -186,11 +200,11 @@ interface FacetedFilterProps {
 
 function FacetedFilter({ title, options }: FacetedFilterProps) {
   const [open, setOpen] = useState(false);
-  const [selectedValues, setSelectedValues] = useState([]);
+  const [selectedValues, setSelectedValues] = useState<string[]>([]);
   const [date, setDate] = useState<DateRange | undefined>({
     from: new Date(2022, 0, 20),
     to: addDays(new Date(2022, 0, 20), 1),
-  })
+  });
 
   const handleSelect = (value: string) => {
     if (selectedValues.includes(value)) {
@@ -231,15 +245,15 @@ function FacetedFilter({ title, options }: FacetedFilterProps) {
         <PopoverContent className=" p-0 rounded-none w-full flex flex-col" align="end">
           <div className="flex justify-between items-center p-2 border-b">
             <div className="font-bold">{title}</div>
-            <Button variant="outline" size="icon" className='rounded-none' onClick={() => setSelectedValues([])}>
+            <Button variant="outline" size="icon" className="rounded-none" onClick={() => setSelectedValues([])}>
               <FilterX />
             </Button>
           </div>
           <div className="flex justify-start items-start">
-            <Command className='pr-3 py-0 h-full'>
-              <CommandInput placeholder='Especialidad' className="h-8" />
+            <Command className="pr-3 py-0 h-full">
+              <CommandInput placeholder="Especialidad" className="h-8" />
               <CommandEmpty>No results found.</CommandEmpty>
-              <CommandList className='styled-scroll h-full'>
+              <CommandList className="styled-scroll h-full">
                 <CommandGroup>
                   {options.map((option) => {
                     const isSelected = selectedValues.includes(option.value);
@@ -270,17 +284,9 @@ function FacetedFilter({ title, options }: FacetedFilterProps) {
                 )}
               </CommandList>
             </Command>
-            <div className='p-4 box-border border-l'>
-              <p>
-                Disponibilidad de citas
-              </p>
-              <Calendar 
-                initialFocus
-                mode="range"
-                defaultMonth={date?.from}
-                selected={date}
-                onSelect={setDate}
-              />
+            <div className="p-4 box-border border-l">
+              <p>Disponibilidad de citas</p>
+              <Calendar initialFocus mode="range" defaultMonth={date?.from} selected={date} onSelect={setDate} />
             </div>
           </div>
         </PopoverContent>

@@ -26,8 +26,8 @@ export class PrismaCriteriaConverter {
 
   public criteria(criteria: Criteria) {
     const where = this.filter(criteria.getFilters());
-    const orderBy = criteria.hasOrder() ? this.order(criteria.getOrder()) : undefined;
-    const pagination = criteria.hasPagination() ? this.pagination(criteria.getPagination()) : undefined;
+    const orderBy = criteria.hasOrder() ? this.order(criteria.getOrder()!) : undefined;
+    const pagination = criteria.hasPagination() ? this.pagination(criteria.getPagination()!) : undefined;
     return {
       where,
       orderBy,
@@ -35,8 +35,8 @@ export class PrismaCriteriaConverter {
     };
   }
 
-  private filter(filters: Filters) {
-    const filter = filters.filters.map((filter) => {
+  private filter(filters: Filters): any {
+    const filter = filters.filters.map((filter: any) => {
       if (!isFilter(filter)) return this.filter(filter);
       const transformer = this.filterTransformers.get(filter.operator);
       if (transformer) {

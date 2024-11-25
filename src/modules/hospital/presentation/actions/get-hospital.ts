@@ -8,7 +8,7 @@ export async function getHospital(userId: string) {
   try {
     const service = new GetHospital(new PrismaHospitalRepository(db));
     return await service.run(userId);
-  } catch (error) {
+  } catch (error: any) {
     console.log('[GetHospital', error);
     throw new InternalError(error);
   }

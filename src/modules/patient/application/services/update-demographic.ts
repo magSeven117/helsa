@@ -7,7 +7,7 @@ import { PatientRepository } from '../../domain/patient-repository';
 export class UpdateDemographic {
   constructor(private patientRepository: PatientRepository) {}
 
-  async run(id: string, demographic: Partial<Primitives<PatientDemographic>>) {
+  async run(id: string, demographic: Primitives<PatientDemographic>) {
     const patient = await this.patientRepository.find(
       Criteria.fromValues([{ field: 'id', value: id, operator: Operator.EQUAL }])
     );

@@ -7,7 +7,7 @@ import { HospitalRepository } from '../../domain/hospital-repository';
 export class CreateHospital {
   constructor(private hospitalRepository: HospitalRepository) {}
 
-  async run(data: Partial<Primitives<Hospital>>): Promise<void> {
+  async run(data: Primitives<Hospital>): Promise<void> {
     const existing = await this.hospitalRepository.find(HospitalCriteria.findByAdminId(data.adminId));
     if (existing) {
       throw new FormatError('Hospital already exists');

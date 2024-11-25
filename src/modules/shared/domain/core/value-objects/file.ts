@@ -13,7 +13,7 @@ export class File extends StringValueObject {
   async download(): Promise<void> {
     const fileName = this.value.split('/').pop();
     const response = await fetch(this.value);
-    const stream = createWriteStream(fileName);
+    const stream = createWriteStream(fileName || new Date().toISOString());
     await finished(Readable.fromWeb(response.body as any).pipe(stream));
   }
 
@@ -30,7 +30,7 @@ export class File extends StringValueObject {
           chunks.push(Buffer.from(jsonData, 'utf-8'));
         }
       });
-      readStream.on('end', () => resolve(Buffer.concat(chunks)));
+      readStream.on('end', () => resolve(Buffer.concat(chunks as any)));
       readStream.on('error', reject);
     });
   }
