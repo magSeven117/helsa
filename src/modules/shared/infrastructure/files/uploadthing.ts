@@ -7,11 +7,7 @@ export const ourFileRouter = {
       maxFileCount: 1,
     },
   })
-    .middleware(async ({ req }) => {
-      return {};
-    })
-    .onUploadComplete(async ({ metadata, file }) => {
-      return {};
-    }),
+    .middleware(async ({ req }) => ({}))
+    .onUploadComplete(async ({ metadata, file }) => console.log(metadata)),
 } satisfies FileRouter;
 export type OurFileRouter = typeof ourFileRouter;
