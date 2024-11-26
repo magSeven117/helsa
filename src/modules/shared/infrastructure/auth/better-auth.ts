@@ -21,13 +21,15 @@ export const auth = betterAuth({
         type: 'string',
         defaultValue: 'UNDEFINED',
       },
+      bio: {
+        type: 'string',
+        defaultValue: '',
+        input: true,
+      },
     },
   },
   emailAndPassword: {
     enabled: true,
-    sendResetPassword: async ({ url }) => {
-      // Send an email with the reset password link
-    },
   },
   plugins: [
     emailOTP({

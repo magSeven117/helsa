@@ -10,8 +10,8 @@ export const PersonalInfo = ({ user }: { user: any }) => {
     <div className="flex flex-col w-full gap-10">
       <AvatarSection image={user.image} />
       <NameSection firstName={user.firstName} lastName={user.lastName} />
-      <EmailSection email={user.email} />
       <BioSection bio={user.bio ?? ''} />
+      <EmailSection email={user.email} />
       <DeleteAccountSection />
     </div>
   );

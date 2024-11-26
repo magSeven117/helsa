@@ -11,7 +11,7 @@ const Page = async () => {
           firstName: user.name.split(' ')[0],
           lastName: user.name.split(' ')[1],
           email: user.email,
-          bio: '',
+          bio: user.bio,
           imageUrl: user.image,
         }}
       />
