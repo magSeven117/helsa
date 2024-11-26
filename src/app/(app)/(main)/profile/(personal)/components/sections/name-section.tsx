@@ -14,22 +14,19 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 
 const formSchema = z.object({
-  firstName: z.string().min(2, {
+  name: z.string().min(2, {
     message: 'First name must be at least 2 characters.',
-  }),
-  lastName: z.string().min(2, {
-    message: 'Last name must be at least 2 characters.',
   }),
 });
 
 type NameFormValues = z.infer<typeof formSchema>;
 
-export const NameSection = ({ firstName, lastName }: NameFormValues) => {
+export const NameSection = ({ name }: NameFormValues) => {
   const [isEditing, setIsEditing] = useState(false);
   const toggleEdit = () => setIsEditing((current) => !current);
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: { firstName, lastName },
+    defaultValues: { name },
   });
   const { isSubmitting, isValid } = form.formState;
 
@@ -38,7 +35,7 @@ export const NameSection = ({ firstName, lastName }: NameFormValues) => {
   const onSubmit = async (data: NameFormValues) => {
     try {
       await authClient.updateUser({
-        name: `${data.firstName} ${data.lastName}`,
+        name: data.name,
       });
       setIsEditing(false);
       router.refresh();
@@ -54,43 +51,26 @@ export const NameSection = ({ firstName, lastName }: NameFormValues) => {
         <form action="" onSubmit={form.handleSubmit(onSubmit)}>
           <CardHeader className="">
             <div>
-              <CardTitle>Nombres</CardTitle>
+              <CardTitle>Nombre</CardTitle>
               <p className="text-muted-foreground text-sm mt-5">
                 Este es el nombre que se mostrara en tu perfil. Puedes cambiarlo
               </p>
               {!isEditing ? (
-                <p className="text-primary font-bold mt-3">
-                  {form.getValues('firstName')} {form.getValues('lastName')}
-                </p>
+                <p className="text-primary font-bold mt-3">{form.getValues('name')}</p>
               ) : (
-                <div className="flex justify-between items-center gap-3 mt-6">
-                  <FormField
-                    control={form.control}
-                    name="firstName"
-                    render={({ field }) => (
-                      <FormItem className="flex-1">
-                        <FormLabel>Nombre</FormLabel>
-                        <FormControl>
-                          <Input {...field} className="rounded-none"></Input>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="lastName"
-                    render={({ field }) => (
-                      <FormItem className="flex-1">
-                        <FormLabel>Apellido</FormLabel>
-                        <FormControl>
-                          <Input {...field} className="rounded-none"></Input>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Nombre</FormLabel>
+                      <FormControl>
+                        <Input {...field} className="rounded-none"></Input>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               )}
             </div>
           </CardHeader>

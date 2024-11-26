@@ -1,3 +1,5 @@
+import { Primitives } from '@/modules/shared/domain/types/primitives';
+import { User } from '@/modules/user/domain/user';
 import { getCurrentUser } from '@/modules/user/presentation/actions/get-current-user';
 import { PersonalInfo } from './components/personal-info';
 
@@ -6,15 +8,7 @@ const Page = async () => {
   if (!user) return null;
   return (
     <div className="space-y-6 w-full">
-      <PersonalInfo
-        user={{
-          firstName: user.name.split(' ')[0],
-          lastName: user.name.split(' ')[1],
-          email: user.email,
-          bio: user.bio,
-          imageUrl: user.image,
-        }}
-      />
+      <PersonalInfo user={user as Primitives<User>} />
     </div>
   );
 };

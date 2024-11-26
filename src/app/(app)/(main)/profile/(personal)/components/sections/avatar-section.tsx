@@ -4,6 +4,7 @@ import { Button } from '@/libs/shadcn-ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@/libs/shadcn-ui/components/card';
 import { Form, FormControl, FormField, FormItem } from '@/libs/shadcn-ui/components/form';
 import { authClient } from '@/modules/shared/infrastructure/auth/auth-client';
+import { useUploadThing } from '@/modules/shared/infrastructure/files/use-upload';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -22,11 +23,25 @@ const AvatarSection = ({ image }: AvatarSectionValues) => {
     resolver: zodResolver(formSchema),
     defaultValues: { image },
   });
+  const { startUpload } = useUploadThing('imageUploader', {
+    onClientUploadComplete: () => {
+      console.log('client upload complete');
+    },
+    onUploadError: () => {
+      console.log('error occurred while uploading');
+    },
+    onUploadBegin: (file) => {
+      console.log('upload has begun for', file);
+    },
+  });
   const { isSubmitting, isValid } = form.formState;
   const router = useRouter();
   const onSubmit = async (_values: AvatarSectionValues) => {
     if (avatarFile) {
-      await authClient.updateUser({ image: '' });
+      const res = await startUpload([avatarFile]);
+      if (res) {
+        await authClient.updateUser({ image: res[0]!.url });
+      }
       router.refresh();
     }
   };

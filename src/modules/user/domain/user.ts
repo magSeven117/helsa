@@ -18,6 +18,7 @@ export class User extends Aggregate {
     public name: StringValueObject,
     public emailVerified: BooleanValueObject,
     public bio: OptionalString,
+    public image: OptionalString,
     createdAt: DateValueObject,
     updatedAt: DateValueObject
   ) {
@@ -32,6 +33,7 @@ export class User extends Aggregate {
       new StringValueObject(name),
       new BooleanValueObject(false),
       new OptionalString(bio || ''),
+      new OptionalString(''),
       DateValueObject.today(),
       DateValueObject.today()
     );
@@ -47,6 +49,7 @@ export class User extends Aggregate {
       new StringValueObject(data.name),
       new BooleanValueObject(data.emailVerified),
       new OptionalString(data.bio),
+      new OptionalString(data.image),
       new DateValueObject(data.createdAt),
       new DateValueObject(data.updatedAt)
     );
@@ -60,6 +63,7 @@ export class User extends Aggregate {
       name: this.name.value,
       emailVerified: this.emailVerified.value,
       bio: this.bio.value,
+      image: this.image.value,
       createdAt: this.createdAt.value,
       updatedAt: this.updatedAt.value,
     };
