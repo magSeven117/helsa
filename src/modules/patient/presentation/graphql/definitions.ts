@@ -108,7 +108,7 @@ export const patientSchema = gql`
   input PatientDemographicInput {
     civilStatus: String
     occupation: String
-    educationLevel: String
+    educativeLevel: String
   }
 
   input PatientBiometricInput {

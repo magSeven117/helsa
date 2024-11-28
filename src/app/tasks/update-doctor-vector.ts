@@ -1,7 +1,7 @@
 import { GetDoctorAppointments } from '@/modules/appointment/application/get-doctor-appointments';
 import { PrismaAppointmentRepository } from '@/modules/appointment/infrastructure/persistance/prisma-appointment-repository';
 import { UpdateIndexStore } from '@/modules/doctor/application/services/update-index-store';
-import { MongoDBDoctorIndexStore } from '@/modules/doctor/infrastructure/persistence/mongodb-doctor-index-store';
+import { MongoDBDoctorSearcher } from '@/modules/doctor/infrastructure/persistence/mongodb-doctor-searcher';
 import { PrismaDoctorRepository } from '@/modules/doctor/infrastructure/persistence/prisma-doctor-repository';
 import { mongodbClient } from '@/modules/shared/infrastructure/persistence/mongodb/mongodb-client';
 import { db } from '@/modules/shared/infrastructure/persistence/prisma/prisma-connection';
@@ -16,7 +16,7 @@ export const UpdateDoctorVectorTask = task({
     const { doctorId } = payload;
     const service = new UpdateIndexStore(
       new PrismaDoctorRepository(db),
-      new MongoDBDoctorIndexStore(mongodbClient),
+      new MongoDBDoctorSearcher(mongodbClient),
       new GetUser(new PrismaUserRepository(db)),
       new GetDoctorAppointments(new PrismaAppointmentRepository(db))
     );

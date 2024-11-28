@@ -13,7 +13,7 @@ export const useCreatePatient = () => {
     demographic: {
       civilStatus?: string;
       occupation?: string;
-      educationLevel?: string;
+      educativeLevel?: string;
     };
   }) => {
     const { data } = await client.mutate({

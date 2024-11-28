@@ -1,11 +1,11 @@
 import { Button } from '@/libs/shadcn-ui/components/button';
-import { PlusCircle } from 'lucide-react';
+import { Calendar, PlusCircle } from 'lucide-react';
+import Link from 'next/link';
 import { Activities } from './components/activities';
 import BloodPressure from './components/blood-pressure';
 import Glucose from './components/glucose';
 import { HealthAverage } from './components/health-average';
 import HeartRate from './components/heart-rate';
-import Appoint from './components/schudule-appoint/appoint-button';
 import Temperature from './components/temperature';
 import { UpcomingAppointments } from './components/upcoming-appointments';
 
@@ -15,7 +15,11 @@ const Page = () => {
       <div className="h-full flex justify-between items-center max-sm:flex-col">
         <div className="flex justify-start flex-col w-full h-full pt-5 pr-9 gap-5">
           <div className="w-full flex items-center gap-4">
-            <Appoint />
+            <Link href={'/book'}>
+              <Button className="rounded-none" variant="outline">
+                Agendar <Calendar />{' '}
+              </Button>
+            </Link>
             <Button className="rounded-none" variant="outline">
               Informar <PlusCircle />{' '}
             </Button>

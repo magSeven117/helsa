@@ -6,6 +6,7 @@ import { ConsultingRoomAddress } from './consulting-room-address';
 import { Day } from './day';
 import { Education } from './educations';
 import { Schedule } from './schedule';
+import { Specialty } from './specialty';
 
 export class Doctor extends Aggregate {
   constructor(
@@ -19,7 +20,8 @@ export class Doctor extends Aggregate {
     updatedAt: DateValueObject,
     public schedule?: Schedule,
     public consultingRoomAddress?: ConsultingRoomAddress,
-    public educations?: Education[]
+    public educations?: Education[],
+    public specialty?: Specialty
   ) {
     super(id, createdAt, updatedAt);
   }
@@ -68,6 +70,7 @@ export class Doctor extends Aggregate {
       schedule: this.schedule ? this.schedule.toPrimitives() : undefined,
       consultingRoomAddress: this.consultingRoomAddress ? this.consultingRoomAddress.toPrimitives() : undefined,
       educations: this.educations ? this.educations.map((education) => education.toPrimitives()) : [],
+      specialty: this.specialty ? this.specialty.toPrimitives() : undefined,
     };
   }
 

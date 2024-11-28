@@ -35,6 +35,7 @@ export const auth = betterAuth({
     emailOTP({
       otpLength: 6,
       sendVerificationOTP: async ({ email, otp, type }) => {
+        console.log('code', otp);
         if (type === 'forget-password') {
           await resend.emails.send({
             to: email,

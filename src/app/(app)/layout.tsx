@@ -7,6 +7,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata } from 'next';
 import { ThemeProvider } from 'next-themes';
 import { Nunito } from 'next/font/google';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { Toaster } from 'sonner';
 
 const nunito = Nunito({ subsets: ['latin'] });
@@ -26,13 +27,15 @@ export default function RootLayout({
       <html lang="en" suppressHydrationWarning={true}>
         <link rel="icon" href={icon.src} sizes="any" />
         <body className={nunito.className + ' styled-scroll'} suppressHydrationWarning={true}>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-            {children}
-            <Analytics />
-            <SpeedInsights />
-            <ToastProvider></ToastProvider>
-            <Toaster />
-          </ThemeProvider>
+          <NuqsAdapter>
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+              {children}
+              <Analytics />
+              <SpeedInsights />
+              <ToastProvider></ToastProvider>
+              <Toaster />
+            </ThemeProvider>
+          </NuqsAdapter>
         </body>
       </html>
     </ApolloContextProvider>
