@@ -2,7 +2,7 @@ import { Button } from '@/libs/shadcn-ui/components/button';
 import { Skeleton } from '@/libs/shadcn-ui/components/skeleton';
 import { format } from 'date-fns';
 import { motion } from 'framer-motion';
-import { X } from 'lucide-react';
+import { Star, X } from 'lucide-react';
 const listVariant = {
   hidden: { y: 10, opacity: 0 },
   show: {
@@ -35,6 +35,20 @@ const FilterList = ({ filters, loading, onRemove, specialties }: Props) => {
       }
       case 'availability': {
         return format(new Date(value), 'MMM d, yyyy');
+      }
+
+      case 'minRate': {
+        return (
+          <div className="flex justify-center items-center gap-2">
+            {Array.from({ length: value }).map((_, index) => (
+              <Star key={index} className="text-primary size-4" />
+            ))}
+          </div>
+        );
+      }
+
+      case 'experience': {
+        return `${value} Years`;
       }
 
       case 'q':

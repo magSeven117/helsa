@@ -10,19 +10,23 @@ import {
 } from '@/libs/shadcn-ui/components/dropdown-menu';
 import { Input } from '@/libs/shadcn-ui/components/input';
 import { cn } from '@/libs/shadcn-ui/utils/utils';
-import { CalendarDays, ListFilter, Search, Stethoscope } from 'lucide-react';
+import { Briefcase, CalendarDays, ListFilter, Search, Star, Stethoscope } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import SelectSpecialty from './select-specialty';
 
 import { Calendar } from '@/libs/shadcn-ui/components/calendar';
 import { formatISO } from 'date-fns';
-import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs';
+import { parseAsArrayOf, parseAsInteger, parseAsString, useQueryStates } from 'nuqs';
+import ExperienceRange from './experience-range';
 import FilterList from './filter-list';
+import RateRange from './rate-range';
 const defaultSearch = {
   q: null,
   specialties: null,
   availability: null,
+  minRate: null,
+  experience: null,
 };
 
 type Props = {
@@ -36,6 +40,8 @@ const SearchDoctorInput = ({ specialties }: Props) => {
       q: parseAsString,
       specialties: parseAsArrayOf(parseAsString),
       availability: parseAsString,
+      minRate: parseAsInteger,
+      experience: parseAsInteger,
     },
     {
       shallow: false,
@@ -137,7 +143,7 @@ const SearchDoctorInput = ({ specialties }: Props) => {
         <DropdownMenuSub>
           <DropdownMenuSubTrigger className="rounded-none">
             <CalendarDays className="size-4 mr-2" />
-            <span>Fecha</span>
+            <span>Disponibilidad en</span>
           </DropdownMenuSubTrigger>
 
           <DropdownMenuPortal>
@@ -149,6 +155,46 @@ const SearchDoctorInput = ({ specialties }: Props) => {
                 selected={filters.availability ? new Date(filters.availability) : new Date()}
                 onSelect={(date) => {
                   setFilters({ availability: formatISO(date!, { representation: 'date' }) });
+                }}
+              />
+            </DropdownMenuSubContent>
+          </DropdownMenuPortal>
+        </DropdownMenuSub>
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger className="rounded-none">
+            <Star className="size-4 mr-2" />
+            <span>Calificación minima</span>
+          </DropdownMenuSubTrigger>
+
+          <DropdownMenuPortal>
+            <DropdownMenuSubContent
+              sideOffset={14}
+              alignOffset={-4}
+              className="p-0 rounded-none w-[250px] min-h-[150px]"
+            >
+              <RateRange
+                onSelect={(min) => {
+                  setFilters({ minRate: min });
+                }}
+              />
+            </DropdownMenuSubContent>
+          </DropdownMenuPortal>
+        </DropdownMenuSub>
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger className="rounded-none">
+            <Briefcase className="size-4 mr-2" />
+            <span>Experiencia minima</span>
+          </DropdownMenuSubTrigger>
+
+          <DropdownMenuPortal>
+            <DropdownMenuSubContent
+              sideOffset={14}
+              alignOffset={-4}
+              className="p-0 rounded-none w-[250px] min-h-[150px]"
+            >
+              <ExperienceRange
+                onSelect={(min) => {
+                  setFilters({ experience: min });
                 }}
               />
             </DropdownMenuSubContent>

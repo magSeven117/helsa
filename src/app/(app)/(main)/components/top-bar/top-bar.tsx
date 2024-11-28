@@ -27,11 +27,10 @@ const TopBar = () => {
     <div className="flex w-full justify-between items-center  px-8 py-5 border-b">
       <div className="flex w-1/2 items-center gap-3">
         <SidebarTrigger />
-        <Searcher />
-      </div>
-      <div className="flex items-center gap-3">
         <AIButton />
         <CommandButton />
+      </div>
+      <div className="flex items-center gap-3">
         <NotificationButton />
         <ProfileButton user={data?.user!} />
       </div>
@@ -154,8 +153,8 @@ const Searcher = () => {
 const AIButton = () => {
   return (
     <div className="flex justify-start items-center gap-3 text-muted-foreground hover:text-foreground cursor-pointer text-sm">
-      <span className="bg-sidebar p-1 flex justify-center items-center border rounded-none text-xs">
-        <Sparkles className="size-4 mr-2" /> {' Helsa IA'}
+      <span className="p-1 flex justify-center items-center rounded-none text-xs">
+        <Sparkles className="size-4 mr-2" /> {'Ask Helsa a question'}
       </span>
     </div>
   );
