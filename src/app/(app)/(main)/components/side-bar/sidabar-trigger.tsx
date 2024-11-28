@@ -13,12 +13,10 @@ export function CustomTrigger() {
       size="icon"
       className={cn('rounded-full bg-sidebar-accent w-5 h-5 border border-sidebar-border')}
       onClick={(event) => {
-        toggleSidebar()
+        toggleSidebar();
       }}
     >
-      {
-        state === 'expanded' ? <ChevronLeft className='size-4'/>: <ChevronRight/>
-      }
+      {state === 'expanded' ? <ChevronLeft className="size-4" /> : <ChevronRight />}
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   );
@@ -34,10 +32,10 @@ export function SidebarTrigger() {
       size="icon"
       className={cn('rounded-full w-10 h-10 border p-4')}
       onClick={(event) => {
-        toggleSidebar()
+        toggleSidebar();
       }}
     >
-      <Menu className='size-10'/>
+      <Menu className="size-4" />
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   );

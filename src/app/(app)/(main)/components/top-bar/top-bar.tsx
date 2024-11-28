@@ -176,7 +176,7 @@ const NotificationButton = () => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" className="rounded-full w-10 h-10 border p-4">
-          <Bell className="size-10" />
+          <Bell className="size-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" sideOffset={8} className="h-[500px] w-[350px] rounded-none p-0">
@@ -240,7 +240,7 @@ const ProfileButton = ({ user }: { user: any }) => {
           <Avatar className="h-10 w-10 rounded-full">
             <AvatarImage src={user?.image || ''} alt={user?.name || ''} className="object-contain" />
             <AvatarFallback className="rounded-lg">
-              <User className="size-10" />
+              <User className="size-4" />
             </AvatarFallback>
           </Avatar>
         </Button>

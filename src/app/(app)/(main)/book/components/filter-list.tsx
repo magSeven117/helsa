@@ -1,5 +1,6 @@
 import { Button } from '@/libs/shadcn-ui/components/button';
 import { Skeleton } from '@/libs/shadcn-ui/components/skeleton';
+import { format } from 'date-fns';
 import { motion } from 'framer-motion';
 import { X } from 'lucide-react';
 const listVariant = {
@@ -32,6 +33,9 @@ const FilterList = ({ filters, loading, onRemove, specialties }: Props) => {
       case 'specialties': {
         return value.map((slug: string) => specialties?.find((category) => category.name === slug)?.name).join(', ');
       }
+      case 'availability': {
+        return format(new Date(value), 'MMM d, yyyy');
+      }
 
       case 'q':
         return value;
@@ -46,7 +50,7 @@ const FilterList = ({ filters, loading, onRemove, specialties }: Props) => {
   };
 
   return (
-    <motion.ul variants={listVariant} initial="hidden" animate="show" className="flex space-x-2">
+    <motion.ul variants={listVariant} initial="hidden" animate="show" className="flex gap-2">
       {loading && (
         <div className="flex space-x-2">
           <motion.li key="1" variants={itemVariant}>
@@ -65,7 +69,7 @@ const FilterList = ({ filters, loading, onRemove, specialties }: Props) => {
             return (
               <motion.li key={key} variants={itemVariant}>
                 <Button
-                  className="rounded-full h-8 px-3 bg-secondary hover:bg-secondary font-normal text-[#878787] flex space-x-1 items-center group"
+                  className="rounded-full h-8 px-3 bg-secondary hover:bg-secondary font-normal text-[#878787] flex items-center group"
                   onClick={() => handleOnRemove(key)}
                 >
                   <X className="scale-0 group-hover:scale-100 transition-all w-0 group-hover:w-4" />
