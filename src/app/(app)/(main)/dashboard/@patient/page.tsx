@@ -16,11 +16,11 @@ const Page = () => {
         <div className="flex justify-start flex-col w-full h-full pt-5 pr-9 gap-5">
           <div className="w-full flex items-center gap-4">
             <Link href={'/book'}>
-              <Button className="rounded-none" variant="outline">
-                Agendar <Calendar />{' '}
+              <Button className="rounded-none gap-2" variant="outline">
+                Agendar <Calendar />
               </Button>
             </Link>
-            <Button className="rounded-none" variant="outline">
+            <Button className="rounded-none gap-2" variant="outline">
               Informar <PlusCircle />{' '}
             </Button>
           </div>

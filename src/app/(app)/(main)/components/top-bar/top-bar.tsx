@@ -24,8 +24,8 @@ import { SidebarTrigger } from '../side-bar/sidabar-trigger';
 const TopBar = () => {
   const { data } = authClient.useSession();
   return (
-    <div className="flex w-full justify-between items-center  px-8 py-5 border-b">
-      <div className="flex w-1/2 items-center gap-3">
+    <div className="flex w-full justify-between items-center pl-5  pr-8 py-5 border-b">
+      <div className="flex w-1/2 items-center gap-5">
         <SidebarTrigger />
         <AIButton />
         <CommandButton />
