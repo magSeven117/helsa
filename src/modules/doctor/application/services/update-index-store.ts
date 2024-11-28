@@ -1,9 +1,6 @@
 import { GetDoctorAppointments } from '@/modules/appointment/application/get-doctor-appointments';
-import { Appointment } from '@/modules/appointment/domain/appointment';
 import { Criteria, Operator } from '@/modules/shared/domain/core/criteria';
-import { Primitives } from '@/modules/shared/domain/types/primitives';
 import { GetUser } from '@/modules/user/application/get-user';
-import { User } from '@/modules/user/domain/user';
 import { format } from 'date-fns';
 import { DoctorSearcher } from '../../domain/doctor-index-store';
 import { DoctorRepository } from '../../domain/doctor-repository';
@@ -31,8 +28,9 @@ export class UpdateIndexStore {
 
     const groupedAppointments: {
       date: string;
-      appointments: Primitives<Appointment>[];
-      day: { availabilities: number; name: string };
+      appointments: number;
+      availabilities: number;
+      day: string;
     }[] = [];
 
     for (const appointment of appointments) {
@@ -43,14 +41,13 @@ export class UpdateIndexStore {
       if (index === -1) {
         groupedAppointments.push({
           date,
-          appointments: [appointment.toPrimitives()],
-          day: {
-            availabilities: availability?.hours.length || 0,
-            name: day,
-          },
+          appointments: 1,
+          availabilities: (availability?.hours.length || 0) - 1,
+          day,
         });
       } else {
-        groupedAppointments[index]!.appointments.push(appointment.toPrimitives());
+        groupedAppointments[index]!.appointments += 1;
+        groupedAppointments[index]!.availabilities -= 1;
       }
     }
   }

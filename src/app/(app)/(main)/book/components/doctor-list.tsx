@@ -1,4 +1,5 @@
 import { Card } from '@/libs/shadcn-ui/components/card';
+import { getDoctors } from '@/modules/doctor/presentation/actions/get-doctors';
 import { Star } from 'lucide-react';
 
 type Props = {
@@ -11,29 +12,16 @@ type Props = {
   };
 };
 
-const DoctorList = ({ filters }: Props) => {
-  const filteredDoctors = doctors.filter((doctor) => {
-    let matches = true;
-    if (filters.q) {
-      matches = matches && doctor.name.toLowerCase().includes(filters.q.toLowerCase());
-    }
-    if (filters.specialties) {
-      matches = matches && filters.specialties.includes(doctor.specialty);
-    }
-    if (filters.availability) {
-      matches = matches && doctor.availability.includes(filters.availability);
-    }
-    if (filters.minRate) {
-      matches = matches && doctor.rating >= filters.minRate;
-    }
-    if (filters.experience) {
-      matches = matches && doctor.experience >= filters.experience;
-    }
-    return matches;
+const DoctorList = async ({ filters }: Props) => {
+  const doctors2 = await getDoctors({
+    q: filters.q as string,
+    availability: filters.availability as string,
+    minRate: filters.minRate as number,
+    specialties: filters.specialties as string[],
   });
   return (
     <div className="grid grid-cols-5 px-5 my-5 gap-3">
-      {filteredDoctors.map((doctor, index) => {
+      {doctors2.map((doctor, index) => {
         return (
           <Card
             key={index}
@@ -46,7 +34,7 @@ const DoctorList = ({ filters }: Props) => {
                 <p className="text-sm text-muted-foreground">{doctor.specialty}</p>
               </div>
               <div className="flex items-center justify-end gap-1">
-                {Array.from({ length: doctor.rating }).map((_, index) => (
+                {Array.from({ length: doctor.score }).map((_, index) => (
                   <Star key={index} className="size-3" />
                 ))}
               </div>
@@ -57,63 +45,5 @@ const DoctorList = ({ filters }: Props) => {
     </div>
   );
 };
-
-const doctors = [
-  {
-    image:
-      'https://png.pngtree.com/png-vector/20230928/ourmid/pngtree-young-afro-professional-doctor-png-image_10148632.png',
-    name: 'Dr. John Doe',
-    specialty: 'Dermatología',
-    rating: 4.5,
-    reviews: 100,
-    experience: 5,
-    availability: ['2025-01-01', '2025-01-05', '2025-01-10'],
-  },
-  {
-    image: '/images/doctora.png',
-    name: 'Dra. Jane Doe',
-    specialty: 'Cardialgia',
-    rating: 5,
-    reviews: 100,
-    experience: 5,
-    availability: ['2025-01-02', '2025-01-06', '2025-01-11'],
-  },
-  {
-    image: '/images/doctor-1.png',
-    name: 'Dr. Elmer Pineda',
-    specialty: 'Endocrinóloga',
-    rating: 3,
-    reviews: 100,
-    experience: 5,
-    availability: ['2025-02-03', '2024-12-07', '2024-12-12'],
-  },
-  {
-    image: '/images/doctor-2.png',
-    name: 'Dr. Jorge Segura',
-    specialty: 'Medicina Interna',
-    rating: 2,
-    reviews: 100,
-    experience: 5,
-    availability: ['2025-02-04', '2025-02-08', '2024-12-13'],
-  },
-  {
-    image: '/images/doctora-1.png',
-    name: 'Dr. Ana Maria',
-    specialty: 'Pediatría',
-    rating: 4.3,
-    reviews: 100,
-    experience: 5,
-    availability: ['2025-10-05', '2025-10-09', '2025-10-14'],
-  },
-  {
-    image: '/images/doctora-2.png',
-    name: 'Dr. Maria Elena',
-    specialty: 'Ginecología',
-    rating: 5,
-    reviews: 100,
-    experience: 5,
-    availability: ['2025-10-06', '2025-10-10', '2025-10-15'],
-  },
-];
 
 export default DoctorList;

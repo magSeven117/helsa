@@ -1,7 +1,8 @@
 import { Appointment } from '@/modules/appointment/domain/appointment';
 import { Primitives } from '@/modules/shared/domain/types/primitives';
 import { User } from '@/modules/user/domain/user';
-import { format } from 'date-fns';
+import { format, isValid } from 'date-fns';
+import { formatInTimeZone } from 'date-fns-tz';
 import { MongoClient } from 'mongodb';
 import { Doctor } from '../../domain/doctor';
 import { DoctorSearcher } from '../../domain/doctor-index-store';
@@ -64,7 +65,12 @@ export class MongoDBDoctorSearcher implements DoctorSearcher {
       specialty: doctorPrimitives.specialty?.name,
       score: doctorPrimitives.score,
       experience: doctorPrimitives.experience,
-      schedule: appointments,
+      schedule: appointments.map((a) => ({
+        date: a.date,
+        appointments: a.appointments.length,
+        day: a.day,
+      })),
+      days: doctorPrimitives.schedule?.days,
     });
   }
 
@@ -75,14 +81,15 @@ export class MongoDBDoctorSearcher implements DoctorSearcher {
     specialties,
   }: {
     term?: string;
-    availability?: Date;
+    availability?: string;
     minRate?: number;
     specialties?: string[];
   }) {
+    console.log(minRate);
     const results = await this.collection
       .aggregate([
         ...(term ? this.getTextFilter(term) : []),
-        ...(availability ? this.getAvailabilityFilter(availability) : []),
+        ...(availability && isValid(new Date(availability!)) ? this.getAvailabilityFilter(availability) : []),
         ...(minRate ? this.getMinRateFilter(minRate) : []),
         ...(specialties ? this.getSpecialtiesFilter(specialties) : []),
       ])
@@ -99,17 +106,28 @@ export class MongoDBDoctorSearcher implements DoctorSearcher {
     ];
   }
 
-  private getAvailabilityFilter(availability: Date) {
-    const dayOfWeek = format(availability, 'EEEE').toLowerCase();
+  private getAvailabilityFilter(availability: string) {
     return [
       {
         $match: {
-          $expr: {
-            $and: [
-              { $eq: ['$$schedule.date', dayOfWeek] },
-              { $gte: [{ $size: '$$schedule.day.availabilities' }, { $size: '$$schedule.appointments' }] },
-            ],
-          },
+          $or: [
+            {
+              schedule: {
+                $elemMatch: {
+                  date: formatInTimeZone(availability, 'America/Caracas', 'yyyy-MM-dd'),
+                  availabilities: { $gt: 0 },
+                },
+              },
+            },
+            {
+              days: {
+                $elemMatch: {
+                  day: format(availability, 'EEEE').toLowerCase(),
+                  hours: { $gt: 0 },
+                },
+              },
+            },
+          ],
         },
       },
     ];

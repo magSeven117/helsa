@@ -1,6 +1,6 @@
 import { Button } from '@/libs/shadcn-ui/components/button';
 import { Skeleton } from '@/libs/shadcn-ui/components/skeleton';
-import { format } from 'date-fns';
+import { formatInTimeZone } from 'date-fns-tz';
 import { motion } from 'framer-motion';
 import { Star, X } from 'lucide-react';
 const listVariant = {
@@ -34,7 +34,7 @@ const FilterList = ({ filters, loading, onRemove, specialties }: Props) => {
         return value.map((slug: string) => specialties?.find((category) => category.name === slug)?.name).join(', ');
       }
       case 'availability': {
-        return format(new Date(value), 'MMM d, yyyy');
+        return formatInTimeZone(value, 'America/Caracas', 'MMM d, yyyy');
       }
 
       case 'minRate': {

@@ -55,7 +55,7 @@ const SideBar = ({ role }: { role: string }) => {
       <SidebarHeader className="bg-background">
         <SidebarMenuButton
           size="lg"
-          className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+          className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground rounded-none"
         >
           <Link href="/dashboard" className="flex items-center justify-center gap-2">
             <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
