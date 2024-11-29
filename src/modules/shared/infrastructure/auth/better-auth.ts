@@ -3,6 +3,8 @@ import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { nextCookies } from 'better-auth/next-js';
 import { emailOTP } from 'better-auth/plugins';
+import { headers } from 'next/headers';
+import { cache } from 'react';
 import { resend } from '../email/resend';
 import ForgetPassword from '../email/templates/forget-password';
 import VerifyEmail from '../email/templates/verify-email';
@@ -68,4 +70,10 @@ export const auth = betterAuth({
       clientSecret: process.env.FACEBOOK_CLIENT_SECRET!,
     },
   },
+});
+
+export const getSession = cache(async () => {
+  return await auth.api.getSession({
+    headers: await headers(),
+  });
 });
