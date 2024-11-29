@@ -1,5 +1,3 @@
-import { Appointment } from '@/modules/appointment/domain/appointment';
-import { Primitives } from '@/modules/shared/domain/types/primitives';
 import { User } from '@/modules/user/domain/user';
 import { AnyOrama, create, insert, search } from '@orama/orama';
 import { persist, restore } from '@orama/plugin-data-persistence';
@@ -50,8 +48,9 @@ export class OramaDoctorSearcher implements DoctorSearcher {
     doctor: Doctor,
     appointments: {
       date: string;
-      appointments: Primitives<Appointment>[];
-      day: { availabilities: number; name: string };
+      appointments: number;
+      day: string;
+      availabilities: number;
     }[]
   ) {
     const userPrimitives = user.toPrimitives();
@@ -66,8 +65,9 @@ export class OramaDoctorSearcher implements DoctorSearcher {
       experience: doctorPrimitives.experience,
       schedule: appointments.map((appointment) => ({
         date: appointment.date,
-        appointments: appointment.appointments.length,
+        appointments: appointment.appointments,
         day: appointment.day,
+        availabilities: appointment.availabilities,
       })),
     });
   }
@@ -76,7 +76,13 @@ export class OramaDoctorSearcher implements DoctorSearcher {
     return await persist(this.oramaClient, 'json');
   }
 
-  async search(params: { term?: string; availability?: Date; minRate?: number; specialties?: string[] }) {
+  async search(params: {
+    term?: string;
+    availability?: string;
+    minRate?: number;
+    specialties?: string[];
+    experience?: number;
+  }) {
     const date = params.availability ? format(params.availability, 'yyyy-MM-dd') : null;
     const response = await search(this.oramaClient, {
       term: params.term,

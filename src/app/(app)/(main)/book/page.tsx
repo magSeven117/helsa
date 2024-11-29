@@ -1,8 +1,8 @@
 import { getSpecialties } from '@/modules/doctor/presentation/actions/get-specialties';
 import { createSearchParamsCache, parseAsArrayOf, parseAsInteger, parseAsString } from 'nuqs/server';
 import { Suspense } from 'react';
-import DoctorList from './components/doctor-list';
 import DoctorSkeleton from './components/doctor-list-loading';
+import DoctorListWrapper from './components/doctor-list-wrapper';
 import SearchDoctorInput from './components/search-doctor-input';
 
 const searchParamsCache = createSearchParamsCache({
@@ -31,7 +31,7 @@ const Page = async ({ searchParams }: { searchParams: Record<string, string | st
         <SearchDoctorInput specialties={specialties} />
       </div>
       <Suspense fallback={<DoctorSkeleton />} key={loadingKey}>
-        <DoctorList
+        <DoctorListWrapper
           filters={{
             q,
             specialties: selectedSpecialties,

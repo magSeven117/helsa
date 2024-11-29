@@ -1,28 +1,21 @@
-import { getDoctors } from '@/modules/doctor/presentation/actions/get-doctors';
+'use client';
+
 import DoctorCard from './doctor-card';
 
 type Props = {
-  filters: {
-    q: string | null;
-    specialties: string[] | null;
-    availability: string | null;
-    minRate: number | null;
-    experience: number | null;
-  };
+  doctors: {
+    id: string;
+    name: string;
+    image: string;
+    score: number;
+    specialty: string;
+    experience: number;
+  }[];
 };
-
-const DoctorList = async ({ filters }: Props) => {
-  const doctors2 = await getDoctors({
-    q: filters.q as string,
-    availability: filters.availability as string,
-    minRate: filters.minRate as number,
-    specialties: filters.specialties as string[],
-    experience: filters.experience as number,
-  });
-
+const DoctorList = ({ doctors }: Props) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 px-5 my-5 gap-3">
-      {doctors2.map((doctor, index) => {
+      {doctors.map((doctor, index) => {
         return <DoctorCard doctor={doctor} key={index} />;
       })}
     </div>
