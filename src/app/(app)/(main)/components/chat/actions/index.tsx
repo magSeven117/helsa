@@ -119,7 +119,7 @@ export const AI = createAI<AIState, UIState>({
     'use server';
 
     const createdAt = new Date();
-    const userId = state.user.id;
+    const userId = '46ae6c1c-6ff1-48a7-85ba-0521bc3716e4';
 
     const { chatId, messages } = state;
 

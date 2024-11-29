@@ -1,3 +1,4 @@
+'use client';
 import { useEnterSubmit } from '@/libs/ducen-ui/hooks/use-enter-submit';
 import { useScrollAnchor } from '@/libs/ducen-ui/hooks/use-scroll-anchor';
 import { ScrollArea } from '@/libs/shadcn-ui/components/scroll-area';
