@@ -2,7 +2,7 @@ import { getSpecialties } from '@/modules/doctor/presentation/actions/get-specia
 import { createSearchParamsCache, parseAsArrayOf, parseAsInteger, parseAsString } from 'nuqs/server';
 import { Suspense } from 'react';
 import DoctorList from './components/doctor-list';
-import DoctorSkeleton from './components/doctor-skeleton';
+import DoctorSkeleton from './components/doctor-list-loading';
 import SearchDoctorInput from './components/search-doctor-input';
 
 const searchParamsCache = createSearchParamsCache({

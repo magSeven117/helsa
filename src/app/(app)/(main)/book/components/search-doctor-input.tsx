@@ -13,14 +13,14 @@ import { cn } from '@/libs/shadcn-ui/utils/utils';
 import { Briefcase, CalendarDays, ListFilter, Search, Star, Stethoscope } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
-import SelectSpecialty from './select-specialty';
+import SelectSpecialty from './filter-specialty-select';
 
 import { Calendar } from '@/libs/shadcn-ui/components/calendar';
 import { formatISO } from 'date-fns';
 import { parseAsArrayOf, parseAsInteger, parseAsString, useQueryStates } from 'nuqs';
-import ExperienceRange from './experience-range';
-import FilterList from './filter-list';
-import RateRange from './rate-range';
+import ExperienceRange from './filter-experience-range';
+import RateRange from './filter-rate-range';
+import FilterList from './search-doctor-filters';
 const defaultSearch = {
   q: null,
   specialties: null,

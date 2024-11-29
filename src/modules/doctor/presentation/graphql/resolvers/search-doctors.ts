@@ -7,7 +7,7 @@ export const SearchDoctorsResolver = async (
   _: unknown,
   input: {
     term?: string;
-    availability?: Date;
+    availability?: string;
     minRate?: number;
     specialties?: string[];
   }
