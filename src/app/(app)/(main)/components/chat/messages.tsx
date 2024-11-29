@@ -15,7 +15,7 @@ export function UserMessage({ children }: { children: React.ReactNode }) {
         <ChatAvatar role="user" />
       </div>
 
-      <div className="ml-4 flex-1 space-y-2 overflow-hidden pl-2 text-xs font-mono leading-relaxed">{children}</div>
+      <div className="ml-4 flex-1 space-y-2 overflow-hidden pl-2 text-xs leading-relaxed">{children}</div>
     </div>
   );
 }
@@ -42,7 +42,7 @@ export function BotMessage({ content }: { content: string | StreamableValue<stri
           <ChatAvatar role="assistant" />
         </div>
 
-        <div className="ml-4 flex-1 overflow-hidden pl-2 text-xs font-mono">{text}</div>
+        <div className="ml-4 flex-1 overflow-hidden pl-2 text-xs ">{text}</div>
       </div>
     </ErrorBoundary>
   );

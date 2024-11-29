@@ -48,7 +48,7 @@ export function ChatExamples({ onSubmit }: { onSubmit: (example: string) => void
           <button key={example} type="button" onClick={() => onSubmit(example)}>
             <motion.li
               variants={itemVariant}
-              className="font-mono text-[#878787] bg-[#F2F1EF] text-xs dark:bg-[#1D1D1D] px-3 py-2 rounded-full cursor-default"
+              className=" text-[#878787] bg-[#F2F1EF] text-xs dark:bg-[#1D1D1D] px-3 py-2 rounded-full cursor-default"
             >
               {example}
             </motion.li>
