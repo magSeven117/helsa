@@ -16,6 +16,8 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import SelectSpecialty from './filter-specialty-select';
 
 import { Calendar } from '@/libs/shadcn-ui/components/calendar';
+import { generateDoctorFilters } from '@/modules/doctor/presentation/actions/generate-doctor-filters';
+import { readStreamableValue } from 'ai/rsc';
 import { formatISO } from 'date-fns';
 import { parseAsArrayOf, parseAsInteger, parseAsString, useQueryStates } from 'nuqs';
 import ExperienceRange from './filter-experience-range';
@@ -35,6 +37,7 @@ type Props = {
 
 const SearchDoctorInput = ({ specialties }: Props) => {
   const [prompt, setPrompt] = useState('');
+  const [streaming, setStreaming] = useState(false);
   const [filters, setFilters] = useQueryStates(
     {
       q: parseAsString,
@@ -59,6 +62,44 @@ const SearchDoctorInput = ({ specialties }: Props) => {
     }
   };
 
+  const handleSubmit = async () => {
+    if (prompt.split(' ').length > 1) {
+      setStreaming(true);
+
+      const { object } = await generateDoctorFilters(
+        prompt,
+        `
+          specialties: ${specialties.map((s) => s.name).join(', ')}
+        `
+      );
+      let finalObject = {};
+
+      for await (const partialObject of readStreamableValue(object)) {
+        if (partialObject) {
+          finalObject = {
+            ...finalObject,
+            ...partialObject,
+            specialties:
+              partialObject?.categories?.map(
+                (name: string) => specialties?.find((specialty) => specialty.name === name)?.slug
+              ) ?? null,
+            q: partialObject?.name ?? null,
+            minRate: partialObject?.minRate ?? null,
+            experience: partialObject?.experience ?? null,
+          };
+        }
+      }
+
+      setFilters({
+        q: null,
+        ...finalObject,
+      });
+      setStreaming(false);
+    } else {
+      setFilters({ q: prompt.length > 0 ? prompt : null });
+    }
+  };
+
   useHotkeys(
     'esc',
     () => {
@@ -79,7 +120,7 @@ const SearchDoctorInput = ({ specialties }: Props) => {
           className="relative w-full lg:w-fit"
           onSubmit={(e) => {
             e.preventDefault();
-            setFilters({ q: prompt });
+            handleSubmit();
           }}
         >
           <Search className="absolute pointer-events-none left-3 top-[11px] size-4" />
@@ -107,7 +148,7 @@ const SearchDoctorInput = ({ specialties }: Props) => {
             </button>
           </DropdownMenuTrigger>
         </form>
-        <FilterList filters={filters} onRemove={setFilters} loading={false} specialties={specialties} />
+        <FilterList filters={filters} onRemove={setFilters} loading={streaming} specialties={specialties} />
       </div>
       <DropdownMenuContent
         className="rounded-none w-[350px]"
