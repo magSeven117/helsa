@@ -3,18 +3,17 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/libs/shadcn-ui/components/avatar';
 import { Button } from '@/libs/shadcn-ui/components/button';
 import { Calendar } from '@/libs/shadcn-ui/components/calendar';
-import { Card, CardContent, CardHeader, CardTitle } from '@/libs/shadcn-ui/components/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/libs/shadcn-ui/components/select';
 import { Textarea } from '@/libs/shadcn-ui/components/textarea';
 import { format } from 'date-fns';
 import { useState } from 'react';
 
 interface Doctor {
-  id: string;
+  doctorId: string;
   name: string;
   specialty: string;
   image: string;
-  rating: number;
+  score: number;
 }
 
 interface TimeSlot {
@@ -51,7 +50,6 @@ export default function DoctorAppointment({ doctor }: { doctor: Doctor }) {
   const [paymentMethod, setPaymentMethod] = useState<string | undefined>();
 
   const handleSubmit = () => {
-    // Aquí iría la lógica para enviar la cita
     console.log({
       doctor: doctor.name,
       date: date ? format(date, 'yyyy-MM-dd') : '',
@@ -60,72 +58,69 @@ export default function DoctorAppointment({ doctor }: { doctor: Doctor }) {
     });
   };
 
+  if (!doctor) {
+    return null;
+  }
+
   return (
-    <div className="p-4 w-2/3">
-      <Card className="border-none">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold">Agendar cita con {doctor.name}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <DoctorInfo doctor={doctor} />
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-            <div className="col-span-2">
-              <Calendar
-                mode="single"
-                selected={date}
-                onSelect={setDate}
-                className="h-full w-full flex border rounded-none mt-3"
-                classNames={{
-                  months: 'flex w-full flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0 flex-1',
-                  month: 'space-y-4 w-full flex flex-col',
-                  table: 'w-full h-full border-collapse space-y-1',
-                  head_row: '',
-                  row: 'w-full mt-2',
-                  cell: 'w-1/7 h-8 text-center cursor-pointer',
-                }}
-              />
-            </div>
-            <div className="col-span-1 md:col-span-3">
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3">
-                {timeSlots.map((slot) => (
-                  <Button
-                    key={slot.id}
-                    variant={selectedSlot === slot.id ? 'default' : 'outline'}
-                    onClick={() => setSelectedSlot(slot.id)}
-                  >
-                    {slot.time}
-                  </Button>
-                ))}
-              </div>
-              <div className="mt-4">
-                <Textarea
-                  placeholder="Describe tus síntomas y la razón de tu consulta aquí"
-                  value={symptoms}
-                  onChange={(e) => setSymptoms(e.target.value)}
-                  className="min-h-[100px] rounded-none"
-                />
-              </div>
-              <div className="mt-4">
-                <Select onValueChange={setPaymentMethod}>
-                  <SelectTrigger className="w-full rounded-none">
-                    <SelectValue placeholder="Selecciona un método de pago" />
-                  </SelectTrigger>
-                  <SelectContent className="rounded-none">
-                    {paymentMethods.map((method) => (
-                      <SelectItem key={method.id} value={method.id} className="rounded-none">
-                        {method.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <Button className="w-full mt-4" onClick={handleSubmit} disabled={!date || !selectedSlot || !symptoms}>
-                Agendar cita
+    <div className="w-full mt-10">
+      <DoctorInfo doctor={doctor} />
+      <div className="grid grid-cols-1 gap-6">
+        <div className="col-span-1">
+          <Calendar
+            mode="single"
+            selected={date}
+            onSelect={setDate}
+            className="h-full w-full flex border rounded-none mt-3"
+            classNames={{
+              months: 'flex w-full flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0 flex-1',
+              month: 'space-y-4 w-full flex flex-col',
+              table: 'w-full h-full border-collapse space-y-1',
+              head_row: '',
+              row: 'w-full mt-2',
+              cell: 'w-1/7 h-8 text-center cursor-pointer',
+            }}
+          />
+        </div>
+        <div className="col-span-1">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3">
+            {timeSlots.map((slot) => (
+              <Button
+                key={slot.id}
+                variant={selectedSlot === slot.id ? 'default' : 'outline'}
+                onClick={() => setSelectedSlot(slot.id)}
+              >
+                {slot.time}
               </Button>
-            </div>
+            ))}
           </div>
-        </CardContent>
-      </Card>
+          <div className="mt-4">
+            <Textarea
+              placeholder="Describe tus síntomas y la razón de tu consulta aquí"
+              value={symptoms}
+              onChange={(e) => setSymptoms(e.target.value)}
+              className="min-h-[100px] rounded-none"
+            />
+          </div>
+          <div className="mt-4">
+            <Select onValueChange={setPaymentMethod}>
+              <SelectTrigger className="w-full rounded-none">
+                <SelectValue placeholder="Selecciona un método de pago" />
+              </SelectTrigger>
+              <SelectContent className="rounded-none">
+                {paymentMethods.map((method) => (
+                  <SelectItem key={method.id} value={method.id} className="rounded-none">
+                    {method.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <Button className="w-full mt-4" onClick={handleSubmit} disabled={!date || !selectedSlot || !symptoms}>
+            Agendar cita
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }
@@ -133,8 +128,8 @@ export default function DoctorAppointment({ doctor }: { doctor: Doctor }) {
 function DoctorInfo({ doctor }: { doctor: Doctor }) {
   return (
     <div className="flex items-center space-x-4 mb-5">
-      <Avatar className="h-32 w-32">
-        <AvatarImage src={doctor.image} alt={doctor.name} />
+      <Avatar className="h-16 w-16 border">
+        <AvatarImage src={doctor.image} alt={doctor.name} className="object-contain" />
         <AvatarFallback>
           {doctor.name
             .split(' ')
@@ -149,7 +144,7 @@ function DoctorInfo({ doctor }: { doctor: Doctor }) {
           {[...Array(5)].map((_, i) => (
             <svg
               key={i}
-              className={`w-4 h-4 ${i < doctor.rating ? 'text-yellow-400' : 'text-gray-300'}`}
+              className={`w-4 h-4 ${i < doctor.score ? 'text-yellow-400' : 'text-gray-300'}`}
               fill="currentColor"
               viewBox="0 0 20 20"
             >
@@ -157,11 +152,6 @@ function DoctorInfo({ doctor }: { doctor: Doctor }) {
             </svg>
           ))}
         </div>
-        <p className="text-sm text-muted-foreground mt-2">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ea voluptates earum possimus deleniti ipsum
-          architecto ratione maxime, dolorem illum itaque debitis! Tempora accusantium exercitationem at dolores! Unde
-          ex laboriosam expedita!
-        </p>
       </div>
     </div>
   );
