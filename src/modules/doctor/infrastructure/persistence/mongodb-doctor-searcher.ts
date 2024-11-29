@@ -30,8 +30,6 @@ export class MongoDBDoctorSearcher implements DoctorSearcher {
     };
     const index = {
       name: 'text',
-      specialty: 'text',
-      email: 'text',
     };
     if (!indexes.some((i) => i.name === 'vector_index')) {
       response = await this.collection.createSearchIndex(embedded);
@@ -104,8 +102,8 @@ export class MongoDBDoctorSearcher implements DoctorSearcher {
   private getTextFilter(term: string) {
     return [
       { $match: { $text: { $search: term } } },
-      { $addFields: { score: { $meta: 'textScore' } } },
-      { $sort: { score: { $meta: 'textScore' } } },
+      { $addFields: { search_score: { $meta: 'textScore' } } },
+      { $sort: { search_score: { $meta: 'textScore' } } },
     ];
   }
 

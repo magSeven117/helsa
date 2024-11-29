@@ -3,22 +3,16 @@ import DoctorList from './doctor-list';
 
 type Props = {
   filters: {
-    q: string | null;
-    specialties: string[] | null;
-    availability: string | null;
-    minRate: number | null;
-    experience: number | null;
+    q?: string;
+    specialties?: string[];
+    availability?: string;
+    minRate?: number;
+    experience?: number;
   };
 };
 
 const DoctorListWrapper = async ({ filters }: Props) => {
-  const doctors = await getDoctors({
-    q: filters.q as string,
-    availability: filters.availability as string,
-    minRate: filters.minRate as number,
-    specialties: filters.specialties as string[],
-    experience: filters.experience as number,
-  });
+  const doctors = await getDoctors(filters);
 
   return <DoctorList doctors={doctors} />;
 };

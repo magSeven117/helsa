@@ -21,9 +21,16 @@ const Page = async ({ searchParams }: { searchParams: Record<string, string | st
     minRate,
     specialties: selectedSpecialties,
   } = searchParamsCache.parse(searchParams);
+  const filter = {
+    experience,
+    availability,
+    minRate,
+    specialties: selectedSpecialties,
+  };
   const specialties = await getSpecialties();
   const loadingKey = JSON.stringify({
     query: q,
+    filter,
   });
   return (
     <div className="grid grid-cols-1 w-full">
@@ -33,11 +40,11 @@ const Page = async ({ searchParams }: { searchParams: Record<string, string | st
       <Suspense fallback={<DoctorSkeleton />} key={loadingKey}>
         <DoctorListWrapper
           filters={{
-            q,
-            specialties: selectedSpecialties,
-            availability,
-            minRate,
-            experience,
+            q: q || undefined,
+            specialties: selectedSpecialties || undefined,
+            availability: availability || undefined,
+            minRate: minRate || undefined,
+            experience: experience || undefined,
           }}
         />
       </Suspense>
