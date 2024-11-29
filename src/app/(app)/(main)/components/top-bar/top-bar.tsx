@@ -15,10 +15,12 @@ import { Input } from '@/libs/shadcn-ui/components/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/libs/shadcn-ui/components/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/libs/shadcn-ui/components/tabs';
 import { authClient } from '@/modules/shared/infrastructure/auth/auth-client';
+import { useKBar } from 'kbar';
 import { Bell, Command, Inbox, Loader2, LogOut, Search, Settings, Sparkles, SunMoon, User, X } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { useAssistantStore } from '../assistant/assistant-store';
 import { SidebarTrigger } from '../side-bar/sidabar-trigger';
 
 const TopBar = () => {
@@ -151,8 +153,12 @@ const Searcher = () => {
 };
 
 const AIButton = () => {
+  const { setOpen } = useAssistantStore();
   return (
-    <div className="flex justify-start items-center gap-3 text-muted-foreground hover:text-foreground cursor-pointer text-sm">
+    <div
+      className="flex justify-start items-center gap-3 text-muted-foreground hover:text-foreground cursor-pointer text-sm"
+      onClick={() => setOpen()}
+    >
       <span className="p-1 flex justify-center items-center rounded-none text-xs">
         <Sparkles className="size-4 mr-2" /> {'Ask Helsa a question'}
       </span>
@@ -161,8 +167,13 @@ const AIButton = () => {
 };
 
 const CommandButton = () => {
+  const { query } = useKBar();
+
   return (
-    <div className="flex justify-start items-center gap-3 text-muted-foreground hover:text-foreground cursor-pointer text-sm">
+    <div
+      className="flex justify-start items-center gap-3 text-muted-foreground hover:text-foreground cursor-pointer text-sm"
+      onClick={() => query.toggle()}
+    >
       <span className="bg-sidebar p-1 flex justify-center items-center border rounded-none text-xs">
         <Command className="size-4" /> {' + K'}
       </span>
