@@ -15,6 +15,7 @@ export class GetDoctors {
       specialties: filters.specialties,
       availability: filters.availability,
       minRate: filters.minRate,
+      experience: filters.experience,
     });
   }
 }

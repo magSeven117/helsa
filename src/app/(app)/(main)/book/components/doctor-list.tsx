@@ -17,6 +17,7 @@ const DoctorList = async ({ filters }: Props) => {
     availability: filters.availability as string,
     minRate: filters.minRate as number,
     specialties: filters.specialties as string[],
+    experience: filters.experience as number,
   });
 
   return (

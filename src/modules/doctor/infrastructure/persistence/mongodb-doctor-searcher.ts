@@ -1,5 +1,3 @@
-import { Appointment } from '@/modules/appointment/domain/appointment';
-import { Primitives } from '@/modules/shared/domain/types/primitives';
 import { User } from '@/modules/user/domain/user';
 import { format, isValid } from 'date-fns';
 import { formatInTimeZone } from 'date-fns-tz';
@@ -50,8 +48,9 @@ export class MongoDBDoctorSearcher implements DoctorSearcher {
     doctor: Doctor,
     appointments: {
       date: string;
-      appointments: Primitives<Appointment>[];
-      day: { availabilities: number; name: string };
+      appointments: number;
+      availabilities: number;
+      day: string;
     }[]
   ) {
     const userPrimitives = user.toPrimitives();
@@ -67,8 +66,9 @@ export class MongoDBDoctorSearcher implements DoctorSearcher {
       experience: doctorPrimitives.experience,
       schedule: appointments.map((a) => ({
         date: a.date,
-        appointments: a.appointments.length,
+        appointments: a.appointments,
         day: a.day,
+        availabilities: a.availabilities,
       })),
       days: doctorPrimitives.schedule?.days,
     });
@@ -79,11 +79,13 @@ export class MongoDBDoctorSearcher implements DoctorSearcher {
     availability,
     minRate,
     specialties,
+    experience,
   }: {
     term?: string;
     availability?: string;
     minRate?: number;
     specialties?: string[];
+    experience?: number;
   }) {
     console.log(minRate);
     const results = await this.collection
@@ -92,6 +94,7 @@ export class MongoDBDoctorSearcher implements DoctorSearcher {
         ...(availability && isValid(new Date(availability!)) ? this.getAvailabilityFilter(availability) : []),
         ...(minRate ? this.getMinRateFilter(minRate) : []),
         ...(specialties ? this.getSpecialtiesFilter(specialties) : []),
+        ...(experience ? this.getExperienceFilter(experience) : []),
       ])
       .toArray();
 
@@ -139,5 +142,9 @@ export class MongoDBDoctorSearcher implements DoctorSearcher {
 
   private getSpecialtiesFilter(specialties: string[]) {
     return [{ $match: { specialty: { $in: specialties } } }];
+  }
+
+  private getExperienceFilter(experience: number) {
+    return [{ $match: { experience: { $gt: experience } } }];
   }
 }

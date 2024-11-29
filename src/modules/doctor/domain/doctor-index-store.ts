@@ -1,5 +1,3 @@
-import { Appointment } from '@/modules/appointment/domain/appointment';
-import { Primitives } from '@/modules/shared/domain/types/primitives';
 import { User } from '@/modules/user/domain/user';
 import { Doctor } from './doctor';
 
@@ -9,10 +7,17 @@ export interface DoctorSearcher {
     doctor: Doctor,
     appointments: {
       date: string;
-      appointments: Primitives<Appointment>[];
-      day: { availabilities: number; name: string };
+      appointments: number;
+      availabilities: number;
+      day: string;
     }[]
   ): Promise<void>;
-  search(criteria: { term?: string; availability?: string; minRate?: number; specialties?: string[] }): Promise<any[]>;
+  search(criteria: {
+    term?: string;
+    availability?: string;
+    minRate?: number;
+    specialties?: string[];
+    experience?: number;
+  }): Promise<any[]>;
   index(): Promise<string | Buffer>;
 }

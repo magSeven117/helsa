@@ -5,14 +5,14 @@ import { format } from 'date-fns';
 import { DoctorSearcher } from '../../domain/doctor-index-store';
 import { DoctorRepository } from '../../domain/doctor-repository';
 import { EmbeddingDoctor } from '../../domain/embedding-doctor';
+import { User } from '@/modules/user/domain/user';
 
 export class UpdateIndexStore {
   constructor(
     private doctorRepository: DoctorRepository,
     private doctorIndexStore: DoctorSearcher,
     private getUser: GetUser,
-    private getAppointments: GetDoctorAppointments,
-    private embedder: EmbeddingDoctor
+    private getAppointments: GetDoctorAppointments
   ) {}
 
   async run(doctorId: string) {
@@ -50,5 +50,6 @@ export class UpdateIndexStore {
         groupedAppointments[index]!.availabilities -= 1;
       }
     }
+    await this.doctorIndexStore.save(User.fromPrimitives(user), doctor, groupedAppointments);
   }
 }

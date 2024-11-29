@@ -10,6 +10,7 @@ type Props = {
     specialty: string;
     image: string;
     score: number;
+    experience: number;
   };
 };
 
@@ -26,10 +27,16 @@ const DoctorCard = ({ doctor }: Props) => {
           <p className="font-bold">{doctor.name}</p>
           <p className="text-sm text-muted-foreground">{doctor.specialty}</p>
         </div>
-        <div className="flex items-center justify-end gap-1">
-          {Array.from({ length: doctor.score }).map((_, index) => (
-            <Star key={index} className="size-3" />
-          ))}
+        <div className="flex flex-col items-end gap-1">
+          <div className="flex items-center justify-end gap-1">
+            {Array.from({ length: 5 }).map((_, index) => (
+              <Star
+                key={index}
+                className={`size-3 ${doctor.score > index ? 'text-primary' : 'text-muted-foreground'}`}
+              />
+            ))}
+          </div>
+          <p className="text-sm text-muted-foreground">{doctor.experience} años</p>
         </div>
       </div>
     </Card>
