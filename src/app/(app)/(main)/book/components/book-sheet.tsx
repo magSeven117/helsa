@@ -17,8 +17,8 @@ type Props = {
 const BookSheet = ({ data, isOpen, setOpen }: Props) => {
   return (
     <Sheet open={isOpen} onOpenChange={setOpen}>
-      <SheetContent className="sm:w-1/3 sm:max-w-full p-4 bg-transparent border-none">
-        <div className="bg-background p-6 border border-sidebar">
+      <SheetContent className="sm:w-1/4 sm:max-w-full p-4 bg-transparent border-none">
+        <div className="bg-background p-6 border border-sidebar h-full overflow-y-auto no-scroll">
           <SheetHeader>
             <SheetTitle>Agendar tu cita</SheetTitle>
           </SheetHeader>

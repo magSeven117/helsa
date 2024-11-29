@@ -32,7 +32,9 @@ const DoctorCard = ({ doctor }: Props) => {
             {Array.from({ length: 5 }).map((_, index) => (
               <Star
                 key={index}
-                className={`size-3 ${doctor.score > index ? 'text-primary' : 'text-muted-foreground'}`}
+                className={`size-3 font-bold ${
+                  doctor.score > index ? 'text-color-brand-primary' : 'text-muted-foreground'
+                }`}
               />
             ))}
           </div>
