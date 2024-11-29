@@ -80,6 +80,7 @@ const Chat = ({ messages, submitMessage, user, onNewChat, input, setInput, showF
         <form
           ref={formRef}
           onSubmit={(evt) => {
+            evt.preventDefault();
             onSubmit(input);
           }}
         >

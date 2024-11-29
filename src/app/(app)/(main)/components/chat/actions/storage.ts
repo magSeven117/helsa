@@ -1,11 +1,13 @@
 'use server';
+import { getSession } from '@/modules/shared/infrastructure/auth/better-auth';
 import { client as RedisClient } from '@/modules/shared/infrastructure/persistence/redis/redis-client';
+import { getCurrentUser } from '@/modules/user/presentation/actions/get-current-user';
 import { Chat, SettingsResponse } from './types';
 
 export async function getAssistantSettings(): Promise<SettingsResponse> {
-  // const user = await getCurrentUser();
+  const user = await getCurrentUser();
 
-  const userId = '46ae6c1c-6ff1-48a7-85ba-0521bc3716e4';
+  const userId = user?.id;
 
   const defaultSettings: SettingsResponse = {
     enabled: true,
@@ -68,9 +70,9 @@ export async function getLatestChat() {
   const settings = await getAssistantSettings();
   if (!settings?.enabled) return null;
 
-  //const user = await getCurrentUser();
+  const user = await getCurrentUser();
 
-  const userId = '46ae6c1c-6ff1-48a7-85ba-0521bc3716e4';
+  const userId = user?.id;
 
   try {
     const chat: string[] = await RedisClient.zrange(`chat:user:${userId}`, 0, 1, {
@@ -88,9 +90,9 @@ export async function getLatestChat() {
 }
 
 export async function getChats() {
-  //const user = await getCurrentUser();
+  const user = await getCurrentUser();
 
-  const userId = '46ae6c1c-6ff1-48a7-85ba-0521bc3716e4';
+  const userId = user?.id;
 
   try {
     const pipeline = RedisClient.pipeline();
@@ -111,9 +113,9 @@ export async function getChats() {
 }
 
 export async function getChat(id: string) {
-  //const session = await getSession();
+  const session = await getSession();
 
-  const userId = '46ae6c1c-6ff1-48a7-85ba-0521bc3716e4';
+  const userId = session?.user?.id;
 
   const chat = await RedisClient.hgetall<Chat>(`chat:${id}`);
 
