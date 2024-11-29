@@ -1,5 +1,6 @@
 import { cn } from '@/libs/shadcn-ui/utils/utils';
 import { useClickAway } from '@uidotdev/usehooks';
+import { SidebarItems } from './sidebar-items';
 import { Toolbar } from './toolbar';
 
 type Props = {
@@ -24,7 +25,7 @@ export function SidebarList({ isExpanded, chatId, setExpanded, onSelect, onNewCh
           isExpanded && 'visible translate-x-full'
         )}
       >
-        {/* <SidebarItems onSelect={onSelect} chatId={chatId} /> */}
+        <SidebarItems onSelect={onSelect} chatId={chatId} />
         <Toolbar onNewChat={onNewChat} />
         <div className="absolute z-10 h-[477px] w-[45px] bg-gradient-to-r from-background/30 dark:from-[#131313]/30 to-background right-0 top-0 pointer-events-none" />
       </div>
