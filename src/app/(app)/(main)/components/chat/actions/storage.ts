@@ -46,21 +46,21 @@ type SetAassistant = {
   };
 };
 
-export async function setAssistantSettings({ settings, params, userId, teamId }: SetAassistant) {
-  return RedisClient.set(`assistant:${teamId}:user:${userId}:settings`, {
+export async function setAssistantSettings({ settings, params, userId }: SetAassistant) {
+  return RedisClient.set(`assistant:user:${userId}:settings`, {
     ...settings,
     ...params,
   });
 }
 
-export async function clearChats({ teamId, userId }: { teamId: string; userId: string }) {
-  const chats: string[] = await RedisClient.zrange(`chat:${teamId}:user:${userId}`, 0, -1);
+export async function clearChats({ userId }: { teamId: string; userId: string }) {
+  const chats: string[] = await RedisClient.zrange(`chat:user:${userId}`, 0, -1);
 
   const pipeline = RedisClient.pipeline();
 
   for (const chat of chats) {
     pipeline.del(chat);
-    pipeline.zrem(`chat:${teamId}:user:${userId}`, chat);
+    pipeline.zrem(`chat:user:${userId}`, chat);
   }
 
   await pipeline.exec();
