@@ -16,8 +16,11 @@ const schema = z.object({
   }),
 });
 
-export const createUser = actionClient.schema(schema).action(async ({ ctx, parsedInput }) => {
-  const { user } = parsedInput;
-  const service = new RegisterUser(new PrismaUserRepository(db), new TriggerEventBus());
-  await service.run(user.id, user.email, user.role, user.name);
-});
+export const createUser = actionClient
+  .schema(schema)
+  .metadata({ actionName: 'create-user' })
+  .action(async ({ ctx, parsedInput }) => {
+    const { user } = parsedInput;
+    const service = new RegisterUser(new PrismaUserRepository(db), new TriggerEventBus());
+    await service.run(user.id, user.email, user.role, user.name);
+  });
