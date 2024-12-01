@@ -1,20 +1,16 @@
-import { gql, useApolloClient } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
+
+const UPDATE_BIO = gql`
+  mutation UpdateBio($bio: String!) {
+    updateBio(bio: $bio)
+  }
+`;
 
 export const useUpdateBio = () => {
-  const client = useApolloClient();
-  const updateBio = async (bio: string) => {
-    await client.mutate({
-      mutation: gql`
-        mutation UpdateBio($bio: String!) {
-          updateBio(bio: $bio)
-        }
-      `,
-      variables: {
-        bio,
-      },
-    });
-  };
+  const [updateBio, { loading, error }] = useMutation(UPDATE_BIO);
   return {
     updateBio,
+    loading,
+    error,
   };
 };

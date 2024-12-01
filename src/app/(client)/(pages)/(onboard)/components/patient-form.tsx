@@ -72,12 +72,16 @@ const PatientForm = ({ userId }: { userId: string }) => {
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       await createPatient({
-        id: v4(),
-        userId: userId,
-        demographic: data.demographic,
-        biometric: {
-          ...data.biometric,
-          height: parseFloat(data.biometric.height),
+        variables: {
+          patient: {
+            id: v4(),
+            userId: userId,
+            demographic: data.demographic,
+            biometric: {
+              ...data.biometric,
+              height: parseFloat(data.biometric.height),
+            },
+          },
         },
       });
       setShowSuccessModal(true);

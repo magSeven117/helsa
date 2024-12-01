@@ -1,33 +1,19 @@
-import { gql, useApolloClient } from '@apollo/client';
+import { Patient } from '@/modules/patient/domain/patient';
+import { Primitives } from '@/modules/shared/domain/types/primitives';
+import { gql, useMutation } from '@apollo/client';
+
+const CREATE_PATIENT = gql`
+  mutation CreatePatient($patient: PatientInput!) {
+    createPatient(patient: $patient)
+  }
+`;
 
 export const useCreatePatient = () => {
-  const client = useApolloClient();
-  const createPatient = async (payload: {
-    id: string;
-    userId: string;
-    biometric: {
-      height?: number;
-      bloodType?: string;
-      organDonor?: string;
-    };
-    demographic: {
-      civilStatus?: string;
-      occupation?: string;
-      educativeLevel?: string;
-    };
-  }) => {
-    const { data } = await client.mutate({
-      mutation: gql`
-        mutation CreatePatient($patient: PatientInput!) {
-          createPatient(patient: $patient)
-        }
-      `,
-      variables: { patient: payload },
-    });
-    return data;
-  };
+  const [createPatient, { loading, error }] = useMutation<Primitives<Patient>>(CREATE_PATIENT);
 
   return {
     createPatient,
+    loading,
+    error,
   };
 };
