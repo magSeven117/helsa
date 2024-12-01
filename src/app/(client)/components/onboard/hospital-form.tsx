@@ -1,4 +1,5 @@
 'use client';
+import { createHospital } from '@/app/(server)/actions/hospital/create-hospital';
 import * as successAnimation from '@/assets/animations/success_animation.json';
 import {
   AlertDialog,
@@ -20,7 +21,6 @@ import {
 } from '@/libs/shadcn-ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/libs/shadcn-ui/components/form';
 import { Input } from '@/libs/shadcn-ui/components/input';
-import { useCreateHospital } from '@/modules/hospital/presentation/graphql/hooks/use-create-hospital';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -52,23 +52,23 @@ const HospitalForm = ({ userId }: { userId: string }) => {
   });
   const { isSubmitting } = form.formState;
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-
-  const { createHospital } = useCreateHospital();
   const router = useRouter();
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       await createHospital({
-        adminId: userId,
-        name: data.name,
-        address: {
-          street: data.street,
-          city: data.city,
-          country: data.country,
-          zipCode: data.zipCode,
-          coordinates: {
-            latitude: 0,
-            longitude: 0,
+        hospital: {
+          adminId: userId,
+          name: data.name,
+          address: {
+            street: data.street || '',
+            city: data.city || '',
+            country: data.country || '',
+            zipCode: data.zipCode || '',
+            coordinates: {
+              latitude: 0,
+              longitude: 0,
+            },
           },
         },
       });
@@ -98,7 +98,7 @@ const HospitalForm = ({ userId }: { userId: string }) => {
                   <FormItem className="my-2">
                     <FormLabel className="text-sm">Dirección</FormLabel>
                     <FormControl>
-                      <Input {...field} className='rounded-none'></Input>
+                      <Input {...field} className="rounded-none"></Input>
                     </FormControl>
                     <FormMessage></FormMessage>
                   </FormItem>
@@ -112,7 +112,7 @@ const HospitalForm = ({ userId }: { userId: string }) => {
                     <FormItem className="my-2 flex-1">
                       <FormLabel className="text-sm">Dirección</FormLabel>
                       <FormControl>
-                        <Input {...field} className='rounded-none'></Input>
+                        <Input {...field} className="rounded-none"></Input>
                       </FormControl>
                       <FormMessage></FormMessage>
                     </FormItem>
@@ -125,7 +125,7 @@ const HospitalForm = ({ userId }: { userId: string }) => {
                     <FormItem className="my-2 flex-1">
                       <FormLabel className="text-sm">Ciudad</FormLabel>
                       <FormControl>
-                        <Input {...field} className='rounded-none'></Input>
+                        <Input {...field} className="rounded-none"></Input>
                       </FormControl>
                       <FormMessage></FormMessage>
                     </FormItem>
@@ -140,7 +140,7 @@ const HospitalForm = ({ userId }: { userId: string }) => {
                     <FormItem className="my-2 flex-1">
                       <FormLabel className="text-sm">País</FormLabel>
                       <FormControl>
-                        <Input {...field} className='rounded-none'></Input>
+                        <Input {...field} className="rounded-none"></Input>
                       </FormControl>
                       <FormMessage></FormMessage>
                     </FormItem>
@@ -153,7 +153,7 @@ const HospitalForm = ({ userId }: { userId: string }) => {
                     <FormItem className="my-2 flex-1">
                       <FormLabel className="text-sm">Código postal</FormLabel>
                       <FormControl>
-                        <Input {...field} type="number" className='rounded-none'></Input>
+                        <Input {...field} type="number" className="rounded-none"></Input>
                       </FormControl>
                       <FormMessage></FormMessage>
                     </FormItem>
@@ -163,7 +163,7 @@ const HospitalForm = ({ userId }: { userId: string }) => {
             </CardContent>
             <CardFooter>
               <div className="grid w-full gap-y-4">
-                <Button type="submit" className='rounded-none'>
+                <Button type="submit" className="rounded-none">
                   {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Continuar'}
                 </Button>
               </div>
@@ -172,7 +172,7 @@ const HospitalForm = ({ userId }: { userId: string }) => {
         </form>
       </Form>
       <AlertDialog open={showSuccessModal}>
-        <AlertDialogContent className='rounded-none'>
+        <AlertDialogContent className="rounded-none">
           <Lottie
             options={{
               autoplay: true,
@@ -199,7 +199,7 @@ const HospitalForm = ({ userId }: { userId: string }) => {
                   router.push('/dashboard');
                 }}
                 size="lg"
-                className='rounded-none'
+                className="rounded-none"
               >
                 Ir al inicio
               </Button>

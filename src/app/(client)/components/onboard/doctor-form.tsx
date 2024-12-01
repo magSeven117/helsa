@@ -1,4 +1,5 @@
 'use client';
+import { createDoctor } from '@/app/(server)/actions/doctor/create-doctor';
 import * as successAnimation from '@/assets/animations/success_animation.json';
 import {
   AlertDialog,
@@ -22,7 +23,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/libs/shadcn-ui/components/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/libs/shadcn-ui/components/select';
 import { Specialty } from '@/modules/doctor/domain/specialty';
-import { useCreateDoctor } from '@/modules/doctor/presentation/graphql/hooks/use-create-doctor';
 import { useSpecialties } from '@/modules/doctor/presentation/graphql/hooks/use-get-specialties';
 import { Primitives } from '@/modules/shared/domain/types/primitives';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -52,17 +52,17 @@ const DoctorForm = ({ userId }: { userId: string }) => {
   const { isSubmitting } = form.formState;
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const { specialties } = useSpecialties();
-
-  const { createDoctor } = useCreateDoctor();
   const router = useRouter();
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       await createDoctor({
-        id: v4(),
-        licenseMedicalNumber: data.licenseMedicalNumber,
-        specialtyId: data.specialtyId,
-        userId: userId,
+        doctor: {
+          id: v4(),
+          licenseMedicalNumber: data.licenseMedicalNumber,
+          specialtyId: data.specialtyId,
+          userId: userId,
+        },
       });
       setShowSuccessModal(true);
     } catch (error) {

@@ -11,15 +11,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/libs/shadcn-ui/components/dropdown-menu';
-import { Input } from '@/libs/shadcn-ui/components/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/libs/shadcn-ui/components/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/libs/shadcn-ui/components/tabs';
 import { authClient } from '@/modules/shared/infrastructure/auth/auth-client';
 import { useKBar } from 'kbar';
-import { Bell, Command, Inbox, Loader2, LogOut, Search, Settings, Sparkles, SunMoon, User, X } from 'lucide-react';
+import { Bell, Command, Inbox, LogOut, Settings, Sparkles, SunMoon, User } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import { useAssistantStore } from '../assistant/assistant-store';
 import { SidebarTrigger } from '../side-bar/sidabar-trigger';
 
@@ -41,116 +39,6 @@ const TopBar = () => {
 };
 
 export default TopBar;
-
-const Searcher = () => {
-  const [term, setTerm] = useState('');
-  const [results, setResults] = useState<any[]>([]);
-  const [isSearching, setIsSearching] = useState(false);
-  const handleChange = (e: any) => {
-    setTerm(e.target.value);
-  };
-  const router = useRouter();
-  const searchResults = async (search: string) => {
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    setResults([
-      {
-        title: 'Jose Veliz',
-        description: 'Diabetes type 2',
-        age: 25,
-        last_consult: '2021-10-10',
-        image: 'https://avatars.githubusercontent.com/u/1403241?v=4',
-      },
-      {
-        title: 'Jose Veliz',
-        description: 'Diabetes type 2',
-        age: 25,
-        last_consult: '2021-10-10',
-        image: 'https://avatars.githubusercontent.com/u/1403241?v=4',
-      },
-    ]);
-    setIsSearching(false);
-  };
-  useEffect(() => {
-    if (!term || term === '') {
-      setResults([]);
-      setIsSearching(false);
-      return;
-    }
-    setIsSearching(true);
-    const timeout = setTimeout(async () => {
-      await searchResults(term);
-    }, 500);
-
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [term]);
-  const navigate = (id: string) => {
-    router.push(`/patients/${id}`);
-    setTerm('');
-  };
-  return (
-    <div className="rounded-full flex-1 flex relative items-center gap-2">
-      <div className="w-full pr-10 relative">
-        <Input
-          className="outline-none text-secondary-foreground rounded-none box-border focus-visible:ring-transparent"
-          placeholder="Buscar"
-          value={term}
-          onChange={handleChange}
-        />
-        {!isSearching && term && results.length > 0 ? (
-          <div
-            className="absolute z-20 right-[46px] top-[7px] bg-sidebar p-1 flex justify-center items-center border rounded-none text-xs cursor-pointer"
-            onClick={() => setTerm('')}
-          >
-            <X className="size-4" />
-          </div>
-        ) : (
-          <div className="absolute z-20 right-[46px] top-[7px] bg-sidebar p-1 flex justify-center items-center border rounded-none text-xs">
-            <Search className="size-4" />
-          </div>
-        )}
-      </div>
-      {isSearching && (
-        <div className="absolute w-full pr-10 z-50 bg-background left-0 top-[50px]">
-          <div className=" bg-background w-full h-[250px] rounded-none shadow border">
-            <div className="flex justify-center items-center h-full">
-              <Loader2 className="h-[50px] w-[50px] text-primary animate-spin"></Loader2>
-            </div>
-          </div>
-        </div>
-      )}
-      {!isSearching && term && results.length > 0 && (
-        <div className="absolute w-full pr-10 z-50 bg-background left-0 top-[50px]">
-          <div className="w-full h-[250px] rounded-none shadow border p-2 space-y-2">
-            {results.map((result, index) => (
-              <div
-                key={index}
-                className="flex gap-2 p-2 cursor-pointer hover:bg-border border"
-                onClick={() => navigate(result.title)}
-              >
-                <img src={result.image} alt={result.title} className="h-[50px] w-[50px] rounded-full" />
-                <div className="flex flex-col justify-center">
-                  <div className="font-bold text-[1rem]">
-                    {result.title} - <span className="font-bold">{result.age} years</span>
-                  </div>
-                  <div className="text-xs">
-                    {result.description} - <span className="italic">last consult {result.last_consult}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-      {!isSearching && term && results.length === 0 && (
-        <div className="absolute z-50 bg-background w-4/5 h-[250px] rounded shadow border left-[50px] top-[50px]">
-          <div className="flex justify-center items-center h-full text-xl font-bold">No results found</div>
-        </div>
-      )}
-    </div>
-  );
-};
 
 const AIButton = () => {
   const { setOpen } = useAssistantStore();

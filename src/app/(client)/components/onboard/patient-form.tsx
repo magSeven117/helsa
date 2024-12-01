@@ -1,4 +1,5 @@
 'use client';
+import { createPatient } from '@/app/(server)/actions/patient/create-patient';
 import * as successAnimation from '@/assets/animations/success_animation.json';
 import {
   AlertDialog,
@@ -21,7 +22,6 @@ import {
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/libs/shadcn-ui/components/form';
 import { Input } from '@/libs/shadcn-ui/components/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/libs/shadcn-ui/components/select';
-import { useCreatePatient } from '@/modules/patient/presentation/graphql/hooks/use-create-patient';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Label } from '@radix-ui/react-dropdown-menu';
 import { Loader2 } from 'lucide-react';
@@ -30,7 +30,6 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Lottie from 'react-lottie';
 import { toast } from 'sonner';
-import { v4 } from 'uuid';
 import { z } from 'zod';
 
 const formSchema = z.object({
@@ -66,21 +65,17 @@ const PatientForm = ({ userId }: { userId: string }) => {
   const { isSubmitting } = form.formState;
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  const { createPatient } = useCreatePatient();
   const router = useRouter();
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       await createPatient({
-        variables: {
-          patient: {
-            id: v4(),
-            userId: userId,
-            demographic: data.demographic,
-            biometric: {
-              ...data.biometric,
-              height: parseFloat(data.biometric.height),
-            },
+        patient: {
+          userId: userId,
+          demographic: data.demographic,
+          biometric: {
+            ...data.biometric,
+            height: parseFloat(data.biometric.height),
           },
         },
       });
