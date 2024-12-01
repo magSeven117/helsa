@@ -34,7 +34,11 @@ export const BioSection = ({ bio }: BioFormValues) => {
 
   const onSubmit = async (data: BioFormValues) => {
     try {
-      await updateBio(data.bio);
+      await updateBio({
+        variables: {
+          bio: data.bio,
+        },
+      });
       setIsEditing(false);
       router.refresh();
     } catch (error) {
