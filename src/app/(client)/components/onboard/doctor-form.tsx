@@ -23,7 +23,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/libs/shadcn-ui/components/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/libs/shadcn-ui/components/select';
 import { Specialty } from '@/modules/doctor/domain/specialty';
-import { useSpecialties } from '@/modules/doctor/presentation/graphql/hooks/use-get-specialties';
 import { Primitives } from '@/modules/shared/domain/types/primitives';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
@@ -40,7 +39,7 @@ const formSchema = z.object({
   specialtyId: z.string().min(1, { message: 'Specialty is required' }),
 });
 
-const DoctorForm = ({ userId }: { userId: string }) => {
+const DoctorForm = ({ userId, specialties }: { userId: string; specialties: Primitives<Specialty>[] }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -51,7 +50,6 @@ const DoctorForm = ({ userId }: { userId: string }) => {
   });
   const { isSubmitting } = form.formState;
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const { specialties } = useSpecialties();
   const router = useRouter();
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
