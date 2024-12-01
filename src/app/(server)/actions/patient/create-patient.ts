@@ -1,3 +1,4 @@
+'use server';
 import { CreatePatient } from '@/modules/patient/application/services/create-patient';
 import { Patient } from '@/modules/patient/domain/patient';
 import { PrismaPatientRepository } from '@/modules/patient/infrastructure/prisma-patient-repository';

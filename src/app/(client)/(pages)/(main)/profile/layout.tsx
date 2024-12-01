@@ -1,10 +1,11 @@
-import { getCurrentUser } from '@/modules/user/presentation/actions/get-current-user';
+import { getCurrentUser } from '@/app/(server)/actions/user/get-current-user';
 import { redirect } from 'next/navigation';
 import React from 'react';
 import { NavigationProfile } from '../../../components/profile/navigation-profile';
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
-  const user = await getCurrentUser();
+  const userResponse = await getCurrentUser();
+  const user = userResponse?.data ?? null;
   if (!user) return redirect('/sign-in');
   return (
     <div className="w-full h-full pt-10">

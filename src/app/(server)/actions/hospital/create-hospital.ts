@@ -1,3 +1,4 @@
+'use server';
 import { CreateHospital } from '@/modules/hospital/application/services/create-hospital';
 import { Hospital } from '@/modules/hospital/domain/hospital';
 import { PrismaHospitalRepository } from '@/modules/hospital/infrastructure/prisma-hospital-repository';

@@ -1,5 +1,4 @@
 'use server';
-import { authActionClient } from '@/modules/shared/infrastructure/actions/client-actions';
 import { anthropic } from '@ai-sdk/anthropic';
 import { streamObject } from 'ai';
 import { createStreamableValue } from 'ai/rsc';
@@ -19,33 +18,25 @@ const filterDoctorsSchema = z.object({
   experience: z.number().optional().describe('The minimal experience years to filter by'),
 });
 
-const schema = z.object({
-  prompt: z.string(),
-  context: z.string().optional(),
-});
+export async function generateDoctorFilters(prompt: string, context?: string) {
+  const stream = createStreamableValue();
 
-export const generateDoctorFilters = authActionClient
-  .schema(schema)
-  .metadata({ actionName: 'generate-doctor-filters' })
-  .action(async ({ parsedInput: { prompt, context } }) => {
-    const stream = createStreamableValue();
+  (async () => {
+    const { partialObjectStream } = await streamObject({
+      model: anthropic('claude-3-sonnet-20240229'),
+      system: `You are a helpful assistant that generates filters for a given prompt. \n
+      Current date is: ${new Date().toISOString().split('T')[0]} \n
+      ${context}
+    `,
+      schema: filterDoctorsSchema,
+      prompt,
+      temperature: 0.5,
+    });
+    for await (const data of partialObjectStream) {
+      stream.update(data);
+    }
+    stream.done();
+  })();
 
-    (async () => {
-      const { partialObjectStream } = await streamObject({
-        model: anthropic('claude-3-sonnet-20240229'),
-        system: `You are a helpful assistant that generates filters for a given prompt. \n
-        Current date is: ${new Date().toISOString().split('T')[0]} \n
-        ${context}
-      `,
-        schema: filterDoctorsSchema,
-        prompt,
-        temperature: 0.5,
-      });
-      for await (const data of partialObjectStream) {
-        stream.update(data);
-      }
-      stream.done();
-    })();
-
-    return { object: stream.value };
-  });
+  return { object: stream.value };
+}

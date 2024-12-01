@@ -1,3 +1,4 @@
+'use server';
 import { GetDoctors } from '@/modules/doctor/application/services/get-doctors';
 import { MongoDBDoctorSearcher } from '@/modules/doctor/infrastructure/persistence/mongodb-doctor-searcher';
 import { authActionClient } from '@/modules/shared/infrastructure/actions/client-actions';

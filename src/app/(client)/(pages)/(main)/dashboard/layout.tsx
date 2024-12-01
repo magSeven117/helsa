@@ -1,4 +1,4 @@
-import { getCurrentUser } from '@/modules/user/presentation/actions/get-current-user';
+import { getCurrentUser } from '@/app/(server)/actions/user/get-current-user';
 import { redirect } from 'next/navigation';
 
 const Layout = async ({
@@ -10,7 +10,8 @@ const Layout = async ({
   patient: React.ReactNode;
   hospital: React.ReactNode;
 }) => {
-  const user = await getCurrentUser();
+  const userResponse = await getCurrentUser();
+  const user = userResponse?.data ?? null;
   if (!user) {
     return redirect('/sign-in');
   }

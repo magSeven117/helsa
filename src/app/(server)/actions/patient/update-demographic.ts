@@ -1,3 +1,4 @@
+'use server';
 import { UpdateDemographic } from '@/modules/patient/application/services/update-demographic';
 import { PatientDemographic } from '@/modules/patient/domain/members/demographic';
 import { PrismaPatientRepository } from '@/modules/patient/infrastructure/prisma-patient-repository';

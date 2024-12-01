@@ -1,3 +1,4 @@
+'use server';
 import { UpdateDoctor } from '@/modules/doctor/application/services/update-doctor';
 import { PrismaDoctorRepository } from '@/modules/doctor/infrastructure/persistence/prisma-doctor-repository';
 import { authActionClient } from '@/modules/shared/infrastructure/actions/client-actions';

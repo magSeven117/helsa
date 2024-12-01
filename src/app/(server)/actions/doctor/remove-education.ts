@@ -1,3 +1,4 @@
+'use server';
 import { RemoveEducation } from '@/modules/doctor/application/services/remove-education';
 import { PrismaDoctorRepository } from '@/modules/doctor/infrastructure/persistence/prisma-doctor-repository';
 import { authActionClient } from '@/modules/shared/infrastructure/actions/client-actions';

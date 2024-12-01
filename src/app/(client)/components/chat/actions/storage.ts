@@ -1,11 +1,13 @@
 'use server';
+import { getCurrentUser } from '@/app/(server)/actions/user/get-current-user';
 import { getSession } from '@/modules/shared/infrastructure/auth/better-auth';
 import { client as RedisClient } from '@/modules/shared/infrastructure/persistence/redis/redis-client';
-import { getCurrentUser } from '@/modules/user/presentation/actions/get-current-user';
 import { Chat, SettingsResponse } from './types';
 
 export async function getAssistantSettings(): Promise<SettingsResponse> {
-  const user = await getCurrentUser();
+  const userResponse = await getCurrentUser();
+
+  const user = userResponse?.data;
 
   const userId = user?.id;
 
@@ -70,7 +72,8 @@ export async function getLatestChat() {
   const settings = await getAssistantSettings();
   if (!settings?.enabled) return null;
 
-  const user = await getCurrentUser();
+  const userResponse = await getCurrentUser();
+  const user = userResponse?.data;
 
   const userId = user?.id;
 
@@ -90,7 +93,8 @@ export async function getLatestChat() {
 }
 
 export async function getChats() {
-  const user = await getCurrentUser();
+  const userResponse = await getCurrentUser();
+  const user = userResponse?.data;
 
   const userId = user?.id;
 

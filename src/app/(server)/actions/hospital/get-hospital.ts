@@ -1,3 +1,4 @@
+'use server';
 import { GetHospital } from '@/modules/hospital/application/services/get-hospital';
 import { PrismaHospitalRepository } from '@/modules/hospital/infrastructure/prisma-hospital-repository';
 import { authActionClient } from '@/modules/shared/infrastructure/actions/client-actions';

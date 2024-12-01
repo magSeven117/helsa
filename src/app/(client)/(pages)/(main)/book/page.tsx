@@ -1,4 +1,4 @@
-import { getSpecialties } from '@/modules/doctor/presentation/actions/get-specialties';
+import { getSpecialties } from '@/app/(server)/actions/doctor/get-specialties';
 import { createSearchParamsCache, parseAsArrayOf, parseAsInteger, parseAsString } from 'nuqs/server';
 import { Suspense } from 'react';
 import DoctorSkeleton from '../../../components/book/doctor-list-loading';
@@ -27,7 +27,8 @@ const Page = async ({ searchParams }: { searchParams: Record<string, string | st
     minRate,
     specialties: selectedSpecialties,
   };
-  const specialties = await getSpecialties();
+  const responseSpecialties = await getSpecialties();
+  const specialties = responseSpecialties?.data ?? [];
   const loadingKey = JSON.stringify({
     query: q,
     filter,

@@ -1,3 +1,4 @@
+'use server';
 import { client as RedisClient } from '@/modules/shared/infrastructure/persistence/redis/redis-client';
 import { Ratelimit } from '@upstash/ratelimit';
 import { createMiddleware } from 'next-safe-action';

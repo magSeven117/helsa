@@ -1,3 +1,4 @@
+'use server';
 import { CreateDoctor } from '@/modules/doctor/application/services/create-doctor';
 import { Doctor } from '@/modules/doctor/domain/doctor';
 import { PrismaDoctorRepository } from '@/modules/doctor/infrastructure/persistence/prisma-doctor-repository';

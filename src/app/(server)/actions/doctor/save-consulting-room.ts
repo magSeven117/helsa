@@ -1,3 +1,4 @@
+'use server';
 import { SetConsultingRoom } from '@/modules/doctor/application/services/set-consulting-room';
 import { ConsultingRoomAddress } from '@/modules/doctor/domain/consulting-room-address';
 import { PrismaDoctorRepository } from '@/modules/doctor/infrastructure/persistence/prisma-doctor-repository';

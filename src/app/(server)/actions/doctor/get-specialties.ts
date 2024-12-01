@@ -1,3 +1,4 @@
+'use server';
 import { GetSpecialties } from '@/modules/doctor/application/services/get-specialties';
 import { PrismaDoctorRepository } from '@/modules/doctor/infrastructure/persistence/prisma-doctor-repository';
 import { actionClient } from '@/modules/shared/infrastructure/actions/client-actions';

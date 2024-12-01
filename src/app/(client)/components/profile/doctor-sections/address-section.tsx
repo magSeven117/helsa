@@ -42,6 +42,7 @@ export const AddressSection = ({ consultingRoom, id }: AddressFormValues & { id:
         doctorId: id,
         consultingRoomAddress: data.consultingRoom,
       });
+      setIsEditing(false);
       router.refresh();
     } catch (error) {
       console.log(error);

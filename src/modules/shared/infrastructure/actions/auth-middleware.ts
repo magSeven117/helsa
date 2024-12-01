@@ -1,3 +1,4 @@
+'use server';
 import { createMiddleware } from 'next-safe-action';
 import { AuthorizationError } from '../../domain/core/errors/authorization-error';
 import { getSession } from '../auth/better-auth';

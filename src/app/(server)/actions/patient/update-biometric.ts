@@ -1,3 +1,4 @@
+'use server';
 import { UpdateBiometric } from '@/modules/patient/application/services/update-biometric';
 import { PatientBiometric } from '@/modules/patient/domain/members/biometric';
 import { PrismaPatientRepository } from '@/modules/patient/infrastructure/prisma-patient-repository';

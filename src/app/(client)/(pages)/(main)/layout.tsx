@@ -1,5 +1,5 @@
+import { getCurrentUser } from '@/app/(server)/actions/user/get-current-user';
 import { SidebarProvider } from '@/libs/shadcn-ui/components/sidebar';
-import { getCurrentUser } from '@/modules/user/presentation/actions/get-current-user';
 import { redirect } from 'next/navigation';
 import React from 'react';
 import { v4 } from 'uuid';
@@ -10,7 +10,8 @@ import SideBar from '../../components/side-bar/side-bar';
 import TopBar from '../../components/top-bar/top-bar';
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
-  const user = await getCurrentUser();
+  const userResponse = await getCurrentUser();
+  const user = userResponse?.data ?? null;
   if (!user) {
     return redirect('/sign-in');
   } else if (user.role === 'UNDEFINED') {

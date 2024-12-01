@@ -1,4 +1,4 @@
-import { getDoctors } from '@/modules/doctor/presentation/actions/get-doctors';
+import { searchDoctors } from '@/app/(server)/actions/doctor/search-doctors';
 import DoctorList from './doctor-list';
 
 type Props = {
@@ -12,7 +12,8 @@ type Props = {
 };
 
 const DoctorListWrapper = async ({ filters }: Props) => {
-  const doctors = await getDoctors(filters);
+  const response = await searchDoctors(filters);
+  const doctors = response?.data ?? [];
 
   return <DoctorList doctors={doctors} />;
 };

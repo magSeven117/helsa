@@ -15,8 +15,8 @@ import { useRef, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import SelectSpecialty from './filter-specialty-select';
 
+import { generateDoctorFilters } from '@/app/(server)/actions/doctor/generate-doctor-filters';
 import { Calendar } from '@/libs/shadcn-ui/components/calendar';
-import { generateDoctorFilters } from '@/modules/doctor/presentation/actions/generate-doctor-filters';
 import { readStreamableValue } from 'ai/rsc';
 import { formatISO } from 'date-fns';
 import { parseAsArrayOf, parseAsInteger, parseAsString, useQueryStates } from 'nuqs';

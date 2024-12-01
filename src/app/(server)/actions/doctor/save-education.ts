@@ -1,3 +1,4 @@
+'use server';
 import { SaveEducation } from '@/modules/doctor/application/services/add-education';
 import { Education } from '@/modules/doctor/domain/educations';
 import { PrismaDoctorRepository } from '@/modules/doctor/infrastructure/persistence/prisma-doctor-repository';
