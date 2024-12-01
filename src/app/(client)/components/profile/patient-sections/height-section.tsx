@@ -1,10 +1,10 @@
 'use client';
 
+import { updateBiometric } from '@/app/(server)/actions/patient/update-biometric';
 import { Button } from '@/libs/shadcn-ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@/libs/shadcn-ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/libs/shadcn-ui/components/form';
 import { Input } from '@/libs/shadcn-ui/components/input';
-import { useUpdateBiometric } from '@/modules/patient/presentation/graphql/hooks/use-update-biometric';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -14,31 +14,28 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 
 const formSchema = z.object({
-  height: z.string()
+  height: z.string(),
 });
 
-type HeightValue = z.infer<typeof formSchema> ;
+type HeightValue = z.infer<typeof formSchema>;
 
-export const HeightSection = ({ height, id }: HeightValue & { id: string}) => {
+export const HeightSection = ({ height, id }: HeightValue & { id: string }) => {
   const [isEditing, setIsEditing] = useState(false);
   const toggleEdit = () => setIsEditing((current) => !current);
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: { height },
-    mode: 'all'
+    mode: 'all',
   });
   const { isSubmitting, isValid } = form.formState;
   const router = useRouter();
-  const { updateBiometric } = useUpdateBiometric();
   const onSubmit = async (data: HeightValue) => {
     try {
       await updateBiometric({
-        variables: {
-          patientId: id,
-          biometric: {
-            height: parseFloat(data.height)
-          }
-        }
+        patientId: id,
+        biometric: {
+          height: parseFloat(data.height),
+        },
       });
       setIsEditing(false);
       toast.success('Altura actualizada correctamente');
@@ -57,9 +54,7 @@ export const HeightSection = ({ height, id }: HeightValue & { id: string}) => {
             <div>
               <CardTitle>Altura</CardTitle>
               <p className="text-muted-foreground text-sm mt-5">
-                {isEditing
-                  ? 'Ingresa tu altura. Este número es público.'
-                  : 'Tu altura es pública'}
+                {isEditing ? 'Ingresa tu altura. Este número es público.' : 'Tu altura es pública'}
               </p>
               {!isEditing ? (
                 <p className="text-primary font-bold mt-3">{form.getValues('height')} mts</p>
@@ -70,7 +65,7 @@ export const HeightSection = ({ height, id }: HeightValue & { id: string}) => {
                   render={({ field }) => (
                     <FormItem className="flex-1 mt-5">
                       <FormControl>
-                        <Input {...field} className="rounded-none" type='number'></Input>
+                        <Input {...field} className="rounded-none" type="number"></Input>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -85,10 +80,13 @@ export const HeightSection = ({ height, id }: HeightValue & { id: string}) => {
             </p>
             {isEditing ? (
               <div className="flex justify-end items-center gap-3">
-                <Button onClick={() => {
-                  form.reset();
-                  toggleEdit();
-                }} className="rounded-none">
+                <Button
+                  onClick={() => {
+                    form.reset();
+                    toggleEdit();
+                  }}
+                  className="rounded-none"
+                >
                   Cancelar
                 </Button>
                 <Button disabled={!isValid || isSubmitting} type="submit" className="rounded-none">

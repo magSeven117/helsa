@@ -1,11 +1,12 @@
 'use client';
 
+import { updateDoctor } from '@/app/(server)/actions/doctor/update-doctor';
 import { Button } from '@/libs/shadcn-ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@/libs/shadcn-ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/libs/shadcn-ui/components/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/libs/shadcn-ui/components/select';
-import { useSpecialties } from '@/modules/doctor/presentation/graphql/hooks/use-get-specialties';
-import { useUpdateDoctor } from '@/modules/doctor/presentation/graphql/hooks/use-update-doctor';
+import { Specialty } from '@/modules/doctor/domain/specialty';
+import { Primitives } from '@/modules/shared/domain/types/primitives';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -20,7 +21,11 @@ const formSchema = z.object({
 
 type SpecialtyValue = z.infer<typeof formSchema>;
 
-export const SpecialtySection = ({ specialtyId, id }: SpecialtyValue & { id: string }) => {
+export const SpecialtySection = ({
+  specialtyId,
+  id,
+  specialties,
+}: SpecialtyValue & { id: string; specialties: Primitives<Specialty>[] }) => {
   const [isEditing, setIsEditing] = useState(false);
   const toggleEdit = () => setIsEditing((current) => !current);
   const form = useForm({
@@ -29,14 +34,17 @@ export const SpecialtySection = ({ specialtyId, id }: SpecialtyValue & { id: str
     mode: 'all',
   });
   const { isSubmitting, isValid } = form.formState;
-  const { updateDoctor } = useUpdateDoctor();
-  const { specialties } = useSpecialties();
 
   const router = useRouter();
 
   const onSubmit = async (data: SpecialtyValue) => {
     try {
-      await updateDoctor(id, { specialtyId: data.specialtyId });
+      await updateDoctor({
+        doctorId: id,
+        doctor: {
+          specialtyId: data.specialtyId,
+        },
+      });
       setIsEditing(false);
       toast.success('Specialty updated successfully');
       router.refresh();

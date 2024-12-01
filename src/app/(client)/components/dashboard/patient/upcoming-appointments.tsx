@@ -8,12 +8,12 @@ export function UpcomingAppointments() {
   const [date, setDate] = useState<Date | undefined>(new Date());
   return (
     <div className="py-5 w-full">
-      <p className='text-center text-lg font-semibold'>Agenda</p>
+      <p className="text-center text-lg font-semibold">Agenda</p>
       <div className="w-full flex justify-center">
-        <Calendar mode="single" selected={date} onSelect={setDate}  />
+        <Calendar mode="single" selected={date} onSelect={setDate} />
       </div>
       <div>
-        <div className='h-[350px] no-scroll overflow-scroll'>
+        <div className="h-[350px] no-scroll overflow-scroll">
           <div className="flex flex-col gap-4 mt-4">
             {appointments.map((appointment, index) => (
               <div key={index} className="cursor-pointer hover:bg-accent p-3">
@@ -41,25 +41,6 @@ export function UpcomingAppointments() {
     </div>
   );
 }
-
-const doctors = [
-  {
-    name: 'Dr. José Véliz',
-    avatar: '/avatar/05.png',
-  },
-  {
-    name: 'Dr. José Véliz',
-    avatar: '/avatar/05.png',
-  },
-  {
-    name: 'Dr. José Véliz',
-    avatar: '/avatar/05.png',
-  },
-  {
-    name: 'Dr. José Véliz',
-    avatar: '/avatar/05.png',
-  },
-];
 
 const appointments = [
   {

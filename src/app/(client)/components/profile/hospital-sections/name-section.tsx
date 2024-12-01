@@ -1,10 +1,10 @@
 'use client';
 
+import { updateHospital } from '@/app/(server)/actions/hospital/update-hospital';
 import { Button } from '@/libs/shadcn-ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@/libs/shadcn-ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/libs/shadcn-ui/components/form';
 import { Input } from '@/libs/shadcn-ui/components/input';
-import { useUpdateHospital } from '@/modules/hospital/presentation/graphql/hooks/use-update-hospital';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -17,23 +17,22 @@ const formSchema = z.object({
   name: z.string().min(3, { message: 'El nombre no puede estar vació' }),
 });
 
-type NameSectionValue = z.infer<typeof formSchema> ;
+type NameSectionValue = z.infer<typeof formSchema>;
 
-export const NameSection = ({ name, id }: NameSectionValue & { id: string}) => {
+export const NameSection = ({ name, id }: NameSectionValue & { id: string }) => {
   const [isEditing, setIsEditing] = useState(false);
   const toggleEdit = () => setIsEditing((current) => !current);
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: { name },
-    mode: 'all'
+    mode: 'all',
   });
   const { isSubmitting, isValid } = form.formState;
   const router = useRouter();
-  const { updateHospital } = useUpdateHospital();
 
   const onSubmit = async (data: NameSectionValue) => {
     try {
-      await updateHospital({ variables: { hospitalId: id, hospital: data } });
+      await updateHospital({ hospitalId: id, hospital: data });
       setIsEditing(false);
       toast.success('Nombre actualizado correctamente');
       router.refresh();
@@ -42,7 +41,6 @@ export const NameSection = ({ name, id }: NameSectionValue & { id: string}) => {
       toast.error('An error occurred. Please try again.');
     }
   };
-
 
   return (
     <Card className="rounded-none bg-transparent">
@@ -73,15 +71,16 @@ export const NameSection = ({ name, id }: NameSectionValue & { id: string}) => {
             </div>
           </CardHeader>
           <CardFooter className="border-t pt-4 flex justify-between items-start gap-2 md:items-center flex-col md:flex-row">
-            <p className="text-muted-foreground text-xs">
-              El nombre es obligatorio y público.
-            </p>
+            <p className="text-muted-foreground text-xs">El nombre es obligatorio y público.</p>
             {isEditing ? (
               <div className="flex justify-end items-center gap-3">
-                <Button onClick={() => {
-                  form.reset();
-                  toggleEdit();
-                }} className="rounded-none">
+                <Button
+                  onClick={() => {
+                    form.reset();
+                    toggleEdit();
+                  }}
+                  className="rounded-none"
+                >
                   Cancelar
                 </Button>
                 <Button disabled={!isValid || isSubmitting} type="submit" className="rounded-none">

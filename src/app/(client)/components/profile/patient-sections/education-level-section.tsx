@@ -1,10 +1,10 @@
 'use client';
 
+import { updateDemographic } from '@/app/(server)/actions/patient/update-demographic';
 import { Button } from '@/libs/shadcn-ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@/libs/shadcn-ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/libs/shadcn-ui/components/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/libs/shadcn-ui/components/select';
-import { useUpdateDemographic } from '@/modules/patient/presentation/graphql/hooks/use-update-demographic';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -14,26 +14,25 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 
 const formSchema = z.object({
-  educationLevel: z.enum(['PRIMARY', 'SECONDARY', 'TECHNICAL', 'UNIVERSITY']),
+  educativeLevel: z.enum(['PRIMARY', 'SECONDARY', 'TECHNICAL', 'UNIVERSITY']),
 });
 
 type EducationLevelValue = z.infer<typeof formSchema>;
 
-export const EducationLevelSection = ({ educationLevel, id }: EducationLevelValue & { id: string }) => {
+export const EducationLevelSection = ({ educativeLevel, id }: EducationLevelValue & { id: string }) => {
   const [isEditing, setIsEditing] = useState(false);
   const toggleEdit = () => setIsEditing((current) => !current);
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: { educationLevel },
+    defaultValues: { educativeLevel },
     mode: 'all',
   });
   const { isSubmitting, isValid } = form.formState;
   const router = useRouter();
-  const { updateDemographic } = useUpdateDemographic();
 
   const onSubmit = async (data: EducationLevelValue) => {
     try {
-      await updateDemographic({ variables: { patientId: id, demographic: data } });
+      await updateDemographic({ patientId: id, demographic: data });
       setIsEditing(false);
       toast.success('Nivel educativo actualizado correctamente.');
       router.refresh();
@@ -43,7 +42,7 @@ export const EducationLevelSection = ({ educationLevel, id }: EducationLevelValu
     }
   };
 
-  const selectedCivilStatus = educationLevels.find((option) => option.id === form.getValues('educationLevel'));
+  const selectedCivilStatus = educationLevels.find((option) => option.id === form.getValues('educativeLevel'));
 
   return (
     <Card className="rounded-none bg-transparent">
@@ -60,7 +59,7 @@ export const EducationLevelSection = ({ educationLevel, id }: EducationLevelValu
               ) : (
                 <FormField
                   control={form.control}
-                  name="educationLevel"
+                  name="educativeLevel"
                   render={({ field }) => (
                     <FormItem className="flex-1 mt-5">
                       <Select onValueChange={field.onChange} defaultValue={field.value}>

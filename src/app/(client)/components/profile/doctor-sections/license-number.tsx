@@ -1,10 +1,10 @@
 'use client';
 
+import { updateDoctor } from '@/app/(server)/actions/doctor/update-doctor';
 import { Button } from '@/libs/shadcn-ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@/libs/shadcn-ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/libs/shadcn-ui/components/form';
 import { Input } from '@/libs/shadcn-ui/components/input';
-import { useUpdateDoctor } from '@/modules/doctor/presentation/graphql/hooks/use-update-doctor';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -19,23 +19,27 @@ const formSchema = z.object({
   }),
 });
 
-type LicenseNumberValue = z.infer<typeof formSchema> ;
+type LicenseNumberValue = z.infer<typeof formSchema>;
 
-export const LicenseNumberSection = ({ licenseMedicalNumber, id }: LicenseNumberValue & { id: string}) => {
+export const LicenseNumberSection = ({ licenseMedicalNumber, id }: LicenseNumberValue & { id: string }) => {
   const [isEditing, setIsEditing] = useState(false);
   const toggleEdit = () => setIsEditing((current) => !current);
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: { licenseMedicalNumber },
-    mode: 'all'
+    mode: 'all',
   });
   const { isSubmitting, isValid } = form.formState;
   const router = useRouter();
-  const { updateDoctor } = useUpdateDoctor();
 
   const onSubmit = async (data: LicenseNumberValue) => {
     try {
-      await updateDoctor(id, { licenseMedicalNumber: data.licenseMedicalNumber });
+      await updateDoctor({
+        doctorId: id,
+        doctor: {
+          licenseMedicalNumber: data.licenseMedicalNumber,
+        },
+      });
       setIsEditing(false);
       router.refresh();
     } catch (error) {
@@ -80,10 +84,13 @@ export const LicenseNumberSection = ({ licenseMedicalNumber, id }: LicenseNumber
             </p>
             {isEditing ? (
               <div className="flex justify-end items-center gap-3">
-                <Button onClick={() => {
-                  form.reset();
-                  toggleEdit();
-                }} className="rounded-none">
+                <Button
+                  onClick={() => {
+                    form.reset();
+                    toggleEdit();
+                  }}
+                  className="rounded-none"
+                >
                   Cancelar
                 </Button>
                 <Button disabled={!isValid || isSubmitting} type="submit" className="rounded-none">

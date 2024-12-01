@@ -18,7 +18,7 @@ const Page = async () => {
       <div className="flex flex-col w-full gap-10">
         <CivilStatusSection civilStatus={patient.demographic.civilStatus as any} id={patient.id} />
         <OccupationSection occupation={patient.demographic.occupation} id={patient.id} />
-        <EducationLevelSection educationLevel={patient.demographic.educativeLevel as any} id={patient.id} />
+        <EducationLevelSection educativeLevel={patient.demographic.educativeLevel as any} id={patient.id} />
         <HeightSection height={patient.biometric.height.toString()} id={patient.id} />
         <BloodTypeSection bloodType={patient.biometric.bloodType} id={patient.id} />
         <OrganDonorSection organDonor={patient.biometric.organDonor} id={patient.id} />

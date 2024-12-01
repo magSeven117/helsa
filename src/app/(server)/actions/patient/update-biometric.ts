@@ -9,9 +9,9 @@ import { z } from 'zod';
 const schema = z.object({
   patientId: z.string(),
   biometric: z.object({
-    height: z.number(),
-    organDonor: z.string(),
-    bloodType: z.string(),
+    height: z.number().optional(),
+    organDonor: z.string().optional(),
+    bloodType: z.string().optional(),
   }),
 });
 

@@ -1,6 +1,18 @@
 'use client';
 
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/libs/shadcn-ui/components/alert-dialog';
+import { removeEducation } from '@/app/(server)/actions/doctor/remove-education';
+import { saveEducation } from '@/app/(server)/actions/doctor/save-education';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/libs/shadcn-ui/components/alert-dialog';
 import { Button } from '@/libs/shadcn-ui/components/button';
 import { Calendar } from '@/libs/shadcn-ui/components/calendar';
 import { Card, CardFooter, CardHeader, CardTitle } from '@/libs/shadcn-ui/components/card';
@@ -8,9 +20,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/libs/shadcn-ui/components/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/libs/shadcn-ui/components/popover';
 import { cn } from '@/libs/shadcn-ui/utils/utils';
-import { useAddEducation } from '@/modules/doctor/presentation/graphql/hooks/use-add-education';
-import { useEditEducation } from '@/modules/doctor/presentation/graphql/hooks/use-edit-education';
-import { useRemoveEducation } from '@/modules/doctor/presentation/graphql/hooks/use-remove-education';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { CalendarIcon, Loader2, Pencil, Trash2 } from 'lucide-react';
@@ -34,7 +43,7 @@ export const EducationsSection = ({
   educations,
   id,
 }: {
-  educations: { title: string; institution: string; graduatedAt: Date, id: string }[];
+  educations: { title: string; institution: string; graduatedAt: Date; id: string }[];
   id: string;
 }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -55,28 +64,26 @@ export const EducationsSection = ({
   const { isSubmitting, isValid } = form.formState;
   const router = useRouter();
 
-  const { addEducation } = useAddEducation();
-  const { editEducation } = useEditEducation();
-  const { removeEducation } = useRemoveEducation();
-
-  const setEditData = (education: { title: string; institution: string; graduatedAt: Date, id: string }) => {
+  const setEditData = (education: { title: string; institution: string; graduatedAt: Date; id: string }) => {
     setEditingEducationId(education.id);
     form.setValue('education.title', education.title);
     form.setValue('education.institution', education.institution);
     form.setValue('education.graduatedAt', education.graduatedAt);
-  }
+  };
 
   const onSubmit = async (data: EducationsValue) => {
     try {
-      if (isEditing) {
-        await editEducation(id, editingEducationId!, data.education);
-        toast.success('Education edited successfully.');
-        setIsEditing(false);
-      } else if (isCreating) {
-        await addEducation(id, data.education);
-        toast.success('Education added successfully.');
-        setIsCreating(false);
-      }
+      await saveEducation({
+        doctorId: id,
+        education: {
+          title: data.education.title,
+          institution: data.education.institution,
+          graduatedAt: data.education.graduatedAt,
+          id: editingEducationId ?? undefined,
+        },
+      });
+      toast.success('Education edited successfully.');
+      setIsEditing(false);
       form.reset();
       router.refresh();
     } catch (error) {
@@ -87,13 +94,16 @@ export const EducationsSection = ({
 
   const deleteEducation = async (educationId: string) => {
     try {
-      await removeEducation(id, educationId);
+      await removeEducation({
+        doctorId: id,
+        educationId,
+      });
       toast.success('Education deleted successfully.');
     } catch (error) {
       console.log(error);
       toast.error('An error occurred. Please try again.');
     }
-  }
+  };
 
   return (
     <Card className="rounded-none bg-transparent">
@@ -112,7 +122,10 @@ export const EducationsSection = ({
                       {education.title} - {format(education.graduatedAt, 'PP')}
                     </p>
                     <div className="flex items-center justify-between gap-3">
-                      <Button className="rounded-none bg-sidebar" size="icon" variant="outline" 
+                      <Button
+                        className="rounded-none bg-sidebar"
+                        size="icon"
+                        variant="outline"
                         onClick={(e) => {
                           e.preventDefault();
                           setIsEditing(true);
@@ -123,7 +136,7 @@ export const EducationsSection = ({
                       </Button>
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
-                          <Button className="rounded-none bg-sidebar" size="icon" variant="outline" type='button'>
+                          <Button className="rounded-none bg-sidebar" size="icon" variant="outline" type="button">
                             <Trash2 className="size-4" />
                           </Button>
                         </AlertDialogTrigger>
@@ -137,7 +150,11 @@ export const EducationsSection = ({
                           <AlertDialogFooter className="flex w-full justify-end items-center">
                             <AlertDialogCancel className="rounded-none max-sm:w-full">Cancelar</AlertDialogCancel>
                             <AlertDialogAction asChild className="bg-destructive text-primary">
-                              <Button variant="destructive" className="rounded-none max-sm:w-full" onClick={() => deleteEducation(education.id)}>
+                              <Button
+                                variant="destructive"
+                                className="rounded-none max-sm:w-full"
+                                onClick={() => deleteEducation(education.id)}
+                              >
                                 Eliminar
                               </Button>
                             </AlertDialogAction>
@@ -219,7 +236,7 @@ export const EducationsSection = ({
             <p className="text-muted-foreground text-xs">
               Agrega tus estudios y certificaciones para que los pacientes sepan más sobre ti.
             </p>
-            {(isEditing || isCreating) ? (
+            {isEditing || isCreating ? (
               <div className="flex justify-end items-center gap-3">
                 <Button
                   onClick={() => {
@@ -229,7 +246,7 @@ export const EducationsSection = ({
                     isCreating && toggleCreate();
                   }}
                   className="rounded-none"
-                  type='button'
+                  type="button"
                 >
                   Cancelar
                 </Button>

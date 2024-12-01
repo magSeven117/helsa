@@ -1,10 +1,10 @@
 'use client';
 
+import { saveConsultingRoom } from '@/app/(server)/actions/doctor/save-consulting-room';
 import { Button } from '@/libs/shadcn-ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@/libs/shadcn-ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/libs/shadcn-ui/components/form';
 import { Input } from '@/libs/shadcn-ui/components/input';
-import { useSetConsultingRoom } from '@/modules/doctor/presentation/graphql/hooks/use-set-consulting-room';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2, MapPin } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -34,14 +34,13 @@ export const AddressSection = ({ consultingRoom, id }: AddressFormValues & { id:
     defaultValues: { consultingRoom },
   });
   const { isSubmitting, isValid } = form.formState;
-  const { setConsultingRoom } = useSetConsultingRoom();
   const router = useRouter();
 
   const onSubmit = async (data: AddressFormValues) => {
     try {
-      await setConsultingRoom(id, {
-        city: data.consultingRoom.city,
-        address: data.consultingRoom.address,
+      await saveConsultingRoom({
+        doctorId: id,
+        consultingRoomAddress: data.consultingRoom,
       });
       router.refresh();
     } catch (error) {
@@ -70,7 +69,7 @@ export const AddressSection = ({ consultingRoom, id }: AddressFormValues & { id:
                   </div>
                 </div>
               ) : (
-                <div className='flex justify-between items-center gap-3 mt-3'>
+                <div className="flex justify-between items-center gap-3 mt-3">
                   <FormField
                     control={form.control}
                     name="consultingRoom.city"
@@ -79,7 +78,7 @@ export const AddressSection = ({ consultingRoom, id }: AddressFormValues & { id:
                         <FormLabel>Ciudad</FormLabel>
                         <FormControl>
                           <div>
-                            <Input {...field} className='outline-none rounded-none'></Input>
+                            <Input {...field} className="outline-none rounded-none"></Input>
                           </div>
                         </FormControl>
                         <FormMessage />
@@ -94,7 +93,7 @@ export const AddressSection = ({ consultingRoom, id }: AddressFormValues & { id:
                         <FormLabel>Dirección</FormLabel>
                         <FormControl>
                           <div>
-                            <Input {...field} className='outline-none rounded-none'></Input>
+                            <Input {...field} className="outline-none rounded-none"></Input>
                           </div>
                         </FormControl>
                         <FormMessage />

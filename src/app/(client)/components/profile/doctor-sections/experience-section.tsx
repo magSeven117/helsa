@@ -1,10 +1,10 @@
 'use client';
 
+import { updateDoctor } from '@/app/(server)/actions/doctor/update-doctor';
 import { Button } from '@/libs/shadcn-ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@/libs/shadcn-ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/libs/shadcn-ui/components/form';
 import { Input } from '@/libs/shadcn-ui/components/input';
-import { useUpdateDoctor } from '@/modules/doctor/presentation/graphql/hooks/use-update-doctor';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -17,9 +17,9 @@ const formSchema = z.object({
   experience: z.string().optional(),
 });
 
-type ExperienceValue = z.infer<typeof formSchema> ;
+type ExperienceValue = z.infer<typeof formSchema>;
 
-export const ExperienceSection = ({ experience, id }: ExperienceValue & { id: string}) => {
+export const ExperienceSection = ({ experience, id }: ExperienceValue & { id: string }) => {
   const [isEditing, setIsEditing] = useState(false);
   const toggleEdit = () => setIsEditing((current) => !current);
   const form = useForm({
@@ -28,11 +28,15 @@ export const ExperienceSection = ({ experience, id }: ExperienceValue & { id: st
   });
   const { isSubmitting, isValid } = form.formState;
   const router = useRouter();
-  const { updateDoctor } = useUpdateDoctor();
 
   const onSubmit = async (data: ExperienceValue) => {
     try {
-      await updateDoctor(id, { experience: Number(data.experience) });
+      await updateDoctor({
+        doctorId: id,
+        doctor: {
+          experience: Number(data.experience),
+        },
+      });
       setIsEditing(false);
       router.refresh();
     } catch (error) {
@@ -60,7 +64,7 @@ export const ExperienceSection = ({ experience, id }: ExperienceValue & { id: st
                   render={({ field }) => (
                     <FormItem className="flex-1 mt-5">
                       <FormControl>
-                        <Input {...field} className="rounded-none"  ></Input>
+                        <Input {...field} className="rounded-none"></Input>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -70,15 +74,16 @@ export const ExperienceSection = ({ experience, id }: ExperienceValue & { id: st
             </div>
           </CardHeader>
           <CardFooter className="border-t pt-4 flex justify-between items-start gap-2 md:items-center flex-col md:flex-row">
-            <p className="text-muted-foreground text-xs">
-              La medida en años de tu experiencia.
-            </p>
+            <p className="text-muted-foreground text-xs">La medida en años de tu experiencia.</p>
             {isEditing ? (
               <div className="flex justify-end items-center gap-3">
-                <Button onClick={() => {
-                  form.reset();
-                  toggleEdit();
-                }} className="rounded-none">
+                <Button
+                  onClick={() => {
+                    form.reset();
+                    toggleEdit();
+                  }}
+                  className="rounded-none"
+                >
                   Cancelar
                 </Button>
                 <Button disabled={!isValid || isSubmitting} type="submit" className="rounded-none">

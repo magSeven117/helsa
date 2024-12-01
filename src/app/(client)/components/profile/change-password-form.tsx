@@ -3,6 +3,7 @@ import { Button } from '@/libs/shadcn-ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@/libs/shadcn-ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/libs/shadcn-ui/components/form';
 import { Input } from '@/libs/shadcn-ui/components/input';
+import { authClient } from '@/modules/shared/infrastructure/auth/auth-client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -34,6 +35,10 @@ const ChangePasswordForm = ({}) => {
   const onSubmit = async (data: any) => {
     try {
       form.reset();
+      authClient.changePassword({
+        newPassword: data.newPassword,
+        currentPassword: data.confirmPassword,
+      });
       toast.success('Password updated successfully');
       router.push('/profile');
     } catch (error) {

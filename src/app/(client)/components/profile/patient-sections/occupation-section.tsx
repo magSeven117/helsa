@@ -1,10 +1,10 @@
 'use client';
 
+import { updateDemographic } from '@/app/(server)/actions/patient/update-demographic';
 import { Button } from '@/libs/shadcn-ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@/libs/shadcn-ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/libs/shadcn-ui/components/form';
 import { Input } from '@/libs/shadcn-ui/components/input';
-import { useUpdateDemographic } from '@/modules/patient/presentation/graphql/hooks/use-update-demographic';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -17,23 +17,22 @@ const formSchema = z.object({
   occupation: z.string().min(3, { message: 'Occupation must be at least 3 characters long' }),
 });
 
-type OccupationValue = z.infer<typeof formSchema> ;
+type OccupationValue = z.infer<typeof formSchema>;
 
-export const OccupationSection = ({ occupation, id }: OccupationValue & { id: string}) => {
+export const OccupationSection = ({ occupation, id }: OccupationValue & { id: string }) => {
   const [isEditing, setIsEditing] = useState(false);
   const toggleEdit = () => setIsEditing((current) => !current);
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: { occupation },
-    mode: 'all'
+    mode: 'all',
   });
   const { isSubmitting, isValid } = form.formState;
   const router = useRouter();
-  const { updateDemographic } = useUpdateDemographic();
 
   const onSubmit = async (data: OccupationValue) => {
     try {
-      await updateDemographic({ variables: { patientId: id, demographic: data } });
+      await updateDemographic({ patientId: id, demographic: data });
       setIsEditing(false);
       toast.success('Ocupación actualizada correctamente');
       router.refresh();
@@ -43,7 +42,6 @@ export const OccupationSection = ({ occupation, id }: OccupationValue & { id: st
     }
   };
 
-
   return (
     <Card className="rounded-none bg-transparent">
       <Form {...form}>
@@ -52,9 +50,7 @@ export const OccupationSection = ({ occupation, id }: OccupationValue & { id: st
             <div>
               <CardTitle>Ocupación</CardTitle>
               <p className="text-muted-foreground text-sm mt-5">
-                {isEditing
-                  ? 'Ingresa tu ocupación. Este dato es público.'
-                  : 'Tu ocupación es pública.'}
+                {isEditing ? 'Ingresa tu ocupación. Este dato es público.' : 'Tu ocupación es pública.'}
               </p>
               {!isEditing ? (
                 <p className="text-primary font-bold mt-3">{form.getValues('occupation')}</p>
@@ -80,10 +76,13 @@ export const OccupationSection = ({ occupation, id }: OccupationValue & { id: st
             </p>
             {isEditing ? (
               <div className="flex justify-end items-center gap-3">
-                <Button onClick={() => {
-                  form.reset();
-                  toggleEdit();
-                }} className="rounded-none">
+                <Button
+                  onClick={() => {
+                    form.reset();
+                    toggleEdit();
+                  }}
+                  className="rounded-none"
+                >
                   Cancelar
                 </Button>
                 <Button disabled={!isValid || isSubmitting} type="submit" className="rounded-none">

@@ -1,10 +1,10 @@
 'use client';
 
+import { updateBio } from '@/app/(server)/actions/user/update-bio';
 import { Button } from '@/libs/shadcn-ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@/libs/shadcn-ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/libs/shadcn-ui/components/form';
 import { Textarea } from '@/libs/shadcn-ui/components/textarea';
-import { useUpdateBio } from '@/modules/user/presentation/graphql/hooks/use-update-bio';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -29,15 +29,12 @@ export const BioSection = ({ bio }: BioFormValues) => {
     defaultValues: { bio },
   });
   const { isSubmitting, isValid } = form.formState;
-  const { updateBio } = useUpdateBio();
   const router = useRouter();
 
   const onSubmit = async (data: BioFormValues) => {
     try {
       await updateBio({
-        variables: {
-          bio: data.bio,
-        },
+        bio: data.bio,
       });
       setIsEditing(false);
       router.refresh();

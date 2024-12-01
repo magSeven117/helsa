@@ -1,10 +1,10 @@
 'use client';
 
+import { updateDemographic } from '@/app/(server)/actions/patient/update-demographic';
 import { Button } from '@/libs/shadcn-ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@/libs/shadcn-ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/libs/shadcn-ui/components/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/libs/shadcn-ui/components/select';
-import { useUpdateDemographic } from '@/modules/patient/presentation/graphql/hooks/use-update-demographic';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -29,11 +29,10 @@ export const CivilStatusSection = ({ civilStatus, id }: CivilStatusValue & { id:
   });
   const { isSubmitting, isValid } = form.formState;
   const router = useRouter();
-  const { updateDemographic } = useUpdateDemographic();
 
   const onSubmit = async (data: CivilStatusValue) => {
     try {
-      await updateDemographic({ variables: { patientId: id, demographic: data } });
+      await updateDemographic({ patientId: id, demographic: data });
       setIsEditing(false);
       toast.success('Estado civil actualizado correctamente');
       router.refresh();

@@ -1,10 +1,10 @@
 'use client';
 
+import { updateBiometric } from '@/app/(server)/actions/patient/update-biometric';
 import { Button } from '@/libs/shadcn-ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@/libs/shadcn-ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/libs/shadcn-ui/components/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/libs/shadcn-ui/components/select';
-import { useUpdateBiometric } from '@/modules/patient/presentation/graphql/hooks/use-update-biometric';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -29,11 +29,10 @@ export const BloodTypeSection = ({ bloodType, id }: BloodTypeLevel & { id: strin
   });
   const { isSubmitting, isValid } = form.formState;
   const router = useRouter();
-  const { updateBiometric } = useUpdateBiometric();
 
   const onSubmit = async (data: BloodTypeLevel) => {
     try {
-      await updateBiometric({ variables: { patientId: id, biometric: data } });
+      await updateBiometric({ patientId: id, biometric: data });
       setIsEditing(false);
       toast.success('Tipo de sangre actualizado correctamente.');
       router.refresh();

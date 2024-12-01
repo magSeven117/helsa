@@ -1,10 +1,10 @@
 'use client';
 
+import { updateHospital } from '@/app/(server)/actions/hospital/update-hospital';
 import { Button } from '@/libs/shadcn-ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@/libs/shadcn-ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/libs/shadcn-ui/components/form';
 import { Input } from '@/libs/shadcn-ui/components/input';
-import { useUpdateHospital } from '@/modules/hospital/presentation/graphql/hooks/use-update-hospital';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2, MapPin } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -41,17 +41,13 @@ export const AddressSection = ({ address, id }: AddressFormValues & { id: string
   });
   const { isSubmitting, isValid } = form.formState;
   const router = useRouter();
-  const { updateHospital } = useUpdateHospital();
-
   const onSubmit = async (data: AddressFormValues) => {
     try {
       await updateHospital({
-        variables: {
-          hospitalId: id,
-          hospital: {
-            address: data.address
-          },
-        }
+        hospitalId: id,
+        hospital: {
+          address: data.address,
+        },
       });
       setIsEditing(false);
       form.reset();
