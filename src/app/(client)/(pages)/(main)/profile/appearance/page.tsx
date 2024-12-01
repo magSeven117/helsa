@@ -1,4 +1,4 @@
-import { AppearanceForm } from './appearance-form';
+import { AppearanceForm } from '../../../../components/profile/appearance-form';
 
 const Page = () => {
   return (

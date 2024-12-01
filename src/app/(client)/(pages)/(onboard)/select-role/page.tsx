@@ -1,4 +1,4 @@
-import SelectRoleForm from '../components/select-role-form';
+import SelectRoleForm from '../../../components/onboard/select-role-form';
 
 const Page = ({ searchParams }: { searchParams: { userId: string } }) => {
   const userId = searchParams.userId;

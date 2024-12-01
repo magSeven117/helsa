@@ -1,4 +1,4 @@
-import NotificationControl from './notification-control';
+import NotificationControl from '../../../../components/profile/notification-control';
 
 const Page = () => {
   return (

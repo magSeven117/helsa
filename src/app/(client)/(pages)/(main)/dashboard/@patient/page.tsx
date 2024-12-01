@@ -1,13 +1,13 @@
 import { Button } from '@/libs/shadcn-ui/components/button';
 import { Calendar, PlusCircle } from 'lucide-react';
 import Link from 'next/link';
-import { Activities } from './components/activities';
-import BloodPressure from './components/blood-pressure';
-import Glucose from './components/glucose';
-import { HealthAverage } from './components/health-average';
-import HeartRate from './components/heart-rate';
-import Temperature from './components/temperature';
-import { UpcomingAppointments } from './components/upcoming-appointments';
+import { Activities } from '../../../../components/dashboard/patient/activities';
+import BloodPressure from '../../../../components/dashboard/patient/blood-pressure';
+import Glucose from '../../../../components/dashboard/patient/glucose';
+import { HealthAverage } from '../../../../components/dashboard/patient/health-average';
+import HeartRate from '../../../../components/dashboard/patient/heart-rate';
+import Temperature from '../../../../components/dashboard/patient/temperature';
+import { UpcomingAppointments } from '../../../../components/dashboard/patient/upcoming-appointments';
 
 const Page = () => {
   return (

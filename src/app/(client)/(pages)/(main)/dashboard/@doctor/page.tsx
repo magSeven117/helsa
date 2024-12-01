@@ -1,10 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/libs/shadcn-ui/components/card';
 import { DateRangePicker } from '@/libs/shadcn-ui/components/date-range-picker';
 import { Calendar, DollarSign, Stethoscope, Users } from 'lucide-react';
-import { AppointmentTypes } from './components/appointment-types';
-import PatientsTable from './components/patients-table';
-import { Revenue } from './components/revenue';
-import { UpcomingAppointments } from './components/upcoming-appointments';
+import { AppointmentTypes } from '../../../../components/dashboard/doctor/appointment-types';
+import PatientsTable from '../../../../components/dashboard/doctor/patients-table';
+import { Revenue } from '../../../../components/dashboard/doctor/revenue';
+import { UpcomingAppointments } from '../../../../components/dashboard/doctor/upcoming-appointments';
 
 const Page = () => {
   return (

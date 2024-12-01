@@ -3,11 +3,11 @@ import { getCurrentUser } from '@/modules/user/presentation/actions/get-current-
 import { redirect } from 'next/navigation';
 import React from 'react';
 import { v4 } from 'uuid';
-import ModalAssistant from './components/assistant/modal-assistant';
-import { AI } from './components/chat/actions';
-import KBar from './components/kbar';
-import SideBar from './components/side-bar/side-bar';
-import TopBar from './components/top-bar/top-bar';
+import ModalAssistant from '../../components/assistant/modal-assistant';
+import { AI } from '../../components/chat/actions';
+import KBar from '../../components/kbar';
+import SideBar from '../../components/side-bar/side-bar';
+import TopBar from '../../components/top-bar/top-bar';
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
   const user = await getCurrentUser();

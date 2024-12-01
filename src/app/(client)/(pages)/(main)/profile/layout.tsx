@@ -1,7 +1,7 @@
 import { getCurrentUser } from '@/modules/user/presentation/actions/get-current-user';
 import { redirect } from 'next/navigation';
 import React from 'react';
-import { NavigationProfile } from './components/navigation-profile';
+import { NavigationProfile } from '../../../components/profile/navigation-profile';
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
   const user = await getCurrentUser();

@@ -1,6 +1,6 @@
-import DoctorForm from '../components/doctor-form';
-import HospitalForm from '../components/hospital-form';
-import PatientForm from '../components/patient-form';
+import DoctorForm from '../../../components/onboard/doctor-form';
+import HospitalForm from '../../../components/onboard/hospital-form';
+import PatientForm from '../../../components/onboard/patient-form';
 
 const Page = ({ searchParams }: { searchParams: { role: string; userId: string } }) => {
   const role = searchParams.role;

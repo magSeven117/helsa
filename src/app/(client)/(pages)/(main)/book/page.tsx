@@ -1,9 +1,9 @@
 import { getSpecialties } from '@/modules/doctor/presentation/actions/get-specialties';
 import { createSearchParamsCache, parseAsArrayOf, parseAsInteger, parseAsString } from 'nuqs/server';
 import { Suspense } from 'react';
-import DoctorSkeleton from './components/doctor-list-loading';
-import DoctorListWrapper from './components/doctor-list-wrapper';
-import SearchDoctorInput from './components/search-doctor-input';
+import DoctorSkeleton from '../../../components/book/doctor-list-loading';
+import DoctorListWrapper from '../../../components/book/doctor-list-wrapper';
+import SearchDoctorInput from '../../../components/book/search-doctor-input';
 
 const searchParamsCache = createSearchParamsCache({
   q: parseAsString,
