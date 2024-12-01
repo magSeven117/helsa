@@ -12,8 +12,8 @@ const Page = async () => {
     return null;
   }
   return (
-    <div className="flex w-full h-full">
-      <DoctorScheduleModal doctorId={doctor.id} />
+    <div className="flex w-full h-full px-5 py-7">
+      <DoctorScheduleModal doctor={doctor} />
     </div>
   );
 };

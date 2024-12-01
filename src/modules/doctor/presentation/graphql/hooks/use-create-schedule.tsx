@@ -7,7 +7,7 @@ const CREATE_SCHEDULE = gql`
   }
 `;
 export const useCreateSchedule = () => {
-  const [createSchedule, { loading, error }] = useMutation(CREATE_SCHEDULE);
+  const [createSchedule, { loading, error, reset }] = useMutation(CREATE_SCHEDULE);
 
-  return { createSchedule, loading, error };
+  return { createSchedule, loading, error, reset };
 };

@@ -1,22 +1,12 @@
 import { UpdateDoctorVectorTask } from '@/app/tasks/update-doctor-vector';
-export const eventsConfig: EventConfig[] = [
+export const handlers: EventConfig[] = [
   {
-    aggregate: 'doctor',
-    globalTasks: [],
-    events: {
-      created: {
-        tasks: [UpdateDoctorVectorTask.id],
-      },
-    },
+    taskId: UpdateDoctorVectorTask.id,
+    events: ['schedule-registered'],
   },
 ];
 
 type EventConfig = {
-  aggregate: string;
-  globalTasks: string[];
-  events: {
-    [key: string]: {
-      tasks: string[];
-    };
-  };
+  taskId: string;
+  events: string[];
 };

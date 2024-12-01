@@ -1,11 +1,10 @@
 import { GetDoctorAppointments } from '@/modules/appointment/application/get-doctor-appointments';
 import { Criteria, Operator } from '@/modules/shared/domain/core/criteria';
 import { GetUser } from '@/modules/user/application/get-user';
+import { User } from '@/modules/user/domain/user';
 import { format } from 'date-fns';
 import { DoctorSearcher } from '../../domain/doctor-index-store';
 import { DoctorRepository } from '../../domain/doctor-repository';
-import { EmbeddingDoctor } from '../../domain/embedding-doctor';
-import { User } from '@/modules/user/domain/user';
 
 export class UpdateIndexStore {
   constructor(

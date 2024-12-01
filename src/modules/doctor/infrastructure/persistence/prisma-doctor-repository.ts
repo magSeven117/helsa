@@ -63,7 +63,10 @@ export class PrismaDoctorRepository implements DoctorRepository {
   }
   async getByCriteria(criteria: Criteria): Promise<Doctor> {
     const { where } = this.converter.criteria(criteria);
-    const doctor = await this.model.findFirst({ where, include: { consultingRoomAddress: true, educations: true } });
+    const doctor = await this.model.findFirst({
+      where,
+      include: { consultingRoomAddress: true, educations: true, schedule: true },
+    });
     if (!doctor) throw new Error('Doctor not found');
     return Doctor.fromPrimitives(doctor as unknown as Primitives<Doctor>);
   }

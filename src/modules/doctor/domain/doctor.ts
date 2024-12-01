@@ -5,6 +5,7 @@ import { Primitives } from '@/modules/shared/domain/types/primitives';
 import { ConsultingRoomAddress } from './consulting-room-address';
 import { Day } from './day';
 import { Education } from './educations';
+import { ScheduleRegistered } from './events/schedule-registered';
 import { Schedule } from './schedule';
 import { Specialty } from './specialty';
 
@@ -108,6 +109,7 @@ export class Doctor extends Aggregate {
   }
 
   createSchedule(days: Primitives<Day>[]) {
-    this.schedule = Schedule.create(1, 24, days);
+    this.schedule = this.schedule ? this.schedule.update(days) : Schedule.create(1, 24, days);
+    this.record(new ScheduleRegistered(this.id.value, days));
   }
 }

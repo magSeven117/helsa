@@ -41,4 +41,13 @@ export class Schedule {
   public static initialize(): Schedule {
     return Schedule.create(0, 0, []);
   }
+
+  public update(days: Primitives<Day>[]): Schedule {
+    return new Schedule(
+      this.id,
+      this.appointmentDuration,
+      this.maxAppointmentsPerDay,
+      days.map((day) => Day.create(day.day, day.hours))
+    );
+  }
 }
