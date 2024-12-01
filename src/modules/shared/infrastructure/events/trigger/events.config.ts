@@ -1,4 +1,4 @@
-import { UpdateDoctorVectorTask } from '@/app/tasks/update-doctor-vector';
+import { UpdateDoctorVectorTask } from '@/app/(server)/tasks/update-doctor-vector';
 export const handlers: EventConfig[] = [
   {
     taskId: UpdateDoctorVectorTask.id,
