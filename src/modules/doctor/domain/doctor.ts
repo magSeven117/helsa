@@ -109,6 +109,18 @@ export class Doctor extends Aggregate {
     }
   }
 
+  saveEducation(education: Primitives<Education>) {
+    if (!this.educations) {
+      this.educations = [];
+    }
+    const index = this.educations.findIndex((edu) => edu.id.value === education.id);
+    if (index >= 0) {
+      this.educations[index] = Education.fromPrimitives(education);
+    } else {
+      this.educations.push(Education.create(education.title, education.institution, education.graduatedAt.toString()));
+    }
+  }
+
   createSchedule(days: Primitives<Day>[]) {
     this.schedule = this.schedule ? this.schedule.update(days) : Schedule.create(1, 24, days);
     this.record(new ScheduleRegistered(this.id.value, days));

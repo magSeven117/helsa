@@ -16,7 +16,7 @@ export class EditEducation {
       throw new NotFoundError('Doctor not found');
     }
 
-    doctor.editEducation(educationId, education);
+    doctor.saveEducation(education);
 
     await this.doctorRepository.save(doctor);
   }

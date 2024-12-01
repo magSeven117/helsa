@@ -3,7 +3,7 @@ import { Primitives } from '@/modules/shared/domain/types/primitives';
 import { DoctorRepository } from '../../domain/doctor-repository';
 import { Education } from '../../domain/educations';
 
-export class AddEducation {
+export class SaveEducation {
   constructor(private readonly doctorRepository: DoctorRepository) {}
 
   async run(doctorId: string, education: Primitives<Education>): Promise<void> {
@@ -11,7 +11,7 @@ export class AddEducation {
       Criteria.fromValues([{ field: 'id', value: doctorId, operator: Operator.EQUAL }])
     );
 
-    doctor.addEducation(education);
+    doctor.saveEducation(education);
 
     await this.doctorRepository.save(doctor);
   }
