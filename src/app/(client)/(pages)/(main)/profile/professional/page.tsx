@@ -1,6 +1,6 @@
+import { getDoctor } from '@/app/(server)/actions/doctor/get-doctor';
 import { getSpecialties } from '@/app/(server)/actions/doctor/get-specialties';
-import { getDoctor } from '@/modules/doctor/presentation/actions/get-doctor';
-import { getCurrentUser } from '@/modules/user/presentation/actions/get-current-user';
+import { getCurrentUser } from '@/app/(server)/actions/user/get-current-user';
 import { AddressSection } from '../../../../components/profile/doctor-sections/address-section';
 import { EducationsSection } from '../../../../components/profile/doctor-sections/educations-section';
 import { ExperienceSection } from '../../../../components/profile/doctor-sections/experience-section';
@@ -8,11 +8,13 @@ import { LicenseNumberSection } from '../../../../components/profile/doctor-sect
 import { SpecialtySection } from '../../../../components/profile/doctor-sections/specialty-section';
 
 const Page = async () => {
-  const user = await getCurrentUser();
+  const res = await getCurrentUser();
+  const user = res?.data ?? null;
   if (!user) {
     return null;
   }
-  const doctor = await getDoctor(user.id);
+  const doctorResponse = await getDoctor({ userId: user.id });
+  const doctor = doctorResponse?.data ?? null;
   const data = await getSpecialties();
   if (!doctor) {
     return null;

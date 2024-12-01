@@ -10,10 +10,11 @@ export const loggerMiddleware = createMiddleware().define(async ({ next, clientI
 
   const endTime = performance.now();
 
-  console.log('Result ->', result);
-  console.log('Client input ->', clientInput);
-  console.log('Metadata ->', metadata);
-  console.log('Action execution took', endTime - startTime, 'ms');
+  console.log(
+    `Executed action ${metadata.actionName} with input ${JSON.stringify(clientInput)} and got result ${
+      result.success ? 'success' : 'failure'
+    } in ${endTime - startTime}ms`
+  );
 
   // And then return the result of the awaited action.
   return result;

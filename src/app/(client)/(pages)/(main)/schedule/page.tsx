@@ -1,9 +1,10 @@
+import { getCurrentUser } from '@/app/(server)/actions/user/get-current-user';
 import { getDoctor } from '@/modules/doctor/presentation/actions/get-doctor';
-import { getCurrentUser } from '@/modules/user/presentation/actions/get-current-user';
-import DoctorScheduleModal from './components/create-schedule';
+import DoctorScheduleModal from '../../../components/schedule/create-schedule';
 
 const Page = async () => {
-  const user = await getCurrentUser();
+  const res = await getCurrentUser();
+  const user = res?.data ?? null;
   if (!user) {
     return null;
   }

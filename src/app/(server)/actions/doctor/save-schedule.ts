@@ -1,3 +1,4 @@
+'use server';
 import { CreateSchedule } from '@/modules/doctor/application/services/create-schedule';
 import { PrismaDoctorRepository } from '@/modules/doctor/infrastructure/persistence/prisma-doctor-repository';
 import { authActionClient } from '@/modules/shared/infrastructure/actions/client-actions';

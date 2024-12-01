@@ -1,4 +1,4 @@
-import { getCurrentUser } from '@/modules/user/presentation/actions/get-current-user';
+import { getCurrentUser } from '@/app/(server)/actions/user/get-current-user';
 import AvatarSection from '../../../../components/profile/personal-sections/avatar-section';
 import { BioSection } from '../../../../components/profile/personal-sections/bio-section';
 import { DeleteAccountSection } from '../../../../components/profile/personal-sections/delete-account-section';
@@ -6,7 +6,8 @@ import { EmailSection } from '../../../../components/profile/personal-sections/e
 import { NameSection } from '../../../../components/profile/personal-sections/name-section';
 
 const Page = async () => {
-  const user = await getCurrentUser();
+  const res = await getCurrentUser();
+  const user = res?.data ?? null;
   if (!user) return null;
   return (
     <div className="space-y-6 w-full">

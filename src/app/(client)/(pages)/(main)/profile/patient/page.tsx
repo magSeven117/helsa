@@ -1,5 +1,5 @@
-import { getPatient } from '@/modules/patient/presentation/actions/get-patient';
-import { getCurrentUser } from '@/modules/user/presentation/actions/get-current-user';
+import { getPatient } from '@/app/(server)/actions/patient/get-patient';
+import { getCurrentUser } from '@/app/(server)/actions/user/get-current-user';
 import { BloodTypeSection } from '../../../../components/profile/patient-sections/blood-type-section';
 import { CivilStatusSection } from '../../../../components/profile/patient-sections/civil-status-section';
 import { EducationLevelSection } from '../../../../components/profile/patient-sections/education-level-section';
@@ -8,11 +8,16 @@ import { OccupationSection } from '../../../../components/profile/patient-sectio
 import { OrganDonorSection } from '../../../../components/profile/patient-sections/organ-donor-section';
 
 const Page = async () => {
-  const user = await getCurrentUser();
+  const userResponse = await getCurrentUser();
+  const user = userResponse?.data ?? null;
   if (!user) {
     return null;
   }
-  const patient = await getPatient({ id: user.id });
+  const patientResponse = await getPatient({ userId: user.id });
+  const patient = patientResponse?.data ?? null;
+  if (!patient) {
+    return null;
+  }
   return (
     <div className="space-y-6 w-full">
       <div className="flex flex-col w-full gap-10">

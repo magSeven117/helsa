@@ -3,6 +3,7 @@
 import { Check, ChevronDown, Clock, Loader2 } from 'lucide-react';
 import * as React from 'react';
 
+import { saveSchedule } from '@/app/(server)/actions/doctor/save-schedule';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/libs/shadcn-ui/components/accordion';
 import {
   AlertDialog,
@@ -27,8 +28,8 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/libs/shadcn-ui/compon
 import { Switch } from '@/libs/shadcn-ui/components/switch';
 import { cn } from '@/libs/shadcn-ui/utils/utils';
 import { Schedule } from '@/modules/doctor/domain/schedule';
-import { useCreateSchedule } from '@/modules/doctor/presentation/graphql/hooks/use-create-schedule';
 import { Primitives } from '@/modules/shared/domain/types/primitives';
+import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 
 type DoctorScheduleProps = {
@@ -48,7 +49,6 @@ const daysLocale = {
 };
 
 export default function DoctorSchedule({ doctorId, schedule, setIsOpen }: DoctorScheduleProps) {
-  const { createSchedule, loading, error, reset } = useCreateSchedule();
   const [selectedHours, setSelectedHours] = React.useState<{ [key: string]: string[] }>({
     monday: schedule.days.find((day) => day.day === 'monday')?.hours.map((hour) => hour.hour) ?? [],
     tuesday: schedule.days.find((day) => day.day === 'tuesday')?.hours.map((hour) => hour.hour) ?? [],
@@ -105,16 +105,16 @@ export default function DoctorSchedule({ doctorId, schedule, setIsOpen }: Doctor
     }
   };
 
+  const { executeAsync, isPending, hasErrored, reset } = useAction(saveSchedule);
+
   const save = async () => {
     try {
-      await createSchedule({
-        variables: {
-          doctorId: doctorId,
-          days: Object.entries(selectedHours).map(([day, hours]) => ({
-            day,
-            hours: hours.map((hour) => ({ hour })),
-          })),
-        },
+      await executeAsync({
+        doctorId: doctorId,
+        days: Object.entries(selectedHours).map(([day, hours]) => ({
+          day,
+          hours: hours.map((hour) => ({ hour })),
+        })),
       });
       setIsOpen?.(false);
     } catch (error) {
@@ -190,10 +190,10 @@ export default function DoctorSchedule({ doctorId, schedule, setIsOpen }: Doctor
           </div>
         ))}
       </div>
-      <Button className="mt-4 w-full" onClick={save} disabled={loading}>
-        {loading ? <Loader2 className="size-4 animate-spin" /> : 'Guardar horario'}
+      <Button className="mt-4 w-full" onClick={save} disabled={isPending}>
+        {isPending ? <Loader2 className="size-4 animate-spin" /> : 'Guardar horario'}
       </Button>
-      <AlertDialog open={error ? true : false}>
+      <AlertDialog open={hasErrored ? true : false}>
         <AlertDialogContent className="sm:rounded-none">
           <AlertDialogHeader className="rounded-none">
             <AlertDialogTitle>Ups, error.</AlertDialogTitle>

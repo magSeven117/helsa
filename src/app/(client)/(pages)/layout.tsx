@@ -1,7 +1,6 @@
 import '@/assets/globals.css';
 import icon from '@/assets/images/Helsa Logo black - white.png';
 import ToastProvider from '@/libs/ducen-ui/components/toast-provider';
-import { ApolloContextProvider } from '@/modules/shared/infrastructure/persistence/graphql/apollo-provider';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata } from 'next';
@@ -23,21 +22,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ApolloContextProvider>
-      <html lang="en" suppressHydrationWarning={true}>
-        <link rel="icon" href={icon.src} sizes="any" />
-        <body className={nunito.className + ' styled-scroll'} suppressHydrationWarning={true}>
-          <NuqsAdapter>
-            <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-              {children}
-              <Analytics />
-              <SpeedInsights />
-              <ToastProvider></ToastProvider>
-              <Toaster />
-            </ThemeProvider>
-          </NuqsAdapter>
-        </body>
-      </html>
-    </ApolloContextProvider>
+    <html lang="en" suppressHydrationWarning={true}>
+      <link rel="icon" href={icon.src} sizes="any" />
+      <body className={nunito.className + ' styled-scroll'} suppressHydrationWarning={true}>
+        <NuqsAdapter>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            {children}
+            <Analytics />
+            <SpeedInsights />
+            <ToastProvider></ToastProvider>
+            <Toaster />
+          </ThemeProvider>
+        </NuqsAdapter>
+      </body>
+    </html>
   );
 }
