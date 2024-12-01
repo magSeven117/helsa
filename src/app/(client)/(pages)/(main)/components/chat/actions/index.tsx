@@ -19,7 +19,6 @@ export async function submitUserMessage(content: string): Promise<ClientMessage>
   const { success } = await ratelimit.limit(ip!);
   const aiState = getMutableAIState<typeof AI>();
   if (!success) {
-    console.log('Rate limit success');
     aiState.update({
       ...aiState.get(),
       messages: [
