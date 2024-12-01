@@ -39,7 +39,15 @@ export class Schedule {
   }
 
   public static initialize(): Schedule {
-    return Schedule.create(0, 0, []);
+    return Schedule.create(0, 0, [
+      { day: 'monday', hours: [] },
+      { day: 'tuesday', hours: [] },
+      { day: 'wednesday', hours: [] },
+      { day: 'thursday', hours: [] },
+      { day: 'friday', hours: [] },
+      { day: 'saturday', hours: [] },
+      { day: 'sunday', hours: [] },
+    ]);
   }
 
   public update(days: Primitives<Day>[]): Schedule {

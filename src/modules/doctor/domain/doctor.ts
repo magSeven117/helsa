@@ -36,7 +36,8 @@ export class Doctor extends Aggregate {
       new NumberValueObject(0),
       new NumberValueObject(1),
       DateValueObject.today(),
-      DateValueObject.today()
+      DateValueObject.today(),
+      Schedule.initialize()
     );
   }
 
