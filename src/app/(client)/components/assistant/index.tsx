@@ -1,13 +1,13 @@
 'use client';
 
+import Chat from '@/app/(client)/components/chat';
+import { ChatAIProvider } from '@/app/(client)/components/chat/chat-ai-provider';
+import { getChat } from '@/app/(server)/actions/chat/get-chat';
 import { useAIState, useUIState } from 'ai/rsc';
 import { useEffect, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { v4 } from 'uuid';
-import Chat from '../chat';
-import { AI } from '../chat/actions';
-import { getChat } from '../chat/actions/storage';
-import { getUIStateFromAIState } from '../chat/actions/uitls';
+import { getUIStateFromAIState } from '../chat/utils';
 import { AssistantFeedback } from './feedback';
 import { Header } from './header';
 import { SidebarList } from './sidebar-list';
@@ -16,8 +16,8 @@ const Assistant = () => {
   const [isExpanded, setExpanded] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
   const [chatId, setChatId] = useState<string>();
-  const [messages, setMessages] = useUIState<typeof AI>();
-  const [aiState, setAIState] = useAIState<typeof AI>();
+  const [messages, setMessages] = useUIState<typeof ChatAIProvider>();
+  const [aiState, setAIState] = useAIState<typeof ChatAIProvider>();
   const [input, setInput] = useState<string | undefined>('');
 
   const toggleOpen = () => setExpanded((prev) => !prev);

@@ -85,7 +85,6 @@ export class MongoDBDoctorSearcher implements DoctorSearcher {
     specialties?: string[];
     experience?: number;
   }) {
-    console.log(minRate);
     const results = await this.collection
       .aggregate([
         ...(term ? this.getTextFilter(term) : []),

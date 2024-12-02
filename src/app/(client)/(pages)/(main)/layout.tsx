@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 import React from 'react';
 import { v4 } from 'uuid';
 import ModalAssistant from '../../components/assistant/modal-assistant';
-import { AI } from '../../components/chat/actions';
+import { ChatAIProvider } from '../../components/chat/chat-ai-provider';
 import KBar from '../../components/kbar';
 import SideBar from '../../components/side-bar/side-bar';
 import TopBar from '../../components/top-bar/top-bar';
@@ -19,7 +19,7 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
   }
   return (
     <div className="flex justify-start items-start w-full styled-scroll">
-      <AI
+      <ChatAIProvider
         initialAIState={{
           user: {
             id: user.id,
@@ -40,7 +40,7 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
           </KBar>
           <ModalAssistant />
         </SidebarProvider>
-      </AI>
+      </ChatAIProvider>
     </div>
   );
 };

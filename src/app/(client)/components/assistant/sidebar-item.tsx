@@ -1,5 +1,5 @@
 import { cn } from '@/libs/shadcn-ui/utils/utils';
-import { Chat } from '../chat/actions/types';
+import { Chat } from '@/modules/chat/domain/chat';
 
 interface SidebarItemProps {
   chat: Chat;

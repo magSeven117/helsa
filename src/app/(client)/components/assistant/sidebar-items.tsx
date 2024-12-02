@@ -1,8 +1,9 @@
 import { useAIState } from 'ai/rsc';
 import { useEffect, useState } from 'react';
-import { AI } from '../chat/actions';
-import { getChatsAction } from '../chat/actions/get-chats-action';
-import { Chat } from '../chat/actions/types';
+import { ChatAIProvider } from '../../../(client)/components/chat/chat-ai-provider';
+import { getChatsAction } from '../../../(server)/actions/chat/get-chats-action';
+
+import { Chat } from '@/modules/chat/domain/chat';
 import { SidebarItem } from './sidebar-item';
 
 interface SidebarItemsProps {
@@ -28,7 +29,7 @@ const formatRange = (key: string) => {
 export function SidebarItems({ onSelect, chatId }: SidebarItemsProps) {
   const [items, setItems] = useState<Chat[]>([]);
   const [isLoading, setLoading] = useState(false);
-  const [aiState] = useAIState<typeof AI>();
+  const [aiState] = useAIState<typeof ChatAIProvider>();
 
   useEffect(() => {
     async function fetchData() {

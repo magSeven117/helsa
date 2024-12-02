@@ -1,6 +1,7 @@
+'use server';
+import { Chat } from '@/modules/chat/domain/chat';
 import { addMonths, addWeeks, isAfter, isBefore, isToday } from 'date-fns';
-import { getChats } from './storage';
-import { Chat } from './types';
+import { getChats } from './get-chats';
 
 export async function getChatsAction() {
   const data = await getChats();

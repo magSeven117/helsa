@@ -2,7 +2,7 @@
 import logo2 from '@/assets/images/Helsa Logo black.png';
 import logo from '@/assets/images/Helsa Logo white.png';
 import { Avatar, AvatarFallback, AvatarImage } from '@/libs/shadcn-ui/components/avatar';
-import type { AI } from './actions';
+import type { ChatAIProvider } from '../../../(client)/components/chat/chat-ai-provider';
 
 import { useAIState } from 'ai/rsc';
 import { useTheme } from 'next-themes';
@@ -11,7 +11,7 @@ type Props = {
   role: 'assistant' | 'user';
 };
 export function ChatAvatar({ role }: Props) {
-  const [aiState] = useAIState<typeof AI>();
+  const [aiState] = useAIState<typeof ChatAIProvider>();
   const theme = useTheme();
   switch (role) {
     case 'user': {

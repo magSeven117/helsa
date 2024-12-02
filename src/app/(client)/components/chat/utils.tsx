@@ -1,5 +1,5 @@
-import { BotMessage, UserMessage } from '../messages';
-import type { Chat, Message } from './types';
+import { Chat, Message } from '@/modules/chat/domain/chat';
+import { BotMessage, UserMessage } from './messages';
 
 export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 

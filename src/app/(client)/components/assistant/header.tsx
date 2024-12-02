@@ -1,7 +1,7 @@
 import { Button } from '@/libs/shadcn-ui/components/button';
 import { cn } from '@/libs/shadcn-ui/utils/utils';
 import { Sidebar, X } from 'lucide-react';
-import { useAssistantStore } from './assistant-store';
+import { useAssistantStore } from '../../store/assistant/assistant-store';
 
 type Props = {
   isExpanded: boolean;

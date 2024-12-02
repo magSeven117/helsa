@@ -2,7 +2,7 @@
 import { Dialog, DialogContent } from '@/libs/shadcn-ui/components/dialog';
 import { useHotkeys } from 'react-hotkeys-hook';
 import Assistant from '.';
-import { useAssistantStore } from './assistant-store';
+import { useAssistantStore } from '../../store/assistant/assistant-store';
 const ModalAssistant = () => {
   const { isOpen, setOpen } = useAssistantStore();
   useHotkeys('ctrl+i', (evt) => {

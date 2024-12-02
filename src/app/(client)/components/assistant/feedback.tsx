@@ -2,7 +2,7 @@ import { Button } from '@/libs/shadcn-ui/components/button';
 import { Textarea } from '@/libs/shadcn-ui/components/textarea';
 import { ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
-import { sendFeedback } from './actions/send-feedback';
+import { sendFeedback } from '../../../(server)/actions/assistant/send-feedback';
 
 type Props = {
   onClose: () => void;

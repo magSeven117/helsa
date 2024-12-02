@@ -18,7 +18,7 @@ import { useKBar } from 'kbar';
 import { Bell, Command, Inbox, LogOut, Settings, Sparkles, SunMoon, User } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { useRouter } from 'next/navigation';
-import { useAssistantStore } from '../assistant/assistant-store';
+import { useAssistantStore } from '../../store/assistant/assistant-store';
 import { SidebarTrigger } from '../side-bar/sidabar-trigger';
 
 const TopBar = () => {

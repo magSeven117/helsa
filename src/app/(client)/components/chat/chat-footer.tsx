@@ -5,7 +5,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/libs/shadcn-ui/compon
 import { MessageCircleMore, Outdent, Settings } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { useRouter } from 'next/navigation';
-import { useAssistantStore } from '../assistant/assistant-store';
+import { useAssistantStore } from '../../store/assistant/assistant-store';
 
 type Props = {
   onSubmit: () => void;

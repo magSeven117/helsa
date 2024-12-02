@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@/libs/shadcn-ui/utils/utils';
-import { ClientMessage } from './actions/types';
+import { ClientMessage } from '../../../(server)/actions/chat/types';
 
 type Props = {
   messages: ClientMessage[];
