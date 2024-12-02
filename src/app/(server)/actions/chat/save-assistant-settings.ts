@@ -1,6 +1,7 @@
 'use server';
 
 import { AssistantSettings } from '@/modules/chat/domain/assistant';
+import { RedisChatRepository } from '@/modules/chat/infrastructure/redis-chat-repository';
 import { client } from '@/modules/shared/infrastructure/persistence/redis/redis-client';
 
 type SetAssistant = {
@@ -12,8 +13,6 @@ type SetAssistant = {
   };
 };
 export async function setAssistantSettings({ settings, params, userId }: SetAssistant) {
-  return client.set(`assistant:user:${userId}:settings`, {
-    ...settings,
-    ...params,
-  });
+  const repository = new RedisChatRepository(client);
+  await repository.saveAssistantSettings(settings, userId, params);
 }

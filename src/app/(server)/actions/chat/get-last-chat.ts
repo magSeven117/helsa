@@ -1,4 +1,5 @@
 'use server';
+import { RedisChatRepository } from '@/modules/chat/infrastructure/redis-chat-repository';
 import { client } from '@/modules/shared/infrastructure/persistence/redis/redis-client';
 import { getCurrentUser } from '../user/get-current-user';
 import { getAssistantSettings } from './get-assistant-settings';
@@ -12,16 +13,14 @@ export async function getLatestChat() {
 
   const userId = user?.id;
 
+  if (!userId) {
+    return null;
+  }
+
   try {
-    const chat: string[] = await client.zrange(`chat:user:${userId}`, 0, 1, {
-      rev: true,
-    });
-
-    const lastId = chat.at(0);
-
-    if (lastId) {
-      return client.hgetall(lastId);
-    }
+    const repository = new RedisChatRepository(client);
+    const chat = await repository.getLastChat(userId);
+    return chat;
   } catch (error) {
     return null;
   }

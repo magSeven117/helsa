@@ -1,9 +1,10 @@
+import { MutableAIState } from '@/app/(server)/actions/chat/types';
 import { createStreamableValue } from 'ai/rsc';
 import { v4 } from 'uuid';
 import { BotMessage } from '../messages';
 
 export const generateText = (
-  aiState: any,
+  aiState: MutableAIState,
   textStream: undefined | ReturnType<typeof createStreamableValue<string>>,
   textNode: undefined | React.ReactNode
 ) => {

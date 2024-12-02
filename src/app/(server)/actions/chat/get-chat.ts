@@ -1,5 +1,5 @@
 'use server';
-import { Chat } from '@/modules/chat/domain/chat';
+import { RedisChatRepository } from '@/modules/chat/infrastructure/redis-chat-repository';
 import { getSession } from '@/modules/shared/infrastructure/auth/better-auth';
 import { client } from '@/modules/shared/infrastructure/persistence/redis/redis-client';
 
@@ -8,7 +8,8 @@ export async function getChat(id: string) {
 
   const userId = session?.user?.id;
 
-  const chat = await client.hgetall<Chat>(`chat:${id}`);
+  const repository = new RedisChatRepository(client);
+  const chat = await repository.getChat(id);
 
   if (!chat || (userId && chat.userId !== userId)) {
     return null;
