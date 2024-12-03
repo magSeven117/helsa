@@ -2,7 +2,6 @@ import { Aggregate } from '@/modules/shared/domain/core/aggregate';
 import { DateValueObject, StringValueObject } from '@/modules/shared/domain/core/value-object';
 import { Uuid } from '@/modules/shared/domain/core/value-objects/uuid';
 import { Primitives } from '@/modules/shared/domain/types/primitives';
-import { addHours } from 'date-fns';
 import { AppointmentScheduled } from './events/appointment-scheduled';
 import { AppointmentNote } from './note';
 import { AppointmentRating } from './rating';
@@ -14,12 +13,13 @@ import { AppointmentTelemetry } from './telemetry';
 export class Appointment extends Aggregate {
   constructor(
     id: Uuid,
-    public type: StringValueObject,
-    public initDate: DateValueObject,
-    public endDate: DateValueObject,
+    public date: DateValueObject,
+    public hour: StringValueObject,
     public status: AppointmentStatus,
+    public motive: StringValueObject,
     public patientId: Uuid,
     public doctorId: Uuid,
+    public typeId: Uuid,
     createdAt: DateValueObject,
     updatedAt: DateValueObject,
     public room?: AppointmentRoom,
@@ -34,12 +34,13 @@ export class Appointment extends Aggregate {
   toPrimitives(): Primitives<Appointment> {
     return {
       id: this.id.toString(),
-      type: this.type.value,
-      initDate: this.initDate.value,
-      endDate: this.endDate.value,
+      date: this.date.value,
+      hour: this.hour.value,
+      motive: this.motive.value,
       status: this.status.getValue(),
       patientId: this.patientId.toString(),
       doctorId: this.doctorId.toString(),
+      typeId: this.typeId.value,
       createdAt: this.createdAt.value,
       updatedAt: this.updatedAt.value,
       room: this.room ? this.room.toPrimitives() : undefined,
@@ -53,26 +54,35 @@ export class Appointment extends Aggregate {
   static fromPrimitives(data: Primitives<Appointment>): Appointment {
     return new Appointment(
       new Uuid(data.id),
-      new StringValueObject(data.type),
-      new DateValueObject(data.initDate),
-      new DateValueObject(data.endDate),
+      new DateValueObject(data.date),
+      new StringValueObject(data.hour),
       new AppointmentStatus(data.status),
+      new StringValueObject(data.motive),
       new Uuid(data.patientId),
       new Uuid(data.doctorId),
+      new Uuid(data.typeId),
       new DateValueObject(data.createdAt),
       new DateValueObject(data.updatedAt)
     );
   }
 
-  static create(initDate: Date, motive: string, patientId: string, doctorId: string): Appointment {
+  static create(
+    date: Date,
+    hour: string,
+    motive: string,
+    patientId: string,
+    doctorId: string,
+    typeId: string
+  ): Appointment {
     const appointment = new Appointment(
       Uuid.random(),
-      new StringValueObject('appointment'),
-      new DateValueObject(initDate),
-      new DateValueObject(addHours(initDate, 1)),
+      new DateValueObject(date),
+      new StringValueObject(hour),
       AppointmentStatus.scheduled(),
+      new StringValueObject(motive),
       new Uuid(patientId),
       new Uuid(doctorId),
+      new Uuid(typeId),
       DateValueObject.today(),
       DateValueObject.today()
     );

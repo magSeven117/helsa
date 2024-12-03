@@ -36,9 +36,13 @@ export function Nav({ links }: NavProps) {
   return (
     <div className="flex  gap-5 py-2 justify-start items-center max-sm:max-w-full max-sm:overflow-x-scroll no-scroll">
       {links.map((link, index) => (
-        <Link href={link.href} key={link.title} className={cn('text-muted-foreground', {
-          'text-primary font-bold': pathname === link.href,
-        })}>
+        <Link
+          href={link.href}
+          key={link.title}
+          className={cn('text-muted-foreground', {
+            'text-primary font-bold': pathname === link.href,
+          })}
+        >
           {link.title}
         </Link>
       ))}
@@ -67,6 +71,11 @@ const navItems = [
     roles: ['HOSPITAL'],
   },
   {
+    title: 'Citas',
+    href: '/profile/appointments',
+    roles: ['DOCTOR'],
+  },
+  {
     title: 'Apariencia',
     href: '/profile/appearance',
     roles: ['DOCTOR', 'PATIENT', 'HOSPITAL'],
@@ -81,4 +90,4 @@ const navItems = [
     href: '/profile/security',
     roles: ['DOCTOR', 'PATIENT', 'HOSPITAL'],
   },
-]
+];

@@ -2,6 +2,7 @@ model Appointment {
   id     String            @id @default(uuid())
   date   DateTime
   hour   String
+  motive String
   status AppointmentStatus
 
   patientId String
