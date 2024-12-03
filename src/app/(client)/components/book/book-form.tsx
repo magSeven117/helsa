@@ -1,12 +1,23 @@
 'use client';
 
+import { createAppointment } from '@/app/(server)/actions/appointment/create-appointment';
+import { getDoctorAppointments } from '@/app/(server)/actions/appointment/get-doctor-appointments';
 import { Avatar, AvatarFallback, AvatarImage } from '@/libs/shadcn-ui/components/avatar';
 import { Button } from '@/libs/shadcn-ui/components/button';
-import { Calendar } from '@/libs/shadcn-ui/components/calendar';
+import { DatePicker } from '@/libs/shadcn-ui/components/date-picker';
+import { Form, FormControl, FormField, FormItem, FormMessage } from '@/libs/shadcn-ui/components/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/libs/shadcn-ui/components/select';
 import { Textarea } from '@/libs/shadcn-ui/components/textarea';
+import { Appointment } from '@/modules/appointment/domain/appointment';
+import { Primitives } from '@/modules/shared/domain/types/primitives';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
-import { useState } from 'react';
+import { Loader2 } from 'lucide-react';
+import { useAction } from 'next-safe-action/hooks';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
 
 interface Doctor {
   doctorId: string;
@@ -14,27 +25,16 @@ interface Doctor {
   specialty: string;
   image: string;
   score: number;
+  days: {
+    day: string;
+    hours: { hour: string }[];
+  }[];
 }
 
 interface TimeSlot {
   id: string;
   time: string;
 }
-
-const timeSlots: TimeSlot[] = [
-  { id: '1', time: '09:00' },
-  { id: '2', time: '10:00' },
-  { id: '3', time: '11:00' },
-  { id: '4', time: '12:00' },
-  { id: '5', time: '14:00' },
-  { id: '6', time: '15:00' },
-  { id: '7', time: '16:00' },
-  { id: '8', time: '17:00' },
-  { id: '8', time: '17:00' },
-  { id: '8', time: '17:00' },
-  { id: '8', time: '17:00' },
-  { id: '8', time: '17:00' },
-];
 
 const paymentMethods = [
   { id: 'mobile', name: 'Pago móvil' },
@@ -43,84 +43,156 @@ const paymentMethods = [
   { id: 'bitcoin', name: 'Bitcoin' },
 ];
 
-export default function DoctorAppointment({ doctor }: { doctor: Doctor }) {
-  const [date, setDate] = useState<Date | undefined>(new Date());
-  const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
-  const [symptoms, setSymptoms] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState<string | undefined>();
+const formSchema = z.object({
+  date: z.date(),
+  time: z.string().min(5, 'Selecciona una hora'),
+  symptoms: z.string().min(2, 'Describe tus síntomas'),
+  paymentMethod: z.string().min(2, 'Selecciona un método de pago'),
+});
 
-  const handleSubmit = () => {
-    console.log({
-      doctor: doctor.name,
-      date: date ? format(date, 'yyyy-MM-dd') : '',
-      time: selectedSlot,
-      symptoms,
-    });
+export default function DoctorAppointment({ doctor }: { doctor: Doctor }) {
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      date: new Date(),
+      time: '',
+      symptoms: '',
+      paymentMethod: '',
+    },
+  });
+  const { executeAsync, isPending, hasErrored } = useAction(getDoctorAppointments);
+  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [appointments, setAppointments] = useState<Primitives<Appointment>[]>([]);
+  const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
+  const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await executeAsync({ doctorId: doctor.doctorId });
+      setAppointments(response?.data ?? []);
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (!date) {
+      return;
+    }
+
+    const hours = doctor.days.find((day) => day.day === format(date, 'EEEE').toLowerCase())?.hours ?? [];
+    const availableSlots = hours.filter(
+      (hour) => !appointments.some((appointment) => format(appointment.initDate, 'HH:mm') === hour.hour)
+    );
+
+    setTimeSlots(availableSlots.map((hour) => ({ id: hour.hour, time: hour.hour })));
+    form.setValue('date', date);
+  }, [date]);
+
+  useEffect(() => {
+    if (!selectedSlot) {
+      return;
+    }
+    form.setValue('time', selectedSlot);
+  }, [selectedSlot]);
+
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    try {
+      await createAppointment({
+        doctorId: doctor.doctorId,
+        initDate: new Date(`${format(data.date, 'yyyy-MM-dd')} ${data.time}`),
+        symptoms: data.symptoms,
+      });
+    } catch (error) {
+      console.log(error);
+      toast.error('Ha ocurrido un error al agendar la cita');
+    }
   };
 
-  if (!doctor) {
+  if (isPending) {
+    return <div>Cargando...</div>;
+  }
+
+  if (!doctor || hasErrored) {
     return null;
   }
 
   return (
     <div className="w-full mt-10">
       <DoctorInfo doctor={doctor} />
-      <div className="grid grid-cols-1 gap-6">
-        <div className="col-span-1">
-          <Calendar
-            mode="single"
-            selected={date}
-            onSelect={setDate}
-            className="h-full w-full flex border rounded-none mt-3"
-            classNames={{
-              months: 'flex w-full flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0 flex-1',
-              month: 'space-y-4 w-full flex flex-col',
-              table: 'w-full h-full border-collapse space-y-1',
-              head_row: '',
-              row: 'w-full mt-2',
-              cell: 'w-1/7 h-8 text-center cursor-pointer',
-            }}
-          />
-        </div>
-        <div className="col-span-1">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3">
-            {timeSlots.map((slot) => (
-              <Button
-                key={slot.id}
-                variant={selectedSlot === slot.id ? 'default' : 'outline'}
-                onClick={() => setSelectedSlot(slot.id)}
-              >
-                {slot.time}
-              </Button>
-            ))}
-          </div>
-          <div className="mt-4">
-            <Textarea
-              placeholder="Describe tus síntomas y la razón de tu consulta aquí"
-              value={symptoms}
-              onChange={(e) => setSymptoms(e.target.value)}
-              className="min-h-[100px] rounded-none"
-            />
-          </div>
-          <div className="mt-4">
-            <Select onValueChange={setPaymentMethod}>
-              <SelectTrigger className="w-full rounded-none">
-                <SelectValue placeholder="Selecciona un método de pago" />
-              </SelectTrigger>
-              <SelectContent className="rounded-none">
-                {paymentMethods.map((method) => (
-                  <SelectItem key={method.id} value={method.id} className="rounded-none">
-                    {method.name}
-                  </SelectItem>
+      <Form {...form}>
+        <form action="" onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="grid grid-cols-1 gap-6">
+            <div className="col-span-1 grid grid-cols-1 gap-3">
+              <div className="w-full">
+                <DatePicker onSelect={setDate} selected={date} />
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3">
+                {timeSlots.map((slot) => (
+                  <Button
+                    key={slot.id}
+                    variant={selectedSlot === slot.id ? 'default' : 'outline'}
+                    onClick={() => setSelectedSlot(slot.id)}
+                  >
+                    {slot.time}
+                  </Button>
                 ))}
-              </SelectContent>
-            </Select>
+              </div>
+            </div>
+            <div className="col-span-1">
+              <div className="mt-4">
+                <FormField
+                  control={form.control}
+                  name="symptoms"
+                  render={({ field }) => (
+                    <FormItem className="my-2">
+                      <FormControl>
+                        <Textarea
+                          placeholder="Describe tus síntomas y la razón de tu consulta aquí"
+                          {...field}
+                          className="min-h-[100px] rounded-none"
+                        />
+                      </FormControl>
+                      <FormMessage></FormMessage>
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="mt-4">
+                <FormField
+                  control={form.control}
+                  name="paymentMethod"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger className="w-full rounded-none">
+                            <SelectValue placeholder="Selecciona un método de pago" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent className="rounded-none">
+                          {paymentMethods.map((method) => (
+                            <SelectItem key={method.id} value={method.id} className="rounded-none">
+                              {method.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <Button
+                className="w-full mt-4"
+                type="submit"
+                disabled={form.formState.isSubmitting || !form.formState.isValid}
+              >
+                {form.formState.isSubmitting ? <Loader2 className="size-4 animate-spin" /> : 'Agendar cita'}
+              </Button>
+            </div>
           </div>
-          <Button className="w-full mt-4" onClick={handleSubmit} disabled={!date || !selectedSlot || !symptoms}>
-            Agendar cita
-          </Button>
-        </div>
-      </div>
+        </form>
+      </Form>
     </div>
   );
 }

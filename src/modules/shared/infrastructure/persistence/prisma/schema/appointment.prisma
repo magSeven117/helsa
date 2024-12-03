@@ -1,15 +1,20 @@
 model Appointment {
-  id       String            @id @default(uuid())
-  type     String
-  initDate DateTime
-  endDate  DateTime
-  status   AppointmentStatus
+  id     String            @id @default(uuid())
+  date   DateTime
+  hour   String
+  status AppointmentStatus
 
   patientId String
   patient   Patient @relation(fields: [patientId], references: [id])
 
   doctorId String
   doctor   Doctor @relation(fields: [doctorId], references: [id])
+
+  typeId String
+  type   AppointmentType @relation(fields: [typeId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   room        AppointmentRoom?
   rating      AppointmentRating?
@@ -30,6 +35,18 @@ enum AppointmentStatus {
   STARTED
   MISSED
   FINISHED
+}
+
+model AppointmentType {
+  id       String  @id @default(uuid())
+  doctorId String?
+  name     String
+  duration Decimal
+  color    String
+  system   Boolean
+
+  doctor       Doctor?       @relation(fields: [doctorId], references: [id])
+  appointments Appointment[]
 }
 
 model AppointmentRoom {

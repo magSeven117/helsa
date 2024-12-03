@@ -2,6 +2,8 @@ import { Aggregate } from '@/modules/shared/domain/core/aggregate';
 import { DateValueObject, StringValueObject } from '@/modules/shared/domain/core/value-object';
 import { Uuid } from '@/modules/shared/domain/core/value-objects/uuid';
 import { Primitives } from '@/modules/shared/domain/types/primitives';
+import { addHours } from 'date-fns';
+import { AppointmentScheduled } from './events/appointment-scheduled';
 import { AppointmentNote } from './note';
 import { AppointmentRating } from './rating';
 import { AppointmentRecipe } from './recipe';
@@ -62,17 +64,19 @@ export class Appointment extends Aggregate {
     );
   }
 
-  static create(type: string, initDate: Date, endDate: Date, patientId: Uuid, doctorId: Uuid): Appointment {
-    return new Appointment(
+  static create(initDate: Date, motive: string, patientId: string, doctorId: string): Appointment {
+    const appointment = new Appointment(
       Uuid.random(),
-      new StringValueObject(type),
+      new StringValueObject('appointment'),
       new DateValueObject(initDate),
-      new DateValueObject(endDate),
+      new DateValueObject(addHours(initDate, 1)),
       AppointmentStatus.scheduled(),
-      patientId,
-      doctorId,
+      new Uuid(patientId),
+      new Uuid(doctorId),
       DateValueObject.today(),
       DateValueObject.today()
     );
+    appointment.record(new AppointmentScheduled(appointment.toPrimitives()));
+    return appointment;
   }
 }

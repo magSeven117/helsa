@@ -12,6 +12,16 @@ type Props = {
     score: number;
     specialty: string;
     experience: number;
+    days: {
+      day: string;
+      hours: { hour: string }[];
+    }[];
+    schedule: {
+      date: string;
+      appointments: number;
+      availabilities: number;
+      day: string;
+    };
   }[];
 };
 const DoctorList = ({ doctors }: Props) => {

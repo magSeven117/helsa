@@ -9,19 +9,20 @@ model Doctor {
   consultingRoomAddress ConsultingRoomAddress?
 
   userId      String @unique
-  specialtyId String 
+  specialtyId String
 
   user      User      @relation(fields: [userId], references: [id])
   specialty Specialty @relation(fields: [specialtyId], references: [id])
 
-  educations Education[]
-  hospitals   Hospital[]   @relation("DoctorHospital")
-  ratings     Rating[]
-  diagnostics Diagnostic[]
-  treatments  Treatment[]
-  appointments Appointment[]
-  tests       MedicalTest[]
-  references MedicalReference[]
+  educations       Education[]
+  hospitals        Hospital[]         @relation("DoctorHospital")
+  ratings          Rating[]
+  diagnostics      Diagnostic[]
+  treatments       Treatment[]
+  appointments     Appointment[]
+  tests            MedicalTest[]
+  references       MedicalReference[]
+  appointmentTypes AppointmentType[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -75,7 +76,7 @@ model Education {
 
   title       String
   institution String
-  graduatedAt   DateTime
+  graduatedAt DateTime
 
   doctorId String
   doctor   Doctor @relation(fields: [doctorId], references: [id])

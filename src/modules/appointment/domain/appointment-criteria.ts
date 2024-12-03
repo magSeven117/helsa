@@ -8,4 +8,8 @@ export class AppointmentCriteria {
   static searchByStatus(status: string): Criteria {
     return Criteria.fromValues([{ field: 'status', value: status, operator: Operator.EQUAL }]);
   }
+
+  static searchByDate(date: Date): Criteria {
+    return Criteria.fromValues([{ field: 'initDate', value: date, operator: Operator.EQUAL }]);
+  }
 }

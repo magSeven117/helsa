@@ -100,4 +100,21 @@ export class PrismaDoctorRepository implements DoctorRepository {
   async removeEducation(doctorId: string, educationId: string): Promise<void> {
     await this.client.education.delete({ where: { id: educationId, doctorId } });
   }
+
+  async search(): Promise<Doctor[]> {
+    const doctors = await this.model.findMany({
+      where: {
+        OR: [
+          {
+            schedule: {},
+          },
+          {
+            appointments: { some: { initDate: {} } },
+          },
+        ],
+      },
+      include: { consultingRoomAddress: true, educations: true, schedule: true, appointments: true },
+    });
+    return doctors.map((doctor) => Doctor.fromPrimitives(doctor as unknown as Primitives<Doctor>));
+  }
 }

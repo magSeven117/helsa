@@ -32,4 +32,14 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
       Appointment.fromPrimitives(appointment as unknown as Primitives<Appointment>)
     );
   }
+
+  async save(appointment: Appointment): Promise<void> {
+    const { notes, rating, recipe, room, telemetry, ...data } = appointment.toPrimitives();
+    console.log('data', data);
+    await this.model.upsert({
+      where: { id: data.id },
+      update: data,
+      create: data,
+    });
+  }
 }
