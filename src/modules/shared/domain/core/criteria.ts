@@ -19,6 +19,7 @@ export type Filter = { field: string; value: any; operator: Operator };
 export type Filters = { filters: (Filter | Filters)[]; type: FilterType };
 export type Order = { field: string; order: Direction };
 export type Pagination = { limit: number; offset: number };
+export type Include = { field: string; criteria?: Criteria };
 
 export function isAsc(direction: Direction): boolean {
   return direction === Direction.ASC;
@@ -35,11 +36,13 @@ export class Criteria {
   protected filters: Filters;
   protected order?: Order;
   protected pagination?: Pagination;
+  protected includes: Include[] = [];
 
-  constructor(filters?: Filters, order?: Order, pagination?: Pagination) {
+  constructor(filters?: Filters, order?: Order, pagination?: Pagination, includes?: Include[]) {
     this.filters = filters || { filters: [], type: FilterType.AND };
     this.order = order;
     this.pagination = pagination;
+    this.includes = includes || [];
   }
   hasFilter(): boolean {
     return this.filters.filters.length > 0;
@@ -58,6 +61,10 @@ export class Criteria {
   }
   getPagination(): Pagination | undefined {
     return this.pagination;
+  }
+
+  getIncludes(): Include[] {
+    return this.includes;
   }
 
   where(filters: Filter[]): Criteria {
@@ -100,7 +107,7 @@ export class Criteria {
     return this;
   }
 
-  static fromValues(filters: Filter[], order?: Order, pagination?: Pagination): Criteria {
-    return new Criteria({ filters, type: FilterType.AND }, order, pagination);
+  static fromValues(filters: Filter[], order?: Order, pagination?: Pagination, include?: Include[]): Criteria {
+    return new Criteria({ filters, type: FilterType.AND }, order, pagination, include);
   }
 }

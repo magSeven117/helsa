@@ -3,6 +3,7 @@ import {
   Filter,
   Filters,
   FilterType,
+  Include,
   isFilter,
   Operator,
   Order,
@@ -28,10 +29,12 @@ export class PrismaCriteriaConverter {
     const where = this.filter(criteria.getFilters());
     const orderBy = criteria.hasOrder() ? this.order(criteria.getOrder()!) : undefined;
     const pagination = criteria.hasPagination() ? this.pagination(criteria.getPagination()!) : undefined;
+    const include = this.include(criteria.getIncludes());
     return {
       where,
       orderBy,
       ...pagination,
+      include,
     };
   }
 
@@ -60,6 +63,14 @@ export class PrismaCriteriaConverter {
       skip: pagination.offset || 0,
       take: pagination.limit || 10,
     };
+  }
+  private include(include: Include[]): { [key: string]: any } {
+    return include.reduce((acc, include) => {
+      return {
+        ...acc,
+        [include.field]: include.criteria ? this.criteria(include.criteria) : true,
+      };
+    }, {});
   }
 
   private equal(filter: Filter) {
