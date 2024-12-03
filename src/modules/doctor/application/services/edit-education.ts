@@ -18,6 +18,6 @@ export class EditEducation {
 
     doctor.saveEducation(education);
 
-    await this.doctorRepository.save(doctor);
+    await this.doctorRepository.saveEducations(doctor.id.value, doctor.educations ?? []);
   }
 }

@@ -15,7 +15,7 @@ export class CreateSchedule {
     if (!doctor) throw new NotFoundError('Doctor not found');
 
     doctor.createSchedule(days);
-    await this.doctorRepository.save(doctor);
+    await this.doctorRepository.saveSchedule(doctor.id.value, doctor.schedule);
     await this.bus.publish(doctor.pullDomainEvents());
   }
 }

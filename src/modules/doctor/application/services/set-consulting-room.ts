@@ -16,6 +16,6 @@ export class SetConsultingRoom {
     }
 
     doctor.createConsultingRoomAddress(consultingRoomAddress.city, consultingRoomAddress.address);
-    await this.doctorRepository.save(doctor);
+    await this.doctorRepository.saveConsultingRoomAddress(doctor.id.value, doctor.consultingRoomAddress);
   }
 }

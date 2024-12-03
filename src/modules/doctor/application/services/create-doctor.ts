@@ -7,5 +7,6 @@ export class CreateDoctor {
   async run(data: Primitives<Doctor>): Promise<void> {
     const doctor = Doctor.create(data.id, data.userId, data.licenseMedicalNumber, data.specialtyId);
     await this.repository.save(doctor);
+    await this.repository.saveSchedule(doctor.id.value, doctor.schedule);
   }
 }

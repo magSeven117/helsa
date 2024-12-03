@@ -3,8 +3,11 @@ import { Primitives } from '@/modules/shared/domain/types/primitives';
 import { PrismaCriteriaConverter } from '@/modules/shared/infrastructure/persistence/prisma/prisma-criteria-converter';
 import { PrismaClient } from '@prisma/client';
 import { AppointmentType } from '../../domain/appointment-type';
+import { ConsultingRoomAddress } from '../../domain/consulting-room-address';
 import { Doctor } from '../../domain/doctor';
 import { DoctorRepository } from '../../domain/doctor-repository';
+import { Education } from '../../domain/educations';
+import { Schedule } from '../../domain/schedule';
 import { Specialty } from '../../domain/specialty';
 
 export class PrismaDoctorRepository implements DoctorRepository {
@@ -35,28 +38,87 @@ export class PrismaDoctorRepository implements DoctorRepository {
         experience: data.experience,
       },
     });
-    if (doctor.consultingRoomAddress) {
-      await this.client.consultingRoomAddress.upsert({
-        where: { doctorId: doctor.id.value },
-        update: doctor.consultingRoomAddress.toPrimitives(),
+  }
+
+  async saveConsultingRoomAddress(doctorId: string, address?: ConsultingRoomAddress): Promise<void> {
+    if (!address) return;
+    const data = address.toPrimitives();
+    await this.client.consultingRoomAddress.upsert({
+      where: { doctorId },
+      update: {
+        address: data.address,
+        city: data.city,
+        roomCoordinates: data.roomCoordinates,
+      },
+      create: {
+        doctorId,
+        address: data.address,
+        city: data.city,
+        roomCoordinates: data.roomCoordinates,
+      },
+    });
+  }
+
+  async saveSchedule(doctorId: string, schedule?: Schedule): Promise<void> {
+    if (!schedule) return;
+    const data = schedule.toPrimitives();
+    await this.client.schedule.upsert({
+      where: { doctorId },
+      update: {
+        days: data.days,
+      },
+      create: {
+        doctorId,
+        days: data.days,
+        appointmentDuration: data.appointmentDuration,
+        maxAppointmentsPerDay: data.maxAppointmentsPerDay,
+      },
+    });
+  }
+
+  async saveEducations(doctorId: string, educations: Education[]): Promise<void> {
+    if (!educations) return;
+    for (const education of educations) {
+      const data = education.toPrimitives();
+      await this.client.education.upsert({
+        where: { id: data.id },
+        update: {
+          title: data.title,
+          institution: data.institution,
+          graduatedAt: data.graduatedAt,
+        },
         create: {
-          ...doctor.consultingRoomAddress.toPrimitives(),
-          doctorId: doctor.id.value,
+          id: data.id,
+          title: data.title,
+          institution: data.institution,
+          graduatedAt: data.graduatedAt,
+          doctorId,
         },
       });
     }
-    if (doctor.schedule) {
-      await this.client.schedule.upsert({
-        where: { doctorId: doctor.id.value },
-        update: doctor.schedule.toPrimitives(),
+  }
+
+  async saveAppointmentTypes(doctorId: string, appointmentTypes: AppointmentType[]): Promise<void> {
+    if (!appointmentTypes) return;
+    for (const type of appointmentTypes) {
+      const data = type.toPrimitives();
+      await this.client.appointmentType.upsert({
+        where: { id: data.id },
+        update: {
+          name: data.name,
+          duration: data.duration,
+          color: data.color,
+        },
         create: {
-          ...doctor.schedule.toPrimitives(),
-          doctorId: doctor.id.value,
+          id: data.id,
+          name: data.name,
+          duration: data.duration,
+          doctorId,
+          color: data.color,
+          system: data.system,
         },
       });
     }
-    await this.saveEducations(doctor.id.value, data.educations);
-    await this.saveAppointmentTypes(doctor.id.value, data.appointmentTypes);
   }
   async findByCriteria(criteria: Criteria): Promise<Doctor[]> {
     const query = this.converter.criteria(criteria);
@@ -76,52 +138,6 @@ export class PrismaDoctorRepository implements DoctorRepository {
   async getSpecialties() {
     const specialties = await this.client.specialty.findMany();
     return specialties.map((specialty) => Specialty.fromPrimitives(specialty));
-  }
-
-  async saveEducations(doctorId: string, educations: Primitives<Doctor>['educations']): Promise<void> {
-    if (!educations) return;
-    for (const education of educations) {
-      await this.client.education.upsert({
-        where: { id: education.id },
-        update: {
-          title: education.title,
-          institution: education.institution,
-          graduatedAt: education.graduatedAt,
-        },
-        create: {
-          id: education.id,
-          title: education.title,
-          institution: education.institution,
-          graduatedAt: education.graduatedAt,
-          doctorId,
-        },
-      });
-    }
-  }
-
-  async saveAppointmentTypes(
-    doctorId: string,
-    appointmentTypes: Primitives<Doctor>['appointmentTypes']
-  ): Promise<void> {
-    if (!appointmentTypes) return;
-    for (const type of appointmentTypes) {
-      await this.client.appointmentType.upsert({
-        where: { id: type.id },
-        update: {
-          name: type.name,
-          duration: type.duration,
-          color: type.color,
-        },
-        create: {
-          id: type.id,
-          name: type.name,
-          duration: type.duration,
-          doctorId,
-          color: type.color,
-          system: type.system,
-        },
-      });
-    }
   }
 
   async removeEducation(doctorId: string, educationId: string): Promise<void> {

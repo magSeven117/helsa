@@ -20,6 +20,6 @@ export class SaveAppointmentType {
       doctorId: doctorId,
     });
 
-    await this.repository.save(doctor);
+    await this.repository.saveAppointmentTypes(doctor.id.value, doctor.appointmentTypes ?? []);
   }
 }
