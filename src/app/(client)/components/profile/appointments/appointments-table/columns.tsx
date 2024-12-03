@@ -34,7 +34,7 @@ export const columns: ColumnDef<AppointmentType>[] = [
               <span className="cursor-default">{row.getValue('name')}</span>
             </TooltipTrigger>
             {row.original?.name && (
-              <TooltipContent className="px-3 py-1.5 text-xs" side="right" sideOffset={10}>
+              <TooltipContent className="px-3 py-1.5 text-xs rounded-none" side="right" sideOffset={10}>
                 {row.original.name}
               </TooltipContent>
             )}
@@ -69,10 +69,13 @@ export const columns: ColumnDef<AppointmentType>[] = [
                 <DotsHorizontalIcon className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => setOpen(true)}>Edit</DropdownMenuItem>
+            <DropdownMenuContent align="end" className="rounded-none">
+              <DropdownMenuItem className="rounded-none" onClick={() => setOpen(true)}>
+                Edit
+              </DropdownMenuItem>
               {!row.original.system && (
                 <DropdownMenuItem
+                  className="rounded-none"
                   onClick={() => {
                     console.log('Remove', row.original);
                   }}

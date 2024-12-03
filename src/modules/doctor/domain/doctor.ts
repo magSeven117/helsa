@@ -2,6 +2,7 @@ import { Aggregate } from '@/modules/shared/domain/core/aggregate';
 import { DateValueObject, NumberValueObject, StringValueObject } from '@/modules/shared/domain/core/value-object';
 import { Uuid } from '@/modules/shared/domain/core/value-objects/uuid';
 import { Primitives } from '@/modules/shared/domain/types/primitives';
+import { AppointmentType } from './appointment-type';
 import { ConsultingRoomAddress } from './consulting-room-address';
 import { Day } from './day';
 import { Education } from './educations';
@@ -22,7 +23,8 @@ export class Doctor extends Aggregate {
     public schedule?: Schedule,
     public consultingRoomAddress?: ConsultingRoomAddress,
     public educations?: Education[],
-    public specialty?: Specialty
+    public specialty?: Specialty,
+    public appointmentTypes?: AppointmentType[]
   ) {
     super(id, createdAt, updatedAt);
   }
@@ -55,7 +57,9 @@ export class Doctor extends Aggregate {
       data.consultingRoomAddress ? ConsultingRoomAddress.fromPrimitives(data.consultingRoomAddress) : undefined,
       data.educations
         ? data.educations.map((education: Primitives<Education>) => Education.fromPrimitives(education))
-        : []
+        : [],
+      data.specialty ? Specialty.fromPrimitives(data.specialty) : undefined,
+      data.appointmentTypes ? data.appointmentTypes.map((type) => AppointmentType.fromPrimitives(type)) : []
     );
   }
 
@@ -73,6 +77,7 @@ export class Doctor extends Aggregate {
       consultingRoomAddress: this.consultingRoomAddress ? this.consultingRoomAddress.toPrimitives() : undefined,
       educations: this.educations ? this.educations.map((education) => education.toPrimitives()) : [],
       specialty: this.specialty ? this.specialty.toPrimitives() : undefined,
+      appointmentTypes: this.appointmentTypes ? this.appointmentTypes.map((type) => type.toPrimitives()) : [],
     };
   }
 
@@ -124,5 +129,25 @@ export class Doctor extends Aggregate {
   createSchedule(days: Primitives<Day>[]) {
     this.schedule = this.schedule ? this.schedule.update(days) : Schedule.create(1, 24, days);
     this.record(new ScheduleRegistered(this.id.value, days));
+  }
+
+  saveAppointmentType(appointmentType: Primitives<AppointmentType>) {
+    if (!this.appointmentTypes) {
+      this.appointmentTypes = [];
+    }
+    const index = this.appointmentTypes.findIndex((type) => type.id.value === appointmentType.id);
+    if (index >= 0) {
+      this.appointmentTypes[index] = AppointmentType.fromPrimitives(appointmentType);
+    } else {
+      this.appointmentTypes.push(
+        AppointmentType.create(
+          appointmentType.name,
+          this.id.value,
+          appointmentType.duration,
+          appointmentType.color,
+          false
+        )
+      );
+    }
   }
 }

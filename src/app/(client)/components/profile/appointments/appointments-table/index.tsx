@@ -1,7 +1,8 @@
+import { getAppointmentTypes } from '@/app/(server)/actions/doctor/get-appointment-types';
 import { DataTable } from './table';
 
-export async function TypesTable() {
-  //const categories = await getCategories();
+export async function TypesTable({ doctorId }: { doctorId: string }) {
+  const types = await getAppointmentTypes({ doctorId });
 
-  return <DataTable data={[]} />;
+  return <DataTable data={types?.data ?? []} />;
 }

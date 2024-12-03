@@ -2,6 +2,7 @@ import { Aggregate } from '@/modules/shared/domain/core/aggregate';
 import { DateValueObject, StringValueObject } from '@/modules/shared/domain/core/value-object';
 import { Uuid } from '@/modules/shared/domain/core/value-objects/uuid';
 import { Primitives } from '@/modules/shared/domain/types/primitives';
+import { format } from 'date-fns';
 import { AppointmentScheduled } from './events/appointment-scheduled';
 import { AppointmentNote } from './note';
 import { AppointmentRating } from './rating';
@@ -14,6 +15,7 @@ export class Appointment extends Aggregate {
   constructor(
     id: Uuid,
     public date: DateValueObject,
+    public day: StringValueObject,
     public hour: StringValueObject,
     public status: AppointmentStatus,
     public motive: StringValueObject,
@@ -35,6 +37,7 @@ export class Appointment extends Aggregate {
     return {
       id: this.id.toString(),
       date: this.date.value,
+      day: this.day.value,
       hour: this.hour.value,
       motive: this.motive.value,
       status: this.status.getValue(),
@@ -55,6 +58,7 @@ export class Appointment extends Aggregate {
     return new Appointment(
       new Uuid(data.id),
       new DateValueObject(data.date),
+      new StringValueObject(data.day),
       new StringValueObject(data.hour),
       new AppointmentStatus(data.status),
       new StringValueObject(data.motive),
@@ -66,18 +70,12 @@ export class Appointment extends Aggregate {
     );
   }
 
-  static create(
-    date: Date,
-    hour: string,
-    motive: string,
-    patientId: string,
-    doctorId: string,
-    typeId: string
-  ): Appointment {
+  static create(date: Date, motive: string, patientId: string, doctorId: string, typeId: string): Appointment {
     const appointment = new Appointment(
       Uuid.random(),
       new DateValueObject(date),
-      new StringValueObject(hour),
+      new StringValueObject(format(date, 'yyyy-MM-dd')),
+      new StringValueObject(format(date, 'HH:mm')),
       AppointmentStatus.scheduled(),
       new StringValueObject(motive),
       new Uuid(patientId),

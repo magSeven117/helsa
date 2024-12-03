@@ -1,6 +1,7 @@
 model Appointment {
   id     String            @id @default(uuid())
   date   DateTime
+  day    String
   hour   String
   motive String
   status AppointmentStatus

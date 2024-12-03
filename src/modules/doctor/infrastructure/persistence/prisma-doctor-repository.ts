@@ -2,6 +2,7 @@ import { Criteria } from '@/modules/shared/domain/core/criteria';
 import { Primitives } from '@/modules/shared/domain/types/primitives';
 import { PrismaCriteriaConverter } from '@/modules/shared/infrastructure/persistence/prisma/prisma-criteria-converter';
 import { PrismaClient } from '@prisma/client';
+import { AppointmentType } from '../../domain/appointment-type';
 import { Doctor } from '../../domain/doctor';
 import { DoctorRepository } from '../../domain/doctor-repository';
 import { Specialty } from '../../domain/specialty';
@@ -55,6 +56,7 @@ export class PrismaDoctorRepository implements DoctorRepository {
       });
     }
     await this.saveEducations(doctor.id.value, data.educations);
+    await this.saveAppointmentTypes(doctor.id.value, data.appointmentTypes);
   }
   async findByCriteria(criteria: Criteria): Promise<Doctor[]> {
     const query = this.converter.criteria(criteria);
@@ -65,7 +67,7 @@ export class PrismaDoctorRepository implements DoctorRepository {
     const { where } = this.converter.criteria(criteria);
     const doctor = await this.model.findFirst({
       where,
-      include: { consultingRoomAddress: true, educations: true, schedule: true },
+      include: { consultingRoomAddress: true, educations: true, schedule: true, appointmentTypes: true },
     });
     if (!doctor) throw new Error('Doctor not found');
     return Doctor.fromPrimitives(doctor as unknown as Primitives<Doctor>);
@@ -97,6 +99,31 @@ export class PrismaDoctorRepository implements DoctorRepository {
     }
   }
 
+  async saveAppointmentTypes(
+    doctorId: string,
+    appointmentTypes: Primitives<Doctor>['appointmentTypes']
+  ): Promise<void> {
+    if (!appointmentTypes) return;
+    for (const type of appointmentTypes) {
+      await this.client.appointmentType.upsert({
+        where: { id: type.id },
+        update: {
+          name: type.name,
+          duration: type.duration,
+          color: type.color,
+        },
+        create: {
+          id: type.id,
+          name: type.name,
+          duration: type.duration,
+          doctorId,
+          color: type.color,
+          system: type.system,
+        },
+      });
+    }
+  }
+
   async removeEducation(doctorId: string, educationId: string): Promise<void> {
     await this.client.education.delete({ where: { id: educationId, doctorId } });
   }
@@ -109,12 +136,17 @@ export class PrismaDoctorRepository implements DoctorRepository {
             schedule: {},
           },
           {
-            appointments: { some: { initDate: {} } },
+            appointments: { some: { date: {} } },
           },
         ],
       },
       include: { consultingRoomAddress: true, educations: true, schedule: true, appointments: true },
     });
     return doctors.map((doctor) => Doctor.fromPrimitives(doctor as unknown as Primitives<Doctor>));
+  }
+
+  async getAppointmentsTypes(doctorId: string): Promise<AppointmentType[]> {
+    const types = await this.client.appointmentType.findMany({ where: { OR: [{ doctorId }, { system: true }] } });
+    return types.map((type) => AppointmentType.fromPrimitives(type as unknown as Primitives<AppointmentType>));
   }
 }

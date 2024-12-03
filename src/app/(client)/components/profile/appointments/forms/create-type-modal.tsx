@@ -1,4 +1,7 @@
+'use client';
+import { createAppointmentType } from '@/app/(server)/actions/doctor/create-appointment-type';
 import { InputColor } from '@/libs/ducen-ui/components/input-color';
+import { Button } from '@/libs/shadcn-ui/components/button';
 import {
   DialogContent,
   DialogDescription,
@@ -9,7 +12,12 @@ import {
 import { Form, FormControl, FormField, FormItem } from '@/libs/shadcn-ui/components/form';
 import { Input } from '@/libs/shadcn-ui/components/input';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Loader2 } from 'lucide-react';
+import { useAction } from 'next-safe-action/hooks';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 type Props = {
@@ -24,6 +32,17 @@ const formSchema = z.object({
 });
 
 const CreateTypeModal = ({ isOpen, onOpenChange }: Props) => {
+  const router = useRouter();
+  const createType = useAction(createAppointmentType, {
+    onSuccess: () => {
+      onOpenChange(false);
+      toast.success('Successfully created categories.');
+      router.refresh();
+    },
+    onError: () => {
+      toast.error('Something went wrong please try again.');
+    },
+  });
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -32,7 +51,22 @@ const CreateTypeModal = ({ isOpen, onOpenChange }: Props) => {
       color: '#000000',
     },
   });
-  function onSubmit(data: z.infer<typeof formSchema>) {}
+
+  useEffect(() => {
+    form.reset({
+      color: undefined,
+      duration: undefined,
+      name: undefined,
+    });
+  }, [isOpen]);
+
+  function onSubmit(data: z.infer<typeof formSchema>) {
+    createType.execute({
+      name: data.name,
+      duration: Number(data.duration),
+      color: data.color,
+    });
+  }
   return (
     <DialogContent className="max-w-[455px] sm:rounded-none">
       <Form {...form}>
@@ -95,9 +129,9 @@ const CreateTypeModal = ({ isOpen, onOpenChange }: Props) => {
                   <span className="text-sm text-destructive">Please complete the fields above.</span>
                 )}
               </div>
-              {/* <Button type="submit" disabled={createCategories.status === 'executing'}>
-                {createCategories.status === 'executing' ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Create'}
-              </Button> */}
+              <Button type="submit" disabled={createType.status === 'executing'}>
+                {createType.status === 'executing' ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Create'}
+              </Button>
             </DialogFooter>
           </div>
         </form>
