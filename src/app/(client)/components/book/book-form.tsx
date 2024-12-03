@@ -80,9 +80,7 @@ export default function DoctorAppointment({ doctor }: { doctor: Doctor }) {
     }
 
     const hours = doctor.days.find((day) => day.day === format(date, 'EEEE').toLowerCase())?.hours ?? [];
-    const availableSlots = hours.filter(
-      (hour) => !appointments.some((appointment) => format(appointment.initDate, 'HH:mm') === hour.hour)
-    );
+    const availableSlots = hours.filter((hour) => !appointments.some((appointment) => appointment.hour === hour.hour));
 
     setTimeSlots(availableSlots.map((hour) => ({ id: hour.hour, time: hour.hour })));
     form.setValue('date', date);

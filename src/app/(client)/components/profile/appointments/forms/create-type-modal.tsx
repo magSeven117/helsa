@@ -9,8 +9,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/libs/shadcn-ui/components/dialog';
-import { Form, FormControl, FormField, FormItem } from '@/libs/shadcn-ui/components/form';
-import { Input } from '@/libs/shadcn-ui/components/input';
+import { Form, FormControl, FormField, FormItem, FormMessage } from '@/libs/shadcn-ui/components/form';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/libs/shadcn-ui/components/select';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useAction } from 'next-safe-action/hooks';
@@ -30,6 +30,15 @@ const formSchema = z.object({
   duration: z.string(),
   color: z.string(),
 });
+
+const durations = [
+  { label: '15 minutes', value: 15 },
+  { label: '30 minutes', value: 30 },
+  { label: '45 minutes', value: 45 },
+  { label: '1 hour', value: 60 },
+  { label: '1 hour 30 minutes', value: 70 },
+  { label: '2 hours', value: 120 },
+];
 
 const CreateTypeModal = ({ isOpen, onOpenChange }: Props) => {
   const router = useRouter();
@@ -101,20 +110,31 @@ const CreateTypeModal = ({ isOpen, onOpenChange }: Props) => {
                     )}
                   />
 
-                  <div className="flex-1 relative">
+                  <div className="flex-1 relative focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0">
                     <FormField
                       control={form.control}
-                      name={`duration`}
+                      name="duration"
                       render={({ field }) => (
-                        <FormItem className="flex-1">
-                          <FormControl>
-                            <Input
-                              {...field}
-                              placeholder="Duración"
-                              name={form.watch(`name`)}
-                              className="rounded-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
-                            />
-                          </FormControl>
+                        <FormItem className="flex-1 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0">
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger className="w-full rounded-none ">
+                                <SelectValue placeholder="Duración" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent className="rounded-none">
+                              {durations.map((duration) => (
+                                <SelectItem
+                                  key={duration.value}
+                                  value={duration.value.toString()}
+                                  className="rounded-none"
+                                >
+                                  {duration.label}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
                         </FormItem>
                       )}
                     />

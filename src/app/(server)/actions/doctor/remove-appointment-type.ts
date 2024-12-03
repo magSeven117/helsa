@@ -1,5 +1,5 @@
 'use server';
-import { SaveAppointmentType } from '@/modules/doctor/application/services/save-appointment-type';
+import { RemoveAppointmentType } from '@/modules/doctor/application/services/remove-appointment-type';
 import { PrismaDoctorRepository } from '@/modules/doctor/infrastructure/persistence/prisma-doctor-repository';
 import { authActionClient } from '@/modules/shared/infrastructure/actions/client-actions';
 import { db } from '@/modules/shared/infrastructure/persistence/prisma/prisma-connection';
@@ -7,23 +7,19 @@ import { z } from 'zod';
 import { getDoctor } from './get-doctor';
 
 const schema = z.object({
-  id: z.string().optional(),
-  name: z.string(),
-  duration: z.number(),
-  color: z.string(),
+  id: z.string(),
 });
 
-export const createAppointmentType = authActionClient
+export const removeAppointmentType = authActionClient
   .schema(schema)
-  .metadata({
-    actionName: 'create-appointment-type',
-  })
-  .action(async ({ parsedInput: { color, duration, name, id }, ctx: { user } }) => {
+  .metadata({ actionName: 'remove-appointment-type' })
+  .action(async ({ parsedInput: { id }, ctx: { user } }) => {
     const doctor = await getDoctor({ userId: user.id });
     const doctorId = doctor?.data?.id ?? null;
     if (!doctorId) {
       throw new Error('Doctor not found');
     }
-    const service = new SaveAppointmentType(new PrismaDoctorRepository(db));
-    await service.run(doctorId, id ?? '', name, duration, color);
+
+    const service = new RemoveAppointmentType(new PrismaDoctorRepository(db));
+    await service.run(doctorId, id);
   });

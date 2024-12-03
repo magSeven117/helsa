@@ -10,4 +10,5 @@ export interface DoctorRepository {
   getSpecialties(): Promise<Specialty[]>;
   removeEducation(doctorId: string, educationId: string): Promise<void>;
   getAppointmentsTypes(doctorId: string): Promise<AppointmentType[]>;
+  removeAppointmentType(doctorId: string, appointmentTypeId: string): Promise<void>;
 }

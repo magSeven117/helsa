@@ -149,4 +149,8 @@ export class PrismaDoctorRepository implements DoctorRepository {
     const types = await this.client.appointmentType.findMany({ where: { OR: [{ doctorId }, { system: true }] } });
     return types.map((type) => AppointmentType.fromPrimitives(type as unknown as Primitives<AppointmentType>));
   }
+
+  async removeAppointmentType(doctorId: string, appointmentTypeId: string): Promise<void> {
+    await this.client.appointmentType.delete({ where: { id: appointmentTypeId, doctorId } });
+  }
 }
