@@ -24,6 +24,8 @@ model Doctor {
   references       MedicalReference[]
   appointmentTypes AppointmentType[]
 
+  searchDoctor SearchDoctor?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -80,4 +82,41 @@ model Education {
 
   doctorId String
   doctor   Doctor @relation(fields: [doctorId], references: [id])
+}
+
+model SearchDoctor {
+  id String @id @default(uuid())
+
+  name       String
+  userId     String
+  specialty  String
+  score      Decimal
+  experience Int
+
+  doctorId String @unique
+  doctor   Doctor @relation(fields: [doctorId], references: [id])
+
+  searchSchedules SearchSchedule[]
+  days            SearchDay[]
+}
+
+model SearchSchedule {
+  id String @id @default(uuid())
+
+  day            String
+  appointments   Int
+  availabilities Int
+
+  searchDoctorId String
+  searchDoctor   SearchDoctor @relation(fields: [searchDoctorId], references: [id], onDelete: Cascade)
+}
+
+model SearchDay {
+  id String @id @default(uuid())
+
+  day   String
+  hours Int
+
+  searchDoctorId String
+  searchDoctor   SearchDoctor @relation(fields: [searchDoctorId], references: [id], onDelete: Cascade)
 }

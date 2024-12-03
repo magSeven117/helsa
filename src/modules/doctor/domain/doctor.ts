@@ -1,3 +1,4 @@
+import { Appointment } from '@/modules/appointment/domain/appointment';
 import { Aggregate } from '@/modules/shared/domain/core/aggregate';
 import { DateValueObject, NumberValueObject, StringValueObject } from '@/modules/shared/domain/core/value-object';
 import { Uuid } from '@/modules/shared/domain/core/value-objects/uuid';
@@ -9,6 +10,7 @@ import { Education } from './educations';
 import { ScheduleRegistered } from './events/schedule-registered';
 import { Schedule } from './schedule';
 import { Specialty } from './specialty';
+import { User } from '@/modules/user/domain/user';
 
 export class Doctor extends Aggregate {
   constructor(
@@ -24,7 +26,9 @@ export class Doctor extends Aggregate {
     public consultingRoomAddress?: ConsultingRoomAddress,
     public educations?: Education[],
     public specialty?: Specialty,
-    public appointmentTypes?: AppointmentType[]
+    public appointmentTypes?: AppointmentType[],
+    public appointments?: Appointment[],
+    public user?: User
   ) {
     super(id, createdAt, updatedAt);
   }
@@ -59,7 +63,9 @@ export class Doctor extends Aggregate {
         ? data.educations.map((education: Primitives<Education>) => Education.fromPrimitives(education))
         : [],
       data.specialty ? Specialty.fromPrimitives(data.specialty) : undefined,
-      data.appointmentTypes ? data.appointmentTypes.map((type) => AppointmentType.fromPrimitives(type)) : []
+      data.appointmentTypes ? data.appointmentTypes.map((type) => AppointmentType.fromPrimitives(type)) : [],
+      data.appointments ? data.appointments.map((appointment) => Appointment.fromPrimitives(appointment)) : [],
+      data.user ? User.fromPrimitives(data.user) : undefined
     );
   }
 
@@ -78,6 +84,8 @@ export class Doctor extends Aggregate {
       educations: this.educations ? this.educations.map((education) => education.toPrimitives()) : [],
       specialty: this.specialty ? this.specialty.toPrimitives() : undefined,
       appointmentTypes: this.appointmentTypes ? this.appointmentTypes.map((type) => type.toPrimitives()) : [],
+      appointments: this.appointments ? this.appointments.map((appointment) => appointment.toPrimitives()) : [],
+      user: this.user ? this.user.toPrimitives() : undefined,
     };
   }
 

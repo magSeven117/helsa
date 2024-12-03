@@ -1,35 +1,21 @@
 'use client';
 
 import { createAppointment } from '@/app/(server)/actions/appointment/create-appointment';
-import { getDoctorAppointments } from '@/app/(server)/actions/appointment/get-doctor-appointments';
 import { Avatar, AvatarFallback, AvatarImage } from '@/libs/shadcn-ui/components/avatar';
 import { Button } from '@/libs/shadcn-ui/components/button';
 import { DatePicker } from '@/libs/shadcn-ui/components/date-picker';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/libs/shadcn-ui/components/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/libs/shadcn-ui/components/select';
 import { Textarea } from '@/libs/shadcn-ui/components/textarea';
-import { Appointment } from '@/modules/appointment/domain/appointment';
+import { Doctor } from '@/modules/doctor/domain/doctor';
 import { Primitives } from '@/modules/shared/domain/types/primitives';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { Loader2 } from 'lucide-react';
-import { useAction } from 'next-safe-action/hooks';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-
-interface Doctor {
-  doctorId: string;
-  name: string;
-  specialty: string;
-  image: string;
-  score: number;
-  days: {
-    day: string;
-    hours: { hour: string }[];
-  }[];
-}
 
 interface TimeSlot {
   id: string;
@@ -50,7 +36,7 @@ const formSchema = z.object({
   paymentMethod: z.string().min(2, 'Selecciona un método de pago'),
 });
 
-export default function DoctorAppointment({ doctor }: { doctor: Doctor }) {
+export default function DoctorAppointment({ doctor }: { doctor: Primitives<Doctor> }) {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -60,27 +46,19 @@ export default function DoctorAppointment({ doctor }: { doctor: Doctor }) {
       paymentMethod: '',
     },
   });
-  const { executeAsync, isPending, hasErrored } = useAction(getDoctorAppointments);
   const [date, setDate] = useState<Date | undefined>(new Date());
-  const [appointments, setAppointments] = useState<Primitives<Appointment>[]>([]);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await executeAsync({ doctorId: doctor.doctorId });
-      setAppointments(response?.data ?? []);
-    };
-    fetchData();
-  }, []);
 
   useEffect(() => {
     if (!date) {
       return;
     }
 
-    const hours = doctor.days.find((day) => day.day === format(date, 'EEEE').toLowerCase())?.hours ?? [];
-    const availableSlots = hours.filter((hour) => !appointments.some((appointment) => appointment.hour === hour.hour));
+    const hours = doctor.schedule?.days.find((day) => day.day === format(date, 'EEEE').toLowerCase())?.hours ?? [];
+    const availableSlots = hours.filter(
+      (hour) => !doctor.appointments!.some((appointment) => appointment.hour === hour.hour)
+    );
 
     setTimeSlots(availableSlots.map((hour) => ({ id: hour.hour, time: hour.hour })));
     form.setValue('date', date);
@@ -96,7 +74,7 @@ export default function DoctorAppointment({ doctor }: { doctor: Doctor }) {
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       await createAppointment({
-        doctorId: doctor.doctorId,
+        doctorId: doctor.id,
         initDate: new Date(`${format(data.date, 'yyyy-MM-dd')} ${data.time}`),
         symptoms: data.symptoms,
       });
@@ -106,11 +84,7 @@ export default function DoctorAppointment({ doctor }: { doctor: Doctor }) {
     }
   };
 
-  if (isPending) {
-    return <div>Cargando...</div>;
-  }
-
-  if (!doctor || hasErrored) {
+  if (!doctor) {
     return null;
   }
 
@@ -195,21 +169,21 @@ export default function DoctorAppointment({ doctor }: { doctor: Doctor }) {
   );
 }
 
-function DoctorInfo({ doctor }: { doctor: Doctor }) {
+function DoctorInfo({ doctor }: { doctor: Primitives<Doctor> }) {
   return (
     <div className="flex items-center space-x-4 mb-5">
       <Avatar className="h-16 w-16 border">
-        <AvatarImage src={doctor.image} alt={doctor.name} className="object-contain" />
+        <AvatarImage src={doctor.user?.image} alt={doctor.user?.name} className="object-contain" />
         <AvatarFallback>
-          {doctor.name
+          {doctor.user?.name
             .split(' ')
             .map((n) => n[0])
             .join('')}
         </AvatarFallback>
       </Avatar>
       <div className="flex-1 w-1/3">
-        <h2 className="text-xl font-semibold">{doctor.name}</h2>
-        <p className="text-muted-foreground">{doctor.specialty}</p>
+        <h2 className="text-xl font-semibold">{doctor.user?.name}</h2>
+        <p className="text-muted-foreground">{doctor.specialty?.name}</p>
         <div className="flex items-center mt-1">
           {[...Array(5)].map((_, i) => (
             <svg

@@ -16,7 +16,10 @@ export class UpdateIndexStore {
 
   async run(doctorId: string) {
     const doctor = await this.doctorRepository.getByCriteria(
-      Criteria.fromValues([{ field: 'id', value: doctorId, operator: Operator.EQUAL }])
+      Criteria.fromValues([{ field: 'id', value: doctorId, operator: Operator.EQUAL }], undefined, undefined, [
+        { field: 'schedule' },
+        { field: 'specialty' },
+      ])
     );
     const appointments = await this.getAppointments.run(doctorId);
     const user = await this.getUser.run(doctor.userId.toString());
@@ -33,9 +36,9 @@ export class UpdateIndexStore {
     }[] = [];
 
     for (const appointment of appointments) {
-      const [date = ''] = appointment.initDate.value.toISOString().split('T');
+      const [date = ''] = appointment.date.value.toISOString().split('T');
       const index = groupedAppointments.findIndex((d) => d.date === date);
-      const day = format(appointment.initDate.value, 'EEEE');
+      const day = format(appointment.date.value, 'EEEE');
       const availability = doctor.schedule?.days.find((d) => d.day.value === day);
       if (index === -1) {
         groupedAppointments.push({

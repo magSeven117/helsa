@@ -1,8 +1,8 @@
 'use server';
 import { GetDoctors } from '@/modules/doctor/application/services/get-doctors';
-import { MongoDBDoctorSearcher } from '@/modules/doctor/infrastructure/persistence/mongodb-doctor-searcher';
+import { PrismaDoctorRepository } from '@/modules/doctor/infrastructure/persistence/prisma-doctor-repository';
 import { authActionClient } from '@/modules/shared/infrastructure/actions/client-actions';
-import { mongodbClient } from '@/modules/shared/infrastructure/persistence/mongodb/mongodb-client';
+import { db } from '@/modules/shared/infrastructure/persistence/prisma/prisma-connection';
 import { z } from 'zod';
 
 const schema = z.object({
@@ -19,8 +19,6 @@ export const searchDoctors = authActionClient
     actionName: 'search-doctors',
   })
   .action(async ({ parsedInput }) => {
-    const searcher = new MongoDBDoctorSearcher(mongodbClient);
-    await searcher.index();
-    const service = new GetDoctors(new MongoDBDoctorSearcher(mongodbClient));
+    const service = new GetDoctors(new PrismaDoctorRepository(db));
     return service.run(parsedInput);
   });

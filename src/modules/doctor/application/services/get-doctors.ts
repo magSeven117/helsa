@@ -1,7 +1,7 @@
-import { DoctorSearcher } from '../../domain/doctor-index-store';
+import { DoctorRepository } from '../../domain/doctor-repository';
 
 export class GetDoctors {
-  constructor(private readonly doctorSearcher: DoctorSearcher) {}
+  constructor(private readonly doctorSearcher: DoctorRepository) {}
 
   async run(filters: {
     q?: string;
@@ -10,12 +10,14 @@ export class GetDoctors {
     minRate?: number;
     experience?: number;
   }) {
-    return this.doctorSearcher.search({
+    const doctors = await this.doctorSearcher.search({
       term: filters.q,
       specialties: filters.specialties,
       availability: filters.availability,
       minRate: filters.minRate,
       experience: filters.experience,
     });
+
+    return doctors.map((doctor) => doctor.toPrimitives());
   }
 }

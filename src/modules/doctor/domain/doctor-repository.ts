@@ -13,6 +13,19 @@ export interface DoctorRepository {
   saveEducations(doctorId: string, educations: Education[]): Promise<void>;
   saveAppointmentTypes(doctorId: string, appointmentTypes: AppointmentType[]): Promise<void>;
   findByCriteria(criteria: Criteria): Promise<Doctor[]>;
+  search({
+    term,
+    availability,
+    minRate,
+    specialties,
+    experience,
+  }: {
+    term?: string;
+    availability?: string;
+    minRate?: number;
+    specialties?: string[];
+    experience?: number;
+  }): Promise<Doctor[]>;
   getByCriteria(criteria: Criteria): Promise<Doctor>;
   getSpecialties(): Promise<Specialty[]>;
   getAppointmentsTypes(doctorId: string): Promise<AppointmentType[]>;

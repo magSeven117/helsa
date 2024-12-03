@@ -9,10 +9,14 @@ import { DoctorRepository } from '../../domain/doctor-repository';
 import { Education } from '../../domain/educations';
 import { Schedule } from '../../domain/schedule';
 import { Specialty } from '../../domain/specialty';
+import { PrismaDoctorSearcher } from './prisma-doctor-searcher';
 
 export class PrismaDoctorRepository implements DoctorRepository {
   private converter: PrismaCriteriaConverter = new PrismaCriteriaConverter();
-  constructor(private client: PrismaClient) {}
+  private doctorSearcher: PrismaDoctorSearcher;
+  constructor(private client: PrismaClient) {
+    this.doctorSearcher = new PrismaDoctorSearcher(client);
+  }
 
   get model() {
     return this.client.doctor;
@@ -120,11 +124,13 @@ export class PrismaDoctorRepository implements DoctorRepository {
       });
     }
   }
+
   async findByCriteria(criteria: Criteria): Promise<Doctor[]> {
     const query = this.converter.criteria(criteria);
     const doctors = await this.model.findMany(query);
     return doctors.map((doctor) => Doctor.fromPrimitives(doctor as unknown as Primitives<Doctor>));
   }
+
   async getByCriteria(criteria: Criteria): Promise<Doctor> {
     const { where, include } = this.converter.criteria(criteria);
     const doctor = await this.model.findFirst({
@@ -140,27 +146,6 @@ export class PrismaDoctorRepository implements DoctorRepository {
     return specialties.map((specialty) => Specialty.fromPrimitives(specialty));
   }
 
-  async removeEducation(doctorId: string, educationId: string): Promise<void> {
-    await this.client.education.delete({ where: { id: educationId, doctorId } });
-  }
-
-  async search(): Promise<Doctor[]> {
-    const doctors = await this.model.findMany({
-      where: {
-        OR: [
-          {
-            schedule: {},
-          },
-          {
-            appointments: { some: { date: {} } },
-          },
-        ],
-      },
-      include: { consultingRoomAddress: true, educations: true, schedule: true, appointments: true },
-    });
-    return doctors.map((doctor) => Doctor.fromPrimitives(doctor as unknown as Primitives<Doctor>));
-  }
-
   async getAppointmentsTypes(doctorId: string): Promise<AppointmentType[]> {
     const types = await this.client.appointmentType.findMany({
       where: { OR: [{ doctorId }, { system: true }] },
@@ -169,7 +154,21 @@ export class PrismaDoctorRepository implements DoctorRepository {
     return types.map((type) => AppointmentType.fromPrimitives(type as unknown as Primitives<AppointmentType>));
   }
 
+  async removeEducation(doctorId: string, educationId: string): Promise<void> {
+    await this.client.education.delete({ where: { id: educationId, doctorId } });
+  }
+
   async removeAppointmentType(doctorId: string, appointmentTypeId: string): Promise<void> {
     await this.client.appointmentType.delete({ where: { id: appointmentTypeId, doctorId } });
+  }
+
+  async search(filters: {
+    term?: string;
+    availability?: string;
+    minRate?: number;
+    specialties?: string[];
+    experience?: number;
+  }) {
+    return await this.doctorSearcher.search(filters);
   }
 }
