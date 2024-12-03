@@ -75,8 +75,7 @@ export const columns: ColumnDef<AppointmentType>[] = [
     id: 'actions',
     cell: ({ row, table }) => {
       const [isOpen, setOpen] = React.useState(false);
-      const [isDeleting, setDeleting] = React.useState(false);
-
+      if (row.original.system) return null;
       return (
         <div className="text-right">
           <DropdownMenu>
@@ -89,16 +88,14 @@ export const columns: ColumnDef<AppointmentType>[] = [
               <DropdownMenuItem className="rounded-none" onClick={() => setOpen(true)}>
                 Edit
               </DropdownMenuItem>
-              {!row.original.system && (
-                <DropdownMenuItem
-                  className="rounded-none"
-                  onClick={async () => {
-                    await (table.options.meta as ExtendedTableMeta).remove(row.id);
-                  }}
-                >
-                  Remove
-                </DropdownMenuItem>
-              )}
+              <DropdownMenuItem
+                className="rounded-none"
+                onClick={async () => {
+                  await (table.options.meta as ExtendedTableMeta).remove(row.id);
+                }}
+              >
+                Remove
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
 

@@ -26,7 +26,7 @@ const SelectRoleForm = ({ userId }: { userId: string }) => {
           <div className="flex flex-col items-center justify-around gap-4 w-full">
             <div
               className={cn(
-                'flex items-center justify-start gap-4 p-4 w-2/3 border rounded-lg cursor-pointer transition-all duration-500 group',
+                'flex items-center justify-start gap-4 p-4 w-2/3 border rounded-none cursor-pointer transition-all duration-500 group',
                 {
                   'ring-2 ring-color-brand-primary': role === 'PATIENT',
                 }
@@ -41,7 +41,7 @@ const SelectRoleForm = ({ userId }: { userId: string }) => {
             </div>
             <div
               className={cn(
-                'flex items-center justify-start gap-4 p-4 w-2/3 border rounded-lg cursor-pointer transition-all duration-500 group',
+                'flex items-center justify-start gap-4 p-4 w-2/3 border rounded-none cursor-pointer transition-all duration-500 group',
                 {
                   'ring-2 ring-color-brand-primary': role === 'DOCTOR',
                 }
@@ -56,7 +56,7 @@ const SelectRoleForm = ({ userId }: { userId: string }) => {
             </div>
             <div
               className={cn(
-                'flex items-center justify-start gap-4 p-4 w-2/3 border rounded-lg cursor-pointer transition-all duration-500 group',
+                'flex items-center justify-start gap-4 p-4 w-2/3 border rounded-none cursor-pointer transition-all duration-500 group',
                 {
                   'ring-2 ring-color-brand-primary': role === 'HOSPITAL',
                 }

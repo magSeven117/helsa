@@ -3,8 +3,14 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
+  await prisma.specialty.deleteMany();
+  await prisma.appointmentType.deleteMany();
   await prisma.specialty.createMany({
     data: specialties,
+  });
+
+  await prisma.appointmentType.createMany({
+    data: appointmentTypes,
   });
 }
 
@@ -29,6 +35,12 @@ const specialties = [
   { name: 'Reumatología' },
   { name: 'Traumatología' },
   { name: 'Urología' },
+];
+
+const appointmentTypes = [
+  { name: 'Consulta', duration: 60, color: '#FF0000', system: true },
+  { name: 'Estudio', duration: 60, color: '#00FF00', system: true },
+  { name: 'Procedimiento', duration: 60, color: '#0000FF', system: true },
 ];
 
 main()

@@ -146,7 +146,10 @@ export class PrismaDoctorRepository implements DoctorRepository {
   }
 
   async getAppointmentsTypes(doctorId: string): Promise<AppointmentType[]> {
-    const types = await this.client.appointmentType.findMany({ where: { OR: [{ doctorId }, { system: true }] } });
+    const types = await this.client.appointmentType.findMany({
+      where: { OR: [{ doctorId }, { system: true }] },
+      orderBy: { createdAt: 'desc' },
+    });
     return types.map((type) => AppointmentType.fromPrimitives(type as unknown as Primitives<AppointmentType>));
   }
 

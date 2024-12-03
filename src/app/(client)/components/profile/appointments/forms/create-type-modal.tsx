@@ -143,7 +143,7 @@ const CreateTypeModal = ({ isOpen, onOpenChange }: Props) => {
               </div>
             </div>
 
-            <DialogFooter className="border-t-[1px] pt-4 mt-8 items-center !justify-between">
+            <DialogFooter className=" pt-4 mt-8 items-center !justify-between">
               <div>
                 {Object.values(form.formState.errors).length > 0 && (
                   <span className="text-sm text-destructive">Please complete the fields above.</span>
