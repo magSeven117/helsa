@@ -2,7 +2,7 @@ import { UpdateDoctorVectorTask } from '@/app/(server)/tasks/update-doctor-vecto
 export const handlers: EventConfig[] = [
   {
     taskId: UpdateDoctorVectorTask.id,
-    events: ['schedule-registered'],
+    events: ['schedule-registered', 'doctor-created', 'doctor-updated', 'appointment-scheduled'],
   },
 ];
 
