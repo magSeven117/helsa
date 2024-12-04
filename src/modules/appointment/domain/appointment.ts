@@ -1,3 +1,5 @@
+import { AppointmentType } from '@/modules/doctor/domain/appointment-type';
+import { Doctor } from '@/modules/doctor/domain/doctor';
 import { Aggregate } from '@/modules/shared/domain/core/aggregate';
 import { DateValueObject, StringValueObject } from '@/modules/shared/domain/core/value-object';
 import { Uuid } from '@/modules/shared/domain/core/value-objects/uuid';
@@ -28,7 +30,9 @@ export class Appointment extends Aggregate {
     public rating?: AppointmentRating,
     public telemetry?: AppointmentTelemetry,
     public recipe?: AppointmentRecipe,
-    public notes?: AppointmentNote[]
+    public notes?: AppointmentNote[],
+    public doctor?: Doctor,
+    public type?: AppointmentType
   ) {
     super(id, createdAt, updatedAt);
   }
@@ -51,6 +55,8 @@ export class Appointment extends Aggregate {
       telemetry: this.telemetry ? this.telemetry.toPrimitives() : undefined,
       recipe: this.recipe ? this.recipe.toPrimitives() : undefined,
       notes: this.notes ? this.notes.map((note) => note.toPrimitives()) : undefined,
+      doctor: this.doctor ? this.doctor.toPrimitives() : undefined,
+      type: this.type ? this.type.toPrimitives() : undefined,
     };
   }
 
@@ -66,7 +72,14 @@ export class Appointment extends Aggregate {
       new Uuid(data.doctorId),
       new Uuid(data.typeId),
       new DateValueObject(data.createdAt),
-      new DateValueObject(data.updatedAt)
+      new DateValueObject(data.updatedAt),
+      data.room ? AppointmentRoom.fromPrimitives(data.room) : undefined,
+      data.rating ? AppointmentRating.fromPrimitives(data.rating) : undefined,
+      data.telemetry ? AppointmentTelemetry.fromPrimitives(data.telemetry) : undefined,
+      data.recipe ? AppointmentRecipe.fromPrimitives(data.recipe) : undefined,
+      data.notes ? data.notes.map((note) => AppointmentNote.fromPrimitives(note)) : undefined,
+      data.doctor ? Doctor.fromPrimitives(data.doctor) : undefined,
+      data.type ? AppointmentType.fromPrimitives(data.type) : undefined
     );
   }
 

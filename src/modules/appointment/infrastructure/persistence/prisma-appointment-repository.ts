@@ -26,6 +26,12 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
         telemetry: true,
         recipes: true,
         notes: true,
+        type: true,
+        doctor: {
+          include: {
+            user: true,
+          },
+        },
       },
     });
     return appointments.map((appointment) =>
@@ -34,7 +40,7 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
   }
 
   async save(appointment: Appointment): Promise<void> {
-    const { notes, rating, recipe, room, telemetry, ...data } = appointment.toPrimitives();
+    const { notes, rating, recipe, room, telemetry, doctor, type, ...data } = appointment.toPrimitives();
     console.log('data', data);
     await this.model.upsert({
       where: { id: data.id },
