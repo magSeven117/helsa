@@ -75,13 +75,14 @@ const SearchDoctorInput = ({ specialties }: Props) => {
       let finalObject = {};
 
       for await (const partialObject of readStreamableValue(object)) {
+        console.log(partialObject);
         if (partialObject) {
           finalObject = {
             ...finalObject,
             ...partialObject,
             specialties:
-              partialObject?.categories?.map(
-                (name: string) => specialties?.find((specialty) => specialty.name === name)?.slug
+              partialObject?.specialties?.map(
+                (name: string) => specialties?.find((specialty) => specialty.name === name)?.name
               ) ?? null,
             q: partialObject?.name ?? null,
             minRate: partialObject?.minRate ?? null,

@@ -1,6 +1,7 @@
 import { Primitives } from '@/modules/shared/domain/types/primitives';
 import { User } from '@/modules/user/domain/user';
 import { PrismaClient } from '@prisma/client';
+import { format } from 'date-fns';
 import { Doctor } from '../../domain/doctor';
 import { DoctorSearcher } from '../../domain/doctor-index-store';
 
@@ -76,7 +77,7 @@ export class PrismaDoctorSearcher implements DoctorSearcher {
                 {
                   OR: [
                     { searchSchedules: { some: { day: availability, availabilities: { gt: 0 } } } },
-                    { days: { some: { day: availability, hours: { gt: 0 } } } },
+                    { days: { some: { day: format(new Date(availability), 'EEEE').toLowerCase(), hours: { gt: 0 } } } },
                   ],
                 },
               ]
@@ -93,6 +94,7 @@ export class PrismaDoctorSearcher implements DoctorSearcher {
             schedule: true,
             user: true,
             specialty: true,
+            appointmentTypes: true,
           },
         },
       },

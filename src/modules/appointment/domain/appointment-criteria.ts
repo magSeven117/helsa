@@ -10,6 +10,6 @@ export class AppointmentCriteria {
   }
 
   static searchByDate(date: Date): Criteria {
-    return Criteria.fromValues([{ field: 'initDate', value: date, operator: Operator.EQUAL }]);
+    return Criteria.fromValues([{ field: 'date', value: date, operator: Operator.EQUAL }]);
   }
 }

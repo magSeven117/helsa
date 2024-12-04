@@ -1,3 +1,4 @@
+import { getAppointmentTypes } from '@/app/(server)/actions/doctor/get-appointment-types';
 import { searchDoctors } from '@/app/(server)/actions/doctor/search-doctors';
 import DoctorList from './doctor-list';
 
@@ -13,9 +14,11 @@ type Props = {
 
 const DoctorListWrapper = async ({ filters }: Props) => {
   const response = await searchDoctors(filters);
+  const data = await getAppointmentTypes({ doctorId: '1' });
   const doctors = response?.data ?? [];
+  const types = data?.data ?? [];
 
-  return <DoctorList doctors={doctors} />;
+  return <DoctorList doctors={doctors} types={types} />;
 };
 
 export default DoctorListWrapper;

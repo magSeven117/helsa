@@ -1,12 +1,14 @@
 'use client';
 
 import { createAppointment } from '@/app/(server)/actions/appointment/create-appointment';
+import { duration } from '@/libs/ducen-ui/utils/duration';
 import { Avatar, AvatarFallback, AvatarImage } from '@/libs/shadcn-ui/components/avatar';
 import { Button } from '@/libs/shadcn-ui/components/button';
 import { DatePicker } from '@/libs/shadcn-ui/components/date-picker';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/libs/shadcn-ui/components/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/libs/shadcn-ui/components/select';
 import { Textarea } from '@/libs/shadcn-ui/components/textarea';
+import { AppointmentType } from '@/modules/doctor/domain/appointment-type';
 import { Doctor } from '@/modules/doctor/domain/doctor';
 import { Primitives } from '@/modules/shared/domain/types/primitives';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -34,9 +36,16 @@ const formSchema = z.object({
   time: z.string().min(5, 'Selecciona una hora'),
   symptoms: z.string().min(2, 'Describe tus síntomas'),
   paymentMethod: z.string().min(2, 'Selecciona un método de pago'),
+  typeId: z.string().min(2, 'Selecciona un tipo de cita'),
 });
 
-export default function DoctorAppointment({ doctor }: { doctor: Primitives<Doctor> }) {
+export default function DoctorAppointment({
+  doctor,
+  types,
+}: {
+  doctor: Primitives<Doctor>;
+  types: Primitives<AppointmentType>[];
+}) {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -44,6 +53,7 @@ export default function DoctorAppointment({ doctor }: { doctor: Primitives<Docto
       time: '',
       symptoms: '',
       paymentMethod: '',
+      typeId: '',
     },
   });
   const [date, setDate] = useState<Date | undefined>(new Date());
@@ -75,8 +85,9 @@ export default function DoctorAppointment({ doctor }: { doctor: Primitives<Docto
     try {
       await createAppointment({
         doctorId: doctor.id,
-        initDate: new Date(`${format(data.date, 'yyyy-MM-dd')} ${data.time}`),
+        date: new Date(`${format(data.date, 'yyyy-MM-dd')} ${data.time}`),
         symptoms: data.symptoms,
+        typeId: data.typeId,
       });
     } catch (error) {
       console.log(error);
@@ -88,6 +99,8 @@ export default function DoctorAppointment({ doctor }: { doctor: Primitives<Docto
     return null;
   }
 
+  const finalTypes = [...types, ...(doctor?.appointmentTypes ?? [])];
+
   return (
     <div className="w-full mt-10">
       <DoctorInfo doctor={doctor} />
@@ -95,8 +108,34 @@ export default function DoctorAppointment({ doctor }: { doctor: Primitives<Docto
         <form action="" onSubmit={form.handleSubmit(onSubmit)}>
           <div className="grid grid-cols-1 gap-6">
             <div className="col-span-1 grid grid-cols-1 gap-3">
-              <div className="w-full">
+              <div className="w-full grid grid-cols-2 gap-3">
                 <DatePicker onSelect={setDate} selected={date} />
+                <FormField
+                  control={form.control}
+                  name="typeId"
+                  render={({ field }) => (
+                    <FormItem className="flex-1 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0">
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger className="w-full rounded-none ">
+                            <SelectValue placeholder="Tipo de consulta" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent className="rounded-none">
+                          {finalTypes.map((type) => (
+                            <SelectItem key={type.id} value={type.id} className="rounded-none">
+                              <div className="flex justify-start items-center gap-3">
+                                <div className="size-3" style={{ backgroundColor: type.color }}></div>
+                                {type.name} - {duration(Number(type.duration))}
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3">
                 {timeSlots.map((slot) => (

@@ -8,20 +8,21 @@ import { z } from 'zod';
 import { getPatient } from '../patient/get-patient';
 
 const schema = z.object({
-  initDate: z.date(),
+  date: z.date(),
   symptoms: z.string(),
   doctorId: z.string(),
+  typeId: z.string(),
 });
 
 export const createAppointment = authActionClient
   .schema(schema)
   .metadata({ actionName: 'create-appointment' })
-  .action(async ({ parsedInput: { initDate, symptoms, doctorId }, ctx }) => {
+  .action(async ({ parsedInput: { date, symptoms, doctorId, typeId }, ctx }) => {
     const data = await getPatient({ userId: ctx.user.id });
     const patientId = data?.data?.id;
     if (!patientId) {
       throw new Error('Patient not found');
     }
     const service = new CreateAppointment(new PrismaAppointmentRepository(db), new TriggerEventBus());
-    return service.run(initDate, symptoms, doctorId, patientId);
+    return service.run(date, symptoms, doctorId, patientId, typeId);
   });

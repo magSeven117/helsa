@@ -1,9 +1,4 @@
-import {
-  BooleanValueObject,
-  NumberValueObject,
-  OptionalString,
-  StringValueObject,
-} from '@/modules/shared/domain/core/value-object';
+import { BooleanValueObject, OptionalString, StringValueObject } from '@/modules/shared/domain/core/value-object';
 import { Uuid } from '@/modules/shared/domain/core/value-objects/uuid';
 import { Primitives } from '@/modules/shared/domain/types/primitives';
 
@@ -12,7 +7,7 @@ export class AppointmentType {
     public id: Uuid,
     public name: StringValueObject,
     public doctorId: OptionalString,
-    public duration: NumberValueObject,
+    public duration: StringValueObject,
     public color: StringValueObject,
     public system: BooleanValueObject
   ) {}
@@ -20,7 +15,7 @@ export class AppointmentType {
   public static create(
     name: string,
     doctorId: string,
-    duration: number,
+    duration: string,
     color: string,
     system: boolean
   ): AppointmentType {
@@ -28,7 +23,7 @@ export class AppointmentType {
       Uuid.random(),
       new StringValueObject(name),
       new OptionalString(doctorId),
-      new NumberValueObject(duration),
+      new StringValueObject(duration),
       new StringValueObject(color),
       new BooleanValueObject(system)
     );
@@ -39,7 +34,7 @@ export class AppointmentType {
       new Uuid(data.id),
       new StringValueObject(data.name),
       new OptionalString(data.doctorId),
-      new NumberValueObject(data.duration),
+      new StringValueObject(data.duration),
       new StringValueObject(data.color),
       new BooleanValueObject(data.system)
     );
@@ -50,7 +45,7 @@ export class AppointmentType {
       id: this.id.toString(),
       name: this.name.getValue(),
       doctorId: this.doctorId.getValue(),
-      duration: this.duration.getValue(),
+      duration: this.duration.getValue().toString(),
       color: this.color.getValue(),
       system: this.system.getValue(),
     };

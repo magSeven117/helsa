@@ -1,15 +1,17 @@
 'use client';
 
+import { AppointmentType } from '@/modules/doctor/domain/appointment-type';
+import { Doctor } from '@/modules/doctor/domain/doctor';
+import { Primitives } from '@/modules/shared/domain/types/primitives';
 import { useQueryState } from 'nuqs';
 import BookSheet from './book-sheet';
 import DoctorCard from './doctor-card';
-import { Primitives } from '@/modules/shared/domain/types/primitives';
-import { Doctor } from '@/modules/doctor/domain/doctor';
 
 type Props = {
   doctors: Primitives<Doctor>[];
+  types: Primitives<AppointmentType>[];
 };
-const DoctorList = ({ doctors }: Props) => {
+const DoctorList = ({ doctors, types }: Props) => {
   const [doctorId, setDoctorId] = useQueryState('id');
   const setOpen = (id: string | boolean) => {
     if (id) {
@@ -24,7 +26,7 @@ const DoctorList = ({ doctors }: Props) => {
       {doctors.map((doctor, index) => {
         return <DoctorCard doctor={doctor} key={index} />;
       })}
-      <BookSheet isOpen={Boolean(doctorId)} setOpen={setOpen} data={doctor} />
+      <BookSheet isOpen={Boolean(doctorId)} setOpen={setOpen} data={doctor} types={types} />
     </div>
   );
 };
