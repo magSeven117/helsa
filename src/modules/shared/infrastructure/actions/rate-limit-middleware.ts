@@ -5,7 +5,7 @@ import { createMiddleware } from 'next-safe-action';
 import { headers } from 'next/headers';
 
 const ratelimit = new Ratelimit({
-  limiter: Ratelimit.fixedWindow(10, '10s'),
+  limiter: Ratelimit.fixedWindow(50, '10s'),
   redis: RedisClient,
 });
 

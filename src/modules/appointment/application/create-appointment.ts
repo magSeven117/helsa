@@ -7,7 +7,7 @@ import { AppointmentRepository } from '../domain/appointment-repository';
 export class CreateAppointment {
   constructor(private appointmentRepository: AppointmentRepository, private eventBus: EventBus) {}
 
-  async run(date: Date, symptoms: string, doctorId: string, patientId: string, typeId: string) {
+  async run(id: string, date: Date, symptoms: string, doctorId: string, patientId: string, typeId: string) {
     try {
       const appointment = await this.appointmentRepository.search(AppointmentCriteria.searchByDate(date));
       console.log(appointment.length);
@@ -15,7 +15,7 @@ export class CreateAppointment {
         throw new FormatError('Appointment already exists');
       }
 
-      const newAppointment = Appointment.create(date, symptoms, patientId, doctorId, typeId);
+      const newAppointment = Appointment.create(id, date, symptoms, patientId, doctorId, typeId);
 
       await this.appointmentRepository.save(newAppointment);
       await this.eventBus.publish(newAppointment.pullDomainEvents());

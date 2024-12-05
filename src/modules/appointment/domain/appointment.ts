@@ -1,5 +1,6 @@
 import { AppointmentType } from '@/modules/doctor/domain/appointment-type';
 import { Doctor } from '@/modules/doctor/domain/doctor';
+import { Patient } from '@/modules/patient/domain/patient';
 import { Aggregate } from '@/modules/shared/domain/core/aggregate';
 import { DateValueObject, StringValueObject } from '@/modules/shared/domain/core/value-object';
 import { Uuid } from '@/modules/shared/domain/core/value-objects/uuid';
@@ -32,7 +33,8 @@ export class Appointment extends Aggregate {
     public recipe?: AppointmentRecipe,
     public notes?: AppointmentNote[],
     public doctor?: Doctor,
-    public type?: AppointmentType
+    public type?: AppointmentType,
+    public patient?: Patient
   ) {
     super(id, createdAt, updatedAt);
   }
@@ -57,6 +59,7 @@ export class Appointment extends Aggregate {
       notes: this.notes ? this.notes.map((note) => note.toPrimitives()) : undefined,
       doctor: this.doctor ? this.doctor.toPrimitives() : undefined,
       type: this.type ? this.type.toPrimitives() : undefined,
+      patient: this.patient ? this.patient.toPrimitives() : undefined,
     };
   }
 
@@ -79,13 +82,21 @@ export class Appointment extends Aggregate {
       data.recipe ? AppointmentRecipe.fromPrimitives(data.recipe) : undefined,
       data.notes ? data.notes.map((note) => AppointmentNote.fromPrimitives(note)) : undefined,
       data.doctor ? Doctor.fromPrimitives(data.doctor) : undefined,
-      data.type ? AppointmentType.fromPrimitives(data.type) : undefined
+      data.type ? AppointmentType.fromPrimitives(data.type) : undefined,
+      data.patient ? Patient.fromPrimitives(data.patient) : undefined
     );
   }
 
-  static create(date: Date, motive: string, patientId: string, doctorId: string, typeId: string): Appointment {
+  static create(
+    id: string,
+    date: Date,
+    motive: string,
+    patientId: string,
+    doctorId: string,
+    typeId: string
+  ): Appointment {
     const appointment = new Appointment(
-      Uuid.random(),
+      new Uuid(id),
       new DateValueObject(date),
       new StringValueObject(format(date, 'yyyy-MM-dd')),
       new StringValueObject(format(date, 'HH:mm')),

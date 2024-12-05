@@ -4,4 +4,5 @@ import { Appointment } from './appointment';
 export interface AppointmentRepository {
   save(appointment: Appointment): Promise<void>;
   search(criteria: Criteria): Promise<Appointment[]>;
+  get(id: string): Promise<Appointment | null>;
 }

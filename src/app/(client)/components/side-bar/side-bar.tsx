@@ -15,6 +15,7 @@ import {
 import { cn } from '@/libs/shadcn-ui/utils/utils';
 import { authClient } from '@/modules/shared/infrastructure/auth/auth-client';
 import {
+  BookMarked,
   Calendar,
   CircleDollarSign,
   History,
@@ -116,6 +117,18 @@ export const sideBarItems = [
         title: 'Calendario',
         url: '/schedule',
         roles: ['DOCTOR', 'PATIENT', 'HOSPITAL'],
+      },
+      {
+        icon: BookMarked,
+        title: 'Citas',
+        url: '/appointments',
+        roles: ['DOCTOR', 'PATIENT'],
+      },
+      {
+        icon: Stethoscope,
+        title: 'Doctores',
+        url: '/book',
+        roles: ['PATIENT'],
       },
       {
         icon: History,

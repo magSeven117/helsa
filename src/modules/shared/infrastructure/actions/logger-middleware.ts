@@ -12,7 +12,7 @@ export const loggerMiddleware = createMiddleware().define(async ({ next, clientI
 
   console.log(
     `Executed action ${metadata.actionName} with input ${JSON.stringify(clientInput)} and got result ${
-      result.success ? 'success' : 'failure'
+      result.success ? 'success' : `failure ${result.serverError}`
     } in ${endTime - startTime}ms`
   );
 

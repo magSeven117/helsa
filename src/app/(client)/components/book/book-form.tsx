@@ -14,9 +14,11 @@ import { Primitives } from '@/modules/shared/domain/types/primitives';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import { v4 } from 'uuid';
 import { z } from 'zod';
 
 interface TimeSlot {
@@ -46,6 +48,7 @@ export default function DoctorAppointment({
   doctor: Primitives<Doctor>;
   types: Primitives<AppointmentType>[];
 }) {
+  const router = useRouter();
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -83,12 +86,15 @@ export default function DoctorAppointment({
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
+      const id = v4();
       await createAppointment({
+        id,
         doctorId: doctor.id,
         date: new Date(`${format(data.date, 'yyyy-MM-dd')} ${data.time}`),
         symptoms: data.symptoms,
         typeId: data.typeId,
       });
+      router.push(`/appointments/${id}`);
     } catch (error) {
       console.log(error);
       toast.error('Ha ocurrido un error al agendar la cita');

@@ -1,4 +1,6 @@
 'use client';
+import { generateAppointmentFilters } from '@/app/(server)/actions/appointment/generate-appointment-filters';
+import { Calendar } from '@/libs/shadcn-ui/components/calendar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,41 +12,41 @@ import {
 } from '@/libs/shadcn-ui/components/dropdown-menu';
 import { Input } from '@/libs/shadcn-ui/components/input';
 import { cn } from '@/libs/shadcn-ui/utils/utils';
-import { Briefcase, CalendarDays, ListFilter, Search, Star, Stethoscope } from 'lucide-react';
-import { useRef, useState } from 'react';
-import { useHotkeys } from 'react-hotkeys-hook';
-import SelectSpecialty from './filter-specialty-select';
-
-import { generateDoctorFilters } from '@/app/(server)/actions/doctor/generate-doctor-filters';
-import { Calendar } from '@/libs/shadcn-ui/components/calendar';
 import { readStreamableValue } from 'ai/rsc';
 import { formatISO } from 'date-fns';
-import { parseAsArrayOf, parseAsInteger, parseAsString, useQueryStates } from 'nuqs';
-import ExperienceRange from './filter-experience-range';
-import RateRange from './filter-rate-range';
-import DoctorFilterList from './search-doctor-filters';
+import { CalendarDays, ListFilter, Route, Search, SquareStack, Stethoscope } from 'lucide-react';
+import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs';
+import { useRef, useState } from 'react';
+import { useHotkeys } from 'react-hotkeys-hook';
+import SelectSpecialty from '../../book/filter-specialty-select';
+import AppointmentSearchFilters from './appointment-search-filters';
+import SelectState from './state-filter';
+import SelectType from './type-filter';
+
 const defaultSearch = {
-  q: null,
+  types: null,
   specialties: null,
-  availability: null,
-  minRate: null,
-  experience: null,
+  start: null,
+  end: null,
+  states: null,
 };
 
 type Props = {
   specialties: any[];
+  states: any[];
+  types: any[];
 };
 
-const SearchDoctorInput = ({ specialties }: Props) => {
+const AppointmentSearchInput = ({ specialties, types, states }: Props) => {
   const [prompt, setPrompt] = useState('');
   const [streaming, setStreaming] = useState(false);
   const [filters, setFilters] = useQueryStates(
     {
-      q: parseAsString,
       specialties: parseAsArrayOf(parseAsString),
-      availability: parseAsString,
-      minRate: parseAsInteger,
-      experience: parseAsInteger,
+      types: parseAsArrayOf(parseAsString),
+      start: parseAsString,
+      end: parseAsString,
+      states: parseAsArrayOf(parseAsString),
     },
     {
       shallow: false,
@@ -52,6 +54,7 @@ const SearchDoctorInput = ({ specialties }: Props) => {
   );
   const [isOpen, setIsOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (value) {
@@ -66,10 +69,12 @@ const SearchDoctorInput = ({ specialties }: Props) => {
     if (prompt.split(' ').length > 1) {
       setStreaming(true);
 
-      const { object } = await generateDoctorFilters(
+      const { object } = await generateAppointmentFilters(
         prompt,
         `
           specialties: ${specialties.map((s) => s.name).join(', ')}
+          types: ${types.map((t) => t.name).join(', ')}
+          states: ${states.join(', ')}
         `
       );
       let finalObject = {};
@@ -84,20 +89,15 @@ const SearchDoctorInput = ({ specialties }: Props) => {
               partialObject?.specialties?.map(
                 (name: string) => specialties?.find((specialty) => specialty.name === name)?.name
               ) ?? null,
-            q: partialObject?.name ?? null,
-            minRate: partialObject?.minRate ?? null,
-            experience: partialObject?.experience ?? null,
+            types: partialObject?.types?.map((name: string) => types?.find((type) => type.name === name)?.name) ?? null,
+            states:
+              partialObject?.states?.map((name: string) => states?.find((state) => state === name) ?? null) ?? null,
           };
         }
       }
 
-      setFilters({
-        q: null,
-        ...finalObject,
-      });
+      setFilters(finalObject);
       setStreaming(false);
-    } else {
-      setFilters({ q: prompt.length > 0 ? prompt : null });
     }
   };
 
@@ -112,7 +112,6 @@ const SearchDoctorInput = ({ specialties }: Props) => {
       enableOnFormTags: true,
     }
   );
-
   return (
     <DropdownMenu>
       <div className="flex  md:items-center w-full flex-col md:flex-row gap-2">
@@ -149,7 +148,14 @@ const SearchDoctorInput = ({ specialties }: Props) => {
             </button>
           </DropdownMenuTrigger>
         </form>
-        <DoctorFilterList filters={filters} onRemove={setFilters} loading={streaming} specialties={specialties} />
+        <AppointmentSearchFilters
+          filters={filters}
+          onRemove={setFilters}
+          loading={streaming}
+          specialties={specialties}
+          states={states}
+          types={types}
+        />
       </div>
       <DropdownMenuContent
         className="rounded-none w-[350px]"
@@ -185,18 +191,27 @@ const SearchDoctorInput = ({ specialties }: Props) => {
         <DropdownMenuSub>
           <DropdownMenuSubTrigger className="rounded-none">
             <CalendarDays className="size-4 mr-2" />
-            <span>Disponibilidad en</span>
+            <span>Fechas</span>
           </DropdownMenuSubTrigger>
 
           <DropdownMenuPortal>
             <DropdownMenuSubContent sideOffset={14} alignOffset={-4} className="p-0 rounded-none">
               <Calendar
-                mode="single"
+                mode="range"
                 initialFocus
-                fromDate={new Date()}
-                selected={filters.availability ? new Date(filters.availability) : new Date()}
-                onSelect={(date) => {
-                  setFilters({ availability: formatISO(date!, { representation: 'date' }) });
+                selected={{
+                  from: filters.start ? new Date(filters.start) : undefined,
+                  to: filters.end ? new Date(filters.end) : undefined,
+                }}
+                onSelect={(range) => {
+                  if (!range) return;
+
+                  const newRange = {
+                    start: range.from ? formatISO(range.from, { representation: 'date' }) : filters.start,
+                    end: range.to ? formatISO(range.to, { representation: 'date' }) : filters.end,
+                  };
+
+                  setFilters(newRange);
                 }}
               />
             </DropdownMenuSubContent>
@@ -204,19 +219,23 @@ const SearchDoctorInput = ({ specialties }: Props) => {
         </DropdownMenuSub>
         <DropdownMenuSub>
           <DropdownMenuSubTrigger className="rounded-none">
-            <Star className="size-4 mr-2" />
-            <span>Calificación minima</span>
+            <Route className="size-4 mr-2" />
+            <span>Estado de la cita</span>
           </DropdownMenuSubTrigger>
 
           <DropdownMenuPortal>
-            <DropdownMenuSubContent
-              sideOffset={14}
-              alignOffset={-4}
-              className="p-0 rounded-none w-[250px] min-h-[150px]"
-            >
-              <RateRange
-                onSelect={(min) => {
-                  setFilters({ minRate: min });
+            <DropdownMenuSubContent sideOffset={14} alignOffset={-4} className="p-0 w-[250px] h-[270px] rounded-none">
+              <SelectState
+                headless
+                states={states}
+                onChange={(selected) => {
+                  setFilters({
+                    states: filters?.states?.includes(selected)
+                      ? filters.states.filter((s) => s !== selected).length > 0
+                        ? filters.states.filter((s) => s !== selected)
+                        : null
+                      : [...(filters.states ?? []), selected],
+                  });
                 }}
               />
             </DropdownMenuSubContent>
@@ -224,19 +243,23 @@ const SearchDoctorInput = ({ specialties }: Props) => {
         </DropdownMenuSub>
         <DropdownMenuSub>
           <DropdownMenuSubTrigger className="rounded-none">
-            <Briefcase className="size-4 mr-2" />
-            <span>Experiencia minima</span>
+            <SquareStack className="size-4 mr-2" />
+            <span>Tipo de cita</span>
           </DropdownMenuSubTrigger>
 
           <DropdownMenuPortal>
-            <DropdownMenuSubContent
-              sideOffset={14}
-              alignOffset={-4}
-              className="p-0 rounded-none w-[250px] min-h-[150px]"
-            >
-              <ExperienceRange
-                onSelect={(min) => {
-                  setFilters({ experience: min });
+            <DropdownMenuSubContent sideOffset={14} alignOffset={-4} className="p-0 w-[250px] h-[270px] rounded-none">
+              <SelectType
+                headless
+                types={types}
+                onChange={(selected) => {
+                  setFilters({
+                    types: filters?.types?.includes(selected.name)
+                      ? filters.types.filter((s) => s !== selected.name).length > 0
+                        ? filters.types.filter((s) => s !== selected.name)
+                        : null
+                      : [...(filters.types ?? []), selected.name],
+                  });
                 }}
               />
             </DropdownMenuSubContent>
@@ -247,4 +270,4 @@ const SearchDoctorInput = ({ specialties }: Props) => {
   );
 };
 
-export default SearchDoctorInput;
+export default AppointmentSearchInput;
