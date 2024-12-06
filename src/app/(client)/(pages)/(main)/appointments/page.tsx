@@ -55,12 +55,14 @@ const Page = async ({ searchParams }: { searchParams: Record<string, string | st
           types={types}
         />
       </div>
-      {!isEmpty ? (
+      {isEmpty ? (
         <div className="relative h-[calc(100vh-200px)] overflow-hidden">
           <NoResults />
         </div>
       ) : (
-        <div>{JSON.stringify(appointments?.data ?? [])}</div>
+        <div className="flex px-5 py-7 w-full">
+          {appointments.data?.data.map((appointment) => appointment.doctor?.user?.name)}
+        </div>
       )}
     </div>
   );
