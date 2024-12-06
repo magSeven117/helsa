@@ -1,3 +1,4 @@
+import { Collection } from '@/modules/shared/domain/core/collection.';
 import { Criteria } from '@/modules/shared/domain/core/criteria';
 import { Primitives } from '@/modules/shared/domain/types/primitives';
 import { PrismaCriteriaConverter } from '@/modules/shared/infrastructure/persistence/prisma/prisma-criteria-converter';
@@ -13,35 +14,58 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
     return this.client.appointment;
   }
 
-  async search(criteria: Criteria): Promise<Appointment[]> {
+  async search(criteria: Criteria): Promise<Collection<Appointment>> {
     const { orderBy, skip, take, where } = this.converter.criteria(criteria);
-    const appointments = await this.model.findMany({
-      where,
-      orderBy,
-      skip,
-      take,
-      include: {
-        room: true,
-        rating: true,
-        telemetry: true,
-        recipes: true,
-        notes: true,
-        type: true,
-        doctor: {
-          include: {
-            user: true,
-          },
+    const include = {
+      room: true,
+      rating: true,
+      telemetry: true,
+      recipes: true,
+      notes: true,
+      type: true,
+      doctor: {
+        include: {
+          user: true,
+          specialty: true,
         },
       },
-    });
-    return appointments.map((appointment) =>
+      patient: {
+        include: {
+          user: true,
+          allergies: true,
+          diseases: true,
+          contacts: true,
+          vaccines: true,
+          surgeries: true,
+        },
+      },
+    };
+
+    console.log(where);
+
+    const [data, count] = await this.client.$transaction([
+      this.client.appointment.findMany({
+        where,
+        orderBy,
+        skip,
+        take,
+        include,
+      }),
+      this.client.appointment.count({ where }),
+    ]);
+    const appointments = data.map((appointment) =>
       Appointment.fromPrimitives(appointment as unknown as Primitives<Appointment>)
     );
+    return Collection.fromResponse({
+      data: appointments,
+      total: count,
+      skip: skip || 0,
+      take: take || 10,
+    });
   }
 
   async save(appointment: Appointment): Promise<void> {
     const { notes, rating, recipe, room, telemetry, doctor, type, patient, ...data } = appointment.toPrimitives();
-    console.log('data', data);
     await this.model.upsert({
       where: { id: data.id },
       update: data,

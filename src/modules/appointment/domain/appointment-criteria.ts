@@ -12,4 +12,7 @@ export class AppointmentCriteria {
   static searchByDate(date: Date): Criteria {
     return Criteria.fromValues([{ field: 'date', value: date, operator: Operator.EQUAL }]);
   }
+  static searchByPatientId(patientId: string): Criteria {
+    return Criteria.fromValues([{ field: 'patientId', value: patientId, operator: Operator.EQUAL }]);
+  }
 }
