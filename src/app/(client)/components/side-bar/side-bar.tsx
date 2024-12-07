@@ -52,7 +52,7 @@ const SideBar = ({ role }: { role: string }) => {
     return null;
   }
   return (
-    <Sidebar collapsible="icon" className="bg-background">
+    <Sidebar collapsible="icon" className="bg-background border-none">
       <SidebarHeader className="bg-background">
         <SidebarMenuButton
           size="lg"
