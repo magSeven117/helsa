@@ -51,7 +51,7 @@ export function DataTable({ data, doctorId, types }: Props) {
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead key={header.id}>
+                  <TableHead key={header.id} className="border">
                     {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                   </TableHead>
                 );
@@ -63,7 +63,7 @@ export function DataTable({ data, doctorId, types }: Props) {
           {table.getRowModel().rows.map((row) => (
             <TableRow className="hover:bg-transparent" key={row.id} data-state={row.getIsSelected() && 'selected'}>
               {row.getVisibleCells().map((cell, index) => (
-                <TableCell key={cell.id} className={cn(index === 2 && 'w-[50px]')}>
+                <TableCell key={cell.id} className={cn('border', index === 2 && 'w-[50px]')}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </TableCell>
               ))}
