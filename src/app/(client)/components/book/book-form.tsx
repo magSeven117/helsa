@@ -123,7 +123,7 @@ export default function DoctorAppointment({
                     <FormItem className="flex-1 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0">
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
-                          <SelectTrigger className="w-full rounded-none ">
+                          <SelectTrigger className="w-full rounded-none">
                             <SelectValue placeholder="Tipo de consulta" />
                           </SelectTrigger>
                         </FormControl>
@@ -217,7 +217,7 @@ export default function DoctorAppointment({
 function DoctorInfo({ doctor }: { doctor: Primitives<Doctor> }) {
   return (
     <div className="flex items-center space-x-4 mb-5">
-      <Avatar className="h-16 w-16 border">
+      <Avatar className="h-16 w-16 bg-secondary">
         <AvatarImage src={doctor.user?.image} alt={doctor.user?.name} className="object-contain" />
         <AvatarFallback>
           {doctor.user?.name

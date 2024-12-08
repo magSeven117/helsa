@@ -11,7 +11,7 @@ export function NoResults({ hasFilters }: Props) {
   const router = useRouter();
 
   return (
-    <div className="h-[calc(100vh-300px)] flex items-center justify-center">
+    <div className="h-[calc(100vh-300px)] flex items-center justify-center w-full">
       <div className="flex flex-col items-center">
         <BookMarked className="mb-4 size-10" />
         <div className="text-center mb-6 space-y-2">

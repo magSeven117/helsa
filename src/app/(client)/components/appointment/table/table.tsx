@@ -87,7 +87,7 @@ export function DataTable<TData, TValue>({
                   <TableCell
                     key={cell.id}
                     className={cn(
-                      'px-3 md:px-4 py-2',
+                      'px-3 md:px-4 py-2 border',
                       (cell.column.id === 'select' ||
                         cell.column.id === 'date' ||
                         cell.column.id === 'doctor' ||

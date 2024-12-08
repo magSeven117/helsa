@@ -45,7 +45,7 @@ export function AppointmentsTableHeader({ table, loading }: Props) {
   return (
     <TableHeader>
       <TableRow className="h-[45px] hover:bg-transparent">
-        <TableHead className="min-w-[50px] hidden md:table-cell px-3 md:px-4 py-2">
+        <TableHead className="min-w-[50px] hidden md:table-cell px-3 md:px-4 py-2 border">
           <Checkbox
             className="rounded-none"
             checked={table?.getIsAllPageRowsSelected() || (table?.getIsSomePageRowsSelected() && 'indeterminate')}
@@ -53,7 +53,7 @@ export function AppointmentsTableHeader({ table, loading }: Props) {
           />
         </TableHead>
         {isVisible('date') && (
-          <TableHead>
+          <TableHead className="border">
             <Button
               className="p-0 hover:bg-transparent space-x-2"
               variant="ghost"
@@ -66,7 +66,7 @@ export function AppointmentsTableHeader({ table, loading }: Props) {
           </TableHead>
         )}
         {isVisible('status') && (
-          <TableHead>
+          <TableHead className="border">
             <Button
               className="p-0 hover:bg-transparent space-x-2"
               variant="ghost"
@@ -79,13 +79,13 @@ export function AppointmentsTableHeader({ table, loading }: Props) {
           </TableHead>
         )}
         {isVisible('doctor') && (
-          <TableHead>
+          <TableHead className="border">
             <span>Doctor</span>
           </TableHead>
         )}
 
         {isVisible('type') && (
-          <TableHead>
+          <TableHead className="border">
             <span>Tipo de consulta</span>
           </TableHead>
         )}

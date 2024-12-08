@@ -9,13 +9,20 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/libs/shadcn-ui/components/dropdown-menu';
-import { Ban, ChevronDown } from 'lucide-react';
+import { Ban, ChevronDown, Plus } from 'lucide-react';
+import Link from 'next/link';
 
 const AppointmentActions = () => {
   const { setRowSelection, rowSelection } = useAppointmentStore();
   const transactionIds = Object.keys(rowSelection);
   if (transactionIds.length === 0) {
-    return null;
+    return (
+      <Link href={'/book'} target="_blank">
+        <Button className="h-9" variant={'outline'} size={'icon'}>
+          <Plus className="size-4" />
+        </Button>
+      </Link>
+    );
   }
   return (
     <div className="ml-auto">

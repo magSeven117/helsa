@@ -12,7 +12,6 @@ export class GetAppointments {
     let criteria: Criteria;
     criteria = role === 'DOCTOR' ? AppointmentCriteria.searchByDoctorId(id) : AppointmentCriteria.searchByPatientId(id);
     const response = await this.repository.search(criteria);
-    console.log(JSON.stringify(response.getItems()[0].toPrimitives()));
     return {
       data: response.getItems().map((appointment) => appointment.toPrimitives()),
       meta: response.getMeta(),

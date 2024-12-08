@@ -114,15 +114,10 @@ export const columns: ColumnDef<Primitives<Appointment>>[] = [
   },
 ];
 
-const StateColumn = ({ state }: { state: string }) => {
+export const StateColumn = ({ state }: { state: string }) => {
   return (
     <div className="flex items-center space-x-2">
-      <span
-        className="text-xs font-semibold px-3 py-1 rounded-full"
-        style={{ backgroundColor: stateLabel[state].color }}
-      >
-        {stateLabel[state].label}
-      </span>
+      <span className="text-xs font-semibold px-3 py-1 rounded-full border">{stateLabel[state].label}</span>
     </div>
   );
 };
@@ -130,9 +125,8 @@ const StateColumn = ({ state }: { state: string }) => {
 const TypeColumn = ({ name, color }: { name: string; color: string }) => {
   return (
     <div className="flex items-center space-x-2">
-      <span className="text-xs font-semibold px-3 py-1 rounded-full" style={{ backgroundColor: color }}>
-        {name}
-      </span>
+      <div className="size-3" style={{ backgroundColor: color }}></div>
+      <span className="text-xs font-semibold px-3 py-1">{name}</span>
     </div>
   );
 };
