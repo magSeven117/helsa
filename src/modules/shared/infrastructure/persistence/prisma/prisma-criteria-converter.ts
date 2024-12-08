@@ -20,8 +20,12 @@ export class PrismaCriteriaConverter {
       [Operator.NOT_EQUAL, this.notEqual],
       [Operator.GT, this.greaterThan],
       [Operator.LT, this.lessThan],
+      [Operator.GTE, this.greaterThanOrEqual],
+      [Operator.LTE, this.lessThanOrEqual],
       [Operator.CONTAINS, this.like],
       [Operator.NOT_CONTAINS, this.notLike],
+      [Operator.IN, this.in],
+      [Operator.NOT_IN, this.notIn],
     ]);
   }
 
@@ -95,10 +99,26 @@ export class PrismaCriteriaConverter {
     };
   }
 
+  private greaterThanOrEqual(filter: Filter) {
+    return {
+      [filter.field]: {
+        gte: filter.value,
+      },
+    };
+  }
+
   private lessThan(filter: Filter) {
     return {
       [filter.field]: {
         lt: filter.value,
+      },
+    };
+  }
+
+  private lessThanOrEqual(filter: Filter) {
+    return {
+      [filter.field]: {
+        lte: filter.value,
       },
     };
   }
@@ -117,6 +137,22 @@ export class PrismaCriteriaConverter {
         not: {
           contains: filter.value,
         },
+      },
+    };
+  }
+
+  private in(filter: Filter) {
+    return {
+      [filter.field]: {
+        in: filter.value,
+      },
+    };
+  }
+
+  private notIn(filter: Filter) {
+    return {
+      [filter.field]: {
+        notIn: filter.value,
       },
     };
   }

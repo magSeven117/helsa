@@ -41,8 +41,6 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
       },
     };
 
-    console.log(where);
-
     const [data, count] = await this.client.$transaction([
       this.client.appointment.findMany({
         where,

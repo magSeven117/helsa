@@ -1,7 +1,7 @@
 import { createMiddleware } from 'next-safe-action';
 
 export const loggerMiddleware = createMiddleware().define(async ({ next, clientInput, metadata }) => {
-  console.log('LOGGING MIDDLEWARE');
+  console.log(`Executing action ${metadata.actionName} with input ${JSON.stringify(clientInput)}`);
 
   const startTime = performance.now();
 

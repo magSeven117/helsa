@@ -93,6 +93,7 @@ export default function DoctorAppointment({
         date: new Date(`${format(data.date, 'yyyy-MM-dd')} ${data.time}`),
         symptoms: data.symptoms,
         typeId: data.typeId,
+        specialtyId: doctor.specialtyId,
       });
       router.push(`/appointments/${id}`);
     } catch (error) {

@@ -54,22 +54,11 @@ const AppointmentSearchFilters = ({ filters, loading, onRemove, specialties, sta
       }
 
       case 'types': {
-        return (
-          <p className="flex justify-start items-center gap-2">
-            {value.map((slug: string, index: number) => {
-              const type = types?.find((type) => type.name === slug);
-              return (
-                <div key={slug} className="flex justify-start items-center gap-1">
-                  <div className="size-2" style={{ backgroundColor: type?.color }}></div>
-                  <span>
-                    {type?.name}
-                    {index < value.length - 1 && ','}
-                  </span>
-                </div>
-              );
-            })}
-          </p>
-        );
+        return value
+          .map((slug: string) => {
+            return types?.find((state) => state.name === slug)?.name;
+          })
+          .join(', ');
       }
 
       default:

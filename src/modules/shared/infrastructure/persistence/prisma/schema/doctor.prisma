@@ -31,9 +31,10 @@ model Doctor {
 }
 
 model Specialty {
-  id     String   @id @default(uuid())
-  name   String   @unique
-  doctor Doctor[]
+  id           String        @id @default(uuid())
+  name         String        @unique
+  doctor       Doctor[]
+  appointments Appointment[]
 }
 
 model ConsultingRoomAddress {

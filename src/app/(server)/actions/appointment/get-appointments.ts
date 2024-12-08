@@ -8,7 +8,17 @@ import { z } from 'zod';
 import { getDoctor } from '../doctor/get-doctor';
 import { getPatient } from '../patient/get-patient';
 
-const schema = z.object({}).optional();
+const schema = z.object({
+  start: z.string().optional(),
+  end: z.string().optional(),
+  states: z.array(z.string()).optional(),
+  specialties: z.array(z.string()).optional(),
+  types: z.array(z.string()).optional(),
+  page: z.number().optional(),
+  pageSize: z.number().optional(),
+  sortBy: z.string().optional(),
+  order: z.string().optional(),
+});
 
 export const getAppointments = authActionClient
   .schema(schema)
@@ -22,5 +32,14 @@ export const getAppointments = authActionClient
       return { data: [], meta: {} as Meta };
     }
     const service = new GetAppointments(new PrismaAppointmentRepository(db));
-    return await service.run(data.id, user.role, {});
+    return await service.run(
+      data.id,
+      user.role,
+      parsedInput ?? {},
+      {
+        page: parsedInput.page,
+        pageSize: parsedInput.pageSize,
+      },
+      { sortBy: parsedInput.sortBy, order: parsedInput.order }
+    );
   });

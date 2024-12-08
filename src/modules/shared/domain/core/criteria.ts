@@ -3,8 +3,14 @@ export enum Operator {
   NOT_EQUAL = '!=',
   GT = '>',
   LT = '<',
+  GTE = '>=',
+  LTE = '<=',
   CONTAINS = 'CONTAINS',
   NOT_CONTAINS = 'NOT_CONTAINS',
+  IN = 'IN',
+  NOT_IN = 'NOT_IN',
+  BETWEEN = 'BETWEEN',
+  NOT_BETWEEN = 'NOT_BETWEEN',
 }
 export enum Direction {
   ASC = 'ASC',
@@ -109,5 +115,9 @@ export class Criteria {
 
   static fromValues(filters: Filter[], order?: Order, pagination?: Pagination, include?: Include[]): Criteria {
     return new Criteria({ filters, type: FilterType.AND }, order, pagination, include);
+  }
+
+  static empty(): Criteria {
+    return new Criteria();
   }
 }

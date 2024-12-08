@@ -28,6 +28,9 @@ export type FilterListProps = {
 
 const FilterList = ({ filters, loading, onRemove, renderFilter }: FilterListProps) => {
   const handleOnRemove = (key: string) => {
+    if (key === 'start') {
+      onRemove({ end: null });
+    }
     onRemove({ [key]: null });
   };
 

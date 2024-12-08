@@ -150,7 +150,7 @@ const AppointmentDetailsSheet = ({ data, isOpen, setOpen, types }: Props) => {
                   </Button>
                 </Link>
               </div>
-              <Accordion type="single" collapsible className="w-full px-1">
+              <Accordion type="multiple" defaultValue={['attachments']} className="w-full px-1">
                 <AccordionItem value="attachments">
                   <AccordionTrigger className="hover:no-underline">
                     <div className="flex justify-start items-center gap-2">

@@ -15,6 +15,9 @@ model Appointment {
   typeId String
   type   AppointmentType @relation(fields: [typeId], references: [id])
 
+  specialtyId String
+  specialty   Specialty @relation(fields: [specialtyId], references: [id])
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

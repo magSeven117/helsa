@@ -65,7 +65,14 @@ const Page = async ({ searchParams }: { searchParams: Record<string, string | st
       <div className="flex px-5 w-full">
         <ErrorBoundary errorComponent={ErrorFallback}>
           <Suspense fallback={<Loading />} key={loadingKey}>
-            <AppointmentTable filter={filter} page={page} pageSize={pageSize} sort={sort} />
+            <AppointmentTable
+              filter={filter}
+              page={page}
+              pageSize={pageSize}
+              sort={sort}
+              specialties={specialties}
+              types={types}
+            />
           </Suspense>
         </ErrorBoundary>
       </div>

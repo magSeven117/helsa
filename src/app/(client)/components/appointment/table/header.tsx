@@ -22,12 +22,12 @@ export function AppointmentsTableHeader({ table, loading }: Props) {
       const params = new URLSearchParams(searchParams);
       const prevSort = params.get('sort');
 
-      if (`${name}:asc` === prevSort) {
-        params.set('sort', `${name}:desc`);
-      } else if (`${name}:desc` === prevSort) {
+      if (`${name}:ASC` === prevSort) {
+        params.set('sort', `${name}:DESC`);
+      } else if (`${name}:DESC` === prevSort) {
         params.delete('sort');
       } else {
-        params.set('sort', `${name}:asc`);
+        params.set('sort', `${name}:ASC`);
       }
 
       router.replace(`${pathname}?${params.toString()}`);
@@ -60,8 +60,8 @@ export function AppointmentsTableHeader({ table, loading }: Props) {
               onClick={() => createSortQuery('date')}
             >
               <span>Fecha</span>
-              {'date' === column && value === 'asc' && <ArrowDown size={16} />}
-              {'date' === column && value === 'desc' && <ArrowUp size={16} />}
+              {'date' === column && value === 'ASC' && <ArrowUp size={16} />}
+              {'date' === column && value === 'DESC' && <ArrowDown size={16} />}
             </Button>
           </TableHead>
         )}
@@ -73,14 +73,20 @@ export function AppointmentsTableHeader({ table, loading }: Props) {
               onClick={() => createSortQuery('status')}
             >
               <span>Estado</span>
-              {'status' === column && value === 'asc' && <ArrowDown size={16} />}
-              {'status' === column && value === 'desc' && <ArrowUp size={16} />}
+              {'status' === column && value === 'ASC' && <ArrowUp size={16} />}
+              {'status' === column && value === 'DESC' && <ArrowDown size={16} />}
             </Button>
           </TableHead>
         )}
         {isVisible('doctor') && (
           <TableHead className="border">
             <span>Doctor</span>
+          </TableHead>
+        )}
+
+        {isVisible('specialty') && (
+          <TableHead className="border">
+            <span>Especialidad</span>
           </TableHead>
         )}
 
