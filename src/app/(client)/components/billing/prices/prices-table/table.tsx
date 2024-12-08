@@ -1,6 +1,6 @@
 'use client';
 
-import { removeAppointmentType } from '@/app/(server)/actions/doctor/remove-appointment-type';
+import { removePrice } from '@/app/(server)/actions/doctor/remove-price';
 import { Dialog } from '@/libs/shadcn-ui/components/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/libs/shadcn-ui/components/table';
 import { cn } from '@/libs/shadcn-ui/utils/utils';
@@ -23,7 +23,7 @@ export function DataTable({ data, doctorId, types }: Props) {
   const router = useRouter();
 
   const remove = async (id: string) => {
-    await removeAppointmentType({ id });
+    await removePrice({ id });
     toast.success('Appointment type removed');
     router.refresh();
   };

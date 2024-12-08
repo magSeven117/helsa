@@ -1,5 +1,5 @@
 'use client';
-import { removeAppointmentType } from '@/app/(server)/actions/doctor/remove-appointment-type';
+import { removePrice } from '@/app/(server)/actions/doctor/remove-price';
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -25,7 +25,7 @@ const DeleteTypeModal = ({
   id: string;
 }) => {
   const router = useRouter();
-  const deleteType = useAction(removeAppointmentType, {
+  const deleteType = useAction(removePrice, {
     onSuccess: ({ data }) => {
       toast.success((data as any).message);
       router.refresh();

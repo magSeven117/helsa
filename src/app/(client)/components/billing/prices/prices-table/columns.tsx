@@ -115,6 +115,7 @@ export const columns: ColumnDef<Prices>[] = [
             defaultValue={row.original}
             isOpen={isOpen}
             onOpenChange={setOpen}
+            types={(table.options.meta as ExtendedTableMeta).types}
           />
         </div>
       );

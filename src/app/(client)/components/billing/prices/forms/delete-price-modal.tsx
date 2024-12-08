@@ -1,5 +1,5 @@
 'use client';
-import { removeAppointmentType } from '@/app/(server)/actions/doctor/remove-appointment-type';
+import { removePrice } from '@/app/(server)/actions/doctor/remove-price';
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -15,7 +15,7 @@ import { useAction } from 'next-safe-action/hooks';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
-const DeleteTypeModal = ({
+const DeletePriceModal = ({
   isOpen,
   setOpen,
   id,
@@ -25,9 +25,9 @@ const DeleteTypeModal = ({
   id: string;
 }) => {
   const router = useRouter();
-  const deleteType = useAction(removeAppointmentType, {
-    onSuccess: ({ data }) => {
-      toast.success((data as any).message);
+  const deletePrice = useAction(removePrice, {
+    onSuccess: () => {
+      toast.success('Tarifa eliminada');
       router.refresh();
       setOpen(false);
     },
@@ -36,22 +36,22 @@ const DeleteTypeModal = ({
     <AlertDialog open={isOpen} onOpenChange={setOpen}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Estas seguro que deseas eliminar las categorías seleccionadas?</AlertDialogTitle>
+          <AlertDialogTitle>Estas seguro que deseas eliminar la tarifa?</AlertDialogTitle>
           <AlertDialogDescription>
-            Al eliminar una categoría, todos los productos relacionados con esta categoría serán eliminadas
+            Al eliminar una tarifa, todos los productos relacionados con esta tarifa serán eliminadas
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <Button
             onClick={() => {
-              deleteType.execute({ id });
+              deletePrice.execute({ id });
             }}
-            disabled={deleteType.status === 'executing'}
+            disabled={deletePrice.status === 'executing'}
             className=""
             type="submit"
           >
-            {deleteType.status === 'executing' ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Eliminar'}
+            {deletePrice.status === 'executing' ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Eliminar'}
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
@@ -59,4 +59,4 @@ const DeleteTypeModal = ({
   );
 };
 
-export default DeleteTypeModal;
+export default DeletePriceModal;

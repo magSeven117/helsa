@@ -1,5 +1,5 @@
 'use server';
-import { RemoveAppointmentType } from '@/modules/doctor/application/services/remove-appointment-type';
+import { RemovePrice } from '@/modules/doctor/application/services/remove-appointment-type';
 import { PrismaDoctorRepository } from '@/modules/doctor/infrastructure/persistence/prisma-doctor-repository';
 import { authActionClient } from '@/modules/shared/infrastructure/actions/client-actions';
 import { db } from '@/modules/shared/infrastructure/persistence/prisma/prisma-connection';
@@ -10,9 +10,9 @@ const schema = z.object({
   id: z.string(),
 });
 
-export const removeAppointmentType = authActionClient
+export const removePrice = authActionClient
   .schema(schema)
-  .metadata({ actionName: 'remove-appointment-type' })
+  .metadata({ actionName: 'remove-price' })
   .action(async ({ parsedInput: { id }, ctx: { user } }) => {
     const doctor = await getDoctor({ userId: user.id });
     const doctorId = doctor?.data?.id ?? null;
@@ -20,6 +20,6 @@ export const removeAppointmentType = authActionClient
       throw new Error('Doctor not found');
     }
 
-    const service = new RemoveAppointmentType(new PrismaDoctorRepository(db));
+    const service = new RemovePrice(new PrismaDoctorRepository(db));
     await service.run(doctorId, id);
   });

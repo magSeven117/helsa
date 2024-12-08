@@ -24,10 +24,11 @@ type Props = {
     currency: string;
     typeId: string;
   };
+  types: any[];
 };
 
 const formSchema = z.object({
-  amount: z.number(),
+  amount: z.string(),
   duration: z.string(),
   typeId: z.string(),
   currency: z.string(),
@@ -40,23 +41,29 @@ const durations = [
   { label: '1 hour 30 minutes', value: 90 },
   { label: '2 hours', value: 120 },
 ];
+const currencies = [
+  { label: 'USD', value: 'USD' },
+  { label: 'EUR', value: 'EUR' },
+  { label: 'GBP', value: 'GBP' },
+  { label: 'JPY', value: 'JPY' },
+];
 
-export const EditPriceModal = ({ defaultValue, id, isOpen, onOpenChange, doctorId }: Props) => {
+export const EditPriceModal = ({ defaultValue, id, isOpen, onOpenChange, doctorId, types }: Props) => {
   const router = useRouter();
   const createType = useAction(savePrice, {
     onSuccess: () => {
       onOpenChange(false);
-      toast.success('Successfully created categories.');
+      toast.success('Tarifa actualizada');
       router.refresh();
     },
     onError: () => {
-      toast.error('Something went wrong please try again.');
+      toast.error('Error al actualizar la tarifa');
     },
   });
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      amount: defaultValue.amount,
+      amount: defaultValue.amount.toString(),
       duration: defaultValue.duration.toString(),
       typeId: defaultValue.typeId,
       currency: defaultValue.currency,
@@ -65,7 +72,7 @@ export const EditPriceModal = ({ defaultValue, id, isOpen, onOpenChange, doctorI
   function onSubmit(data: z.infer<typeof formSchema>) {
     createType.execute({
       id,
-      amount: data.amount,
+      amount: parseInt(data.amount),
       duration: parseInt(data.duration),
       typeId: data.typeId,
       currency: data.currency,
@@ -83,52 +90,104 @@ export const EditPriceModal = ({ defaultValue, id, isOpen, onOpenChange, doctorI
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="mt-6 mb-6">
               <div className="flex flex-col space-y-2">
-                <div className="flex space-x-2">
+                <div className="grid grid-cols-2 gap-x-2 gap-y-4">
                   <FormField
                     control={form.control}
-                    name="amount"
+                    name={`amount`}
                     render={({ field }) => (
                       <FormItem className="flex-1">
                         <FormControl>
-                          <div className="relative">
-                            <Input {...field} />
-
-                            <FormMessage />
-                          </div>
+                          <Input
+                            {...field}
+                            placeholder="Precio"
+                            className="rounded-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-transparent"
+                            type="number"
+                          />
                         </FormControl>
                       </FormItem>
                     )}
                   />
 
-                  <div className="flex-1 relative">
-                    <FormField
-                      control={form.control}
-                      name="duration"
-                      render={({ field }) => (
-                        <FormItem className="flex-1 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0">
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger className="w-full rounded-none ">
-                                <SelectValue placeholder="Duración" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent className="rounded-none">
-                              {durations.map((duration) => (
-                                <SelectItem
-                                  key={duration.value}
-                                  value={duration.value.toString()}
-                                  className="rounded-none"
-                                >
-                                  {duration.label}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+                  <FormField
+                    control={form.control}
+                    name={`currency`}
+                    render={({ field }) => (
+                      <FormItem className="flex-1 ">
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="w-full rounded-none focus:outline-none focus:ring-0 focus:ring-transparent">
+                              <SelectValue placeholder="Moneda" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent className="rounded-none">
+                            {currencies.map((currency) => (
+                              <SelectItem
+                                key={currency.value}
+                                value={currency.value.toString()}
+                                className="rounded-none"
+                              >
+                                {currency.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="typeId"
+                    render={({ field }) => (
+                      <FormItem className="flex-1">
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="w-full rounded-none focus:outline-none focus:ring-0 focus:ring-transparent">
+                              <SelectValue placeholder="Tipo de consulta" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent className="rounded-none">
+                            {types.map((type) => (
+                              <SelectItem key={type.id} value={type.id} className="rounded-none">
+                                <div className="flex justify-start items-center gap-3">
+                                  <div className="size-3" style={{ backgroundColor: type.color }}></div>
+                                  {type.name}
+                                </div>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="duration"
+                    render={({ field }) => (
+                      <FormItem className="flex-1 ">
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="w-full rounded-none focus:outline-none focus:ring-0 focus:ring-transparent">
+                              <SelectValue placeholder="Duración" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent className="rounded-none">
+                            {durations.map((duration) => (
+                              <SelectItem
+                                key={duration.value}
+                                value={duration.value.toString()}
+                                className="rounded-none"
+                              >
+                                {duration.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
               </div>
 
