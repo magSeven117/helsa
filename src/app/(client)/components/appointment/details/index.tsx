@@ -13,7 +13,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/libs/shadcn-ui/c
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/libs/shadcn-ui/components/tabs';
 import { Textarea } from '@/libs/shadcn-ui/components/textarea';
 import { Appointment } from '@/modules/appointment/domain/appointment';
-import { AppointmentType } from '@/modules/doctor/domain/appointment-type';
+import { AppointmentType } from '@/modules/appointment/domain/appointment-type';
 import { Primitives } from '@/modules/shared/domain/types/primitives';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';

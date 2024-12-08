@@ -1,4 +1,4 @@
-import { getAppointmentTypes } from '@/app/(server)/actions/doctor/get-appointment-types';
+import { getAppointmentTypes } from '@/app/(server)/actions/appointment/get-appointment-types';
 import { DataTable } from './table';
 
 export async function TypesTable({ doctorId }: { doctorId: string }) {

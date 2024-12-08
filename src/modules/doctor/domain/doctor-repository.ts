@@ -1,8 +1,8 @@
 import { Criteria } from '@/modules/shared/domain/core/criteria';
-import { AppointmentType } from './appointment-type';
 import { ConsultingRoomAddress } from './consulting-room-address';
 import { Doctor } from './doctor';
 import { Education } from './educations';
+import { Price } from './price';
 import { Schedule } from './schedule';
 import { Specialty } from './specialty';
 
@@ -11,7 +11,7 @@ export interface DoctorRepository {
   saveConsultingRoomAddress(doctorId: string, address?: ConsultingRoomAddress): Promise<void>;
   saveSchedule(doctorId: string, schedule?: Schedule): Promise<void>;
   saveEducations(doctorId: string, educations: Education[]): Promise<void>;
-  saveAppointmentTypes(doctorId: string, appointmentTypes: AppointmentType[]): Promise<void>;
+  savePrices(doctorId: string, prices: Price[]): Promise<void>;
   findByCriteria(criteria: Criteria): Promise<Doctor[]>;
   search({
     term,
@@ -27,8 +27,8 @@ export interface DoctorRepository {
     experience?: number;
   }): Promise<Doctor[]>;
   getByCriteria(criteria: Criteria): Promise<Doctor>;
+  getPrices(doctorId: string): Promise<Price[]>;
   getSpecialties(): Promise<Specialty[]>;
-  getAppointmentsTypes(doctorId: string): Promise<AppointmentType[]>;
   removeEducation(doctorId: string, educationId: string): Promise<void>;
-  removeAppointmentType(doctorId: string, appointmentTypeId: string): Promise<void>;
+  removePrice(doctorId: string, priceId: string): Promise<void>;
 }

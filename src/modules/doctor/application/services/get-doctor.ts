@@ -10,9 +10,11 @@ export class GetDoctor {
     const doctor = await this.doctorRepository.getByCriteria(
       Criteria.fromValues([{ field: 'userId', value: userId, operator: Operator.EQUAL }], undefined, undefined, [
         { field: 'consultingRoomAddress' },
-        { field: 'appointmentTypes' },
         { field: 'educations' },
         { field: 'schedule' },
+        { field: 'specialty' },
+        { field: 'prices' },
+        { field: 'user' },
       ])
     );
 

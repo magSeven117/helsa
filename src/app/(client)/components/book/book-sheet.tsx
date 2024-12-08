@@ -1,5 +1,5 @@
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/libs/shadcn-ui/components/sheet';
-import { AppointmentType } from '@/modules/doctor/domain/appointment-type';
+import { AppointmentType } from '@/modules/appointment/domain/appointment-type';
 import { Doctor } from '@/modules/doctor/domain/doctor';
 import { Primitives } from '@/modules/shared/domain/types/primitives';
 import DoctorAppointment from './book-form';

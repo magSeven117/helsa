@@ -1,4 +1,4 @@
-import { AppointmentType } from '@/modules/doctor/domain/appointment-type';
+import { AppointmentType } from '@/modules/appointment/domain/appointment-type';
 import { Doctor } from '@/modules/doctor/domain/doctor';
 import { Patient } from '@/modules/patient/domain/patient';
 import { Aggregate } from '@/modules/shared/domain/core/aggregate';

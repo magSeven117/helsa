@@ -1,4 +1,4 @@
-import { getAppointmentTypes } from '@/app/(server)/actions/doctor/get-appointment-types';
+import { getAppointmentTypes } from '@/app/(server)/actions/appointment/get-appointment-types';
 import { searchDoctors } from '@/app/(server)/actions/doctor/search-doctors';
 import DoctorList from './doctor-list';
 

@@ -43,17 +43,14 @@ enum AppointmentStatus {
 }
 
 model AppointmentType {
-  id       String  @id @default(uuid())
-  doctorId String?
-  name     String
-  duration Decimal
-  color    String
-  system   Boolean
+  id    String @id @default(uuid())
+  name  String
+  color String @default("#000000")
 
-  doctor       Doctor?       @relation(fields: [doctorId], references: [id])
   appointments Appointment[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
+  Price        Price[]
 }
 
 model AppointmentRoom {

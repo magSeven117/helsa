@@ -14,15 +14,15 @@ model Doctor {
   user      User      @relation(fields: [userId], references: [id])
   specialty Specialty @relation(fields: [specialtyId], references: [id])
 
-  educations       Education[]
-  hospitals        Hospital[]         @relation("DoctorHospital")
-  ratings          Rating[]
-  diagnostics      Diagnostic[]
-  treatments       Treatment[]
-  appointments     Appointment[]
-  tests            MedicalTest[]
-  references       MedicalReference[]
-  appointmentTypes AppointmentType[]
+  educations   Education[]
+  hospitals    Hospital[]         @relation("DoctorHospital")
+  ratings      Rating[]
+  diagnostics  Diagnostic[]
+  treatments   Treatment[]
+  appointments Appointment[]
+  tests        MedicalTest[]
+  references   MedicalReference[]
+  prices       Price[]
 
   searchDoctor SearchDoctor?
 
@@ -120,4 +120,18 @@ model SearchDay {
 
   searchDoctorId String
   searchDoctor   SearchDoctor @relation(fields: [searchDoctorId], references: [id], onDelete: Cascade)
+}
+
+model Price {
+  id String @id @default(uuid())
+
+  amount   Decimal
+  currency String
+  duration Decimal
+
+  doctorId String
+  doctor   Doctor @relation(fields: [doctorId], references: [id])
+
+  typeId String
+  type   AppointmentType @relation(fields: [typeId], references: [id])
 }

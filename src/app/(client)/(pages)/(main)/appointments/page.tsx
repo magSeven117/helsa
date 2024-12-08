@@ -4,7 +4,7 @@ import AppointmentActions from '@/app/(client)/components/appointment/table/acti
 import { Loading } from '@/app/(client)/components/appointment/table/loading';
 import { ColumnVisibility } from '@/app/(client)/components/appointment/table/visibility';
 import { ErrorFallback } from '@/app/(client)/components/error-fallback';
-import { getAppointmentTypes } from '@/app/(server)/actions/doctor/get-appointment-types';
+import { getAppointmentTypes } from '@/app/(server)/actions/appointment/get-appointment-types';
 import { getSpecialties } from '@/app/(server)/actions/doctor/get-specialties';
 import { AppointmentStatusEnum } from '@/modules/appointment/domain/status';
 import { ErrorBoundary } from 'next/dist/client/components/error-boundary';

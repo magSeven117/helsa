@@ -1,3 +1,4 @@
+import { AppointmentType } from '@/modules/appointment/domain/appointment-type';
 import { Collection } from '@/modules/shared/domain/core/collection.';
 import { Criteria } from '@/modules/shared/domain/core/criteria';
 import { Primitives } from '@/modules/shared/domain/types/primitives';
@@ -103,5 +104,10 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
       return null;
     }
     return Appointment.fromPrimitives(appointment as unknown as Primitives<Appointment>);
+  }
+
+  async getTypes(): Promise<AppointmentType[]> {
+    const types = await this.client.appointmentType.findMany();
+    return types.map((type) => AppointmentType.fromPrimitives(type as unknown as Primitives<AppointmentType>));
   }
 }

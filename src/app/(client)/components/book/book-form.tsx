@@ -8,7 +8,7 @@ import { DatePicker } from '@/libs/shadcn-ui/components/date-picker';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/libs/shadcn-ui/components/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/libs/shadcn-ui/components/select';
 import { Textarea } from '@/libs/shadcn-ui/components/textarea';
-import { AppointmentType } from '@/modules/doctor/domain/appointment-type';
+import { AppointmentType } from '@/modules/appointment/domain/appointment-type';
 import { Doctor } from '@/modules/doctor/domain/doctor';
 import { Primitives } from '@/modules/shared/domain/types/primitives';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -106,7 +106,7 @@ export default function DoctorAppointment({
     return null;
   }
 
-  const finalTypes = [...types, ...(doctor?.appointmentTypes ?? [])];
+  const finalTypes = [...(doctor.prices ?? [])];
 
   return (
     <div className="w-full mt-10">
