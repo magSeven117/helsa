@@ -1,5 +1,6 @@
 import { AppointmentType } from '@/modules/appointment/domain/appointment-type';
 import { Doctor } from '@/modules/doctor/domain/doctor';
+import { Price } from '@/modules/doctor/domain/price';
 import { Patient } from '@/modules/patient/domain/patient';
 import { Aggregate } from '@/modules/shared/domain/core/aggregate';
 import { DateValueObject, StringValueObject } from '@/modules/shared/domain/core/value-object';
@@ -26,6 +27,7 @@ export class Appointment extends Aggregate {
     public doctorId: Uuid,
     public typeId: Uuid,
     public specialtyId: Uuid,
+    public priceId: Uuid,
     createdAt: DateValueObject,
     updatedAt: DateValueObject,
     public room?: AppointmentRoom,
@@ -35,7 +37,8 @@ export class Appointment extends Aggregate {
     public notes?: AppointmentNote[],
     public doctor?: Doctor,
     public type?: AppointmentType,
-    public patient?: Patient
+    public patient?: Patient,
+    public price?: Price
   ) {
     super(id, createdAt, updatedAt);
   }
@@ -52,6 +55,7 @@ export class Appointment extends Aggregate {
       doctorId: this.doctorId.toString(),
       typeId: this.typeId.value,
       specialtyId: this.specialtyId.value,
+      priceId: this.priceId.value,
       createdAt: this.createdAt.value,
       updatedAt: this.updatedAt.value,
       room: this.room ? this.room.toPrimitives() : undefined,
@@ -62,6 +66,7 @@ export class Appointment extends Aggregate {
       doctor: this.doctor ? this.doctor.toPrimitives() : undefined,
       type: this.type ? this.type.toPrimitives() : undefined,
       patient: this.patient ? this.patient.toPrimitives() : undefined,
+      price: this.price ? this.price.toPrimitives() : undefined,
     };
   }
 
@@ -77,6 +82,7 @@ export class Appointment extends Aggregate {
       new Uuid(data.doctorId),
       new Uuid(data.typeId),
       new Uuid(data.specialtyId),
+      new Uuid(data.priceId),
       new DateValueObject(data.createdAt),
       new DateValueObject(data.updatedAt),
       data.room ? AppointmentRoom.fromPrimitives(data.room) : undefined,
@@ -86,7 +92,8 @@ export class Appointment extends Aggregate {
       data.notes ? data.notes.map((note) => AppointmentNote.fromPrimitives(note)) : undefined,
       data.doctor ? Doctor.fromPrimitives(data.doctor) : undefined,
       data.type ? AppointmentType.fromPrimitives(data.type) : undefined,
-      data.patient ? Patient.fromPrimitives(data.patient) : undefined
+      data.patient ? Patient.fromPrimitives(data.patient) : undefined,
+      data.price ? Price.fromPrimitives(data.price) : undefined
     );
   }
 
@@ -97,7 +104,8 @@ export class Appointment extends Aggregate {
     patientId: string,
     doctorId: string,
     typeId: string,
-    specialtyId: string
+    specialtyId: string,
+    priceId: string
   ): Appointment {
     const appointment = new Appointment(
       new Uuid(id),
@@ -110,6 +118,7 @@ export class Appointment extends Aggregate {
       new Uuid(doctorId),
       new Uuid(typeId),
       new Uuid(specialtyId),
+      new Uuid(priceId),
       DateValueObject.today(),
       DateValueObject.today()
     );

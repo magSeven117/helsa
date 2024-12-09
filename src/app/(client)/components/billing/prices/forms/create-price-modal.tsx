@@ -29,6 +29,7 @@ type Props = {
 };
 
 const formSchema = z.object({
+  name: z.string(),
   amount: z.string(),
   duration: z.string(),
   typeId: z.string(),
@@ -56,11 +57,11 @@ const CreatePriceModal = ({ isOpen, onOpenChange, doctorId, types }: Props) => {
   const createType = useAction(savePrice, {
     onSuccess: () => {
       onOpenChange(false);
-      toast.success('Successfully created categories.');
+      toast.success('Tarifa creada');
       router.refresh();
     },
     onError: () => {
-      toast.error('Something went wrong please try again.');
+      toast.error('Error al crear la tarifa');
     },
   });
   const form = useForm({
@@ -70,6 +71,7 @@ const CreatePriceModal = ({ isOpen, onOpenChange, doctorId, types }: Props) => {
       duration: '30',
       typeId: '',
       currency: 'USD',
+      name: '',
     },
   });
 
@@ -84,6 +86,7 @@ const CreatePriceModal = ({ isOpen, onOpenChange, doctorId, types }: Props) => {
 
   function onSubmit(data: z.infer<typeof formSchema>) {
     createType.execute({
+      name: data.name,
       amount: parseFloat(data.amount),
       duration: parseInt(data.duration),
       typeId: data.typeId,
@@ -98,13 +101,28 @@ const CreatePriceModal = ({ isOpen, onOpenChange, doctorId, types }: Props) => {
         <form onSubmit={form.handleSubmit(onSubmit, (error) => console.log(error))}>
           <div className="p-4">
             <DialogHeader className="mb-4">
-              <DialogTitle>Crear categoría</DialogTitle>
+              <DialogTitle>Crear tarifa</DialogTitle>
               <DialogDescription>Crea tus tarifas aquí</DialogDescription>
             </DialogHeader>
 
             <div className="flex flex-col space-y-6 max-h-[400px] overflow-auto">
               <div className="flex flex-col space-y-2">
                 <div className="grid grid-cols-2 gap-x-2 gap-y-4">
+                  <FormField
+                    control={form.control}
+                    name={`name`}
+                    render={({ field }) => (
+                      <FormItem className="col-span-2">
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder="Nombre de la tarifa"
+                            className="rounded-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-transparent"
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
                   <FormField
                     control={form.control}
                     name={`amount`}

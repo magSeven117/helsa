@@ -27,9 +27,15 @@ export type Prices = {
   duration: number;
   currency: string;
   typeId: string;
+  name: string;
 };
 
 export const columns: ColumnDef<Prices>[] = [
+  {
+    header: 'Nombre',
+    accessorKey: 'name',
+    cell: ({ row }) => row.original.name,
+  },
   {
     header: 'Precio',
     accessorKey: 'amount',
@@ -38,7 +44,7 @@ export const columns: ColumnDef<Prices>[] = [
         <TooltipProvider delayDuration={0}>
           <Tooltip>
             <TooltipTrigger asChild>
-              <span className="cursor-default">{row.original.amount}</span>
+              <span className="cursor-default">${row.original.amount}</span>
             </TooltipTrigger>
             {row.original?.currency && (
               <TooltipContent className="px-3 py-1.5 text-xs rounded-none" side="right" sideOffset={10}>
@@ -56,7 +62,7 @@ export const columns: ColumnDef<Prices>[] = [
     cell: ({ row }) => row.original.currency ?? '-',
   },
   {
-    header: 'Duration',
+    header: 'Duración',
     accessorKey: 'duration',
     cell: ({ row }) =>
       row.getValue('duration')

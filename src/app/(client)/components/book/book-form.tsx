@@ -38,7 +38,7 @@ const formSchema = z.object({
   time: z.string().min(5, 'Selecciona una hora'),
   symptoms: z.string().min(2, 'Describe tus síntomas'),
   paymentMethod: z.string().min(2, 'Selecciona un método de pago'),
-  typeId: z.string().min(2, 'Selecciona un tipo de cita'),
+  priceId: z.string().min(2, 'Selecciona un precio'),
 });
 
 export default function DoctorAppointment({
@@ -56,7 +56,7 @@ export default function DoctorAppointment({
       time: '',
       symptoms: '',
       paymentMethod: '',
-      typeId: '',
+      priceId: '',
     },
   });
   const [date, setDate] = useState<Date | undefined>(new Date());
@@ -92,7 +92,8 @@ export default function DoctorAppointment({
         doctorId: doctor.id,
         date: new Date(`${format(data.date, 'yyyy-MM-dd')} ${data.time}`),
         symptoms: data.symptoms,
-        typeId: data.typeId,
+        typeId: doctor.prices?.find((price) => price.id === data.priceId)?.typeId ?? types[0].id,
+        priceId: data.priceId,
         specialtyId: doctor.specialtyId,
       });
       router.push(`/appointments/${id}`);
@@ -119,7 +120,7 @@ export default function DoctorAppointment({
                 <DatePicker onSelect={setDate} selected={date} />
                 <FormField
                   control={form.control}
-                  name="typeId"
+                  name="priceId"
                   render={({ field }) => (
                     <FormItem className="flex-1 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0">
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -132,8 +133,12 @@ export default function DoctorAppointment({
                           {finalTypes.map((type) => (
                             <SelectItem key={type.id} value={type.id} className="rounded-none">
                               <div className="flex justify-start items-center gap-3">
-                                <div className="size-3" style={{ backgroundColor: type.color }}></div>
-                                {type.name} - {duration(Number(type.duration))}
+                                <div
+                                  className="size-3"
+                                  style={{ backgroundColor: types.find((t) => t.id === type.typeId)?.color }}
+                                ></div>
+                                {types.find((t) => t.id === type.typeId)?.name} - {duration(type.duration)} -{' '}
+                                {type.amount} {type.currency}
                               </div>
                             </SelectItem>
                           ))}

@@ -125,6 +125,7 @@ model SearchDay {
 model Price {
   id String @id @default(uuid())
 
+  name     String  @default("Consulta")
   amount   Decimal
   currency String
   duration Decimal
@@ -134,4 +135,6 @@ model Price {
 
   typeId String
   type   AppointmentType @relation(fields: [typeId], references: [id])
+
+  appointments Appointment[]
 }

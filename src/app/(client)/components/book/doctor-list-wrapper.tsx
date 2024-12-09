@@ -14,7 +14,7 @@ type Props = {
 
 const DoctorListWrapper = async ({ filters }: Props) => {
   const response = await searchDoctors(filters);
-  const data = await getAppointmentTypes({ doctorId: '1' });
+  const data = await getAppointmentTypes();
   const doctors = response?.data ?? [];
   const types = data?.data ?? [];
 

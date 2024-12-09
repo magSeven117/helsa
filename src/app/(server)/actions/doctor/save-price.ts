@@ -14,6 +14,7 @@ const schema = z.object({
   amount: z.number(),
   currency: z.string(),
   duration: z.number(),
+  name: z.string(),
 });
 
 export const savePrice = authActionClient

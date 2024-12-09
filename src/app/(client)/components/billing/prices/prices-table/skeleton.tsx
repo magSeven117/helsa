@@ -1,6 +1,6 @@
+import { Skeleton } from '@/libs/shadcn-ui/components/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/libs/shadcn-ui/components/table';
 import { Header } from './header';
-import { Skeleton } from '@/libs/shadcn-ui/components/skeleton';
 
 export function TypesSkeleton() {
   return (
@@ -10,21 +10,33 @@ export function TypesSkeleton() {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>VAT</TableHead>
+            <TableHead>Nombre</TableHead>
+            <TableHead>Precio</TableHead>
+            <TableHead>Moneda</TableHead>
+            <TableHead>Duración</TableHead>
+            <TableHead>Tipo de consulta</TableHead>
           </TableRow>
         </TableHeader>
 
         <TableBody>
           {[...Array(15)].map((_, index) => (
             <TableRow key={index.toString()} className="hover:bg-transparent h-[49px]">
-              <TableCell className="w-[50px]">
+              <TableCell className="w-[50px] border">
                 <Skeleton className="size-4 rounded-md" />
               </TableCell>
-              <TableCell>
+              <TableCell className="border">
                 <Skeleton className="w-[20%] h-2" />
               </TableCell>
-              <TableCell className="w-[65px]">
+              <TableCell className="w-[65px] border">
+                <Skeleton className="w-5 h-1" />
+              </TableCell>
+              <TableCell className="w-[65px] border">
+                <Skeleton className="w-5 h-1" />
+              </TableCell>
+              <TableCell className="w-[65px] border">
+                <Skeleton className="w-5 h-1" />
+              </TableCell>
+              <TableCell className="w-[65px] border">
                 <Skeleton className="w-5 h-1" />
               </TableCell>
             </TableRow>

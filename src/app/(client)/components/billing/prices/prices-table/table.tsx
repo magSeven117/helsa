@@ -43,7 +43,7 @@ export function DataTable({ data, doctorId, types }: Props) {
 
   return (
     <div className="w-full">
-      <Header onOpenChange={onOpenChange} />
+      <Header onOpenChange={onOpenChange} table={table} />
 
       <Table className="border">
         <TableHeader className="">

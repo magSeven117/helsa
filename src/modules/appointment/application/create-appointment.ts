@@ -14,7 +14,8 @@ export class CreateAppointment {
     doctorId: string,
     patientId: string,
     typeId: string,
-    specialtyId: string
+    specialtyId: string,
+    priceId: string
   ) {
     try {
       const appointment = await this.appointmentRepository.search(AppointmentCriteria.searchByDate(date));
@@ -22,7 +23,7 @@ export class CreateAppointment {
         throw new FormatError('Appointment already exists');
       }
 
-      const newAppointment = Appointment.create(id, date, symptoms, patientId, doctorId, typeId, specialtyId);
+      const newAppointment = Appointment.create(id, date, symptoms, patientId, doctorId, typeId, specialtyId, priceId);
 
       await this.appointmentRepository.save(newAppointment);
       await this.eventBus.publish(newAppointment.pullDomainEvents());

@@ -125,7 +125,7 @@ export class Doctor extends Aggregate {
       this.prices[index] = Price.fromPrimitives(price);
     } else {
       this.prices.push(
-        Price.create(price.id, price.amount, price.currency, price.duration, this.id.value, price.typeId)
+        Price.create(price.id, price.name, price.amount, price.currency, price.duration, this.id.value, price.typeId)
       );
     }
   }

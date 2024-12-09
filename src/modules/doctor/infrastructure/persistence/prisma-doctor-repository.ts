@@ -113,6 +113,7 @@ export class PrismaDoctorRepository implements DoctorRepository {
           currency: data.currency,
           typeId: data.typeId,
           duration: data.duration,
+          name: data.name,
         },
         create: {
           id: data.id,
@@ -121,6 +122,7 @@ export class PrismaDoctorRepository implements DoctorRepository {
           typeId: data.typeId,
           duration: data.duration,
           doctorId: data.doctorId,
+          name: data.name,
         },
       });
     }

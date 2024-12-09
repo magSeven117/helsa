@@ -6,6 +6,7 @@ import { Primitives } from '@/modules/shared/domain/types/primitives';
 export class Price {
   constructor(
     public id: Uuid,
+    public name: StringValueObject,
     public amount: NumberValueObject,
     public currency: StringValueObject,
     public duration: NumberValueObject,
@@ -16,6 +17,7 @@ export class Price {
 
   static create(
     id: string,
+    name: string,
     amount: number,
     currency: string,
     duration: number,
@@ -24,6 +26,7 @@ export class Price {
   ): Price {
     return new Price(
       new Uuid(id),
+      new StringValueObject(name),
       new NumberValueObject(amount),
       new StringValueObject(currency),
       new NumberValueObject(duration),
@@ -35,6 +38,7 @@ export class Price {
   static fromPrimitives(data: any): Price {
     return new Price(
       new Uuid(data.id),
+      new StringValueObject(data.name),
       new NumberValueObject(data.amount),
       new StringValueObject(data.currency),
       new NumberValueObject(data.duration),
@@ -47,6 +51,7 @@ export class Price {
   toPrimitives(): Primitives<Price> {
     return {
       id: this.id.value,
+      name: this.name.value,
       amount: this.amount.value,
       currency: this.currency.value,
       duration: this.duration.value,

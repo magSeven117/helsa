@@ -23,12 +23,14 @@ type Props = {
     duration: number;
     currency: string;
     typeId: string;
+    name: string;
   };
   types: any[];
 };
 
 const formSchema = z.object({
   amount: z.string(),
+  name: z.string(),
   duration: z.string(),
   typeId: z.string(),
   currency: z.string(),
@@ -67,6 +69,7 @@ export const EditPriceModal = ({ defaultValue, id, isOpen, onOpenChange, doctorI
       duration: defaultValue.duration.toString(),
       typeId: defaultValue.typeId,
       currency: defaultValue.currency,
+      name: defaultValue.name,
     },
   });
   function onSubmit(data: z.infer<typeof formSchema>) {
@@ -77,6 +80,7 @@ export const EditPriceModal = ({ defaultValue, id, isOpen, onOpenChange, doctorI
       typeId: data.typeId,
       currency: data.currency,
       doctorId: doctorId,
+      name: data.name,
     });
   }
   return (
@@ -84,13 +88,28 @@ export const EditPriceModal = ({ defaultValue, id, isOpen, onOpenChange, doctorI
       <DialogContent className="max-w-[455px] sm:rounded-none">
         <div className="p-4">
           <DialogHeader>
-            <DialogTitle>Edit Category</DialogTitle>
+            <DialogTitle>Edición de tarifa</DialogTitle>
           </DialogHeader>
 
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="mt-6 mb-6">
               <div className="flex flex-col space-y-2">
                 <div className="grid grid-cols-2 gap-x-2 gap-y-4">
+                  <FormField
+                    control={form.control}
+                    name={`name`}
+                    render={({ field }) => (
+                      <FormItem className="col-span-2">
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder="Precio"
+                            className="rounded-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-transparent"
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
                   <FormField
                     control={form.control}
                     name={`amount`}
