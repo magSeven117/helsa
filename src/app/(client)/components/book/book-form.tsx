@@ -1,7 +1,6 @@
 'use client';
 
 import { createAppointment } from '@/app/(server)/actions/appointment/create-appointment';
-import { duration } from '@/libs/ducen-ui/utils/duration';
 import { Avatar, AvatarFallback, AvatarImage } from '@/libs/shadcn-ui/components/avatar';
 import { Button } from '@/libs/shadcn-ui/components/button';
 import { DatePicker } from '@/libs/shadcn-ui/components/date-picker';
@@ -137,8 +136,7 @@ export default function DoctorAppointment({
                                   className="size-3"
                                   style={{ backgroundColor: types.find((t) => t.id === type.typeId)?.color }}
                                 ></div>
-                                {types.find((t) => t.id === type.typeId)?.name} - {duration(type.duration)} -{' '}
-                                {type.amount} {type.currency}
+                                {type.name} - ${type.amount}
                               </div>
                             </SelectItem>
                           ))}

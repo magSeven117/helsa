@@ -1,4 +1,3 @@
-import Overview from '@/app/(client)/components/appointment/overview';
 import { getAppointment } from '@/app/(server)/actions/appointment/get-appointment';
 import { Button } from '@/libs/shadcn-ui/components/button';
 import { cn } from '@/libs/shadcn-ui/utils/utils';
@@ -36,8 +35,6 @@ const Page = async ({ params }: { params: { id: string } }) => {
           Cancelar cita
         </Button>
       </div>
-
-      <Overview appointment={appointment} />
     </div>
   );
 };

@@ -64,7 +64,8 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
   }
 
   async save(appointment: Appointment): Promise<void> {
-    const { notes, rating, recipe, room, telemetry, doctor, type, patient, ...data } = appointment.toPrimitives();
+    const { notes, rating, recipe, room, telemetry, doctor, type, patient, price, ...data } =
+      appointment.toPrimitives();
     await this.model.upsert({
       where: { id: data.id },
       update: data,
