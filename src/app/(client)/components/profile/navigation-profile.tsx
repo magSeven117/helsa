@@ -71,11 +71,6 @@ const navItems = [
     roles: ['HOSPITAL'],
   },
   {
-    title: 'Citas',
-    href: '/profile/appointments',
-    roles: ['DOCTOR'],
-  },
-  {
     title: 'Apariencia',
     href: '/profile/appearance',
     roles: ['DOCTOR', 'PATIENT', 'HOSPITAL'],

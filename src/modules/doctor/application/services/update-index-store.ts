@@ -21,7 +21,7 @@ export class UpdateIndexStore {
         { field: 'specialty' },
       ])
     );
-    const appointments = await this.getAppointments.run(doctorId);
+    const appointments = (await this.getAppointments.run(doctorId)).getItems();
     const user = await this.getUser.run(doctor.userId.toString());
 
     if (!doctor || !user) {

@@ -18,5 +18,5 @@ export const getDoctorAppointments = authActionClient
   .action(async ({ parsedInput: { doctorId } }) => {
     const service = new GetDoctorAppointments(new PrismaAppointmentRepository(db));
     const response = await service.run(doctorId);
-    return response.map((appointment) => appointment.toPrimitives());
+    return response.getItems();
   });

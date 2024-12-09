@@ -40,7 +40,7 @@ const Page = async ({ searchParams }: { searchParams: Record<string, string | st
   };
   const responseSpecialties = await getSpecialties();
   const specialties = responseSpecialties?.data ?? [];
-  const data = await getAppointmentTypes({ doctorId: '1' });
+  const data = await getAppointmentTypes();
   const types = data?.data ?? [];
 
   const sort = (searchParams?.sort as string)?.split(':');

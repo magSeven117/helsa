@@ -18,6 +18,6 @@ export class GetUpcomingAppointment {
       )
     );
 
-    return appointments.map((appointment) => appointment.toPrimitives());
+    return appointments.getItems().map((appointment) => appointment.toPrimitives());
   }
 }
