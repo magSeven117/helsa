@@ -146,3 +146,14 @@ body,
   background: hsl(var(--primary));
   border-radius: 10px;
 }
+
+.str-video {
+  background-color: #272a30;
+  color: #ffffff;
+  height: 100dvh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  max-width: 100%;
+}

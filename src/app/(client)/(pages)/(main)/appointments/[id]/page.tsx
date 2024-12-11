@@ -1,39 +1,25 @@
+import { VideoCall } from '@/app/(client)/components/call';
+import { generateUserToken } from '@/app/(server)/actions/appointment/generate-user-token';
 import { getAppointment } from '@/app/(server)/actions/appointment/get-appointment';
-import { Button } from '@/libs/shadcn-ui/components/button';
-import { cn } from '@/libs/shadcn-ui/utils/utils';
-import { Phone, X } from 'lucide-react';
+import { getCurrentUser } from '@/app/(server)/actions/user/get-current-user';
 import Link from 'next/link';
 
 const Page = async ({ params }: { params: { id: string } }) => {
   const response = await getAppointment({ appointmentId: params.id });
+  const tokenResponse = await generateUserToken();
+  const user = await getCurrentUser();
   const appointment = response?.data!;
   return (
-    <div className="grid grid-cols-1 w-full">
-      <div className="px-7 my-3">
-        <div className="flex  gap-5 py-2 justify-start items-center max-sm:max-w-full max-sm:overflow-x-scroll no-scroll border-b rounded-none px-3">
-          <Link href={''} className={cn('text-muted-foreground', {})}>
-            General
-          </Link>
-          <Link href={''} className={cn('text-muted-foreground', {})}>
-            Diagnósticos
-          </Link>
-          <Link href={''} className={cn('text-muted-foreground', {})}>
-            Documentos y exámenes
-          </Link>
-          <Link href={''} className={cn('text-muted-foreground', {})}>
-            Notas
-          </Link>
+    <div className="w-full px-5 py-7 box-border h-full grid grid-cols-6 gap-4">
+      <div className="flex flex-col col-span-3 h-full box-border">
+        <div className="border h-full flex-1 flex-col flex gap-2">
+          <VideoCall id={params.id} token={tokenResponse?.data ?? ''} user={user?.data!} />
         </div>
       </div>
-      <div className="px-7 pt-5 flex items-center gap-5">
-        <Button variant={'outline'} className="gap-3">
-          <Phone />
-          Entrar a la llamada
-        </Button>
-        <Button variant={'outline'} className="gap-3">
-          <X />
-          Cancelar cita
-        </Button>
+      <div className="flex flex-col col-span-3 box-border">
+        <div className="flex  gap-5 py-2 justify-start items-center max-sm:max-w-full max-sm:overflow-x-scroll no-scroll">
+          <Link href={'/'}>Chat</Link>
+        </div>
       </div>
     </div>
   );

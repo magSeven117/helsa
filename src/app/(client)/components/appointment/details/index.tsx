@@ -71,10 +71,12 @@ const AppointmentDetailsSheet = ({ data, isOpen, setOpen, types }: Props) => {
               <CalendarDays className="size-4" />
               Re agendar
             </Button>
-            <Button className="flex-1 h-9 gap-2" variant={'secondary'}>
-              <Video className="size-4" />
-              Entrar a llamada
-            </Button>
+            <Link href={`/appointments/${data?.id}`}>
+              <Button className="flex-1 h-9 gap-2" variant={'secondary'}>
+                <Video className="size-4" />
+                Entrar a llamada
+              </Button>
+            </Link>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button className="h-9" size={'icon'} variant={'secondary'}>

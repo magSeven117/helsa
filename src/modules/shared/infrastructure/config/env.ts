@@ -6,7 +6,6 @@ export const env = createEnv({
     NODE_ENV: z.string(),
     DATABASE_URL: z.string(),
     TRIGGER_SECRET_KEY: z.string(),
-    MONGO_URI: z.string(),
   },
   client: {
     NEXT_PUBLIC_BASE_URL: z.string(),
@@ -15,7 +14,6 @@ export const env = createEnv({
     NODE_ENV: process.env.NODE_ENV,
     TRIGGER_SECRET_KEY: process.env.TRIGGER_SECRET_KEY,
     DATABASE_URL: process.env.DATABASE_URL,
-    MONGO_URI: process.env.MONGO_URI,
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
   },
 });
