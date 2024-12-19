@@ -108,155 +108,172 @@ export const MyUILayout = () => {
   const localParticipant = useLocalParticipant();
   const remoteParticipants = useRemoteParticipants();
 
+  if (!localParticipant || callCallingState === CallingState.LEFT) {
+    return (
+      <div className="relative w-full flex-1">
+        <div className="h-full w-full flex flex-col justify-center items-center gap-3">
+          <p className="text-lg font-semibold">
+            {remoteParticipants.length > 0 ? 'Te están esperando' : 'No hay nadie en la llamada'}
+          </p>
+          <Button onClick={() => call?.join()} className="rounded-full gap-3" variant={'outline'}>
+            <PhoneIncoming className="size-4" />
+            Entrar
+          </Button>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="relative w-full flex-1">
-      <MyParticipantList participants={remoteParticipants} />
-      <MyFloatingLocalParticipant participant={localParticipant} count={participantCount} />
       {callCallingState == CallingState.JOINED && (
-        <motion.div
-          className="absolute inset-x-0 bottom-2 flex justify-center"
-          initial={{ opacity: 0, filter: 'blur(8px)', y: 0 }}
-          animate={{ opacity: 1, filter: 'blur(0px)', y: -24 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-        >
-          <div className="backdrop-filter backdrop-blur-lg bg-background rounded-full pl-2 pr-4 py-3 h-10 flex items-center justify-center border-[0.5px] border-border">
-            <TooltipProvider delayDuration={0}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className={cn('rounded-full size-8', {
-                      'bg-destructive': micMute,
-                    })}
-                    onClick={() => {
-                      microphone.toggle();
-                    }}
-                  >
-                    {micMute ? <MicOff className="size-4" /> : <Mic className="size-4 text-primary" />}
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent sideOffset={15} className="text-[10px] px-2 py-1 rounded-sm font-medium">
-                  <p>Mute</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-            <TooltipProvider delayDuration={0}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className={cn('rounded-full size-8', {
-                      'bg-destructive': cameraMute,
-                    })}
-                    onClick={() => {
-                      camera.toggle();
-                    }}
-                  >
-                    {cameraMute ? <VideoOff className="size-4" /> : <Video className="size-4 text-primary" />}
-                  </Button>
-                </TooltipTrigger>
-
-                <TooltipContent sideOffset={15} className="text-[10px] px-2 py-1 rounded-sm font-medium">
-                  <p>Camera</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-            <TooltipProvider delayDuration={0}>
-              <DropdownMenu>
+        <>
+          <MyParticipantList participants={remoteParticipants} />
+          <MyFloatingLocalParticipant participant={localParticipant} count={participantCount} />
+          <motion.div
+            className="absolute inset-x-0 bottom-2 flex justify-center"
+            initial={{ opacity: 0, filter: 'blur(8px)', y: 0 }}
+            animate={{ opacity: 1, filter: 'blur(0px)', y: -24 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+          >
+            <div className="backdrop-filter backdrop-blur-lg bg-background rounded-full pl-2 pr-4 py-3 h-10 flex items-center justify-center border-[0.5px] border-border">
+              <TooltipProvider delayDuration={0}>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon" className={cn('rounded-full size-8')}>
-                        <Settings className="size-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className={cn('rounded-full size-8', {
+                        'bg-destructive': micMute,
+                      })}
+                      onClick={() => {
+                        microphone.toggle();
+                      }}
+                    >
+                      {micMute ? <MicOff className="size-4" /> : <Mic className="size-4 text-primary" />}
+                    </Button>
                   </TooltipTrigger>
                   <TooltipContent sideOffset={15} className="text-[10px] px-2 py-1 rounded-sm font-medium">
-                    <p>Configuraciones</p>
+                    <p>Mute</p>
                   </TooltipContent>
                 </Tooltip>
-                <DropdownMenuContent className="w-[300px] rounded-none" side="top" align="start">
-                  <DropdownMenuGroup>
-                    <DropdownMenuSub>
-                      <DropdownMenuSubTrigger className="gap-2">
-                        <div className="w-4 h-4 mr-2 flex justify-center items-center">
-                          <Video />
-                        </div>
-                        <span className="text-sm">Selecciona la cámara</span>
-                      </DropdownMenuSubTrigger>
-                      <DropdownMenuPortal>
-                        <DropdownMenuSubContent className="rounded-none">
-                          {cameraDevices.map((device) => (
-                            <DropdownMenuItem
-                              className="gap-2 rounded-none"
-                              key={device.deviceId}
-                              onClick={() => {
-                                call?.camera.select(device.deviceId);
-                              }}
-                            >
-                              <div className="w-4 h-4 mr-2 flex justify-center items-center">
-                                <Video />
-                              </div>
-                              <span className="text-sm font-semibold">{device.label}</span>
-                            </DropdownMenuItem>
-                          ))}
-                        </DropdownMenuSubContent>
-                      </DropdownMenuPortal>
-                    </DropdownMenuSub>
-                    <DropdownMenuSub>
-                      <DropdownMenuSubTrigger className="gap-2">
-                        <div className="w-4 h-4 mr-2 flex justify-center items-center">
-                          <Mic />
-                        </div>
-                        <span className="text-sm">Selecciona el micrófono</span>
-                      </DropdownMenuSubTrigger>
-                      <DropdownMenuPortal>
-                        <DropdownMenuSubContent className="rounded-none">
-                          {micDevices.map((device) => (
-                            <DropdownMenuItem
-                              className="gap-2 rounded-none"
-                              key={device.deviceId}
-                              onClick={() => {
-                                call?.camera.select(device.deviceId);
-                              }}
-                            >
-                              <div className="w-4 h-4 mr-2 flex justify-center items-center">
-                                <Mic />
-                              </div>
-                              <span className="text-sm font-semibold">{device.label}</span>
-                            </DropdownMenuItem>
-                          ))}
-                        </DropdownMenuSubContent>
-                      </DropdownMenuPortal>
-                    </DropdownMenuSub>
-                  </DropdownMenuGroup>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </TooltipProvider>
-            <Separator orientation="vertical" className="mr-3 ml-2 h-4" />
-            <TooltipProvider delayDuration={0}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="rounded-full w-8 h-6 ml-5 bg-destructive"
-                    onClick={() => {
-                      call?.leave();
-                    }}
-                  >
-                    <PhoneOff className="size-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent sideOffset={15} className="text-[10px] px-2 py-1 rounded-sm font-medium">
-                  <p>Salir</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
-        </motion.div>
+              </TooltipProvider>
+              <TooltipProvider delayDuration={0}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className={cn('rounded-full size-8', {
+                        'bg-destructive': cameraMute,
+                      })}
+                      onClick={() => {
+                        camera.toggle();
+                      }}
+                    >
+                      {cameraMute ? <VideoOff className="size-4" /> : <Video className="size-4 text-primary" />}
+                    </Button>
+                  </TooltipTrigger>
+
+                  <TooltipContent sideOffset={15} className="text-[10px] px-2 py-1 rounded-sm font-medium">
+                    <p>Camera</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+              <TooltipProvider delayDuration={0}>
+                <DropdownMenu>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className={cn('rounded-full size-8')}>
+                          <Settings className="size-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                    </TooltipTrigger>
+                    <TooltipContent sideOffset={15} className="text-[10px] px-2 py-1 rounded-sm font-medium">
+                      <p>Configuraciones</p>
+                    </TooltipContent>
+                  </Tooltip>
+                  <DropdownMenuContent className="w-[300px] rounded-none" side="top" align="start">
+                    <DropdownMenuGroup>
+                      <DropdownMenuSub>
+                        <DropdownMenuSubTrigger className="gap-2">
+                          <div className="w-4 h-4 mr-2 flex justify-center items-center">
+                            <Video />
+                          </div>
+                          <span className="text-sm">Selecciona la cámara</span>
+                        </DropdownMenuSubTrigger>
+                        <DropdownMenuPortal>
+                          <DropdownMenuSubContent className="rounded-none">
+                            {cameraDevices.map((device) => (
+                              <DropdownMenuItem
+                                className="gap-2 rounded-none"
+                                key={device.deviceId}
+                                onClick={() => {
+                                  call?.camera.select(device.deviceId);
+                                }}
+                              >
+                                <div className="w-4 h-4 mr-2 flex justify-center items-center">
+                                  <Video />
+                                </div>
+                                <span className="text-sm font-semibold">{device.label}</span>
+                              </DropdownMenuItem>
+                            ))}
+                          </DropdownMenuSubContent>
+                        </DropdownMenuPortal>
+                      </DropdownMenuSub>
+                      <DropdownMenuSub>
+                        <DropdownMenuSubTrigger className="gap-2">
+                          <div className="w-4 h-4 mr-2 flex justify-center items-center">
+                            <Mic />
+                          </div>
+                          <span className="text-sm">Selecciona el micrófono</span>
+                        </DropdownMenuSubTrigger>
+                        <DropdownMenuPortal>
+                          <DropdownMenuSubContent className="rounded-none">
+                            {micDevices.map((device) => (
+                              <DropdownMenuItem
+                                className="gap-2 rounded-none"
+                                key={device.deviceId}
+                                onClick={() => {
+                                  call?.camera.select(device.deviceId);
+                                }}
+                              >
+                                <div className="w-4 h-4 mr-2 flex justify-center items-center">
+                                  <Mic />
+                                </div>
+                                <span className="text-sm font-semibold">{device.label}</span>
+                              </DropdownMenuItem>
+                            ))}
+                          </DropdownMenuSubContent>
+                        </DropdownMenuPortal>
+                      </DropdownMenuSub>
+                    </DropdownMenuGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </TooltipProvider>
+              <Separator orientation="vertical" className="mr-3 ml-2 h-4" />
+              <TooltipProvider delayDuration={0}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="rounded-full w-8 h-6 ml-5 bg-destructive"
+                      onClick={() => {
+                        call?.leave();
+                      }}
+                    >
+                      <PhoneOff className="size-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent sideOffset={15} className="text-[10px] px-2 py-1 rounded-sm font-medium">
+                    <p>Salir</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+          </motion.div>
+        </>
       )}
     </div>
   );
@@ -264,8 +281,11 @@ export const MyUILayout = () => {
 
 export const MyParticipantList = (props: { participants: StreamVideoParticipant[] }) => {
   const { participants } = props;
+  if (participants.length === 0) {
+    return null;
+  }
   return (
-    <div style={{ display: 'flex', flexDirection: 'row', gap: '8px' }}>
+    <div style={{ display: 'flex', flexDirection: 'row', gap: '8px', height: '100%' }}>
       {participants.map((participant) => (
         <ParticipantView
           participant={participant}
@@ -285,19 +305,8 @@ export const MyFloatingLocalParticipant = (props: { participant?: StreamVideoPar
   const { useCallCallingState } = useCallStateHooks();
   const callCallingState = useCallCallingState();
 
-  if (!participant || callCallingState === CallingState.LEFT) {
-    return (
-      <div className="h-full w-full flex flex-col justify-center items-center gap-3">
-        <p className="text-lg font-semibold">{props.count > 0 ? 'Te están esperando' : 'No hay nadie en la llamada'}</p>
-        <Button onClick={() => call?.join()} className="rounded-full gap-3" variant={'outline'}>
-          <PhoneIncoming className="size-4" />
-          Entrar
-        </Button>
-      </div>
-    );
-  }
   return (
-    <div className="absolute top-[15px] left-[15px] w-[300px] h-[165px] border">
+    <div className="absolute top-[15px] left-[15px] w-[230px] h-[125px] border bg-background">
       <ParticipantView
         participant={participant!}
         className="h-full"
