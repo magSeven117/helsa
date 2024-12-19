@@ -8,7 +8,7 @@ import { ThemeProvider } from 'next-themes';
 import { Nunito } from 'next/font/google';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { Toaster } from 'sonner';
-
+import Progress from '../components/top-bar/progress';
 const nunito = Nunito({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -27,6 +27,7 @@ export default function RootLayout({
       <body className={nunito.className + ' styled-scroll'} suppressHydrationWarning={true}>
         <NuqsAdapter>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            <Progress />
             {children}
             <Analytics />
             <SpeedInsights />
