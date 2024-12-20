@@ -1,6 +1,5 @@
 import { getCurrentUser } from '@/app/(server)/actions/user/get-current-user';
 import { SidebarProvider } from '@/libs/shadcn-ui/components/sidebar';
-import { redirect } from 'next/navigation';
 import React from 'react';
 import { v4 } from 'uuid';
 import ModalAssistant from '../../components/assistant/modal-assistant';
@@ -11,12 +10,8 @@ import TopBar from '../../components/top-bar/top-bar';
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
   const userResponse = await getCurrentUser();
-  const user = userResponse?.data ?? null;
-  if (!user) {
-    return redirect('/sign-in');
-  } else if (user.role === 'UNDEFINED') {
-    return redirect(`/select-role?userId=${user.id}`);
-  }
+  const user = userResponse?.data!;
+
   return (
     <div className="flex justify-start items-start w-full styled-scroll">
       <ChatAIProvider

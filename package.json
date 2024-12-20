@@ -60,6 +60,7 @@
     "ably": "^2.6.0",
     "ai": "^4.0.6",
     "better-auth": "^1.0.2",
+    "better-fetch": "^1.1.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
