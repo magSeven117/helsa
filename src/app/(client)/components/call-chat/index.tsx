@@ -21,17 +21,9 @@ const CallCHat = ({ id, user }: { id: string; user: User }) => {
   return (
     <ChatClientProvider client={client}>
       <ChatRoomProvider id={id} options={RoomOptionsDefaults} release={false}>
-        <div className="flex flex-col h-full">
-          <div className="border-b h-16 px-10">
-            <div className="flex justify-between items-center h-full">
-              <div className="flex items-center gap-2">
-                <div className="text-lg font-bold">Chat</div>
-              </div>
-            </div>
-          </div>
-          <ChatList userId={user.id} />
-          <ChatFooter />
-        </div>
+        <div className="border-b h-8 px-10"></div>
+        <ChatList userId={user.id} />
+        <ChatFooter />
       </ChatRoomProvider>
     </ChatClientProvider>
   );
@@ -76,8 +68,10 @@ const ChatList = ({ userId }: { userId: string }) => {
     ref.current?.scrollTo(0, ref.current.scrollHeight);
   }, [messages]);
   return (
-    <div className="flex-1 max-h-[460px] overflow-y-scroll py-2 styled-scroll" ref={ref}>
-      {messages.length === 0 && <div className="text-center">No messages</div>}
+    <div className="h-[500px] overflow-y-scroll py-2 styled-scroll" ref={ref}>
+      {messages.length === 0 && (
+        <div className="text-center h-full w-full flex justify-center items-center">No messages</div>
+      )}
       {messages.map((message, index) => {
         const isUserMessage = message.clientId === userId;
         return (
@@ -87,7 +81,7 @@ const ChatList = ({ userId }: { userId: string }) => {
           >
             <div
               className={`p-2 ${
-                isUserMessage ? 'bg-primary text-right text-black justify-end' : 'bg-sidebar text-left'
+                isUserMessage ? 'bg-gray-400 text-right text-black justify-end' : 'bg-sidebar text-left'
               } rounded-none w-1/2 text-sm flex flex-col justify-center`}
             >
               {message.text}
