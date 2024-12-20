@@ -2,10 +2,11 @@
 import { Button } from '@/libs/shadcn-ui/components/button';
 import { Input } from '@/libs/shadcn-ui/components/input';
 import { ChatClient, RoomOptionsDefaults } from '@ably/chat';
-import { ChatClientProvider, ChatRoomProvider, useMessages } from '@ably/chat/react';
+import { ChatClientProvider, ChatRoomProvider, useMessages, usePresenceListener } from '@ably/chat/react';
 import * as Ably from 'ably';
 import { User } from 'better-auth';
 import { formatDistance } from 'date-fns';
+import { Send } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 const CallCHat = ({ id, user }: { id: string; user: User }) => {
   const [client, setClient] = useState<ChatClient | null>(null);
@@ -21,11 +22,32 @@ const CallCHat = ({ id, user }: { id: string; user: User }) => {
   return (
     <ChatClientProvider client={client}>
       <ChatRoomProvider id={id} options={RoomOptionsDefaults} release={false}>
-        <div className="border-b h-8 px-10"></div>
+        <div className="h-2"></div>
         <ChatList userId={user.id} />
         <ChatFooter />
       </ChatRoomProvider>
     </ChatClientProvider>
+  );
+};
+
+const ChatStatus = () => {
+  const [present, setPresent] = useState(false);
+  const {} = usePresenceListener({
+    listener: (presence) => {
+      if (presence.action === 'present') {
+        setPresent(true);
+      } else if (presence.action === 'leave') {
+        setPresent(false);
+      }
+    },
+  });
+  return (
+    <div className="h-8 bg-background border-b">
+      <div className="h-full flex justify-center items-center">
+        <span className="text-muted-foreground text-sm">Chat</span>
+        <span className={`ml-2 size-2 rounded-full ${present ? 'bg-green-500' : 'bg-red-500'}`}></span>
+      </div>
+    </div>
   );
 };
 
@@ -37,15 +59,16 @@ const ChatFooter = () => {
     setMessage('');
   };
   return (
-    <div className="border-t h-16 flex justify-between items-center">
+    <div className="h-16 flex justify-between items-center relative px-5 py-2">
       <Input
-        className="h-full border-none rounded-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0"
+        className="h-10 border border-primary rounded-full focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 pr-8"
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+        placeholder="Escribe un mensaje..."
       />
-      <Button className="h-full" onClick={handleSend}>
-        Enviar
+      <Button className="size-8 p-0 rounded-full absolute right-7" size={'icon'} onClick={handleSend}>
+        <Send className="size-3" />
       </Button>
     </div>
   );
@@ -61,14 +84,17 @@ const ChatList = ({ userId }: { userId: string }) => {
     },
   });
   useEffect(() => {
-    get({ limit: 50, direction: 'forwards' }).then((messages) => setMessages((prev) => [...messages.items]));
+    get({ limit: 50, direction: 'forwards', end: new Date().getTime() }).then((messages) =>
+      setMessages((prev) => [...messages.items])
+    );
   }, []);
 
   useEffect(() => {
+    console.log(messages);
     ref.current?.scrollTo(0, ref.current.scrollHeight);
   }, [messages]);
   return (
-    <div className="h-[500px] overflow-y-scroll py-2 styled-scroll" ref={ref}>
+    <div className="flex-auto h-[50vh] overflow-y-scroll py-2 styled-scroll" ref={ref}>
       {messages.length === 0 && (
         <div className="text-center h-full w-full flex justify-center items-center">No messages</div>
       )}
@@ -77,12 +103,12 @@ const ChatList = ({ userId }: { userId: string }) => {
         return (
           <div
             key={`message-${index}`}
-            className={`p-2 ${isUserMessage ? 'justify-end' : 'justify-start'} w-full text-sm flex items-center`}
+            className={`py-1 px-2 ${isUserMessage ? 'justify-end' : 'justify-start'} w-full text-sm flex items-center`}
           >
             <div
               className={`p-2 ${
-                isUserMessage ? 'bg-gray-400 text-right text-black justify-end' : 'bg-sidebar text-left'
-              } rounded-none w-1/2 text-sm flex flex-col justify-center`}
+                isUserMessage ? 'bg-gray-300 text-right text-black justify-end' : 'bg-sidebar text-left'
+              } w-1/2 text-sm flex flex-col justify-center rounded-sm`}
             >
               {message.text}
               <span className={`text-xs ${isUserMessage ? 'text-gray-700' : 'text-muted-foreground'}`}>
