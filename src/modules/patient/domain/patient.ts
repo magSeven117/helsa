@@ -2,6 +2,7 @@ import { Aggregate } from '@/modules/shared/domain/core/aggregate';
 import { DateValueObject } from '@/modules/shared/domain/core/value-object';
 import { Uuid } from '@/modules/shared/domain/core/value-objects/uuid';
 import { Primitives } from '@/modules/shared/domain/types/primitives';
+import { User } from '@/modules/user/domain/user';
 import { Allergy } from './members/allergy';
 import { BloodTypes, OrganDonors, PatientBiometric } from './members/biometric';
 import { ChronicDisease } from './members/chronic-disease';
@@ -22,7 +23,8 @@ export class Patient extends Aggregate {
     public vaccines: Vaccine[],
     public surgeries: Surgery[],
     createdAt: DateValueObject,
-    updatedAt: DateValueObject
+    updatedAt: DateValueObject,
+    public user?: User
   ) {
     super(id, createdAt, updatedAt);
   }
@@ -40,6 +42,7 @@ export class Patient extends Aggregate {
       surgeries: this.surgeries.map((surgery) => surgery.toPrimitives()),
       createdAt: this.createdAt.value,
       updatedAt: this.updatedAt.value,
+      user: this.user ? this.user.toPrimitives() : undefined,
     };
   }
 
@@ -55,7 +58,8 @@ export class Patient extends Aggregate {
       data.vaccines.map((vaccine: Primitives<Vaccine>) => Vaccine.fromPrimitives(vaccine)),
       data.surgeries.map((surgery: Primitives<Surgery>) => Surgery.fromPrimitives(surgery)),
       new DateValueObject(data.createdAt),
-      new DateValueObject(data.updatedAt)
+      new DateValueObject(data.updatedAt),
+      data.user ? User.fromPrimitives(data.user) : undefined
     );
   }
 

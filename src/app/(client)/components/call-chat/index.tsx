@@ -59,15 +59,15 @@ const ChatFooter = () => {
     setMessage('');
   };
   return (
-    <div className="h-16 flex justify-between items-center relative px-5 py-2">
+    <div className="h-16 flex justify-between items-center relative px-3 py-2">
       <Input
-        className="h-10 border border-primary rounded-full focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 pr-8"
+        className="h-10 border border-primary rounded-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 pr-8 py-0"
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         onKeyDown={(e) => e.key === 'Enter' && handleSend()}
         placeholder="Escribe un mensaje..."
       />
-      <Button className="size-8 p-0 rounded-full absolute right-7" size={'icon'} onClick={handleSend}>
+      <Button className="size-8 p-0 rounded-none absolute right-4" size={'icon'} onClick={handleSend}>
         <Send className="size-3" />
       </Button>
     </div>
