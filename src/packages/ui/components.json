@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "default",
+  "rsc": true,
+  "tsx": true,
+  "tailwind": {
+    "config": "../tailwind-config/config.ts",
+    "css": "styles/globals.css",
+    "baseColor": "slate",
+    "cssVariables": true,
+    "prefix": ""
+  },
+  "aliases": {
+    "components": "@/helsa/ui/components",
+    "utils": "@/helsa/ui/lib/utils",
+    "ui": "@/helsa/ui/components/ui",
+    "lib": "@/helsa/ui/lib",
+    "hooks": "@/helsa/ui/hooks"
+  }
+}

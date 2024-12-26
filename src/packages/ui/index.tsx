@@ -1,0 +1,17 @@
+import { ThemeProvider } from 'next-themes';
+import { ThemeProviderProps } from 'next-themes/dist/types';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
+import { Toaster } from 'sonner';
+import Progress from './components/internal/progress';
+
+type DesignSystemProviderProperties = ThemeProviderProps;
+
+export const DesignSystemProvider = ({ children, ...properties }: DesignSystemProviderProperties) => (
+  <NuqsAdapter>
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+      <Progress />
+      {children}
+      <Toaster />
+    </ThemeProvider>
+  </NuqsAdapter>
+);

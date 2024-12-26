@@ -1,0 +1,28 @@
+{
+  "name": "@helsa/database",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "scripts": {
+    "build": "prisma generate",
+    "migrate": "prisma migrate dev",
+    "push": "prisma db push"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.16.1",
+    "@helsa/env": "*",
+    "server-only": "^0.0.1"
+  },
+  "devDependencies": {
+    "@helsa/typescript-config": "*",
+    "@types/node": "^20",
+    "prisma": "^5.16.1",
+    "typescript": "^5",
+    "ts-node": "^10.9.2"
+  },
+  "prisma": {
+    "schema": "./prisma/",
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} ./seed.ts"
+  }
+}

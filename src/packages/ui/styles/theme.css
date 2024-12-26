@@ -1,0 +1,26 @@
+@import './tokens.css';
+:root {
+  --color-brand-primary: #8167ec;
+  --color-brand-secondary: #dfcbfa;
+  --color-background-primary: #ffffff;
+  --color-background-secondary: #e1e7ef;
+  --color-foreground-primary: #0e0f13;
+  --color-foreground-secondary: #22242e;
+  --color-complementary-danger: #ea3a3d;
+  --color-complementary-success: #22a094;
+  --color-complementary-warning: #f7cb45;
+}
+
+.dark {
+  :root {
+    --color-brand-primary: #8167ec;
+    --color-brand-secondary: #dfcbfa;
+    --color-background-primary: #0e0f13;
+    --color-background-secondary: #22242e;
+    --color-foreground-primary: #ffffff;
+    --color-foreground-secondary: #e1e7ef;
+    --color-complementary-danger: #ea3a3d;
+    --color-complementary-success: #22a094;
+    --color-complementary-warning: #f7cb45;
+  }
+}

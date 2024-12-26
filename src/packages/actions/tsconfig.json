@@ -1,0 +1,13 @@
+{
+  "extends": "@helsa/typescript-config/server.json",
+  "compilerOptions": {
+    "baseUrl": "."
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

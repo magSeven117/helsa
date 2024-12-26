@@ -1,0 +1,14 @@
+{
+  "extends": "@helsa/typescript-config/library.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "jsx": "react"
+  },
+  "include": [
+    "./*.ts",
+    "./*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

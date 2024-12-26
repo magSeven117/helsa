@@ -1,0 +1,27 @@
+{
+  "name": "@helsa/tasks",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "scripts": {
+    "clean": "rm -rf .turbo node_modules",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+  },
+  "dependencies": {
+    "@trigger.dev/sdk": "3.3.5",
+    "@helsa/env": "*",
+    "server-only": "^0.0.1"
+  },
+  "devDependencies": {
+    "@helsa/typescript-config": "*",
+    "@types/node": "^20",
+    "prisma": "^5.16.1",
+    "typescript": "^5",
+    "ts-node": "^10.9.2"
+  },
+  "prisma": {
+    "schema": "./prisma/",
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} ./seed.ts"
+  }
+}

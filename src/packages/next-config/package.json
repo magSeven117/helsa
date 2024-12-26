@@ -1,0 +1,17 @@
+{
+  "name": "@helsa/next-config",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+  },
+  "devDependencies": {
+    "@helsa/env": "*",
+    "@helsa/typescript-config": "*",
+    "next": "14.2.4"
+  },
+  "dependencies": {
+    "@prisma/nextjs-monorepo-workaround-plugin": "^6.0.1"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "extends": "@helsa/typescript-config/library.json",
+  "compilerOptions": {
+    "module": "preserve",
+    "moduleResolution": "bundler",
+    "baseUrl": "."
+  },
+  "include": [
+    "./*.ts",
+    "./*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

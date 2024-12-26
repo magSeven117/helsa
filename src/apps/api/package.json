@@ -1,0 +1,52 @@
+{
+  "name": "@helsa/api",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "trigger:dev": "npx trigger.dev dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@helsa/env": "*",
+    "@helsa/database": "*",
+    "@helsa/auth": "*",
+    "@helsa/cache": "*",
+    "@helsa/actions": "*",
+    "@helsa/ddd": "*",
+    "@helsa/email": "*",
+    "@helsa/rate-limit": "*",
+    "@helsa/engine": "*",
+    "@helsa/tasks": "*",
+    "@ai-sdk/anthropic": "^1.0.2",
+    "@stream-io/node-sdk": "^0.4.5",
+    "@trigger.dev/sdk": "3.3.5",
+    "@vercel/blob": "^0.27.0",
+    "ably": "^2.6.0",
+    "ai": "^4.0.6",
+    "date-fns": "^3.6.0",
+    "date-fns-tz": "^3.2.0",
+    "next": "14.2.4",
+    "next-safe-action": "^7.9.9",
+    "react": "^18",
+    "react-dom": "^18",
+    "svix": "^1.24.0",
+    "uuid": "^10.0.0",
+    "voyage-ai-provider": "^0.0.1"
+  },
+  "devDependencies": {
+    "@trigger.dev/build": "3.3.5",
+    "@helsa/typescript-config": "*",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@types/uuid": "^10.0.0",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5",
+    "concurrently": "^9.1.0"
+  }
+}
