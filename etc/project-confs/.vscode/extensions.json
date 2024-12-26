@@ -1,0 +1,14 @@
+{
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "skyran.js-jsx-snippets",
+    "streetsidesoftware.code-spell-checker",
+    "streetsidesoftware.code-spell-checker-spanish",
+    "aaron-bond.better-comments",
+    "Equinusocio.vsc-material-theme",
+    "GitHub.copilot",
+    "GitHub.copilot-chat",
+    "ms-vscode.vscode-typescript-tslint-plugin",
+    "ms-vscode.vscode-typescript-next-plugin"
+  ]
+}
