@@ -13,6 +13,7 @@
     "@ably/chat": "^0.2.1",
     "@ai-sdk/anthropic": "^1.0.2",
     "@helsa/actions": "*",
+    "@helsa/analytics": "^0.1.0",
     "@helsa/auth": "*",
     "@helsa/cache": "*",
     "@helsa/database": "*",

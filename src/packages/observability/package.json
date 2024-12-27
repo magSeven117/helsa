@@ -1,5 +1,5 @@
 {
-  "name": "@helsa/actions",
+  "name": "@helsa/observability",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -7,20 +7,12 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
-    "@helsa/analytics": "*",
-    "@helsa/auth": "*",
-    "@helsa/database": "*",
-    "@helsa/ddd": "*",
     "@helsa/env": "*",
-    "@helsa/observability": "^0.1.0",
-    "@helsa/rate-limit": "*",
-    "@helsa/typescript-config": "*",
-    "next": "14.2.4",
-    "next-safe-action": "^7.9.9",
-    "server-only": "^0.0.1",
-    "zod": "^3.23.8"
+    "@logtail/next": "^0.1.7",
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
+    "@helsa/typescript-config": "*",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

@@ -1,0 +1,10 @@
+{
+  "extends": "@helsa/typescript-config/next.json",
+  "include": [
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

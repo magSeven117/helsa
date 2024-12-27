@@ -1,7 +1,8 @@
+import { logger } from '@helsa/observability/logger';
 import { createMiddleware } from 'next-safe-action';
 
 export const loggerMiddleware = createMiddleware().define(async ({ next, clientInput, metadata }) => {
-  console.log(`Executing action ${metadata.actionName} with input ${JSON.stringify(clientInput)}`);
+  logger.info(`Executing action ${metadata.actionName} with input ${JSON.stringify(clientInput)}`);
 
   const startTime = performance.now();
 
@@ -10,10 +11,10 @@ export const loggerMiddleware = createMiddleware().define(async ({ next, clientI
 
   const endTime = performance.now();
 
-  console.log(
+  logger.info(
     `Executed action ${metadata.actionName} with input ${JSON.stringify(clientInput)} and got result ${
       result.success ? 'success' : `failure ${result.serverError}`
-    } in ${endTime - startTime}ms`
+    } in ${endTime - startTime}ms`,
   );
 
   // And then return the result of the awaited action.

@@ -1,4 +1,5 @@
 'use server';
+import { logger } from '@helsa/observability/logger';
 import { createRateLimiter, slidingWindow } from '@helsa/rate-limit';
 import { createMiddleware } from 'next-safe-action';
 import { headers } from 'next/headers';
@@ -12,6 +13,7 @@ export const rateLimitMiddleware = createMiddleware().define(async ({ next, clie
   const { success, remaining } = await ratelimit.limit(`${ip}-${metadata.name}`);
 
   if (!success) {
+    logger.warn(`Rate limit exceeded for ${ip} on action ${metadata.name}`);
     throw new Error('Too many requests');
   }
 

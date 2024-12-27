@@ -1,4 +1,5 @@
 import icon from '@/src/assets/images/Helsa Logo black - white.png';
+import { Provider as Analytics } from '@helsa/analytics/client';
 import { DesignSystemProvider } from '@helsa/ui';
 import '@helsa/ui/styles/global.css';
 import type { Metadata } from 'next';
@@ -21,6 +22,7 @@ export default function RootLayout({
       <link rel="icon" href={icon.src} sizes="any" />
       <body className={nunito.className + ' styled-scroll'} suppressHydrationWarning={true}>
         <DesignSystemProvider>{children}</DesignSystemProvider>
+        <Analytics />
       </body>
     </html>
   );

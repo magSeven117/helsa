@@ -1,0 +1,10 @@
+{
+  "extends": "@helsa/typescript-config/library.json",
+  "include": [
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
