@@ -94,7 +94,7 @@ const ChatList = ({ userId }: { userId: string }) => {
     ref.current?.scrollTo(0, ref.current.scrollHeight);
   }, [messages]);
   return (
-    <div className="flex-auto h-[50vh] overflow-y-scroll py-2 styled-scroll" ref={ref}>
+    <div className="flex-auto h-[50vh] overflow-y-scroll py-2 no-scroll" ref={ref}>
       {messages.length === 0 && (
         <div className="text-center h-full w-full flex justify-center items-center">No messages</div>
       )}
@@ -103,12 +103,12 @@ const ChatList = ({ userId }: { userId: string }) => {
         return (
           <div
             key={`message-${index}`}
-            className={`py-1 px-2 ${isUserMessage ? 'justify-end' : 'justify-start'} w-full text-sm flex items-center`}
+            className={`py-2 px-2 ${isUserMessage ? 'justify-end' : 'justify-start'} w-full text-sm flex items-center`}
           >
             <div
               className={`p-2 ${
                 isUserMessage ? 'bg-gray-300 text-right text-black justify-end' : 'bg-sidebar text-left'
-              } w-1/2 text-sm flex flex-col justify-center rounded-sm`}
+              } text-sm flex flex-col justify-center rounded-sm`}
             >
               {message.text}
               <span className={`text-xs ${isUserMessage ? 'text-gray-700' : 'text-muted-foreground'}`}>

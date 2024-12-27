@@ -13,7 +13,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@helsa/ui/components/dropdown-menu';
@@ -86,13 +85,12 @@ const patientsColumns: ColumnDef<Patient>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="rounded-none">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem onClick={() => navigator.clipboard.writeText(payment.id)}>
-              Copy payment ID
+              Ver historial medico
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem>Agendar cita</DropdownMenuItem>
+            <DropdownMenuItem>Solicitar pago</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

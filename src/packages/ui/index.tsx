@@ -8,10 +8,12 @@ type DesignSystemProviderProperties = ThemeProviderProps;
 
 export const DesignSystemProvider = ({ children, ...properties }: DesignSystemProviderProperties) => (
   <NuqsAdapter>
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange {...properties}>
       <Progress />
       {children}
       <Toaster />
     </ThemeProvider>
   </NuqsAdapter>
 );
+
+export { useTheme } from 'next-themes';
