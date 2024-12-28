@@ -22,6 +22,7 @@
     "@helsa/engine": "*",
     "@helsa/env": "*",
     "@helsa/rate-limit": "*",
+    "@helsa/storage": "^0.1.0",
     "@helsa/supabase": "^0.1.0",
     "@helsa/tasks": "*",
     "@helsa/ui": "*",
