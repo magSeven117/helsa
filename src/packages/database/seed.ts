@@ -38,9 +38,9 @@ const specialties = [
 ];
 
 const appointmentTypes = [
-  { name: 'Consulta', duration: 60, color: '#FF0000', system: true },
-  { name: 'Estudio', duration: 60, color: '#00FF00', system: true },
-  { name: 'Procedimiento', duration: 60, color: '#0000FF', system: true },
+  { name: 'Consulta', color: '#FF0000' },
+  { name: 'Estudio', color: '#00FF00' },
+  { name: 'Procedimiento', color: '#0000FF' },
 ];
 
 main()

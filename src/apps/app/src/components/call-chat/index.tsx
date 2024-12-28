@@ -1,61 +1,26 @@
 'use client';
-import { ChatClient, RoomOptionsDefaults } from '@ably/chat';
-import { ChatClientProvider, ChatRoomProvider, useMessages, usePresenceListener } from '@ably/chat/react';
+import { useMessages } from '@/src/hooks/use-messages';
 import { Button } from '@helsa/ui/components/button';
 import { Input } from '@helsa/ui/components/input';
-import * as Ably from 'ably';
 import { User } from 'better-auth';
 import { formatDistance } from 'date-fns';
 import { Send } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 const CallCHat = ({ id, user }: { id: string; user: User }) => {
-  const [client, setClient] = useState<ChatClient | null>(null);
-  useEffect(() => {
-    const ably = new Ably.Realtime({ key: process.env.NEXT_PUBLIC_ABLY_API_KEY, clientId: user.id });
-    setClient(new ChatClient(ably));
-  }, []);
-
-  if (!client) {
-    return null;
-  }
-
   return (
-    <ChatClientProvider client={client}>
-      <ChatRoomProvider id={id} options={RoomOptionsDefaults} release={false}>
-        <div className="h-2"></div>
-        <ChatList userId={user.id} />
-        <ChatFooter />
-      </ChatRoomProvider>
-    </ChatClientProvider>
+    <>
+      <div className="h-2"></div>
+      <ChatList userId={user.id} appointmentId={id} />
+      <ChatFooter userId={user.id} appointmentId={id} />
+    </>
   );
 };
 
-const ChatStatus = () => {
-  const [present, setPresent] = useState(false);
-  const {} = usePresenceListener({
-    listener: (presence) => {
-      if (presence.action === 'present') {
-        setPresent(true);
-      } else if (presence.action === 'leave') {
-        setPresent(false);
-      }
-    },
-  });
-  return (
-    <div className="h-8 bg-background border-b">
-      <div className="h-full flex justify-center items-center">
-        <span className="text-muted-foreground text-sm">Chat</span>
-        <span className={`ml-2 size-2 rounded-full ${present ? 'bg-green-500' : 'bg-red-500'}`}></span>
-      </div>
-    </div>
-  );
-};
-
-const ChatFooter = () => {
+const ChatFooter = ({ appointmentId, userId }: { appointmentId: string; userId: string }) => {
   const [message, setMessage] = useState('');
-  const { send } = useMessages();
+  const { sendMessage } = useMessages(appointmentId);
   const handleSend = () => {
-    send({ text: message });
+    sendMessage({ text: message, userId, appointmentId });
     setMessage('');
   };
   return (
@@ -74,23 +39,11 @@ const ChatFooter = () => {
   );
 };
 
-const ChatList = ({ userId }: { userId: string }) => {
-  const [messages, setMessages] = useState<any[]>([]);
+const ChatList = ({ userId, appointmentId }: { userId: string; appointmentId: string }) => {
+  const { messages } = useMessages(appointmentId);
   const ref = useRef<HTMLDivElement>(null);
-  const { get } = useMessages({
-    listener: (message) => {
-      console.log(message);
-      setMessages((prev) => [...prev, message.message]);
-    },
-  });
-  useEffect(() => {
-    get({ limit: 50, direction: 'forwards', end: new Date().getTime() }).then((messages) =>
-      setMessages((prev) => [...messages.items]),
-    );
-  }, []);
 
   useEffect(() => {
-    console.log(messages);
     ref.current?.scrollTo(0, ref.current.scrollHeight);
   }, [messages]);
   return (
@@ -99,7 +52,7 @@ const ChatList = ({ userId }: { userId: string }) => {
         <div className="text-center h-full w-full flex justify-center items-center">No messages</div>
       )}
       {messages.map((message, index) => {
-        const isUserMessage = message.clientId === userId;
+        const isUserMessage = message.userId === userId;
         return (
           <div
             key={`message-${index}`}
@@ -107,12 +60,12 @@ const ChatList = ({ userId }: { userId: string }) => {
           >
             <div
               className={`p-2 ${
-                isUserMessage ? 'bg-gray-300 text-right text-black justify-end' : 'bg-sidebar text-left'
-              } text-sm flex flex-col justify-center rounded-sm`}
+                isUserMessage ? 'bg-stone-600 text-right  justify-end' : 'bg-sidebar text-left'
+              } text-sm flex flex-col justify-center rounded-none`}
             >
               {message.text}
-              <span className={`text-xs ${isUserMessage ? 'text-gray-700' : 'text-muted-foreground'}`}>
-                {formatDistance(new Date(message.createdAt), new Date(), { addSuffix: true })}
+              <span className={`text-xs ${isUserMessage ? '' : 'text-muted-foreground'}`}>
+                {formatDistance(new Date(message.createdAt!), new Date(), { addSuffix: true })}
               </span>
             </div>
           </div>

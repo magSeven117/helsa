@@ -1,0 +1,7 @@
+model Message {
+  id            String   @id @default(uuid())
+  text          String
+  userId        String
+  appointmentId String
+  createdAt     DateTime @default(now())
+}

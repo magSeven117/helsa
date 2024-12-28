@@ -1,0 +1,21 @@
+{
+  "name": "@helsa/supabase",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "clean": "rm -rf .turbo node_modules",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
+    "generate": "supabase gen types typescript --project-id abcdefghijklmnopqrst > types.ts"
+  },
+  "dependencies": {
+    "@helsa/env": "*",
+    "@supabase/ssr": "^0.5.2",
+    "@supabase/supabase-js": "^2.47.10",
+    "supabase": "^2.1.1"
+  },
+  "devDependencies": {
+    "@helsa/typescript-config": "*",
+    "@types/node": "^20",
+    "typescript": "^5"
+  }
+}

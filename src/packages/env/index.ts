@@ -32,6 +32,8 @@ export const env = createEnv({
     NEXT_PUBLIC_ABLY_API_KEY: z.string(),
     NEXT_PUBLIC_OPENPANEL_CLIENT_ID: z.string(),
     NEXT_PUBLIC_OPENPANEL_CLIENT_SECRET: z.string(),
+    NEXT_PUBLIC_SUPABASE_URL: z.string(),
+    NEXT_PUBLIC_SUPABASE_KEY: z.string(),
   },
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
@@ -61,5 +63,7 @@ export const env = createEnv({
     OPEN_PANEL_CLIENT_SECRET: process.env.OPEN_PANEL_CLIENT_SECRET,
     NEXT_PUBLIC_OPENPANEL_CLIENT_ID: process.env.NEXT_PUBLIC_OPENPANEL_CLIENT_ID,
     NEXT_PUBLIC_OPENPANEL_CLIENT_SECRET: process.env.NEXT_PUBLIC_OPENPANEL_CLIENT_SECRET,
+    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    NEXT_PUBLIC_SUPABASE_KEY: process.env.NEXT_PUBLIC_SUPABASE_KEY,
   },
 });
