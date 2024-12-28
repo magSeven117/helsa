@@ -8,7 +8,7 @@ type UploadParams = {
 
 export const upload = async (client: SupabaseClient, { file, path, bucket }: UploadParams) => {
   const storage = client.storage.from(bucket);
-  const { error } = await storage.upload(path.join(''), file, {
+  const { data, error } = await storage.upload(path.join('/'), file, {
     upsert: true,
     cacheControl: '3600',
   });
@@ -17,7 +17,7 @@ export const upload = async (client: SupabaseClient, { file, path, bucket }: Upl
     throw error;
   }
 
-  return storage.getPublicUrl(path.join('')).data.publicUrl;
+  return storage.getPublicUrl(path.join('/')).data.publicUrl;
 };
 
 type RemoveParams = {

@@ -1,15 +1,17 @@
 'use client';
 import { authClient } from '@helsa/auth/client';
+import { upload } from '@helsa/storage';
+import { createClient } from '@helsa/supabase/client';
 import { Button } from '@helsa/ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@helsa/ui/components/card';
 import { Form, FormControl, FormField, FormItem } from '@helsa/ui/components/form';
 import AvatarInput from '@helsa/ui/components/internal/avatar-input';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { upload } from '@vercel/blob/client';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 const formSchema = z.object({
@@ -27,13 +29,16 @@ const AvatarSection = ({ image }: AvatarSectionValues) => {
   const router = useRouter();
   const onSubmit = async (_values: AvatarSectionValues) => {
     if (avatarFile) {
-      const res = await upload(`/avatars/${avatarFile.name}`, avatarFile, {
-        access: 'public',
-        handleUploadUrl: '/api/files',
+      const supabase = createClient();
+      const res = await upload(supabase, {
+        file: avatarFile,
+        path: ['avatars', avatarFile.name],
+        bucket: 'profiles',
       });
       if (res) {
-        await authClient.updateUser({ image: res.url });
+        await authClient.updateUser({ image: res });
       }
+      toast.success('Avatar actualizado correctamente');
       router.refresh();
     }
   };
