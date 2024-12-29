@@ -35,7 +35,7 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
-  trustedOrigins: ['helsapatient://'],
+  trustedOrigins: ['helsapatient://', 'exp://'],
   plugins: [
     emailOTP({
       otpLength: 6,
@@ -67,6 +67,7 @@ export const auth = betterAuth({
       enabled: true,
       clientId: env.GOOGLE_CLIENT_ID!,
       clientSecret: env.GOOGLE_CLIENT_SECRET!,
+      redirectURI: `${env.NEXT_PUBLIC_BASE_URL}/api/auth/callback/google`,
     },
     facebook: {
       enabled: true,
