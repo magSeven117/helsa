@@ -1,6 +1,6 @@
 'use client';
-import * as successAnimation from '@/assets/animations/success_animation.json';
 import { createDoctor } from '@/src/actions/doctor/create-doctor';
+import * as successAnimation from '@/src/assets/animations/success_animation.json';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { Specialty } from '@helsa/engine/doctor/domain/specialty';
 import {

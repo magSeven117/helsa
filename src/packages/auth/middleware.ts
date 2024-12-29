@@ -14,7 +14,12 @@ export async function betterAuthMiddleware(req: NextRequest, publicRoutes: strin
     return NextResponse.redirect(new URL('/sign-in', req.url));
   }
 
-  if (session && session.user.role === 'UNDEFINED' && req.nextUrl.pathname !== '/select-role') {
+  if (
+    session &&
+    session.user.role === 'UNDEFINED' &&
+    req.nextUrl.pathname !== '/select-role' &&
+    req.nextUrl.pathname !== '/onboarding'
+  ) {
     return NextResponse.redirect(new URL(`/select-role?userId=${session.user.id}`, req.url));
   }
 

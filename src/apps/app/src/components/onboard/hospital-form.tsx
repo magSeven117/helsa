@@ -1,6 +1,6 @@
 'use client';
-import * as successAnimation from '@/assets/animations/success_animation.json';
 import { createHospital } from '@/src/actions/hospital/create-hospital';
+import * as successAnimation from '@/src/assets/animations/success_animation.json';
 import {
   AlertDialog,
   AlertDialogAction,

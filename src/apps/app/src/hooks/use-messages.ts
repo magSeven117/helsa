@@ -51,10 +51,14 @@ export const useMessages = (appointmentId: string) => {
   useEffect(() => {
     const channel = supabase
       .channel('chat_messages')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'Message' }, (payload) => {
-        const newMessage = payload.new;
-        addMessage(newMessage as Message);
-      })
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'Message', filter: `appointmentId=eq.${appointmentId}` },
+        (payload) => {
+          const newMessage = payload.new;
+          addMessage(newMessage as Message);
+        },
+      )
       .on(
         'postgres_changes',
         { event: 'DELETE', schema: 'public', table: 'Message', filter: `appointmentId=eq.${appointmentId}` },

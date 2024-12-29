@@ -11,7 +11,8 @@ const SelectRoleForm = ({ userId }: { userId: string }) => {
   const [role, setRole] = useState<string | null>(null);
   const router = useRouter();
   const onContinue = () => {
-    if (!role) return;
+    console.log(role);
+    //if (!role) return;
 
     router.push(`/onboarding?role=${role}&userId=${userId}`);
   };
