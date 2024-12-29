@@ -1,14 +1,15 @@
+import { expo } from '@better-auth/expo';
 import { PrismaClient } from '@helsa/database';
+import { resend } from '@helsa/email';
+import ForgetPassword from '@helsa/email/templates/forget-password';
+import VerifyEmail from '@helsa/email/templates/verify-email';
+import { env } from '@helsa/env';
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { nextCookies } from 'better-auth/next-js';
 import { emailOTP } from 'better-auth/plugins';
 import { headers } from 'next/headers';
 import { cache } from 'react';
-import { resend } from '@helsa/email';
-import ForgetPassword from '@helsa/email/templates/forget-password';
-import VerifyEmail from '@helsa/email/templates/verify-email';
-import { env } from '@helsa/env';
 
 const prisma = new PrismaClient();
 export const auth = betterAuth({
@@ -34,6 +35,7 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
+  trustedOrigins: ['helsapatient://'],
   plugins: [
     emailOTP({
       otpLength: 6,
@@ -58,6 +60,7 @@ export const auth = betterAuth({
       sendVerificationOnSignUp: true,
     }),
     nextCookies(),
+    expo(),
   ],
   socialProviders: {
     google: {
