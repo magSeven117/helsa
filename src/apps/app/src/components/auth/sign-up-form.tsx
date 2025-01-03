@@ -61,7 +61,6 @@ export default function SignUpForm() {
 
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [verifying, setVerifying] = useState(false);
-  const [userId, setUserId] = useState('');
   const [verification, setVerification] = useState({
     state: '',
     code: '',
@@ -76,7 +75,8 @@ export default function SignUpForm() {
         name: data.firstName + ' ' + data.lastName,
         image: undefined,
       });
-      setUserId(res.data?.user.id || '');
+      console.log(res);
+      toast.error('A un solo paso de poder iniciar');
       setVerification({ ...verification, state: 'pending' });
     } catch (error) {
       console.error(JSON.stringify(error, null, 2));
@@ -305,7 +305,7 @@ export default function SignUpForm() {
               <Button
                 onClick={() => {
                   setShowSuccessModal(false);
-                  router.push(`/select-role?userId=${userId}`);
+                  router.push(`/select-role`);
                 }}
                 size="lg"
               >
