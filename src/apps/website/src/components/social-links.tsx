@@ -13,19 +13,19 @@ export function SocialLinks() {
         </a>
       </li>
       <li>
-        <a target="_blank" rel="noreferrer" href="https://go.midday.ai/7rhA3rz">
+        <a target="_blank" rel="noreferrer" href="https://github.com/Duccem/Helsa">
           <span className="sr-only">Producthunt</span>
           <ProductHunt className="fill-[#878787]" />
         </a>
       </li>
       <li>
-        <a target="_blank" rel="noreferrer" href="https://go.midday.ai/anPiuRx">
+        <a target="_blank" rel="noreferrer" href="https://github.com/Duccem/Helsa">
           <span className="sr-only">Discord</span>
           <Discord className="fill-[#878787]" />
         </a>
       </li>
       <li>
-        <a target="_blank" rel="noreferrer" href="https://git.new/midday">
+        <a target="_blank" rel="noreferrer" href="https://github.com/Duccem/Helsa">
           <span className="sr-only">Github</span>
           <Github className="fill-[#878787]" />
         </a>

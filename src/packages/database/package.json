@@ -6,6 +6,7 @@
   "types": "./index.ts",
   "scripts": {
     "build": "prisma generate",
+    "postinstall": "npm run build",
     "migrate": "prisma migrate dev",
     "push": "prisma db push",
     "seed": "prisma db seed"

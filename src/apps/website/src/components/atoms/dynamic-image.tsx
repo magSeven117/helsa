@@ -2,6 +2,7 @@
 
 import { cn } from '@helsa/ui/lib/utils';
 import type { ImageProps } from 'next/image';
+import Image from 'next/image';
 
 interface DynamicImageProps extends Omit<ImageProps, 'src' | 'className'> {
   lightSrc: ImageProps['src'];
@@ -12,8 +13,8 @@ interface DynamicImageProps extends Omit<ImageProps, 'src' | 'className'> {
 export function DynamicImage({ lightSrc, darkSrc, alt, className, ...props }: DynamicImageProps) {
   return (
     <>
-      <img src={lightSrc.src} alt={alt} className={cn('dark:hidden', className)} {...props} />
-      <img src={darkSrc.src} alt={alt} className={cn('hidden dark:block', className)} {...props} />
+      <Image src={lightSrc} alt={alt} className={cn('dark:hidden', className)} {...props} />
+      <Image src={darkSrc} alt={alt} className={cn('hidden dark:block', className)} {...props} />
     </>
   );
 }

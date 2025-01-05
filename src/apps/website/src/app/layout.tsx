@@ -25,7 +25,7 @@ export default function RootLayout({
       <link rel="icon" href={icon.src} sizes="any" />
       <body className={`${nunito.className} antialiased`} suppressHydrationWarning={true}>
         <DesignSystemProvider>
-          <div className="min-h-screen bg-background container mx-auto px-4 overflow-hidden md:overflow-visible">
+          <div className="min-h-screen bg-background container mx-auto px-4 overflow-hidden md:overflow-visible relative">
             <Header />
             {children}
             <Footer />

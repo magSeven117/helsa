@@ -7,9 +7,9 @@ import { WordAnimation } from './atoms/word-animation';
 
 export default function HeroSection() {
   return (
-    <section className="mt-[60px] lg:mt-[180px] min-h-[530px] relative lg:h-[calc(100vh-300px)]" id="home">
+    <section className="mt-[60px] lg:mt-[180px] min-h-[530px] relative " id="home">
       <div className="flex flex-col">
-        <Link href="/updates/october-product-updates">
+        <Link href="/blog">
           <Button variant="outline" className="rounded-full border-border flex space-x-2 items-center">
             <span className="font-mono text-xs">December blog updates</span>
             <svg xmlns="http://www.w3.org/2000/svg" width={12} height={12} fill="none">

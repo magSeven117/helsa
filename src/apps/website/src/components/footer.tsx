@@ -5,15 +5,15 @@ import { SocialLinks } from './social-links';
 
 export default function Footer() {
   return (
-    <footer className="border-t-[1px] border-border px-4 md:px-6 pt-10 md:pt-16 overflow-hidden md:max-h-[820px]">
-      <div className="container">
+    <footer className="border-t-[1px] border-border py-10 md:pt-16 overflow-hidden md:max-h-[820px]">
+      <div className="">
         <div className="flex justify-between items-center border-border border-b-[1px] pb-10 md:pb-16 mb-12">
           <Link href="/" className="scale-50 -ml-[52px] md:ml-0 md:scale-100">
             <LogoLarge />
             <span className="sr-only">Midday</span>
           </Link>
 
-          <span className="font-normal md:text-2xl text-right">Run your business smarter.</span>
+          <span className="font-normal md:text-2xl text-right">Mejora tu salud.</span>
         </div>
 
         <div className="flex flex-col md:flex-row w-full">
@@ -52,7 +52,7 @@ export default function Footer() {
               <span>Resources</span>
               <ul>
                 <li className="transition-colors text-[#878787]">
-                  <Link href="https://git.new/midday">Github</Link>
+                  <Link href="https://github.com/Duccem/helsa">Github</Link>
                 </li>
                 <li className="transition-colors text-[#878787]">
                   <Link href="/support">Support</Link>
@@ -97,13 +97,6 @@ export default function Footer() {
                 <GithubStars />
                 <SocialLinks />
               </div>
-
-              {/* <div className="mb-8">
-                <SubscribeInput />
-              </div>
-              <div className="md:mr-0 mt-auto mr-auto">
-                <StatusWidget />
-              </div>  */}
             </div>
           </div>
         </div>
