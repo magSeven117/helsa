@@ -1,4 +1,4 @@
-import { User } from '@/src/user/domain/user';
+import { User } from '../../user/domain/user';
 import { Doctor } from './doctor';
 
 export interface DoctorSearcher {
@@ -10,7 +10,7 @@ export interface DoctorSearcher {
       appointments: number;
       availabilities: number;
       day: string;
-    }[]
+    }[],
   ): Promise<void>;
   search(criteria: {
     term?: string;

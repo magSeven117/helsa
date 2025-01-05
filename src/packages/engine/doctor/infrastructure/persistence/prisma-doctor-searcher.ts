@@ -1,7 +1,7 @@
-import { Primitives } from '@helsa/ddd/types/primitives';
-import { User } from '@/src/user/domain/user';
 import { PrismaClient } from '@helsa/database';
+import { Primitives } from '@helsa/ddd/types/primitives';
 import { format } from 'date-fns';
+import { User } from '../../../user/domain/user';
 import { Doctor } from '../../domain/doctor';
 import { DoctorSearcher } from '../../domain/doctor-index-store';
 
@@ -18,7 +18,7 @@ export class PrismaDoctorSearcher implements DoctorSearcher {
       appointments: number;
       availabilities: number;
       day: string;
-    }[]
+    }[],
   ) {
     try {
       await this.client.searchDoctor.delete({ where: { doctorId: doctor.id.value } });

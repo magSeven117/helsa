@@ -1,6 +1,6 @@
-import { DoctorRepository } from '@/src/doctor/domain/doctor-repository';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { Doctor } from '../../domain/doctor';
+import { DoctorRepository } from '../../domain/doctor-repository';
 
 export class CreateDoctor {
   constructor(private repository: DoctorRepository) {}

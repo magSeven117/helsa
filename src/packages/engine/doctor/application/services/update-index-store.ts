@@ -1,8 +1,8 @@
-import { GetDoctorAppointments } from '@/src/appointment/application/get-doctor-appointments';
-import { GetUser } from '@/src/user/application/get-user';
-import { User } from '@/src/user/domain/user';
 import { Criteria, Operator } from '@helsa/ddd/core/criteria';
 import { format } from 'date-fns';
+import { GetDoctorAppointments } from '../../../appointment/application/get-doctor-appointments';
+import { GetUser } from '../../../user/application/get-user';
+import { User } from '../../../user/domain/user';
 import { DoctorSearcher } from '../../domain/doctor-index-store';
 import { DoctorRepository } from '../../domain/doctor-repository';
 
