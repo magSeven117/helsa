@@ -10,9 +10,7 @@
   - [Getting Started](#getting-started)
     - [Prerequisites](#prerequisites)
     - [Installation](#installation)
-    - [Docker Setup (Optional)](#docker-setup-optional)
     - [Deployment](#deployment)
-    - [Folder Structure](#folder-structure)
   - [Other links](#other-links)
   - [Contributing](#contributing)
   - [License](#license)
@@ -23,7 +21,7 @@
 
 Welcome to **Helsa**, a cutting-edge telemedicine platform designed to connect patients and healthcare providers seamlessly. Helsa offers a modern and intuitive interface for virtual consultations, health monitoring, and medical record management.
 
-This repository contains both, backend and frontend web source code, destined to manage all main features of the platform.
+This repository contains both, backend, frontend and mobile source code, destined to manage all main features of the platform.
 
 ## Features
 
@@ -37,10 +35,10 @@ This repository contains both, backend and frontend web source code, destined to
 ## Tech Stack
 
 - **Frontend**: [Next.js](https://nextjs.org/)
-- **Backend**: [Next.js](https://nextjs.org/), [GraphQL](https://graphql.org)
-- **Database**: [MongoDB](https://mongodb.com), [Prisma](https://www.prisma.io)
+- **Backend**: [Next.js](https://nextjs.org/)
+- **Database**: [Supabase](https://supabase.com), [Prisma](https://www.prisma.io)
 - **Authentication**: [Better-auth](https://better-auth.com)
-- **Background jobs**: [Qstash](https://trigger.dev)
+- **Background jobs**: [Trigger.dev](https://trigger.dev)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com)
 - **Deployment**: [Vercel](https://vercel.com/home)
 
@@ -52,15 +50,15 @@ Before you begin, ensure you have the following installed:
 
 - Node.js (v16.x or later)
 - npm or yarn
-- MongoDB (for local development)
+- PostgresQL (for local development)
 - Docker (optional, for containerized setup)
 
 ### Installation
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/Duccem/ducen-hospital.git
-   cd ducen-hospital
+   git clone https://github.com/Duccem/helsa.git
+   cd helsa
    ```
 
 2. **Install dependencies**:
@@ -72,17 +70,48 @@ Before you begin, ensure you have the following installed:
 
 3. **Set up environment variables**:
 
-   Create a `.env.local` file in the root directory and add the following variables:
+   Create a `.env.local` file for each app:
 
    ```bash
-    DATABASE_URL=postgresql://postgres:A12345678@postgres
+    NODE_ENV=development
+    PORT=3000
     NEXT_PUBLIC_BASE_URL=http://localhost:3000
-    STRIPE_SECRET_KEY=your-stripe-secret-key
-    SECRET=your-secret-key
-    TRIGGER_SECRET_KEY=your-trigger-api-key
-    MONGO_URI=mongodb://mongo:1427/helsa
-    BETTER_AUTH_SECRET=random-secret-string
-    RESEND_API_KEY=your-resend-api-key
+
+    DATABASE_URL="postgresql://postgres:123456@localhost:6543/postgres"
+    DIRECT_URL="postgresql://postgres:123456@localhost:6543/postgres"
+
+    UPSTASH_REDIS_REST_TOKEN=your-upstash-token
+    UPSTASH_REDIS_REST_URL=https://subdomain.upstash.io
+
+    VOYAGE_API_KEY=your-voyage-key
+    ANTHROPIC_API_KEY=your-anthropic-key
+
+    RESEND_API_KEY=your-resend-key
+
+    BETTER_AUTH_SECRET="secret-phrase"
+
+    FACEBOOK_CLIENT_SECRET=facebook-secret
+    FACEBOOK_CLIENT_ID=facebook-client-id
+    GOOGLE_CLIENT_SECRET=google-secret
+    GOOGLE_CLIENT_ID=google-client-id
+
+    TRIGGER_SECRET_KEY=trigger-secret-key
+    TRIGGER_PROJECT_ID=trigger-project-id
+
+    NEXT_PUBLIC_STREAM_CLIENT_SECRET=stream-secret
+    NEXT_PUBLIC_STREAM_CLIENT_KEY=stream-key
+
+    NEXT_PUBLIC_OPENPANEL_CLIENT_ID=open-panel-key
+    NEXT_PUBLIC_OPENPANEL_CLIENT_SECRET=open-panel-secret
+
+    BETTER_STACK_API_KEY=better-stack-key
+    BETTER_STACK_URL=https://in.logs.betterstack.com
+    LOGTAIL_SOURCE_TOKEN=logtail-token
+
+    NEXT_PUBLIC_SUPABASE_URL=https://subdomain.supabase.co
+    NEXT_PUBLIC_SUPABASE_KEY=supabase-key
+
+    BASEHUB_TOKEN=basehub-key
    ```
 
 4. **Run the development server**:
@@ -93,57 +122,6 @@ Before you begin, ensure you have the following installed:
    ```
 
    Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-### Docker Setup (Optional)
-You can run the Helsa project using Docker and Docker Compose, which simplifies the setup process and ensures consistency across different environments.
-
-1. **Create a ```docker-compose.yml``` file** in the root directory with the following content:
-    ```yml
-    version: '3.8'
-
-    services:
-      app:
-        image: node:16-alpine
-        container_name: helsa-app
-        working_dir: /app
-        volumes:
-          - .:/app
-        ports:
-          - '3000:3000'
-        environment:
-          - DATABASE_URL=postgresql://postgres:A12345678@postgres
-          - NEXT_PUBLIC_BASE_URL=http://localhost:3000
-          - STRIPE_SECRET_KEY=your-stripe-secret-key
-          - SECRET=your-secret-key
-          - TRIGGER_SECRET_KEY=your-trigger-api-key
-          - MONGO_URI=mongodb://mongo:1427/helsa
-          - BETTER_AUTH_SECRET=random-secret-string
-          - RESEND_API_KEY=your-resend-api-key
-        command: npm run dev
-
-      postgres:
-        image: postgres
-        container_name: helsa-postgres
-        environment:
-          POSTGRES_DB: 'support-attachments'
-          POSTGRES_USER: 'postgres'
-          POSTGRES_PASSWORD: 'A12345678'
-    ```
-
-2. **Run the application** using Docker Compose:
-   
-    ```bash
-      docker-compose up
-    ```
-    This will start both the Next.js application and a MongoDB instance. The app will be available at http://localhost:3000.
-
-3. **Stopping the containers**:
-
-    To stop the containers, press Ctrl+C in the terminal where docker-compose up is running. Alternatively, you can stop them using:
-    ```bash
-    docker-compose down
-    ```
-    This will stop and remove the containers, but the data in MongoDB will persist in the ```mongo-data``` volume.
 
 ### Deployment
 
@@ -156,44 +134,6 @@ Helsa is designed to be deployed on Vercel, but you can deploy it on any platfor
    - Set up the environment variables in the Vercel dashboard.
    - Deploy your project.
 
-### Folder Structure
-
-```bash
-helsa/
-├── etc/                             # Everything that is relevant information to the project
-├── public/                          
-├── src/                             # Project main folder
-│   ├── app/                         # Next.js App router, code for backend and frontend apps
-│   │   ├── (app)/                   # Frontend application
-│   │   │   ├── (pages)/             # NextJS pages of app router
-│   │   │   └── components/          # Project section components
-│   │   └── api/                     # Backend api application
-│   │       ├── events/              # Message Q Asynchronous events
-│   │       ├── graphql/             # GraphQL API
-│   │       └── webhooks/            # Webhooks to third party services
-│   ├── libs/                        # Aux libraries
-│   │   ├── ducen-ui/                # Custom own ui library
-│   │   └── shadcn-ui/               # shadcn ui components
-│   ├── modules/                     # Modules of DDD source code
-│   │   ├── shared/                  # Shared modules across all apps
-│   │   ├── doctor/                  
-│   │   └── user/                    
-│   ├── assets/                      
-│   └── middleware.ts                # Function that its executed in all routes
-├── .env.local                       
-├── .eslintrc.json
-├── .gitignore     
-├── .prettierrc     
-├── .components.json     
-├── globals.d.ts     
-├── next-env.d.ts     
-├── postcss.config.mjs     
-├── tailwind.config.ts     
-├── tsconfig.ts     
-├── next.config.js    
-├── package.json     
-└── README.md
-```
 
 ## Other links
 
