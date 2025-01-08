@@ -1,8 +1,7 @@
-import { env } from '@helsa/env';
 import { defineConfig } from '@trigger.dev/sdk/v3';
 
 export default defineConfig({
-  project: env.TRIGGER_PROJECT_ID,
+  project: 'proj_xpkcieqykvumuuufajyk',
   runtime: 'node',
   logLevel: 'log',
   retries: {

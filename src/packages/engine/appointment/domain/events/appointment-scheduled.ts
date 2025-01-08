@@ -2,9 +2,7 @@ import { DomainEvent, DomainEventPrimitives } from '@helsa/ddd/core/domain-event
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { Appointment } from '../appointment';
 
-export type AppointmentScheduledData = {
-  appointment: Primitives<Appointment>;
-};
+export type AppointmentScheduledData = Primitives<Appointment>;
 
 export class AppointmentScheduled extends DomainEvent<AppointmentScheduledData> {
   static EVENT_NAME: string = 'appointment-scheduled';
@@ -13,7 +11,7 @@ export class AppointmentScheduled extends DomainEvent<AppointmentScheduledData> 
       id: undefined,
       occurred_on: undefined,
       name: AppointmentScheduled.EVENT_NAME,
-      data: { appointment },
+      data: { ...appointment },
       aggregate: 'appointment',
     });
   }
