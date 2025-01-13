@@ -6,6 +6,7 @@ import Details from '@/src/components/appointment/call/details';
 import DetailsDoctor from '@/src/components/appointment/call/details-doctor';
 import { VideoCall } from '@/src/components/call';
 import CallCHat from '@/src/components/call-chat';
+import { UserRoleValue } from '@helsa/engine/user/domain/user-role';
 
 const Page = async ({ params }: { params: { id: string } }) => {
   const response = await getAppointment({ appointmentId: params.id });
@@ -21,8 +22,8 @@ const Page = async ({ params }: { params: { id: string } }) => {
           <p className="text-lg">Dr. {appointment?.patient?.user?.name!}</p>
         </div>
         <div className="p-0 bg-transparent items-center justify-end  hover:bg-transparent flex h-full gap-3">
-          {/* <Details data={appointment} /> */}
-          <DetailsDoctor data={appointment} />
+          {user?.data?.role === UserRoleValue.PATIENT && <DetailsDoctor data={appointment} />}
+          {user?.data?.role === UserRoleValue.DOCTOR && <Details data={appointment} />}
           <Actions />
         </div>
       </div>

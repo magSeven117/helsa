@@ -8,12 +8,10 @@ Closes #<issue_number>
 
 ## Checklist
 
-- [ ] My code follows the code style of this project.
-- [ ] I have performed a self-review of my code.
-- [ ] I have commented my code, particularly in hard-to-understand areas.
-- [ ] I have updated the documentation, if necessary.
-- [ ] I have added tests that prove my fix is effective or my feature works.
-- [ ] New and existing tests pass locally with my changes.
+- [ ] Main engine
+- [ ] UX / UI styles
+- [ ] Configurations and workaround
+- [ ] Integrations and adapters
 
 ## Screenshots (if applicable)
 

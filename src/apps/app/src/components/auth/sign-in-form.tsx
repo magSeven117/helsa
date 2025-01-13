@@ -37,6 +37,7 @@ export default function SignInForm() {
       });
 
       if (signInAttempt.data) {
+        revalidatePath('/dashboard');
         router.push('/dashboard');
       } else {
         toast.error('Invalid email or password');
