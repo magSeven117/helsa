@@ -3,14 +3,17 @@ import { getAppointment } from '@/src/actions/appointment/get-appointment';
 import { getCurrentUser } from '@/src/actions/user/get-current-user';
 import Actions from '@/src/components/appointment/call/actions';
 import Details from '@/src/components/appointment/call/details';
+import DetailsDoctor from '@/src/components/appointment/call/details-doctor';
 import { VideoCall } from '@/src/components/call';
 import CallCHat from '@/src/components/call-chat';
+import { UserRoleValue } from '@helsa/engine/user/domain/user-role';
 
 const Page = async ({ params }: { params: { id: string } }) => {
   const response = await getAppointment({ appointmentId: params.id });
   const tokenResponse = await generateUserToken();
   const user = await getCurrentUser();
   const appointment = response?.data!;
+
   return (
     <div className="w-full h-full flex flex-col justify-between px-5" defaultValue="chat">
       <div className="w-full grid grid-cols-2 gap-3 max-md:grid-cols-1">
@@ -19,7 +22,8 @@ const Page = async ({ params }: { params: { id: string } }) => {
           <p className="text-lg">Dr. {appointment?.patient?.user?.name!}</p>
         </div>
         <div className="p-0 bg-transparent items-center justify-end  hover:bg-transparent flex h-full gap-3">
-          <Details data={appointment} />
+          {user?.data?.role === UserRoleValue.PATIENT && <DetailsDoctor data={appointment} />}
+          {user?.data?.role === UserRoleValue.DOCTOR && <Details data={appointment} />}
           <Actions />
         </div>
       </div>
