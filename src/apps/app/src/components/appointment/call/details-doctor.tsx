@@ -6,10 +6,11 @@ import { Avatar, AvatarFallback, AvatarImage } from '@helsa/ui/components/avatar
 import { Badge } from '@helsa/ui/components/badge';
 import { Button } from '@helsa/ui/components/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@helsa/ui/components/sheet';
+import { Textarea } from '@helsa/ui/components/textarea';
 import { ExternalLink, FileText, Paperclip, ReceiptText, StickyNote } from 'lucide-react';
 import Link from 'next/link';
 
-const Details = ({ data }: { data: Primitives<Appointment> }) => {
+const DetailsDoctor = ({ data }: { data: Primitives<Appointment> }) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -23,35 +24,35 @@ const Details = ({ data }: { data: Primitives<Appointment> }) => {
           <SheetHeader className="flex flex-row justify-between items-center gap-4">
             <div className="flex flex-row justify-start items-center gap-4">
               <Avatar className="bg-secondary">
-                <AvatarImage className="object-contain" src={data?.patient?.user?.image} />
-                <AvatarFallback>{data?.patient?.user?.name?.charAt(0)}</AvatarFallback>
+                <AvatarImage className="object-contain" src={data?.doctor?.user?.image} />
+                <AvatarFallback>Dr.{data?.doctor?.user?.name?.charAt(0)}</AvatarFallback>
               </Avatar>
               <div>
                 <SheetTitle className="text-xl flex justify-start items-center gap-2">
-                  {data?.patient?.user?.name}{' '}
+                  {data?.doctor?.user?.name}{' '}
                   <Link href={`/patients/${data?.patient?.id}`} target="_blank">
                     <ExternalLink className="size-4 ml-3" />
                   </Link>{' '}
-                  <Badge variant={'outline'}>26 años</Badge>
+                  {/* <Badge variant={'outline'}>26 años</Badge>
                   <Badge variant={'outline'}>Masculino</Badge>
                   {data.patient?.biometric.organDonor === OrganDonors.Yes && <Badge variant={'outline'}>Donador</Badge>}
-                  <Badge variant={'outline'}>{data.patient?.biometric.bloodType}</Badge>
+                  <Badge variant={'outline'}>{data.patient?.biometric.bloodType}</Badge> */}
                 </SheetTitle>
               </div>
             </div>
           </SheetHeader>
           <div className="flex gap-2 px-1 border-b py-2">
             <div className="flex justify-start items-center gap-2 text-sm">
-              <p className="">Estado civil:</p>
-              <Badge variant={'outline'}>{data.patient?.demographic.civilStatus}</Badge>
+              {/* <p className="">Estado civil:</p>
+              <Badge variant={'outline'}>{data.patient?.demographic.civilStatus}</Badge> */}
             </div>
             <div className="flex justify-start items-center gap-2 text-sm">
-              <p className="">Educación:</p>
-              <Badge variant={'outline'}>{data.patient?.demographic.educativeLevel}</Badge>
+              <p className="">Especialidad:</p>
+              <Badge variant={'outline'}>{data.doctor?.specialty?.name || ''}</Badge>
             </div>
             <div className="flex justify-start items-center gap-2 text-sm">
-              <p className="">Ocupación:</p>
-              <Badge variant={'outline'}>{data.patient?.demographic.occupation}</Badge>
+              <p className="">Nº de Licencia:</p>
+              <Badge variant={'outline'}>{data.doctor?.licenseMedicalNumber || ''}</Badge>
             </div>
           </div>
           <div className="space-y-3 px-1 py-3">
@@ -88,6 +89,9 @@ const Details = ({ data }: { data: Primitives<Appointment> }) => {
                   <span>Archivo adjunto</span>
                   <span>130 KBs</span>
                 </div>
+                <Button className="w-full gap-3 h-9" variant={'secondary'}>
+                  Adjuntar archivo <Paperclip className="size-4" />
+                </Button>
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="notes">
@@ -105,6 +109,14 @@ const Details = ({ data }: { data: Primitives<Appointment> }) => {
                   <StickyNote className="size-4" />
                   <span>Temporibus molestias quibusdam accusantium magni numquam saepe!</span>
                 </div>
+
+                <Textarea
+                  className="mt-2 rounded-none resize-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-transparent"
+                  placeholder="Escribe cualquier comentario"
+                ></Textarea>
+                <Button className="w-full gap-3 h-9" variant={'secondary'}>
+                  Agregar nota <StickyNote className="size-4" />
+                </Button>
               </AccordionContent>
             </AccordionItem>
           </Accordion>
@@ -114,4 +126,4 @@ const Details = ({ data }: { data: Primitives<Appointment> }) => {
   );
 };
 
-export default Details;
+export default DetailsDoctor;
