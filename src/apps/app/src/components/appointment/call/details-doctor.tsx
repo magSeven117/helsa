@@ -25,7 +25,7 @@ const DetailsDoctor = ({ data }: { data: Primitives<Appointment> }) => {
             <div className="flex flex-row justify-start items-center gap-4">
               <Avatar className="bg-secondary">
                 <AvatarImage className="object-contain" src={data?.doctor?.user?.image} />
-                <AvatarFallback>Dr.{data?.doctor?.user?.name?.charAt(0)}</AvatarFallback>
+                <AvatarFallback>Dr. {data?.doctor?.user?.name?.charAt(0)}</AvatarFallback>
               </Avatar>
               <div>
                 <SheetTitle className="text-xl flex justify-start items-center gap-2">

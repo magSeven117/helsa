@@ -22,7 +22,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
         </div>
         <div className="p-0 bg-transparent items-center justify-end  hover:bg-transparent flex h-full gap-3">
           {/* <Details data={appointment} /> */}
-          <DetailsDoctor data={appointment} /> //NOTE - cambiar aqui el modal
+          <DetailsDoctor data={appointment} />
           <Actions />
         </div>
       </div>
