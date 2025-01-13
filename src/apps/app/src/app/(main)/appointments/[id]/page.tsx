@@ -4,6 +4,7 @@ import { getCurrentUser } from '@/src/actions/user/get-current-user';
 import Actions from '@/src/components/appointment/call/actions';
 import Details from '@/src/components/appointment/call/details';
 import DetailsDoctor from '@/src/components/appointment/call/details-doctor';
+import Diagnosis from '@/src/components/appointment/call/diagnosis';
 import { VideoCall } from '@/src/components/call';
 import CallCHat from '@/src/components/call-chat';
 import { UserRoleValue } from '@helsa/engine/user/domain/user-role';
@@ -19,11 +20,16 @@ const Page = async ({ params }: { params: { id: string } }) => {
       <div className="w-full grid grid-cols-2 gap-3 max-md:grid-cols-1">
         <div>
           <h1 className="text-3xl font-bold">Consulta con</h1>
-          <p className="text-lg">Dr. {appointment?.patient?.user?.name!}</p>
+          <p className="text-lg capitalize">
+            {user?.data?.role === UserRoleValue.PATIENT
+              ? `Dr. ${appointment.doctor?.user?.name}`
+              : appointment.patient?.user?.name!}
+          </p>
         </div>
         <div className="p-0 bg-transparent items-center justify-end  hover:bg-transparent flex h-full gap-3">
           {user?.data?.role === UserRoleValue.PATIENT && <DetailsDoctor data={appointment} />}
           {user?.data?.role === UserRoleValue.DOCTOR && <Details data={appointment} />}
+          <Diagnosis data={appointment} />
           <Actions />
         </div>
       </div>
