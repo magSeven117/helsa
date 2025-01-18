@@ -16,7 +16,7 @@
     "@helsa/rate-limit": "*",
     "@helsa/typescript-config": "*",
     "next": "14.2.4",
-    "next-safe-action": "^7.9.9",
+    "next-safe-action": "7.10.2",
     "server-only": "^0.0.1",
     "zod": "^3.23.8"
   },
