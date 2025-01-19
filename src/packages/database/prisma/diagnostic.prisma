@@ -7,13 +7,14 @@ enum DiagnosticType {
   ALLERGY
   DISEASE
   SYMPTOM
-  VACCINE
+  CHRONIC_DISEASE
 }
 
 model Diagnostic {
   id          String           @id @default(uuid())
   description String
   code        String
+  symptoms    String[]
   status      DiagnosticStatus
   type        DiagnosticType
 
@@ -21,8 +22,8 @@ model Diagnostic {
   doctorId      String
   appointmentId String
 
-  patient Patient @relation(fields: [patientId], references: [id])
-  doctor  Doctor  @relation(fields: [doctorId], references: [id])
+  patient     Patient     @relation(fields: [patientId], references: [id])
+  doctor      Doctor      @relation(fields: [doctorId], references: [id])
   appointment Appointment @relation(fields: [appointmentId], references: [id])
 
   treatments Treatment[]

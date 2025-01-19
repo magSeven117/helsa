@@ -22,7 +22,7 @@ const SheetOverlay = React.forwardRef<
   <SheetPrimitive.Overlay
     className={cn(
       'fixed inset-0 z-50 bg-black/80  data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
-      className,
+      className
     )}
     {...props}
     ref={ref}
@@ -46,7 +46,7 @@ const sheetVariants = cva(
     defaultVariants: {
       side: 'right',
     },
-  },
+  }
 );
 
 interface SheetContentProps
@@ -58,7 +58,6 @@ interface SheetContentProps
 const SheetContent = React.forwardRef<React.ElementRef<typeof SheetPrimitive.Content>, SheetContentProps>(
   ({ side = 'right', className, children, ...props }, ref) => (
     <SheetPortal>
-      <SheetOverlay />
       <SheetPrimitive.Content ref={ref} className={cn(sheetVariants({ side }), className)} {...props}>
         {children}
         {props.close && (
@@ -69,7 +68,7 @@ const SheetContent = React.forwardRef<React.ElementRef<typeof SheetPrimitive.Con
         )}
       </SheetPrimitive.Content>
     </SheetPortal>
-  ),
+  )
 );
 SheetContent.displayName = SheetPrimitive.Content.displayName;
 

@@ -1,4 +1,5 @@
 import { getAppointmentTypes } from '@/src/actions/appointment/get-appointment-types';
+import { getSymptoms } from '@/src/actions/appointment/get-symptoms';
 import { searchDoctors } from '@/src/actions/doctor/search-doctors';
 import DoctorList from './doctor-list';
 
@@ -13,12 +14,16 @@ type Props = {
 };
 
 const DoctorListWrapper = async ({ filters }: Props) => {
-  const response = await searchDoctors(filters);
-  const data = await getAppointmentTypes();
-  const doctors = response?.data ?? [];
-  const types = data?.data ?? [];
+  const [responseDoctors, responseTypes, responseSymptoms] = await Promise.all([
+    searchDoctors(filters),
+    getAppointmentTypes(),
+    getSymptoms(),
+  ]);
+  const symptoms = responseSymptoms?.data ?? [];
+  const doctors = responseDoctors?.data ?? [];
+  const types = responseTypes?.data ?? [];
 
-  return <DoctorList doctors={doctors} types={types} />;
+  return <DoctorList doctors={doctors} types={types} symptoms={symptoms} />;
 };
 
 export default DoctorListWrapper;

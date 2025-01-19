@@ -32,7 +32,7 @@ export const Combobox = React.forwardRef<any, ComboBoxProps>(
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="popover-content-width-same-as-its-trigger p-0">
+        <PopoverContent className="popover-content-width-same-as-its-trigger p-0 rounded-none">
           <Command>
             <CommandInput placeholder={placeholder} />
             <CommandEmpty>No option found.</CommandEmpty>
@@ -46,6 +46,7 @@ export const Combobox = React.forwardRef<any, ComboBoxProps>(
                       onChange(currentValue === value ? '' : element.value);
                       setOpen(false);
                     }}
+                    className="rounded-none"
                   >
                     <Check className={cn('mr-2 h-4 w-4', value === element.value ? 'opacity-100' : 'opacity-0')} />
                     {element.icon && (
@@ -62,6 +63,6 @@ export const Combobox = React.forwardRef<any, ComboBoxProps>(
         </PopoverContent>
       </Popover>
     );
-  },
+  }
 );
 Combobox.displayName = 'Combobox';

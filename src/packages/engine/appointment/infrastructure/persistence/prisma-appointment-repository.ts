@@ -1,11 +1,12 @@
+import { PrismaClient } from '@helsa/database';
+import { PrismaCriteriaConverter } from '@helsa/database/converter';
 import { Collection } from '@helsa/ddd/core/collection.';
 import { Criteria } from '@helsa/ddd/core/criteria';
 import { Primitives } from '@helsa/ddd/types/primitives';
-import { PrismaCriteriaConverter } from '@helsa/database/converter';
-import { PrismaClient } from '@helsa/database';
-import { AppointmentType } from '../../domain/appointment-type';
 import { Appointment } from '../../domain/appointment';
 import { AppointmentRepository } from '../../domain/appointment-repository';
+import { AppointmentType } from '../../domain/appointment-type';
+import { Symptom } from '../../domain/symptom';
 
 export class PrismaAppointmentRepository implements AppointmentRepository {
   private converter = new PrismaCriteriaConverter();
@@ -110,5 +111,10 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
   async getTypes(): Promise<AppointmentType[]> {
     const types = await this.client.appointmentType.findMany();
     return types.map((type) => AppointmentType.fromPrimitives(type as unknown as Primitives<AppointmentType>));
+  }
+
+  async getSymptoms(): Promise<Symptom[]> {
+    const symptoms = await this.client.symptom.findMany();
+    return symptoms.map((symptom) => Symptom.fromPrimitives(symptom));
   }
 }

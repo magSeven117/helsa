@@ -12,6 +12,10 @@ async function main() {
   await prisma.appointmentType.createMany({
     data: appointmentTypes,
   });
+
+  await prisma.symptom.createMany({
+    data: symptoms,
+  });
 }
 
 const specialties = [
@@ -35,6 +39,78 @@ const specialties = [
   { name: 'Reumatología' },
   { name: 'Traumatología' },
   { name: 'Urología' },
+];
+
+const symptoms = [
+  {
+    name: 'Silbido en el pecho',
+  },
+  {
+    name: 'Dolor de pecho/cuello',
+  },
+  {
+    name: 'Quejido',
+  },
+  {
+    name: 'Escalofríos y/o sudoración',
+  },
+  {
+    name: 'Dolor de cabeza',
+  },
+  {
+    name: 'Dolor de músculos o cuerpo',
+  },
+  {
+    name: 'Molestias al tragar o falta de apetito',
+  },
+  {
+    name: 'Mucosidad nasal',
+  },
+  {
+    name: 'Congestión nasal',
+  },
+  {
+    name: 'Irritabilidad',
+  },
+  {
+    name: 'Alteración de la voz',
+  },
+  {
+    name: 'Dificultad respiratoria',
+  },
+  {
+    name: 'Dolor de oído',
+  },
+  {
+    name: 'Conjuntivitis',
+  },
+  {
+    name: 'Diarrea',
+  },
+  {
+    name: 'Vómito',
+  },
+  {
+    name: 'Fatiga',
+  },
+  {
+    name: 'Compromiso de conciencia',
+  },
+  {
+    name: 'Respiración rápida',
+  },
+  {
+    name: 'Falta de oxígeno o cianosis',
+  },
+  {
+    name: 'Respiración lenta o ausencia de respiración',
+  },
+  {
+    name: 'Tos',
+  },
+  {
+    name: 'Temperatura',
+  },
 ];
 
 const appointmentTypes = [

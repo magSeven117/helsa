@@ -1,18 +1,20 @@
 'use client';
 
 import { createAppointment } from '@/src/actions/appointment/create-appointment';
+import { Symptom } from '@helsa/database';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { AppointmentType } from '@helsa/engine/appointment/domain/appointment-type';
 import { Doctor } from '@helsa/engine/doctor/domain/doctor';
 import { Avatar, AvatarFallback, AvatarImage } from '@helsa/ui/components/avatar';
 import { Button } from '@helsa/ui/components/button';
+import { Combobox } from '@helsa/ui/components/combobox';
 import { DatePicker } from '@helsa/ui/components/date-picker';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@helsa/ui/components/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@helsa/ui/components/select';
 import { Textarea } from '@helsa/ui/components/textarea';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
-import { Loader2 } from 'lucide-react';
+import { Check, Loader2, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -43,9 +45,11 @@ const formSchema = z.object({
 export default function DoctorAppointment({
   doctor,
   types,
+  symptoms,
 }: {
   doctor: Primitives<Doctor>;
   types: Primitives<AppointmentType>[];
+  symptoms: Primitives<Symptom>[];
 }) {
   const router = useRouter();
   const form = useForm({
@@ -61,6 +65,7 @@ export default function DoctorAppointment({
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
+  const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([]);
 
   useEffect(() => {
     if (!date) {
@@ -69,7 +74,7 @@ export default function DoctorAppointment({
 
     const hours = doctor.schedule?.days.find((day) => day.day === format(date, 'EEEE').toLowerCase())?.hours ?? [];
     const availableSlots = hours.filter(
-      (hour) => !doctor.appointments!.some((appointment) => appointment.hour === hour.hour),
+      (hour) => !doctor.appointments!.some((appointment) => appointment.hour === hour.hour)
     );
 
     setTimeSlots(availableSlots.map((hour) => ({ id: hour.hour, time: hour.hour })));
@@ -108,13 +113,25 @@ export default function DoctorAppointment({
 
   const finalTypes = [...(doctor.prices ?? [])];
 
+  function transformOption(specialty: { id: string; name: string }): {
+    value: string;
+    label: string;
+    icon: any;
+  } {
+    return {
+      value: specialty.name,
+      label: specialty.name,
+      icon: selectedSymptoms.includes(specialty.name) ? Check : null,
+    };
+  }
+
   return (
-    <div className="w-full mt-10">
+    <div className="w-full flex flex-col flex-1">
       <DoctorInfo doctor={doctor} />
       <Form {...form}>
-        <form action="" onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="grid grid-cols-1 gap-6">
-            <div className="col-span-1 grid grid-cols-1 gap-3">
+        <form action="" onSubmit={form.handleSubmit(onSubmit)} className="flex-1  flex flex-col justify-between">
+          <div className="flex flex-col">
+            <div className="flex flex-col gap-3">
               <div className="w-full grid grid-cols-2 gap-3">
                 <DatePicker onSelect={setDate} selected={date} />
                 <FormField
@@ -161,6 +178,32 @@ export default function DoctorAppointment({
             </div>
             <div className="col-span-1">
               <div className="mt-4">
+                <Combobox
+                  onChange={(v) => {
+                    const value = v as string;
+                    const symptom = symptoms.find((s) => s.name == value);
+                    if (!symptom) return;
+                    setSelectedSymptoms((current) =>
+                      current.includes(symptom.name)
+                        ? current.filter((s) => s !== symptom.name)
+                        : [...current, symptom.name]
+                    );
+                  }}
+                  options={symptoms.map(transformOption)}
+                  placeholder="Síntomas"
+                />
+                <div className="flex items-center gap-2 flex-wrap my-6">
+                  {selectedSymptoms.map((symptom, index) => (
+                    <Button
+                      key={index}
+                      className="rounded-full h-8 px-3 bg-secondary hover:bg-secondary font-normal text-[#878787] flex justify-start group "
+                      onClick={() => setSelectedSymptoms((current) => current.filter((s) => s !== symptom))}
+                    >
+                      <X className="scale-0 group-hover:scale-100 transition-all w-0 group-hover:w-4" />
+                      <span>{symptom}</span>
+                    </Button>
+                  ))}
+                </div>
                 <FormField
                   control={form.control}
                   name="symptoms"
@@ -168,7 +211,7 @@ export default function DoctorAppointment({
                     <FormItem className="my-2">
                       <FormControl>
                         <Textarea
-                          placeholder="Describe tus síntomas y la razón de tu consulta aquí"
+                          placeholder="Describe la razón de tu consulta aquí"
                           {...field}
                           className="min-h-[100px] rounded-none"
                         />
@@ -203,15 +246,15 @@ export default function DoctorAppointment({
                   )}
                 />
               </div>
-              <Button
-                className="w-full mt-4"
-                type="submit"
-                disabled={form.formState.isSubmitting || !form.formState.isValid}
-              >
-                {form.formState.isSubmitting ? <Loader2 className="size-4 animate-spin" /> : 'Agendar cita'}
-              </Button>
             </div>
           </div>
+          <Button
+            className="w-full mt-4"
+            type="submit"
+            disabled={form.formState.isSubmitting || !form.formState.isValid}
+          >
+            {form.formState.isSubmitting ? <Loader2 className="size-4 animate-spin" /> : 'Agendar cita'}
+          </Button>
         </form>
       </Form>
     </div>
