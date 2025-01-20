@@ -16,6 +16,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { Check, Loader2, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useQueryState } from 'nuqs';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -37,7 +38,7 @@ const paymentMethods = [
 const formSchema = z.object({
   date: z.date(),
   time: z.string().min(5, 'Selecciona una hora'),
-  symptoms: z.string().min(2, 'Describe tus síntomas'),
+  motive: z.string().min(2, 'Describe tus síntomas'),
   paymentMethod: z.string().min(2, 'Selecciona un método de pago'),
   priceId: z.string().min(2, 'Selecciona un precio'),
 });
@@ -57,7 +58,7 @@ export default function DoctorAppointment({
     defaultValues: {
       date: new Date(),
       time: '',
-      symptoms: '',
+      motive: '',
       paymentMethod: '',
       priceId: '',
     },
@@ -66,6 +67,7 @@ export default function DoctorAppointment({
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
   const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([]);
+  const [_, setId] = useQueryState('id');
 
   useEffect(() => {
     if (!date) {
@@ -74,9 +76,11 @@ export default function DoctorAppointment({
 
     const hours = doctor.schedule?.days.find((day) => day.day === format(date, 'EEEE').toLowerCase())?.hours ?? [];
     const availableSlots = hours.filter(
-      (hour) => !doctor.appointments!.some((appointment) => appointment.hour === hour.hour)
+      (hour) =>
+        !doctor.appointments!.some(
+          (appointment) => appointment.hour === hour.hour && appointment.day === format(date, 'yyyy-MM-dd')
+        )
     );
-
     setTimeSlots(availableSlots.map((hour) => ({ id: hour.hour, time: hour.hour })));
     form.setValue('date', date);
   }, [date]);
@@ -95,12 +99,15 @@ export default function DoctorAppointment({
         id,
         doctorId: doctor.id,
         date: new Date(`${format(data.date, 'yyyy-MM-dd')} ${data.time}`),
-        symptoms: data.symptoms,
+        motive: data.motive,
         typeId: doctor.prices?.find((price) => price.id === data.priceId)?.typeId ?? types[0].id,
         priceId: data.priceId,
         specialtyId: doctor.specialtyId,
+        symptoms: selectedSymptoms.map((s) => symptoms.find((ss) => ss.name === s)?.id!),
       });
-      router.push(`/appointments/${id}`);
+
+      toast.success('Cita creada correctamente');
+      router.push(`/appointments?id=${id}`);
     } catch (error) {
       console.log(error);
       toast.error('Ha ocurrido un error al agendar la cita');
@@ -169,7 +176,11 @@ export default function DoctorAppointment({
                   <Button
                     key={slot.id}
                     variant={selectedSlot === slot.id ? 'default' : 'outline'}
-                    onClick={() => setSelectedSlot(slot.id)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setSelectedSlot(slot.id);
+                    }}
+                    type="button"
                   >
                     {slot.time}
                   </Button>
@@ -206,7 +217,7 @@ export default function DoctorAppointment({
                 </div>
                 <FormField
                   control={form.control}
-                  name="symptoms"
+                  name="motive"
                   render={({ field }) => (
                     <FormItem className="my-2">
                       <FormControl>

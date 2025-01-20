@@ -25,6 +25,7 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
       recipes: true,
       notes: true,
       type: true,
+      symptoms: true,
       doctor: {
         include: {
           user: true,
@@ -64,13 +65,13 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
     });
   }
 
-  async save(appointment: Appointment): Promise<void> {
-    const { notes, rating, recipe, room, telemetry, doctor, type, patient, price, ...data } =
+  async save(appointment: Appointment, symptomsOfThePatient?: string[]): Promise<void> {
+    const { notes, symptoms, rating, recipe, room, telemetry, doctor, type, patient, price, ...data } =
       appointment.toPrimitives();
     await this.model.upsert({
       where: { id: data.id },
       update: data,
-      create: data,
+      create: { ...data, symptoms: { connect: symptomsOfThePatient?.map((s) => ({ id: s })) } },
     });
   }
 
@@ -84,6 +85,7 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
         recipes: true,
         notes: true,
         type: true,
+        symptoms: true,
         doctor: {
           include: {
             user: true,

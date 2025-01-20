@@ -13,6 +13,7 @@ import { AppointmentRating } from './rating';
 import { AppointmentRecipe } from './recipe';
 import { AppointmentRoom } from './room';
 import { AppointmentStatus } from './status';
+import { Symptom } from './symptom';
 import { AppointmentTelemetry } from './telemetry';
 
 export type AppointmentPrimitives = Primitives<Appointment>;
@@ -41,6 +42,7 @@ export class Appointment extends Aggregate {
     public type?: AppointmentType,
     public patient?: Patient,
     public price?: Price,
+    public symptoms?: Symptom[]
   ) {
     super(id, createdAt, updatedAt);
   }
@@ -69,6 +71,7 @@ export class Appointment extends Aggregate {
       type: this.type ? this.type.toPrimitives() : undefined,
       patient: this.patient ? this.patient.toPrimitives() : undefined,
       price: this.price ? this.price.toPrimitives() : undefined,
+      symptoms: this.symptoms ? this.symptoms.map((symptom) => symptom.toPrimitives()) : undefined,
     };
   }
 
@@ -96,6 +99,7 @@ export class Appointment extends Aggregate {
       data.type ? AppointmentType.fromPrimitives(data.type) : undefined,
       data.patient ? Patient.fromPrimitives(data.patient) : undefined,
       data.price ? Price.fromPrimitives(data.price) : undefined,
+      data.symptoms ? data.symptoms.map((symptom) => Symptom.fromPrimitives(symptom)) : undefined
     );
   }
 
@@ -107,7 +111,7 @@ export class Appointment extends Aggregate {
     doctorId: string,
     typeId: string,
     specialtyId: string,
-    priceId: string,
+    priceId: string
   ): Appointment {
     const appointment = new Appointment(
       new Uuid(id),
@@ -122,7 +126,7 @@ export class Appointment extends Aggregate {
       new Uuid(specialtyId),
       new Uuid(priceId),
       DateValueObject.today(),
-      DateValueObject.today(),
+      DateValueObject.today()
     );
     appointment.record(new AppointmentScheduled(appointment.toPrimitives()));
     return appointment;

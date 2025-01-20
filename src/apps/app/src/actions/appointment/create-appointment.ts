@@ -10,22 +10,23 @@ import { getPatient } from '../patient/get-patient';
 const schema = z.object({
   id: z.string(),
   date: z.date(),
-  symptoms: z.string(),
+  motive: z.string(),
   doctorId: z.string(),
   typeId: z.string(),
   priceId: z.string(),
   specialtyId: z.string(),
+  symptoms: z.array(z.string()),
 });
 
 export const createAppointment = authActionClient
   .schema(schema)
   .metadata({ actionName: 'create-appointment' })
-  .action(async ({ parsedInput: { date, symptoms, doctorId, typeId, id, specialtyId, priceId }, ctx }) => {
+  .action(async ({ parsedInput: { date, motive, symptoms, doctorId, typeId, id, specialtyId, priceId }, ctx }) => {
     const data = await getPatient({ userId: ctx.user.id });
     const patientId = data?.data?.id;
     if (!patientId) {
       throw new Error('Patient not found');
     }
     const service = new CreateAppointment(new PrismaAppointmentRepository(database), new TriggerEventBus());
-    return service.run(id, date, symptoms, doctorId, patientId, typeId, specialtyId, priceId);
+    return service.run(id, date, motive, doctorId, patientId, typeId, specialtyId, priceId, symptoms);
   });

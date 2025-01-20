@@ -5,7 +5,7 @@ import { Appointment } from './appointment';
 import { Symptom } from './symptom';
 
 export interface AppointmentRepository {
-  save(appointment: Appointment): Promise<void>;
+  save(appointment: Appointment, symptoms?: string[]): Promise<void>;
   search(criteria: Criteria): Promise<Collection<Appointment>>;
   get(id: string): Promise<Appointment | null>;
   getTypes(): Promise<AppointmentType[]>;

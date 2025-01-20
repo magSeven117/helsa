@@ -115,8 +115,11 @@ const AppointmentDetailsSheet = ({ data, isOpen, setOpen, types }: Props) => {
               <div className="space-y-3 px-1 border-b py-3">
                 <p className="text-sm text-muted-foreground">{data?.motive ?? ''}</p>
                 <div className="flex justify-start items-center gap-2">
-                  <Badge variant={'outline'}>Fiebre</Badge>
-                  <Badge variant={'outline'}>Dolor de cabeza</Badge>
+                  {data?.symptoms?.map((symptom) => (
+                    <Badge key={symptom.id} variant={'outline'}>
+                      {symptom.name}
+                    </Badge>
+                  ))}
                 </div>
               </div>
               <div className="space-y-3 px-1 border-b py-3">

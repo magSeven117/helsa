@@ -8,10 +8,20 @@ Closes #<issue_number>
 
 ## Checklist
 
-- [ ] Main engine
-- [ ] UX / UI styles
-- [ ] Configurations and workaround
-- [ ] Integrations and adapters
+- [ ] Feature
+  - [ ] Frontend Component
+  - [ ] Action
+  - [ ] Task
+  - [ ] Engine Domain
+  - [ ] UX / UI styles
+- [ ] Bug fix
+  - [ ] UX / UI styles
+  - [ ] Frontend Component
+  - [ ] Engine Domain
+  - [ ] Action
+  - [ ] Task
+- [ ] Documentation
+- [ ] Configuration
 
 ## Screenshots (if applicable)
 

@@ -1,7 +1,7 @@
+import { PrismaClient } from '@helsa/database';
+import { PrismaCriteriaConverter } from '@helsa/database/converter';
 import { Criteria } from '@helsa/ddd/core/criteria';
 import { Primitives } from '@helsa/ddd/types/primitives';
-import { PrismaCriteriaConverter } from '@helsa/database/converter';
-import { PrismaClient } from '@helsa/database';
 import { ConsultingRoomAddress } from '../../domain/consulting-room-address';
 import { Doctor } from '../../domain/doctor';
 import { DoctorRepository } from '../../domain/doctor-repository';

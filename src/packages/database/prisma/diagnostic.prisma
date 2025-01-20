@@ -13,21 +13,29 @@ enum DiagnosticType {
 model Diagnostic {
   id          String           @id @default(uuid())
   description String
-  code        String
-  symptoms    String[]
   status      DiagnosticStatus
   type        DiagnosticType
 
   patientId     String
   doctorId      String
   appointmentId String
+  pathologyId   String
 
   patient     Patient     @relation(fields: [patientId], references: [id])
   doctor      Doctor      @relation(fields: [doctorId], references: [id])
   appointment Appointment @relation(fields: [appointmentId], references: [id])
+  pathology   Pathology   @relation(fields: [pathologyId], references: [id])
 
   treatments Treatment[]
+  symptoms   Symptom[]   @relation("DiagnosticSymptom")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Pathology {
+  id   String @id @default(uuid())
+  name String
+
+  diagnoses Diagnostic[]
 }

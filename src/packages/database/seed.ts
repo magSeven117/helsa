@@ -16,6 +16,9 @@ async function main() {
   await prisma.symptom.createMany({
     data: symptoms,
   });
+  await prisma.pathology.createMany({
+    data: pathologies,
+  });
 }
 
 const specialties = [
@@ -110,6 +113,72 @@ const symptoms = [
   },
   {
     name: 'Temperatura',
+  },
+];
+
+const pathologies = [
+  {
+    name: 'Asma',
+  },
+  {
+    name: 'Bronconeumonía',
+  },
+  {
+    name: 'Bronquiolitis Aguda',
+  },
+  {
+    name: 'Bronquitis/Obstructiva Aguda/Crónica',
+  },
+  {
+    name: 'Influenza',
+  },
+  {
+    name: 'Neumonía Viral',
+  },
+  {
+    name: 'Síndrome Bronquial Obstructivo',
+  },
+  {
+    name: 'Resfriado común',
+  },
+  {
+    name: 'Epiglotitis',
+  },
+  {
+    name: 'Coqueluche',
+  },
+  {
+    name: 'Laringitis Aguda',
+  },
+  {
+    name: 'Laringitis Aguda Obstructiva',
+  },
+  {
+    name: 'Laringotraqueitis',
+  },
+  {
+    name: 'Neumonía Bacteriana',
+  },
+  {
+    name: 'Síndrome Coqueluchoide',
+  },
+  {
+    name: 'Traqueitis',
+  },
+  {
+    name: 'Faringoamigdalitis',
+  },
+  {
+    name: 'Adenoiditis Aguda',
+  },
+  {
+    name: 'Sinusitis',
+  },
+  {
+    name: 'Covid 19',
+  },
+  {
+    name: 'Neumonía Atópica',
   },
 ];
 

@@ -21,6 +21,8 @@ model Appointment {
   priceId String @default("")
   price   Price  @relation(fields: [priceId], references: [id])
 
+  symptoms Symptom[] @relation("AppointmentSymptom")
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -117,4 +119,7 @@ model AppointmentNote {
 model Symptom {
   id   String @id @default(uuid())
   name String
+
+  appointments Appointment[] @relation("AppointmentSymptom")
+  diagnoses    Diagnostic[]  @relation("DiagnosticSymptom")
 }

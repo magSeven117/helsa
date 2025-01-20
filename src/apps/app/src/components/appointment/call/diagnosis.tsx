@@ -11,7 +11,7 @@ import { Sheet, SheetContent, SheetHeader, SheetOverlay, SheetTitle, SheetTrigge
 import { Textarea } from '@helsa/ui/components/textarea';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@helsa/ui/components/tooltip';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ClipboardMinus, ExternalLink, TextSearchIcon, Trash2 } from 'lucide-react';
+import { ClipboardMinus, ExternalLink, TextSearchIcon, Trash2, X } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -60,6 +60,7 @@ function transformOption(specialty: { id: string; name: string }) {
 
 const Diagnosis = ({ data }: { data: Primitives<Appointment> }) => {
   const [editing, setEditing] = useState<any>(false);
+  const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([]);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -206,6 +207,32 @@ const Diagnosis = ({ data }: { data: Primitives<Appointment> }) => {
                       </FormItem>
                     )}
                   />
+                  <Combobox
+                    onChange={(v) => {
+                      const value = v as string;
+                      const symptom = data.symptoms?.find((s) => s.name == value);
+                      if (!symptom) return;
+                      setSelectedSymptoms((current) =>
+                        current.includes(symptom.name)
+                          ? current.filter((s) => s !== symptom.name)
+                          : [...current, symptom.name]
+                      );
+                    }}
+                    options={(data.symptoms || []).map(transformOption)}
+                    placeholder="Síntomas presentes relacionados"
+                  />
+                  <div className="flex items-center gap-2 flex-wrap my-3">
+                    {selectedSymptoms.map((symptom, index) => (
+                      <Button
+                        key={index}
+                        className="rounded-full h-8 px-3 bg-secondary hover:bg-secondary font-normal text-[#878787] flex justify-start group "
+                        onClick={() => setSelectedSymptoms((current) => current.filter((s) => s !== symptom))}
+                      >
+                        <X className="scale-0 group-hover:scale-100 transition-all w-0 group-hover:w-4" />
+                        <span>{symptom}</span>
+                      </Button>
+                    ))}
+                  </div>
                   <FormField
                     control={form.control}
                     name="diagnosis"

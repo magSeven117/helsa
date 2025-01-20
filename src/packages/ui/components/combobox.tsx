@@ -1,6 +1,6 @@
 'use client';
 
-import { Check, ChevronsUpDown, LucideIcon } from 'lucide-react';
+import { Check, ChevronsUpDown, Loader2, LucideIcon } from 'lucide-react';
 import * as React from 'react';
 
 import { Button } from '@helsa/ui/components/button';
@@ -20,16 +20,27 @@ export interface ComboBoxProps {
   placeholder?: string;
   value?: string;
   onChange: (value: string) => void;
+  loading?: boolean;
 }
 export const Combobox = React.forwardRef<any, ComboBoxProps>(
-  ({ options, placeholder = 'Select item', value, onChange, ...props }, ref) => {
+  ({ options, placeholder = 'Select item', value, onChange, loading = false, ...props }, ref) => {
     const [open, setOpen] = React.useState(false);
     return (
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <Button variant="outline" role="combobox" aria-expanded={open} className="w-full justify-between">
+          <Button
+            variant="outline"
+            role="combobox"
+            aria-expanded={open}
+            className="w-full justify-between"
+            disabled={loading}
+          >
             {value ? options.find((element) => element.value === value)?.label : placeholder}
-            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            {loading ? (
+              <Loader2 className="ml-2 h-4 w-4 shrink-0 opacity-50 animate-spin" />
+            ) : (
+              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            )}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="popover-content-width-same-as-its-trigger p-0 rounded-none">
