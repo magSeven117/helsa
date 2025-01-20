@@ -3,6 +3,7 @@ import { createSafeActionClient } from 'next-safe-action';
 import { z } from 'zod';
 import { authMiddleware } from './middlewares/auth-middleware';
 import { loggerMiddleware } from './middlewares/logger-middleware';
+import { rateLimitMiddleware } from './middlewares/rate-limit-middleware';
 import { trackingMiddleware } from './middlewares/tracking-middleware';
 
 export const actionClient = createSafeActionClient({
@@ -22,6 +23,8 @@ export const actionClient = createSafeActionClient({
         .optional(),
     });
   },
-}).use(loggerMiddleware);
+})
+  .use(loggerMiddleware)
+  .use(rateLimitMiddleware);
 
 export const authActionClient = actionClient.use(authMiddleware).use(trackingMiddleware);

@@ -1,6 +1,8 @@
 'use client';
+import { getPathologies } from '@/src/actions/diagnostic/get-pathologies';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { Appointment } from '@helsa/engine/appointment/domain/appointment';
+import { Pathology } from '@helsa/engine/diagnostic/domain/pathology';
 import { Accordion } from '@helsa/ui/components/accordion';
 import { Badge } from '@helsa/ui/components/badge';
 import { Button } from '@helsa/ui/components/button';
@@ -12,7 +14,8 @@ import { Textarea } from '@helsa/ui/components/textarea';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@helsa/ui/components/tooltip';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ClipboardMinus, ExternalLink, TextSearchIcon, Trash2, X } from 'lucide-react';
-import { useState } from 'react';
+import { useAction } from 'next-safe-action/hooks';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import Treatment from './treatment';
@@ -38,19 +41,6 @@ const diagnoses = [
   },
 ];
 
-const diagnosesCodes = [
-  {
-    id: '229kskfjgsdkjfsjkdgffjg',
-    name: 'Gripe',
-    code: '216787812',
-  },
-  {
-    id: '229kskfjgsdkjfsjkdgffjg',
-    name: 'Cardiopatia',
-    code: '216787812',
-  },
-];
-
 function transformOption(specialty: { id: string; name: string }) {
   return {
     value: specialty.name,
@@ -60,7 +50,20 @@ function transformOption(specialty: { id: string; name: string }) {
 
 const Diagnosis = ({ data }: { data: Primitives<Appointment> }) => {
   const [editing, setEditing] = useState<any>(false);
+  const [fetching, setFetching] = useState(true);
   const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([]);
+  const [diagnosesCodes, setDiagnosesCodes] = useState<Primitives<Pathology>[]>([]);
+  const action = useAction(getPathologies, {
+    onSuccess: ({ data }) => {
+      setFetching(false);
+      console.log(data);
+      if (!data) {
+        setDiagnosesCodes([]);
+        return;
+      }
+      setDiagnosesCodes(data);
+    },
+  });
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -69,6 +72,13 @@ const Diagnosis = ({ data }: { data: Primitives<Appointment> }) => {
       notes: '',
     },
   });
+
+  useEffect(() => {
+    if (editing) {
+      action.execute();
+    }
+  }, [editing]);
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {};
   return (
     <Sheet>
@@ -247,6 +257,7 @@ const Diagnosis = ({ data }: { data: Primitives<Appointment> }) => {
                             options={diagnosesCodes.map(transformOption)}
                             placeholder="Diagnostico"
                             value={field.value}
+                            loading={fetching}
                           />
                         </FormControl>
                         <FormMessage />
