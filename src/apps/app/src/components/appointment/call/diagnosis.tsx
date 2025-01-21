@@ -1,7 +1,11 @@
 'use client';
+import { createDiagnosis } from '@/src/actions/diagnostic/create-diagnosis';
 import { getPathologies } from '@/src/actions/diagnostic/get-pathologies';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { Appointment } from '@helsa/engine/appointment/domain/appointment';
+import { DiagnosisStatusValues } from '@helsa/engine/diagnostic/domain/diagnosis-status';
+import { DiagnosisTypeValues } from '@helsa/engine/diagnostic/domain/diagnosis-type';
+import { Diagnostic } from '@helsa/engine/diagnostic/domain/diagnostic';
 import { Pathology } from '@helsa/engine/diagnostic/domain/pathology';
 import { Accordion } from '@helsa/ui/components/accordion';
 import { Badge } from '@helsa/ui/components/badge';
@@ -13,10 +17,12 @@ import { Sheet, SheetContent, SheetHeader, SheetOverlay, SheetTitle, SheetTrigge
 import { Textarea } from '@helsa/ui/components/textarea';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@helsa/ui/components/tooltip';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ClipboardMinus, ExternalLink, TextSearchIcon, Trash2, X } from 'lucide-react';
+import { ClipboardMinus, ExternalLink, Loader2, TextSearchIcon, Trash2, X } from 'lucide-react';
 import { useAction } from 'next-safe-action/hooks';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { v4 } from 'uuid';
 import { z } from 'zod';
 import Treatment from './treatment';
 
@@ -24,22 +30,8 @@ const formSchema = z.object({
   diagnosis: z.string(),
   symptoms: z.string(),
   notes: z.string(),
+  type: z.enum(['ALLERGY', 'DISEASE', 'CHRONIC_DISEASE', 'SYMPTOM']),
 });
-
-const diagnoses = [
-  {
-    description: 'Gripe',
-    code: 'ALSKIAS2',
-    type: 'DISEASE',
-    symptoms: ['Apnea', 'Mucosidad', 'Tos'],
-  },
-  {
-    description: 'Neumonia',
-    code: 'ALSKIA43',
-    type: 'DISEASE',
-    symptoms: ['Asfixia', 'Tos', 'Fiebre'],
-  },
-];
 
 function transformOption(specialty: { id: string; name: string }) {
   return {
@@ -51,8 +43,10 @@ function transformOption(specialty: { id: string; name: string }) {
 const Diagnosis = ({ data }: { data: Primitives<Appointment> }) => {
   const [editing, setEditing] = useState<any>(false);
   const [fetching, setFetching] = useState(true);
+  const [diagnoses, setDiagnoses] = useState<Primitives<Diagnostic>[]>(data.diagnostics ?? []);
   const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([]);
   const [diagnosesCodes, setDiagnosesCodes] = useState<Primitives<Pathology>[]>([]);
+  const [loading, setLoading] = useState(false);
   const action = useAction(getPathologies, {
     onSuccess: ({ data }) => {
       setFetching(false);
@@ -79,7 +73,36 @@ const Diagnosis = ({ data }: { data: Primitives<Appointment> }) => {
     }
   }, [editing]);
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {};
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      const id = v4();
+      await createDiagnosis({
+        id,
+        type: values.type,
+        description: values.notes,
+        patientId: data.patientId,
+        doctorId: data.doctorId,
+        appointmentId: data.id,
+        pathologyId: diagnosesCodes.find((d) => d.name === values.diagnosis)?.id!,
+      });
+      const newDiagnosis = {
+        id,
+        description: values.notes,
+        type: values.type as DiagnosisTypeValues,
+        patientId: data.patientId,
+        doctorId: data.doctorId,
+        appointmentId: data.id,
+        pathologyId: diagnosesCodes.find((d) => d.name === values.diagnosis)?.id!,
+        status: 'ACTIVE' as DiagnosisStatusValues,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+      setDiagnoses((current) => [...current, newDiagnosis]);
+      setEditing(false);
+    } catch (error) {
+      toast.success('Diagnostico agregado correctamente');
+    }
+  };
   return (
     <Sheet>
       <SheetOverlay />
@@ -108,7 +131,7 @@ const Diagnosis = ({ data }: { data: Primitives<Appointment> }) => {
                       <ExternalLink />
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent>
+                  <TooltipContent className="rounded-none">
                     <p>Ir al historial de diagnósticos</p>
                   </TooltipContent>
                 </Tooltip>
@@ -120,9 +143,11 @@ const Diagnosis = ({ data }: { data: Primitives<Appointment> }) => {
               <div className="flex justify-between flex-col gap-4 flex-1">
                 <Accordion type="single" collapsible className="">
                   {diagnoses?.map((diagnosis, index) => (
-                    <div key={`${diagnosis.code}-${index}`} className="flex items-center justify-between py-1 px-6">
+                    <div key={`${diagnosis.id}-${index}`} className="flex items-center justify-between py-1 px-6">
                       <div className="flex items-center gap-5">
-                        <div className="text-sm font-bold">{diagnosis.description}</div>
+                        <div className="text-sm font-bold">
+                          {diagnosesCodes.find((c) => c.id === diagnosis.pathologyId)?.name!}
+                        </div>
                         <Badge className="" variant={'outline'}>
                           {diagnosis.type}
                         </Badge>
@@ -143,7 +168,7 @@ const Diagnosis = ({ data }: { data: Primitives<Appointment> }) => {
                         <TooltipProvider>
                           <Tooltip>
                             <TooltipTrigger>
-                              <Treatment name={diagnosis.description} />
+                              <Treatment name={diagnosesCodes.find((c) => c.id === diagnosis.pathologyId)?.name!} />
                             </TooltipTrigger>
                             <TooltipContent className="rounded-none">
                               <p>Tratamiento</p>
@@ -175,15 +200,11 @@ const Diagnosis = ({ data }: { data: Primitives<Appointment> }) => {
           )}
           {editing && (
             <Form {...form}>
-              <form
-                action=""
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="flex flex-col gap-4 justify-between flex-1"
-              >
+              <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4 justify-between flex-1">
                 <div className="flex flex-col gap-4">
                   <FormField
                     control={form.control}
-                    name="symptoms"
+                    name="type"
                     render={({ field }) => (
                       <FormItem className="">
                         <FormLabel className="text-sm">Tipo de diagnostico</FormLabel>
@@ -282,14 +303,8 @@ const Diagnosis = ({ data }: { data: Primitives<Appointment> }) => {
                   <Button onClick={(e) => setEditing(false)} className="flex-1">
                     Cancelar
                   </Button>
-                  <Button
-                    className="flex-1"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setEditing(false);
-                    }}
-                  >
-                    Guardar diagnostico
+                  <Button type="submit" disabled={form.formState.isSubmitting} className="rounded-none flex-1">
+                    {form.formState.isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Guardar diagnostico'}
                   </Button>
                 </div>
               </form>
