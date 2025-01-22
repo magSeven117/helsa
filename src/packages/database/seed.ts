@@ -12,6 +12,13 @@ async function main() {
   await prisma.appointmentType.createMany({
     data: appointmentTypes,
   });
+
+  await prisma.symptom.createMany({
+    data: symptoms,
+  });
+  await prisma.pathology.createMany({
+    data: pathologies,
+  });
 }
 
 const specialties = [
@@ -35,6 +42,144 @@ const specialties = [
   { name: 'Reumatología' },
   { name: 'Traumatología' },
   { name: 'Urología' },
+];
+
+const symptoms = [
+  {
+    name: 'Silbido en el pecho',
+  },
+  {
+    name: 'Dolor de pecho/cuello',
+  },
+  {
+    name: 'Quejido',
+  },
+  {
+    name: 'Escalofríos y/o sudoración',
+  },
+  {
+    name: 'Dolor de cabeza',
+  },
+  {
+    name: 'Dolor de músculos o cuerpo',
+  },
+  {
+    name: 'Molestias al tragar o falta de apetito',
+  },
+  {
+    name: 'Mucosidad nasal',
+  },
+  {
+    name: 'Congestión nasal',
+  },
+  {
+    name: 'Irritabilidad',
+  },
+  {
+    name: 'Alteración de la voz',
+  },
+  {
+    name: 'Dificultad respiratoria',
+  },
+  {
+    name: 'Dolor de oído',
+  },
+  {
+    name: 'Conjuntivitis',
+  },
+  {
+    name: 'Diarrea',
+  },
+  {
+    name: 'Vómito',
+  },
+  {
+    name: 'Fatiga',
+  },
+  {
+    name: 'Compromiso de conciencia',
+  },
+  {
+    name: 'Respiración rápida',
+  },
+  {
+    name: 'Falta de oxígeno o cianosis',
+  },
+  {
+    name: 'Respiración lenta o ausencia de respiración',
+  },
+  {
+    name: 'Tos',
+  },
+  {
+    name: 'Temperatura',
+  },
+];
+
+const pathologies = [
+  {
+    name: 'Asma',
+  },
+  {
+    name: 'Bronconeumonía',
+  },
+  {
+    name: 'Bronquiolitis Aguda',
+  },
+  {
+    name: 'Bronquitis/Obstructiva Aguda/Crónica',
+  },
+  {
+    name: 'Influenza',
+  },
+  {
+    name: 'Neumonía Viral',
+  },
+  {
+    name: 'Síndrome Bronquial Obstructivo',
+  },
+  {
+    name: 'Resfriado común',
+  },
+  {
+    name: 'Epiglotitis',
+  },
+  {
+    name: 'Coqueluche',
+  },
+  {
+    name: 'Laringitis Aguda',
+  },
+  {
+    name: 'Laringitis Aguda Obstructiva',
+  },
+  {
+    name: 'Laringotraqueitis',
+  },
+  {
+    name: 'Neumonía Bacteriana',
+  },
+  {
+    name: 'Síndrome Coqueluchoide',
+  },
+  {
+    name: 'Traqueitis',
+  },
+  {
+    name: 'Faringoamigdalitis',
+  },
+  {
+    name: 'Adenoiditis Aguda',
+  },
+  {
+    name: 'Sinusitis',
+  },
+  {
+    name: 'Covid 19',
+  },
+  {
+    name: 'Neumonía Atópica',
+  },
 ];
 
 const appointmentTypes = [

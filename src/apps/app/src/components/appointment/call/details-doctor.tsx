@@ -1,6 +1,5 @@
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { Appointment } from '@helsa/engine/appointment/domain/appointment';
-import { OrganDonors } from '@helsa/engine/patient/domain/members/biometric';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@helsa/ui/components/accordion';
 import { Avatar, AvatarFallback, AvatarImage } from '@helsa/ui/components/avatar';
 import { Badge } from '@helsa/ui/components/badge';
@@ -33,19 +32,11 @@ const DetailsDoctor = ({ data }: { data: Primitives<Appointment> }) => {
                   <Link href={`/patients/${data?.patient?.id}`} target="_blank">
                     <ExternalLink className="size-4 ml-3" />
                   </Link>{' '}
-                  {/* <Badge variant={'outline'}>26 años</Badge>
-                  <Badge variant={'outline'}>Masculino</Badge>
-                  {data.patient?.biometric.organDonor === OrganDonors.Yes && <Badge variant={'outline'}>Donador</Badge>}
-                  <Badge variant={'outline'}>{data.patient?.biometric.bloodType}</Badge> */}
                 </SheetTitle>
               </div>
             </div>
           </SheetHeader>
           <div className="flex gap-2 px-1 border-b py-2">
-            <div className="flex justify-start items-center gap-2 text-sm">
-              {/* <p className="">Estado civil:</p>
-              <Badge variant={'outline'}>{data.patient?.demographic.civilStatus}</Badge> */}
-            </div>
             <div className="flex justify-start items-center gap-2 text-sm">
               <p className="">Especialidad:</p>
               <Badge variant={'outline'}>{data.doctor?.specialty?.name || ''}</Badge>
@@ -62,8 +53,11 @@ const DetailsDoctor = ({ data }: { data: Primitives<Appointment> }) => {
           <div className="space-y-3 px-1 py-3">
             <p className="text-lg ">Síntomas</p>
             <div className="flex justify-start items-center gap-2">
-              <Badge variant={'outline'}>Fiebre</Badge>
-              <Badge variant={'outline'}>Dolor de cabeza</Badge>
+              {data?.symptoms?.map((symptom) => (
+                <Badge key={symptom.id} variant={'outline'}>
+                  {symptom.name}
+                </Badge>
+              ))}
             </div>
           </div>
           <Accordion type="multiple" defaultValue={['attachments']} className="w-full px-1">

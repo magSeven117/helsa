@@ -61,8 +61,11 @@ const Details = ({ data }: { data: Primitives<Appointment> }) => {
           <div className="space-y-3 px-1 py-3">
             <p className="text-lg ">Síntomas</p>
             <div className="flex justify-start items-center gap-2">
-              <Badge variant={'outline'}>Fiebre</Badge>
-              <Badge variant={'outline'}>Dolor de cabeza</Badge>
+              {data?.symptoms?.map((symptom) => (
+                <Badge key={symptom.id} variant={'outline'}>
+                  {symptom.name}
+                </Badge>
+              ))}
             </div>
           </div>
           <Accordion type="multiple" defaultValue={['attachments']} className="w-full px-1">

@@ -2,6 +2,7 @@
 
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { AppointmentType } from '@helsa/engine/appointment/domain/appointment-type';
+import { Symptom } from '@helsa/engine/appointment/domain/symptom';
 import { Doctor } from '@helsa/engine/doctor/domain/doctor';
 import { useQueryState } from 'nuqs';
 import BookSheet from './book-sheet';
@@ -10,8 +11,9 @@ import DoctorCard from './doctor-card';
 type Props = {
   doctors: Primitives<Doctor>[];
   types: Primitives<AppointmentType>[];
+  symptoms: Primitives<Symptom>[];
 };
-const DoctorList = ({ doctors, types }: Props) => {
+const DoctorList = ({ doctors, types, symptoms }: Props) => {
   const [doctorId, setDoctorId] = useQueryState('id');
   const setOpen = (id: string | boolean) => {
     if (id) {
@@ -26,7 +28,7 @@ const DoctorList = ({ doctors, types }: Props) => {
       {doctors.map((doctor, index) => {
         return <DoctorCard doctor={doctor} key={index} />;
       })}
-      <BookSheet isOpen={Boolean(doctorId)} setOpen={setOpen} data={doctor} types={types} />
+      <BookSheet isOpen={Boolean(doctorId)} setOpen={setOpen} data={doctor} types={types} symptoms={symptoms} />
     </div>
   );
 };

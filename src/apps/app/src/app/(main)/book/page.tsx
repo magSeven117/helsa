@@ -29,6 +29,7 @@ const Page = async ({ searchParams }: { searchParams: Record<string, string | st
   };
   const responseSpecialties = await getSpecialties();
   const specialties = responseSpecialties?.data ?? [];
+
   const loadingKey = JSON.stringify({
     query: q,
     filter,

@@ -1,5 +1,6 @@
 'use client';
 
+import { revalidateDash } from '@/src/actions/shared/revalidate-dash';
 import { authClient } from '@helsa/auth/client';
 import { Button } from '@helsa/ui/components/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@helsa/ui/components/card';
@@ -37,7 +38,7 @@ export default function SignInForm() {
       });
 
       if (signInAttempt.data) {
-        revalidatePath('/dashboard');
+        await revalidateDash();
         router.push('/dashboard');
       } else {
         toast.error('Invalid email or password');
