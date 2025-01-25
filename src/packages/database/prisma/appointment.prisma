@@ -32,6 +32,7 @@ model Appointment {
   recipes     AppointmentRecipe?
   notes       AppointmentNote[]
   diagnostics Diagnostic[]
+  documents   MedicalDocument[]
 }
 
 enum AppointmentStatus {

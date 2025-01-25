@@ -1,15 +1,85 @@
+'use client';
+import { uploadDocument } from '@/src/actions/medical-document/upload-document';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { Appointment } from '@helsa/engine/appointment/domain/appointment';
+import { upload } from '@helsa/storage';
+import { createClient } from '@helsa/supabase/client';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@helsa/ui/components/accordion';
 import { Avatar, AvatarFallback, AvatarImage } from '@helsa/ui/components/avatar';
 import { Badge } from '@helsa/ui/components/badge';
 import { Button } from '@helsa/ui/components/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@helsa/ui/components/sheet';
 import { Textarea } from '@helsa/ui/components/textarea';
-import { ExternalLink, FileText, Paperclip, ReceiptText, StickyNote } from 'lucide-react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { ClipboardMinus, ExternalLink, FileText, Loader2, Paperclip, ReceiptText, StickyNote } from 'lucide-react';
 import Link from 'next/link';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { toast } from 'sonner';
+import { Form, FormControl, FormField, FormItem, FormMessage } from '@helsa/ui/components/form';
+import { Input } from '@helsa/ui/components/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@helsa/ui/components/select';
+import { createAppointmentNote } from '@/src/actions/appointment/create-appointment-note';
 
+const formSchema = z.object({
+  description: z.string(),
+  documentType: z.string(),
+});
+
+const noteSchema = z.object({ note: z.string() });
+
+const documentTypes = [
+  { id: 'MEDICAL_RECORD', name: 'Historial médico' },
+  { id: 'PRESCRIPTION', name: 'Receta' },
+  { id: 'IMAGE', name: 'Imagen' },
+  { id: 'LABORATORY_RESULT', name: 'Resultado de laboratorio' },
+  { id: 'RADIOLOGY', name: 'Radiología' },
+  { id: 'OTHER', name: 'Otro' },
+];
 const DetailsDoctor = ({ data }: { data: Primitives<Appointment> }) => {
+  const [document, setDocument] = useState<File | null>(null);
+  const [editing, setEditing] = useState<any>(false);
+  const [noteEditing, setNoteEditing] = useState<any>(false);
+
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: { description: '', documentType: '' },
+  });
+
+  const noteForm = useForm({ resolver: zodResolver(noteSchema), defaultValues: { note: '' } });
+  const onSubmit = async (values: { description: string; documentType: string }) => {
+    if (document) {
+      const supabase = createClient();
+      const res = await upload(supabase, {
+        file: document,
+        path: [data.patientId, values.documentType, document.name],
+        bucket: 'medical-documents',
+      });
+      if (res) {
+        await uploadDocument({
+          url: res,
+          description: values.description,
+          appointmentId: data.id,
+          patientId: data.patientId,
+          documentType: values.documentType,
+          filename: document.name,
+        });
+      }
+      setEditing(false);
+      toast.success('Documento agregado correctamente');
+      form.reset();
+      setDocument(null);
+    }
+  };
+  const noteOnSubmit = async (values: { note: string }) => {
+    await createAppointmentNote({ appointmentId: data.id, note: values.note });
+    setNoteEditing(false);
+    toast.success('Nota agregada correctamente');
+    noteForm.reset();
+  };
+
+  const noteValue = noteForm.watch('note');
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -68,24 +138,91 @@ const DetailsDoctor = ({ data }: { data: Primitives<Appointment> }) => {
                 </div>
               </AccordionTrigger>
               <AccordionContent className="flex flex-col gap-3">
-                <div className="flex justify-start items-center gap-2 text-muted-foreground">
-                  <FileText className="size-4" />
-                  <span>Archivo adjunto</span>
-                  <span>130 KBs</span>
-                </div>
-                <div className="flex justify-start items-center gap-2 text-muted-foreground">
-                  <FileText className="size-4" />
-                  <span>Análisis de sangre</span>
-                  <span>130 KBs</span>
-                </div>
-                <div className="flex justify-start items-center gap-2 text-muted-foreground">
-                  <FileText className="size-4" />
-                  <span>Archivo adjunto</span>
-                  <span>130 KBs</span>
-                </div>
-                <Button className="w-full gap-3 h-9" variant={'secondary'}>
-                  Adjuntar archivo <Paperclip className="size-4" />
-                </Button>
+                {!editing && (
+                  <>
+                    {data?.documents?.map((document) => (
+                      <div className="flex justify-start items-center gap-2 text-muted-foreground">
+                        <FileText className="size-4" />
+                        <span>{document.fileName}</span>
+                      </div>
+                    ))}
+                    <Button onClick={() => setEditing(true)}>
+                      <ClipboardMinus className="size-4" />
+                      Agregar Archivo
+                    </Button>
+                  </>
+                )}
+                {editing && (
+                  <Form {...form}>
+                    <form action="" onSubmit={form.handleSubmit(onSubmit)}>
+                      <Input
+                        className="rounded-none"
+                        type="file"
+                        onChange={(e) => {
+                          setDocument(e.target.files?.[0]!);
+                        }}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="description"
+                        render={({ field }) => (
+                          <FormItem className="my-2">
+                            <FormControl>
+                              <Textarea
+                                placeholder="Describe el contenido del documento aqui"
+                                {...field}
+                                className="min-h-[100px] rounded-none"
+                              />
+                            </FormControl>
+                            <FormMessage></FormMessage>
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="documentType"
+                        render={({ field }) => (
+                          <FormItem className="flex-1 mb-3">
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger className="w-full rounded-none">
+                                  <SelectValue placeholder="Selecciona un tipo de documento" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent className="rounded-none">
+                                {documentTypes.map((method) => (
+                                  <SelectItem key={method.id} value={method.id} className="rounded-none">
+                                    {method.name}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <div className="flex w-full gap-3">
+                        <Button
+                          onClick={(e) => {
+                            setEditing(false);
+                            form.reset();
+                          }}
+                          className="flex-1"
+                        >
+                          Cancelar
+                        </Button>
+
+                        <Button
+                          className=" gap-3 flex-1"
+                          variant={'secondary'}
+                          disabled={!document || form.formState.isSubmitted}
+                        >
+                          {form.formState.isSubmitting ? <Loader2 className="size-4 animate-spin" /> : 'Subir archivo'}
+                        </Button>
+                      </div>
+                    </form>
+                  </Form>
+                )}
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="notes">
@@ -94,23 +231,54 @@ const DetailsDoctor = ({ data }: { data: Primitives<Appointment> }) => {
                   Notas <StickyNote className="size-4" />
                 </div>
               </AccordionTrigger>
-              <AccordionContent className="flex flex-col gap-3">
-                <div className="flex justify-start items-center gap-2 text-muted-foreground">
-                  <StickyNote className="size-4" />
-                  <span>Lorem ipsum, dolor sit amet consectetur adipisicing elit.</span>
-                </div>
-                <div className="flex justify-start items-center gap-2 text-muted-foreground">
-                  <StickyNote className="size-4" />
-                  <span>Temporibus molestias quibusdam accusantium magni numquam saepe!</span>
-                </div>
 
-                <Textarea
-                  className="mt-2 rounded-none resize-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-transparent"
-                  placeholder="Escribe cualquier comentario"
-                ></Textarea>
-                <Button className="w-full gap-3 h-9" variant={'secondary'}>
-                  Agregar nota <StickyNote className="size-4" />
-                </Button>
+              <AccordionContent className="flex flex-col gap-3">
+                {!noteEditing && (
+                  <>
+                    {data.notes?.map((note) => (
+                      <div className="flex justify-start items-center gap-2 text-muted-foreground mb-2">
+                        <StickyNote className="size-4" />
+                        <span className="flex-1 text-justify">{note.description}</span>
+                      </div>
+                    ))}
+
+                    <Button onClick={() => setNoteEditing(true)}>
+                      <ClipboardMinus className="size-4" />
+                      Agregar Nota
+                    </Button>
+                  </>
+                )}
+                {noteEditing && (
+                  <Form {...noteForm}>
+                    <form onSubmit={noteForm.handleSubmit(noteOnSubmit)}>
+                      <Textarea
+                        {...noteForm.register('note')}
+                        className="mt-2 rounded-none resize-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-transparent
+                        mb-2"
+                        placeholder="Escribe una nota"
+                        name="note"
+                      ></Textarea>
+                      <div className="flex w-full gap-3">
+                        <Button
+                          onClick={(e) => {
+                            setNoteEditing(false);
+                            noteForm.reset();
+                          }}
+                          className="flex-1"
+                        >
+                          Cancelar
+                        </Button>
+                        <Button className="gap-3 h-9 flex-1" variant={'secondary'} disabled={!noteValue}>
+                          {noteForm.formState.isSubmitting ? (
+                            <Loader2 className="size-4 animate-spin" />
+                          ) : (
+                            'Agregar Nota'
+                          )}
+                        </Button>
+                      </div>
+                    </form>
+                  </Form>
+                )}
               </AccordionContent>
             </AccordionItem>
           </Accordion>
