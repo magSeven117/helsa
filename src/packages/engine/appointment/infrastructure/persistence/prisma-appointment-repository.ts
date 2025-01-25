@@ -7,6 +7,7 @@ import { Appointment } from '../../domain/appointment';
 import { AppointmentRepository } from '../../domain/appointment-repository';
 import { AppointmentType } from '../../domain/appointment-type';
 import { Symptom } from '../../domain/symptom';
+import { AppointmentNote } from '../../domain/note';
 
 export class PrismaAppointmentRepository implements AppointmentRepository {
   private converter = new PrismaCriteriaConverter();
@@ -67,8 +68,21 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
   }
 
   async save(appointment: Appointment, symptomsOfThePatient?: string[]): Promise<void> {
-    const { notes, diagnostics, symptoms, rating, recipe, room, telemetry, doctor, type, patient, price, ...data } =
-      appointment.toPrimitives();
+    const {
+      notes,
+      diagnostics,
+      symptoms,
+      rating,
+      recipe,
+      room,
+      telemetry,
+      doctor,
+      type,
+      patient,
+      price,
+      documents,
+      ...data
+    } = appointment.toPrimitives();
     await this.model.upsert({
       where: { id: data.id },
       update: data,
@@ -104,6 +118,7 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
             surgeries: true,
           },
         },
+        documents: true,
       },
     });
     if (!appointment) {
@@ -120,5 +135,22 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
   async getSymptoms(): Promise<Symptom[]> {
     const symptoms = await this.client.symptom.findMany();
     return symptoms.map((symptom) => Symptom.fromPrimitives(symptom));
+  }
+
+  async saveNotes(note: AppointmentNote): Promise<void> {
+    const { appointmentId, date, description, id } = note.toPrimitives();
+
+    await this.model.update({
+      where: { id: appointmentId },
+      data: {
+        notes: {
+          create: {
+            id,
+            date,
+            description,
+          },
+        },
+      },
+    });
   }
 }
