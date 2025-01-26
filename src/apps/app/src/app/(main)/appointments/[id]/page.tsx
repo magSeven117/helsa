@@ -2,6 +2,7 @@ import { generateUserToken } from '@/src/actions/appointment/generate-user-token
 import { getAppointment } from '@/src/actions/appointment/get-appointment';
 import { getCurrentUser } from '@/src/actions/user/get-current-user';
 import Actions from '@/src/components/appointment/call/actions';
+import AddVitals from '@/src/components/appointment/call/add-vitals';
 import Details from '@/src/components/appointment/call/details';
 import DetailsDoctor from '@/src/components/appointment/call/details-doctor';
 import Diagnosis from '@/src/components/appointment/call/diagnosis';
@@ -26,7 +27,10 @@ const Page = async ({ params }: { params: { id: string } }) => {
               : appointment.patient?.user?.name!}
           </p>
         </div>
-        <div className="p-0 bg-transparent items-center justify-end  hover:bg-transparent flex h-full gap-3">
+      
+        <div className="p-0 bg-transparent items-center justify-end  hover:bg-transparent flex h-full gap-4">
+        
+          {user?.data?.role === UserRoleValue.DOCTOR &&   <AddVitals />}
           {user?.data?.role === UserRoleValue.PATIENT && <DetailsDoctor data={appointment} />}
           {user?.data?.role === UserRoleValue.DOCTOR && <Details data={appointment} />}
           <Diagnosis data={appointment} />
