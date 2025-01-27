@@ -141,7 +141,7 @@ const DetailsDoctor = ({ data }: { data: Primitives<Appointment> }) => {
                 {!editing && (
                   <>
                     {data?.documents?.map((document) => (
-                      <div className="flex justify-start items-center gap-2 text-muted-foreground">
+                      <div className="flex justify-start items-center gap-2 text-muted-foreground" key={document.id}>
                         <FileText className="size-4" />
                         <span>{document.fileName}</span>
                       </div>
@@ -236,7 +236,7 @@ const DetailsDoctor = ({ data }: { data: Primitives<Appointment> }) => {
                 {!noteEditing && (
                   <>
                     {data.notes?.map((note) => (
-                      <div className="flex justify-start items-center gap-2 text-muted-foreground mb-2">
+                      <div className="flex justify-start items-center gap-2 text-muted-foreground mb-2" key={note.id}>
                         <StickyNote className="size-4" />
                         <span className="flex-1 text-justify">{note.description}</span>
                       </div>
