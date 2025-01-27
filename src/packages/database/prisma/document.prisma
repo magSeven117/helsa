@@ -1,12 +1,15 @@
 model MedicalDocument {
-  id            String       @id @default(uuid())
-  documentType  DocumentType
-  description String
+  id           String       @id @default(uuid())
+  documentType DocumentType
+  description  String
   url          String
   fileName     String
 
-  patientId    String
-  patient      Patient @relation(fields: [patientId], references: [id])
+  patientId String
+  patient   Patient @relation(fields: [patientId], references: [id])
+
+  appointmentId String?
+  appointment   Appointment? @relation(fields: [appointmentId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

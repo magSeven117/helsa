@@ -7,12 +7,13 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
-    "@helsa/typescript-config": "*",
-    "@helsa/database": "*",
-    "@helsa/env": "*",
     "@helsa/cache": "*",
+    "@helsa/database": "*",
     "@helsa/ddd": "*",
     "@helsa/email": "*",
+    "@helsa/env": "*",
+    "@helsa/storage": "^0.1.0",
+    "@helsa/typescript-config": "*",
     "date-fns": "^3.6.0",
     "date-fns-tz": "^3.2.0"
   },
