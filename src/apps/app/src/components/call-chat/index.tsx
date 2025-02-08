@@ -15,8 +15,8 @@ const CallCHat = ({ id }: { id: string }) => {
   return (
     <>
       <div className="h-2"></div>
-      <ChatList userId={user.id} appointmentId={id} />
-      <ChatFooter userId={user.id} appointmentId={id} />
+      <ChatList userId={user!.id} appointmentId={id} />
+      <ChatFooter userId={user!.id} appointmentId={id} />
     </>
   );
 };

@@ -40,6 +40,9 @@ export const VideoCall = ({ id, token }: { id: string; token: string }) => {
   const [client, setClient] = useState<StreamVideoClient | null>(null);
   useEffect(() => {
     const init = async () => {
+      if (!user) {
+        return;
+      }
       const newClient = StreamVideoClient.getOrCreateInstance({
         apiKey: process.env.NEXT_PUBLIC_STREAM_CLIENT_KEY ?? '',
         user: {
@@ -59,7 +62,7 @@ export const VideoCall = ({ id, token }: { id: string; token: string }) => {
         setClient(null);
       }
     };
-  }, []);
+  }, [user]);
   if (!client) {
     return null;
   }
