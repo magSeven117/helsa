@@ -35,7 +35,7 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
-  trustedOrigins: ['helsapatient://', 'exp://'],
+  trustedOrigins: ['helsapatient://', 'exp://', 'https://app.helsahealthcare.com'],
   plugins: [
     emailOTP({
       otpLength: 6,
