@@ -31,8 +31,6 @@ export async function AppointmentTable({ filter, pageSize, page, sort, specialti
     order: sort ? sort[1] : undefined,
   });
   const { data, meta } = response?.data ?? { data: [], meta: {} as Meta };
-
-  console.log(data.length);
   if (data.length <= 0) {
     return <NoResults hasFilters={hasFilters} />;
   }

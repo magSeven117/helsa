@@ -2,8 +2,6 @@
 import logoiso from '@/src/assets/images/HELSA NUEVO BLANCO ISOTIPO.png';
 import logo from '@/src/assets/images/HELSA NUEVO BLANCO.png';
 import logoiso2 from '@/src/assets/images/HELSA NUEVO NEGRO ISOTIPO.png';
-import logo2 from '@/src/assets/images/HELSA NUEVO NEGRO.png';
-import { authClient } from '@helsa/auth/client';
 import {
   Sidebar,
   SidebarContent,
@@ -43,17 +41,13 @@ export interface SectionRoute {
   path: string;
 }
 
-const SideBar = ({ role }: { role: string }) => {
-  const { data } = authClient.useSession();
+const SideBar = ({ user }: { user: any }) => {
   const sections = sideBarItems.map((section) => ({
     title: section.title,
-    routes: section.routes.filter((route) => route.roles.includes(role)),
+    routes: section.routes.filter((route) => route.roles.includes(user.role)),
   }));
   const path = usePathname();
   const theme = useTheme();
-  if (!data?.session) {
-    return null;
-  }
   const { open } = useSidebar();
   return (
     <Sidebar collapsible="icon" className="bg-background border-r">
@@ -65,19 +59,19 @@ const SideBar = ({ role }: { role: string }) => {
           <Link href="/dashboard" className="flex items-center justify-center gap-2">
             {open && (
               <>
-                {theme.theme === 'dark' || theme.theme === 'system' ? (
+                {theme.resolvedTheme === 'dark' ? (
                   <img src={logo.src} alt="" className="rounded-lg object-contain h-[40px]" />
                 ) : (
-                  <img src={logo2.src} alt="" className="rounded-lg object-contain" />
+                  <img src={logo.src} alt="" className="rounded-lg object-contain h-[40px]" />
                 )}
               </>
             )}
             {!open && (
               <>
-                {theme.theme === 'dark' || theme.theme === 'system' ? (
+                {theme.resolvedTheme === 'dark' ? (
                   <img src={logoiso.src} alt="" className="rounded-lg object-contain h-[40px]" />
                 ) : (
-                  <img src={logoiso2.src} alt="" className="rounded-lg object-contain" />
+                  <img src={logoiso2.src} alt="" className="rounded-lg object-contain h-[40px]" />
                 )}
               </>
             )}
