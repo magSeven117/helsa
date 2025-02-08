@@ -6,8 +6,8 @@ import { Primitives } from '@helsa/ddd/types/primitives';
 import { Appointment } from '../../domain/appointment';
 import { AppointmentRepository } from '../../domain/appointment-repository';
 import { AppointmentType } from '../../domain/appointment-type';
-import { Symptom } from '../../domain/symptom';
 import { AppointmentNote } from '../../domain/note';
+import { Symptom } from '../../domain/symptom';
 
 export class PrismaAppointmentRepository implements AppointmentRepository {
   private converter = new PrismaCriteriaConverter();
@@ -27,7 +27,6 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
       notes: true,
       type: true,
       symptoms: true,
-      diagnostics: true,
       doctor: {
         include: {
           user: true,
@@ -70,6 +69,7 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
   async save(appointment: Appointment, symptomsOfThePatient?: string[]): Promise<void> {
     const {
       notes,
+      treatments,
       diagnostics,
       symptoms,
       rating,
@@ -102,6 +102,13 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
         type: true,
         symptoms: true,
         diagnostics: true,
+        treatments: {
+          include: {
+            medication: true,
+            therapy: true,
+            procedure: true,
+          },
+        },
         doctor: {
           include: {
             user: true,
