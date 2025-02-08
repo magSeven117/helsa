@@ -36,7 +36,9 @@ const Page = async ({ params }: { params: { id: string } }) => {
           {user?.data?.role === UserRoleValue.DOCTOR &&   <AddVitals />}
           {user?.data?.role === UserRoleValue.PATIENT && <DetailsDoctor data={appointment} />}
           {user?.data?.role === UserRoleValue.DOCTOR && <Details data={appointment} />}
-          <Actions data={appointment} pathologies={pathologies?.data ?? []} />
+          {user?.data?.role === UserRoleValue.DOCTOR && (
+            <Actions data={appointment} pathologies={pathologies?.data ?? []} />
+          )}
         </div>
       </div>
       <div className="w-full h-full box-border grid grid-cols-8 max-md:grid-cols-1 py-5  gap-4">
