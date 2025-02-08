@@ -82,8 +82,12 @@ export const VideoCallPage = ({ id }: { id: string }) => {
 
   const [call, setCall] = useState<Call | null>(null);
   useEffect(() => {
-    const newCall = client.call('default', id);
-    setCall(newCall);
+    const initCall = async () => {
+      const newCall = client.call('default', id);
+      await newCall.getOrCreate();
+      setCall(newCall);
+    };
+    initCall();
   }, []);
   if (!call) {
     return null;
