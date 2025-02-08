@@ -6,7 +6,9 @@ import { format } from 'date-fns';
 import { Diagnostic } from '../../diagnostic/domain/diagnostic';
 import { Doctor } from '../../doctor/domain/doctor';
 import { Price } from '../../doctor/domain/price';
+import { Document } from '../../document/domain/document';
 import { Patient } from '../../patient/domain/patient';
+import { Treatment } from '../../treatment/domain/treatment';
 import { AppointmentType } from './appointment-type';
 import { AppointmentScheduled } from './events/appointment-scheduled';
 import { AppointmentNote } from './note';
@@ -16,7 +18,6 @@ import { AppointmentRoom } from './room';
 import { AppointmentStatus } from './status';
 import { Symptom } from './symptom';
 import { AppointmentTelemetry } from './telemetry';
-import { Document } from '../../document/domain/document';
 
 export type AppointmentPrimitives = Primitives<Appointment>;
 
@@ -46,7 +47,8 @@ export class Appointment extends Aggregate {
     public price?: Price,
     public symptoms?: Symptom[],
     public diagnostics?: Diagnostic[],
-    public documents?: Document[]
+    public documents?: Document[],
+    public treatments?: Treatment[]
   ) {
     super(id, createdAt, updatedAt);
   }
@@ -78,6 +80,7 @@ export class Appointment extends Aggregate {
       symptoms: this.symptoms ? this.symptoms.map((symptom) => symptom.toPrimitives()) : undefined,
       diagnostics: this.diagnostics ? this.diagnostics.map((diagnosis) => diagnosis.toPrimitives()) : undefined,
       documents: this.documents ? this.documents.map((document) => document.toPrimitives()) : undefined,
+      treatments: this.treatments ? this.treatments.map((treatment) => treatment.toPrimitives()) : undefined,
     };
   }
 
@@ -107,7 +110,8 @@ export class Appointment extends Aggregate {
       data.price ? Price.fromPrimitives(data.price) : undefined,
       data.symptoms ? data.symptoms.map((symptom) => Symptom.fromPrimitives(symptom)) : undefined,
       data.diagnostics ? data.diagnostics.map((diagnosis) => Diagnostic.fromPrimitives(diagnosis)) : undefined,
-      data.documents ? data.documents.map((document) => Document.fromPrimitives(document)) : undefined
+      data.documents ? data.documents.map((document) => Document.fromPrimitives(document)) : undefined,
+      data.treatments ? data.treatments.map((treatment) => Treatment.fromPrimitives(treatment)) : undefined
     );
   }
 

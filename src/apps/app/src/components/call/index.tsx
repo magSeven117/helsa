@@ -33,19 +33,24 @@ import { User } from 'better-auth';
 import { motion } from 'framer-motion';
 import { Mic, MicOff, PhoneIncoming, PhoneOff, Settings, Video, VideoOff } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useLocalStorage } from 'usehooks-ts';
 
-export const VideoCall = ({ id, token, user }: { id: string; token: string; user: User }) => {
+export const VideoCall = ({ id, token }: { id: string; token: string }) => {
+  const [user] = useLocalStorage<User | null>('user', null);
   const [client, setClient] = useState<StreamVideoClient | null>(null);
   useEffect(() => {
     const init = async () => {
+      if (!user) {
+        return;
+      }
       const newClient = StreamVideoClient.getOrCreateInstance({
         apiKey: process.env.NEXT_PUBLIC_STREAM_CLIENT_KEY ?? '',
         user: {
-          id: user.id ?? '',
+          id: user!.id ?? '',
         },
         token,
       });
-      await newClient.connectUser({ id: user.id ?? '' }, token);
+      await newClient.connectUser({ id: user!.id ?? '' }, token);
       setClient(newClient);
     };
 
@@ -57,7 +62,7 @@ export const VideoCall = ({ id, token, user }: { id: string; token: string; user
         setClient(null);
       }
     };
-  }, []);
+  }, [user]);
   if (!client) {
     return null;
   }

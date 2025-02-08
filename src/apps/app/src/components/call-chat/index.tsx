@@ -4,16 +4,19 @@ import { Button } from '@helsa/ui/components/button';
 import { Input } from '@helsa/ui/components/input';
 import { User } from 'better-auth';
 import { formatDistance } from 'date-fns';
+import { fromZonedTime, toDate } from 'date-fns-tz';
+import { es } from 'date-fns/locale';
 import { Send } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { formatInTimeZone, fromZonedTime, toDate, toZonedTime } from 'date-fns-tz';
-import { es } from 'date-fns/locale';
-const CallCHat = ({ id, user }: { id: string; user: User }) => {
+import { useLocalStorage } from 'usehooks-ts';
+const CallCHat = ({ id }: { id: string }) => {
+  const [user] = useLocalStorage<User | null>('user', null);
+  if (!user) return null;
   return (
     <>
       <div className="h-2"></div>
-      <ChatList userId={user.id} appointmentId={id} />
-      <ChatFooter userId={user.id} appointmentId={id} />
+      <ChatList userId={user!.id} appointmentId={id} />
+      <ChatFooter userId={user!.id} appointmentId={id} />
     </>
   );
 };
@@ -67,13 +70,11 @@ const ChatList = ({ userId, appointmentId }: { userId: string; appointmentId: st
             >
               {message.text}
               <span className={`text-xs ${isUserMessage ? '' : 'text-muted-foreground'}`}>
-                {
-                  formatDistance(
-                    toDate(message.createdAt!, { timeZone: 'UTC' }), 
-                    fromZonedTime(new Date(), Intl.DateTimeFormat().resolvedOptions().timeZone),
-                    { addSuffix: false, locale: es }
-                  )
-                }
+                {formatDistance(
+                  toDate(message.createdAt!, { timeZone: 'UTC' }),
+                  fromZonedTime(new Date(), Intl.DateTimeFormat().resolvedOptions().timeZone),
+                  { addSuffix: false, locale: es }
+                )}
               </span>
             </div>
           </div>

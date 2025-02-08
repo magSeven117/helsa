@@ -1,7 +1,7 @@
 'use client';
-import logo2 from '@/src/assets/images/Helsa Logo black.png';
-import logo from '@/src/assets/images/Helsa Logo white.png';
-import { authClient } from '@helsa/auth/client';
+import logoiso from '@/src/assets/images/HELSA NUEVO BLANCO ISOTIPO.png';
+import logo from '@/src/assets/images/HELSA NUEVO BLANCO.png';
+import logoiso2 from '@/src/assets/images/HELSA NUEVO NEGRO ISOTIPO.png';
 import {
   Sidebar,
   SidebarContent,
@@ -12,6 +12,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from '@helsa/ui/components/sidebar';
 import { cn } from '@helsa/ui/lib/utils';
 import {
@@ -40,33 +41,40 @@ export interface SectionRoute {
   path: string;
 }
 
-const SideBar = ({ role }: { role: string }) => {
-  const { data } = authClient.useSession();
+const SideBar = ({ user }: { user: any }) => {
   const sections = sideBarItems.map((section) => ({
     title: section.title,
-    routes: section.routes.filter((route) => route.roles.includes(role)),
+    routes: section.routes.filter((route) => route.roles.includes(user.role)),
   }));
   const path = usePathname();
   const theme = useTheme();
-  if (!data?.session) {
-    return null;
-  }
+  const { open } = useSidebar();
   return (
     <Sidebar collapsible="icon" className="bg-background border-r">
       <SidebarHeader className="bg-background">
         <SidebarMenuButton
           size="lg"
-          className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground rounded-none"
+          className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground rounded-none justify-start data-[state=close]:hidden"
         >
           <Link href="/dashboard" className="flex items-center justify-center gap-2">
-            <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
-              {theme.theme === 'dark' || theme.theme === 'system' ? (
-                <img src={logo.src} alt="" className="rounded-lg" />
-              ) : (
-                <img src={logo2.src} alt="" className="rounded-lg" />
-              )}
-            </div>
-            <p className="text-lg font-bold">Helsa</p>
+            {open && (
+              <>
+                {theme.resolvedTheme === 'dark' ? (
+                  <img src={logo.src} alt="" className="rounded-lg object-contain h-[40px]" />
+                ) : (
+                  <img src={logo.src} alt="" className="rounded-lg object-contain h-[40px]" />
+                )}
+              </>
+            )}
+            {!open && (
+              <>
+                {theme.resolvedTheme === 'dark' ? (
+                  <img src={logoiso.src} alt="" className="rounded-lg object-contain h-[40px]" />
+                ) : (
+                  <img src={logoiso2.src} alt="" className="rounded-lg object-contain h-[40px]" />
+                )}
+              </>
+            )}
           </Link>
         </SidebarMenuButton>
       </SidebarHeader>
