@@ -48,7 +48,7 @@ const SearchDoctorInput = ({ specialties }: Props) => {
     },
     {
       shallow: false,
-    },
+    }
   );
   const [isOpen, setIsOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -70,7 +70,7 @@ const SearchDoctorInput = ({ specialties }: Props) => {
         prompt,
         `
           specialties: ${specialties.map((s) => s.name).join(', ')}
-        `,
+        `
       );
       let finalObject = {};
 
@@ -82,7 +82,7 @@ const SearchDoctorInput = ({ specialties }: Props) => {
             ...partialObject,
             specialties:
               partialObject?.specialties?.map(
-                (name: string) => specialties?.find((specialty) => specialty.name === name)?.name,
+                (name: string) => specialties?.find((specialty) => specialty.name === name)?.name
               ) ?? null,
             q: partialObject?.name ?? null,
             minRate: partialObject?.minRate ?? null,
@@ -110,7 +110,7 @@ const SearchDoctorInput = ({ specialties }: Props) => {
     },
     {
       enableOnFormTags: true,
-    },
+    }
   );
 
   return (
@@ -142,7 +142,7 @@ const SearchDoctorInput = ({ specialties }: Props) => {
               type="button"
               className={cn(
                 'absolute z-10 right-3 top-[10px] opacity-50 transition-opacity duration-300 hover:opacity-100 focus-visible:outline-none focus-visible:ring-0',
-                isOpen && 'opacity-100',
+                isOpen && 'opacity-100'
               )}
             >
               <ListFilter className="size-4" />
@@ -194,7 +194,7 @@ const SearchDoctorInput = ({ specialties }: Props) => {
                 mode="single"
                 initialFocus
                 fromDate={new Date()}
-                selected={filters.availability ? new Date(filters.availability) : new Date()}
+                selected={filters.availability ? new Date(`${filters.availability} 00:00:00`) : new Date()}
                 onSelect={(date) => {
                   setFilters({ availability: formatISO(date!, { representation: 'date' }) });
                 }}
