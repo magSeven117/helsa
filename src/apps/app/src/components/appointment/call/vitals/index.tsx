@@ -1,16 +1,21 @@
-/* eslint-disable react/jsx-no-undef */
+'use client';
 import { Button } from '@helsa/ui/components/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@helsa/ui/components/sheet';
 import { ReceiptText } from 'lucide-react';
-import Vitals from './vitals';
-
-const AddVitals = () => {
+import { useState } from 'react';
+import VitalsForm from './form';
+import VitalsInfo from './info';
+type Props = {
+  appointment: Primitives<Appointment>;
+};
+const Vitals = ({ appointment }: Props) => {
+  const [isEditing, setIsEditing] = useState(false);
   return (
     <Sheet>
       <SheetTrigger asChild>
         <Button className="gap-2" variant={'outline'}>
           <ReceiptText className="size-4" />
-          Add Vitals
+          Signos vitales
         </Button>
       </SheetTrigger>
       <SheetContent className="sm:w-1/3 sm:max-w-full p-4 border-none focus-visible:outline-none">
@@ -23,11 +28,12 @@ const AddVitals = () => {
               </div>
             </div>
           </SheetHeader>
-          <Vitals />
+          {!isEditing && <VitalsInfo toggle={() => setIsEditing((current) => !current)} appointment={appointment} />}
+          {isEditing && <VitalsForm appointment={appointment} toggle={() => setIsEditing((current) => !current)} />}
         </div>
       </SheetContent>
     </Sheet>
   );
 };
 
-export default AddVitals;
+export default Vitals;

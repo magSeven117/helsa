@@ -1,4 +1,5 @@
 'use client';
+import { saveVitals } from '@/src/actions/appointment/save-vitals';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { Appointment } from '@helsa/engine/appointment/domain/appointment';
 /* eslint-disable react/jsx-no-undef */
@@ -8,17 +9,17 @@ import { Input } from '@helsa/ui/components/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 const formSchema = z.object({
-  bodyTemp: z.string(),
+  temperature: z.string(),
   heartRate: z.string(),
-  systoll: z.string(),
-  diastoll: z.string(),
-  Weight: z.string(),
-  height: z.string(),
-  respiratoryRate: z.string(),
-  oxygenSatur: z.string(),
+  bloodPressure: z.string(),
+  weight: z.string(),
+  //height: z.string(),
+  // respiratoryRate: z.string(),
+  // oxygenSatur: z.string(),
 });
 
 type Props = {
@@ -26,22 +27,35 @@ type Props = {
   toggle: VoidFunction;
 };
 
-const Vitals = () => {
+const VitalsForm = ({ toggle, appointment }: Props) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      bodyTemp: '',
+      temperature: '',
+      bloodPressure: '',
       heartRate: '',
-      systoll: '',
-      diastoll: '',
-      Weight: '',
-      height: '',
-      respiratoryRate: '',
-      oxygenSatur: '',
+      weight: '',
+      //height: '',
+      // respiratoryRate: '',
+      // oxygenSatur: '',
     },
     mode: 'all',
   });
-  const submit = async (data: z.infer<typeof formSchema>) => {};
+  const submit = async (data: z.infer<typeof formSchema>) => {
+    try {
+      await saveVitals({
+        appointmentId: appointment.id,
+        temperature: Number(data.temperature),
+        heartRate: Number(data.heartRate),
+        weight: Number(data.weight),
+        bloodPressure: Number(data.bloodPressure),
+      });
+      toggle();
+      toast.success('Signos vitales guardados correctamente');
+    } catch (error) {
+      toast.error('Error al guardar los signos vitales');
+    }
+  };
   return (
     <Form {...form}>
       <form
@@ -52,7 +66,7 @@ const Vitals = () => {
         <div className="grid grid-cols-2 gap-5">
           <FormField
             control={form.control}
-            name="bodyTemp"
+            name="temperature"
             render={({ field }) => (
               <FormItem className="my-2">
                 <FormLabel className="text-sm">Temperatura del cuerpo</FormLabel>
@@ -77,37 +91,10 @@ const Vitals = () => {
               </FormItem>
             )}
           ></FormField>
-          <FormField
-            control={form.control}
-            name="systoll"
-            render={({ field }) => (
-              <FormItem className="my-2">
-                <FormLabel className="text-sm">PA sistólica</FormLabel>
-                <FormControl>
-                  <Input {...field} className="rounded-none"></Input>
-                </FormControl>
-                <FormMessage></FormMessage>
-              </FormItem>
-            )}
-          ></FormField>
 
           <FormField
             control={form.control}
-            name="diastoll"
-            render={({ field }) => (
-              <FormItem className="my-2">
-                <FormLabel className="text-sm">PA diastólica</FormLabel>
-                <FormControl>
-                  <Input {...field} className="rounded-none"></Input>
-                </FormControl>
-                <FormMessage></FormMessage>
-              </FormItem>
-            )}
-          ></FormField>
-
-          <FormField
-            control={form.control}
-            name="Weight"
+            name="weight"
             render={({ field }) => (
               <FormItem className="my-2">
                 <FormLabel className="text-sm">Peso (Kg)</FormLabel>
@@ -121,37 +108,10 @@ const Vitals = () => {
 
           <FormField
             control={form.control}
-            name="height"
+            name="bloodPressure"
             render={({ field }) => (
               <FormItem className="my-2">
-                <FormLabel className="text-sm">Altura (Cm)</FormLabel>
-                <FormControl>
-                  <Input {...field} className="rounded-none"></Input>
-                </FormControl>
-                <FormMessage></FormMessage>
-              </FormItem>
-            )}
-          ></FormField>
-          <FormField
-            control={form.control}
-            name="respiratoryRate"
-            render={({ field }) => (
-              <FormItem className="my-2">
-                <FormLabel className="text-sm">Frecuencia respiratoria</FormLabel>
-                <FormControl>
-                  <Input {...field} className="rounded-none"></Input>
-                </FormControl>
-                <FormMessage></FormMessage>
-              </FormItem>
-            )}
-          ></FormField>
-
-          <FormField
-            control={form.control}
-            name="oxygenSatur"
-            render={({ field }) => (
-              <FormItem className="my-2">
-                <FormLabel className="text-sm">Saturación de oxígeno</FormLabel>
+                <FormLabel className="text-sm">Presión arterial</FormLabel>
                 <FormControl>
                   <Input {...field} className="rounded-none"></Input>
                 </FormControl>
@@ -161,9 +121,9 @@ const Vitals = () => {
           ></FormField>
         </div>
         <div className="flex w-full gap-3">
-          {/* <Button onClick={() => toggle()} className="flex-1">
+          <Button onClick={() => toggle()} className="flex-1">
             Cancelar
-          </Button> */}
+          </Button>
           <Button type="submit" disabled={form.formState.isSubmitting} className="rounded-none flex-1">
             {form.formState.isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Guardar signos vitales'}
           </Button>
@@ -173,4 +133,4 @@ const Vitals = () => {
   );
 };
 
-export default Vitals;
+export default VitalsForm;

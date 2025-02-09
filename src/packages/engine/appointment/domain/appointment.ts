@@ -143,4 +143,12 @@ export class Appointment extends Aggregate {
     appointment.record(new AppointmentScheduled(appointment.toPrimitives()));
     return appointment;
   }
+
+  saveTelemetry(telemetry: Primitives<AppointmentTelemetry>): void {
+    this.telemetry = AppointmentTelemetry.fromPrimitives({
+      ...telemetry,
+      appointmentId: this.id.toString(),
+      id: this.telemetry?.id.toString() ?? Uuid.random().toString(),
+    });
+  }
 }

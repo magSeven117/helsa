@@ -75,7 +75,6 @@ const SearchDoctorInput = ({ specialties }: Props) => {
       let finalObject = {};
 
       for await (const partialObject of readStreamableValue(object)) {
-        console.log(partialObject);
         if (partialObject) {
           finalObject = {
             ...finalObject,

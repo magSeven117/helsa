@@ -1,7 +1,7 @@
 'use client';
-import AddVitals from '@/src/components/appointment/call/add-vitals';
 import Diagnosis from '@/src/components/appointment/call/diagnosis';
 import Treatment from '@/src/components/appointment/call/treatment';
+import Vitals from '@/src/components/appointment/call/vitals';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { Appointment } from '@helsa/engine/appointment/domain/appointment';
 import { Pathology } from '@helsa/engine/diagnostic/domain/pathology';
@@ -19,7 +19,7 @@ const Actions = ({ data, pathologies }: { data: Primitives<Appointment>; patholo
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="rounded-none flex flex-col gap-1" align="end">
-        <AddVitals />
+        <Vitals appointment={data} />
         <Diagnosis data={data} pathologies={pathologies ?? []} />
         <Treatment data={data} />
       </DropdownMenuContent>

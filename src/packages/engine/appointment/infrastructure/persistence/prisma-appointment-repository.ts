@@ -8,6 +8,7 @@ import { AppointmentRepository } from '../../domain/appointment-repository';
 import { AppointmentType } from '../../domain/appointment-type';
 import { AppointmentNote } from '../../domain/note';
 import { Symptom } from '../../domain/symptom';
+import { AppointmentTelemetry } from '../../domain/telemetry';
 
 export class PrismaAppointmentRepository implements AppointmentRepository {
   private converter = new PrismaCriteriaConverter();
@@ -157,6 +158,26 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
             description,
           },
         },
+      },
+    });
+  }
+
+  async saveTelemetry(telemetry: AppointmentTelemetry, appointmentId: string): Promise<void> {
+    await this.client.appointmentTelemetry.upsert({
+      where: { id: telemetry.id.toString(), appointmentId },
+      create: {
+        id: telemetry.id.toString(),
+        weight: telemetry.weight.value,
+        temperature: telemetry.temperature.value,
+        bloodPressure: telemetry.bloodPressure.value,
+        heartRate: telemetry.heartRate.value,
+        appointmentId: appointmentId,
+      },
+      update: {
+        weight: telemetry.weight.value,
+        temperature: telemetry.temperature.value,
+        bloodPressure: telemetry.bloodPressure.value,
+        heartRate: telemetry.heartRate.value,
       },
     });
   }
