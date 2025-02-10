@@ -46,7 +46,7 @@ const WeightForm = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      weight,
+      weight: weight.toString(),
     },
     mode: 'all',
   });
@@ -109,11 +109,7 @@ export const Weight = ({ value, appointmentId }: { value: number; appointmentId:
 
   if (isEditing) {
     return (
-      <WeightForm
-        bloodPressure={value}
-        toggle={() => setIsEditing((current) => !current)}
-        appointmentId={appointmentId}
-      />
+      <WeightForm weight={value} toggle={() => setIsEditing((current) => !current)} appointmentId={appointmentId} />
     );
   }
 

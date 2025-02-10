@@ -46,7 +46,7 @@ const TemperatureForm = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      temperature,
+      temperature: temperature.toString(),
     },
     mode: 'all',
   });
@@ -110,7 +110,7 @@ export const Temperature = ({ value, appointmentId }: { value: number; appointme
   if (isEditing) {
     return (
       <TemperatureForm
-        bloodPressure={value}
+        temperature={value}
         toggle={() => setIsEditing((current) => !current)}
         appointmentId={appointmentId}
       />
