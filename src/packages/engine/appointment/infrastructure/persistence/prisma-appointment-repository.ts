@@ -91,43 +91,44 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
     });
   }
 
-  async get(id: string): Promise<Appointment | null> {
+  async get(id: string, include?: any): Promise<Appointment | null> {
+    const includeAll = {
+      room: true,
+      rating: true,
+      telemetry: true,
+      recipes: true,
+      notes: true,
+      type: true,
+      symptoms: true,
+      diagnostics: true,
+      treatments: {
+        include: {
+          medication: true,
+          therapy: true,
+          procedure: true,
+        },
+      },
+      doctor: {
+        include: {
+          user: true,
+          specialty: true,
+        },
+      },
+      patient: {
+        include: {
+          user: true,
+          allergies: true,
+          diseases: true,
+          contacts: true,
+          vaccines: true,
+          surgeries: true,
+        },
+      },
+      documents: true,
+    };
     const appointment = await this.model.findUnique({
       where: { id },
-      include: {
-        room: true,
-        rating: true,
-        telemetry: true,
-        recipes: true,
-        notes: true,
-        type: true,
-        symptoms: true,
-        diagnostics: true,
-        treatments: {
-          include: {
-            medication: true,
-            therapy: true,
-            procedure: true,
-          },
-        },
-        doctor: {
-          include: {
-            user: true,
-            specialty: true,
-          },
-        },
-        patient: {
-          include: {
-            user: true,
-            allergies: true,
-            diseases: true,
-            contacts: true,
-            vaccines: true,
-            surgeries: true,
-          },
-        },
-        documents: true,
-      },
+      include: include || includeAll,
     });
     if (!appointment) {
       return null;

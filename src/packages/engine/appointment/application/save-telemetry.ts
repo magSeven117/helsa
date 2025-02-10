@@ -7,7 +7,7 @@ export class SaveTelemetry {
   constructor(private repository: AppointmentRepository) {}
 
   async run(data: Primitives<AppointmentTelemetry>) {
-    const appointment = await this.repository.get(data.appointmentId);
+    const appointment = await this.repository.get(data.appointmentId, { telemetry: true });
     if (!appointment) throw new NotFoundError('Appointment not found');
     appointment.saveTelemetry(data);
 
