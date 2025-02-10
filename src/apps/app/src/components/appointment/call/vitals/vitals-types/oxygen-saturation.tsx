@@ -6,6 +6,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@helsa/ui/components/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Droplet, Loader2, X } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -43,6 +44,7 @@ const OxygenSaturationForm = ({
   toggle: VoidFunction;
   appointmentId: string;
 }) => {
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -59,6 +61,7 @@ const OxygenSaturationForm = ({
       });
       toggle();
       toast.success('Signos vitales guardados correctamente');
+      router.refresh();
     } catch (error) {
       toast.error('Error al guardar los signos vitales');
     }

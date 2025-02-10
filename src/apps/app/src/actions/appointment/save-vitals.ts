@@ -5,7 +5,6 @@ import { Primitives } from '@helsa/ddd/types/primitives';
 import { SaveTelemetry } from '@helsa/engine/appointment/application/save-telemetry';
 import { AppointmentTelemetry } from '@helsa/engine/appointment/domain/telemetry';
 import { PrismaAppointmentRepository } from '@helsa/engine/appointment/infrastructure/persistence/prisma-appointment-repository';
-import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
 const schema = z.object({
@@ -26,5 +25,4 @@ export const saveVitals = authActionClient
   .action(async ({ parsedInput }) => {
     const service = new SaveTelemetry(new PrismaAppointmentRepository(database));
     await service.run(parsedInput as Primitives<AppointmentTelemetry>);
-    revalidatePath(`/appointment/${parsedInput.appointmentId}`);
   });
