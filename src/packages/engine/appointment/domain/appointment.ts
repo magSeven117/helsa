@@ -146,9 +146,18 @@ export class Appointment extends Aggregate {
 
   saveTelemetry(telemetry: Primitives<AppointmentTelemetry>): void {
     this.telemetry = AppointmentTelemetry.fromPrimitives({
-      ...telemetry,
       appointmentId: this.id.toString(),
       id: this.telemetry?.id.toString() ?? Uuid.random().toString(),
+      bloodPressure: telemetry.bloodPressure ? telemetry.bloodPressure : this.telemetry?.bloodPressure.value ?? 120,
+      heartRate: telemetry.heartRate ? telemetry.heartRate : this.telemetry?.heartRate.value ?? 72,
+      temperature: telemetry.temperature ? telemetry.temperature : this.telemetry?.temperature.value ?? 36.6,
+      weight: telemetry.weight ? telemetry.weight : this.telemetry?.weight.value ?? 70,
+      oxygenSaturation: telemetry.oxygenSaturation
+        ? telemetry.oxygenSaturation
+        : this.telemetry?.oxygenSaturation.value ?? 98,
+      respiratoryRate: telemetry.respiratoryRate
+        ? telemetry.respiratoryRate
+        : this.telemetry?.respiratoryRate.value ?? 16,
     });
   }
 }

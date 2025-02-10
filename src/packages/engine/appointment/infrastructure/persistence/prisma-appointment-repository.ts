@@ -171,6 +171,8 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
         temperature: telemetry.temperature.value,
         bloodPressure: telemetry.bloodPressure.value,
         heartRate: telemetry.heartRate.value,
+        respiratoryRate: telemetry.respiratoryRate.value,
+        oxygenSaturation: telemetry.oxygenSaturation.value,
         appointmentId: appointmentId,
       },
       update: {
@@ -178,6 +180,8 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
         temperature: telemetry.temperature.value,
         bloodPressure: telemetry.bloodPressure.value,
         heartRate: telemetry.heartRate.value,
+        respiratoryRate: telemetry.respiratoryRate.value,
+        oxygenSaturation: telemetry.oxygenSaturation.value,
       },
     });
   }

@@ -77,14 +77,16 @@ model AppointmentRating {
 }
 
 model AppointmentTelemetry {
-  id            String      @id @default(uuid())
-  weight        Float?
-  temperature   Float?
-  heartRate     Float?
-  bloodPressure Float?
-  imc           Float?
-  appointmentId String      @unique
-  appointment   Appointment @relation(fields: [appointmentId], references: [id])
+  id               String      @id @default(uuid())
+  weight           Float?
+  temperature      Float?
+  heartRate        Float?
+  bloodPressure    Float?
+  imc              Float?
+  respiratoryRate  Float?      @default(16)
+  oxygenSaturation Float?      @default(98)
+  appointmentId    String      @unique
+  appointment      Appointment @relation(fields: [appointmentId], references: [id])
 }
 
 model AppointmentRecipe {

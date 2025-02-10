@@ -14,7 +14,7 @@ const Actions = ({ data, pathologies }: { data: Primitives<Appointment>; patholo
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant={'outline'} className="gap-2">
-          Actions
+          Medicina
           <PlusCircle />
         </Button>
       </DropdownMenuTrigger>

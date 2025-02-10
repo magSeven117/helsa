@@ -1,15 +1,41 @@
 'use client';
+import { Primitives } from '@helsa/ddd/types/primitives';
+import { Appointment } from '@helsa/engine/appointment/domain/appointment';
 import { Button } from '@helsa/ui/components/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@helsa/ui/components/sheet';
 import { ReceiptText } from 'lucide-react';
-import { useState } from 'react';
-import VitalsForm from './form';
-import VitalsInfo from './info';
+import { BloodPressure } from './vitals-types/blood-pressure';
+import { HeartRate } from './vitals-types/heart-rate';
+import { OxygenSaturation } from './vitals-types/oxygen-saturation';
+import { RespiratoryRate } from './vitals-types/respiratory-rate';
+import { Temperature } from './vitals-types/temperature';
+import { Weight } from './vitals-types/weight';
 type Props = {
   appointment: Primitives<Appointment>;
 };
+type PatientVitals = {
+  heartRate: number;
+  temperature: number;
+  bloodPressure: string;
+  weight: number;
+  systolic: number;
+  diastolic: number;
+  respiratoryRate: number;
+  oxygenSaturation: number;
+};
+
+const defaultData: PatientVitals = {
+  heartRate: 72,
+  temperature: 36.6,
+  bloodPressure: '120/80',
+  weight: 120,
+  systolic: 120,
+  diastolic: 80,
+  respiratoryRate: 16,
+  oxygenSaturation: 98,
+};
 const Vitals = ({ appointment }: Props) => {
-  const [isEditing, setIsEditing] = useState(false);
+  const { telemetry } = appointment;
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -28,8 +54,25 @@ const Vitals = ({ appointment }: Props) => {
               </div>
             </div>
           </SheetHeader>
-          {!isEditing && <VitalsInfo toggle={() => setIsEditing((current) => !current)} appointment={appointment} />}
-          {isEditing && <VitalsForm appointment={appointment} toggle={() => setIsEditing((current) => !current)} />}
+          <div className="flex  flex-col gap-4 flex-1">
+            <div className="grid grid-cols-2 gap-4 py-4">
+              <HeartRate appointmentId={appointment.id} value={telemetry?.heartRate ?? defaultData.heartRate} />
+              <BloodPressure
+                appointmentId={appointment.id}
+                value={telemetry?.bloodPressure ?? Number(defaultData.bloodPressure.split('/')[0])}
+              />
+              <Temperature appointmentId={appointment.id} value={telemetry?.temperature ?? defaultData.temperature} />
+              <Weight appointmentId={appointment.id} value={telemetry?.weight ?? defaultData.weight} />
+              <RespiratoryRate
+                appointmentId={appointment.id}
+                value={telemetry?.respiratoryRate ?? defaultData.respiratoryRate}
+              />
+              <OxygenSaturation
+                appointmentId={appointment.id}
+                value={telemetry?.oxygenSaturation ?? defaultData.oxygenSaturation}
+              />
+            </div>
+          </div>
         </div>
       </SheetContent>
     </Sheet>

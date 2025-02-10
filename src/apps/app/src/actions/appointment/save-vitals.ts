@@ -9,11 +9,13 @@ import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
 const schema = z.object({
-  weight: z.number(),
-  temperature: z.number(),
-  bloodPressure: z.number(),
-  heartRate: z.number(),
+  weight: z.number().optional(),
+  temperature: z.number().optional(),
+  bloodPressure: z.number().optional(),
+  heartRate: z.number().optional(),
   appointmentId: z.string(),
+  respiratoryRate: z.number().optional(),
+  oxygenSaturation: z.number().optional(),
 });
 
 export const saveVitals = authActionClient

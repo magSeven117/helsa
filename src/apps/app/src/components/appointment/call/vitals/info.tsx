@@ -1,7 +1,7 @@
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { Appointment } from '@helsa/engine/appointment/domain/appointment';
 import { Button } from '@helsa/ui/components/button';
-import { Activity, Heart, TreesIcon as Lungs, Thermometer, Weight } from 'lucide-react';
+import { Activity, Heart, TreesIcon as Lungs, Pencil, Thermometer, Weight } from 'lucide-react';
 type Props = {
   appointment: Primitives<Appointment>;
   toggle: VoidFunction;
@@ -50,7 +50,7 @@ const VitalsInfo = ({ appointment, toggle }: Props) => {
         <VitalSign
           icon={<Activity className="h-5 w-5" />}
           label="Presión"
-          value={appointment.telemetry?.bloodPressure ?? mockPatientData.bloodPressure}
+          value={appointment.telemetry?.bloodPressure ?? Number(mockPatientData.bloodPressure.split('/')[0])}
           unit="mmHg"
           max={140}
           min={90}
@@ -90,13 +90,14 @@ const VitalsInfo = ({ appointment, toggle }: Props) => {
 
 export default VitalsInfo;
 
-function VitalSign({
+export function VitalSign({
   icon,
   label,
   value,
   unit,
   max,
   min,
+  toggle,
 }: {
   icon: React.ReactNode;
   label: string;
@@ -104,20 +105,26 @@ function VitalSign({
   unit: string;
   max: number;
   min: number;
+  toggle?: VoidFunction;
 }) {
   const percentage = ((value - min) / (max - min)) * 100;
   const status = value < min || value > max ? 'critical' : 'normal';
 
   return (
-    <div className="relative overflow-hidden  border p-4 transition-all duration-300 ease-in-out hover:shadow-lg hover:scale-105 cursor-pointer">
-      <div className="flex items-center justify-between mb-2">
+    <div className="relative overflow-hidden  border p-4">
+      <div className="flex items-start justify-between mb-2">
         <div className="flex items-center space-x-2">
           <div className={`p-2 rounded-full ${status === 'critical' ? 'bg-red-500' : 'bg-green-500'}`}>{icon}</div>
-          <span className="font-medium text-sm ">{label}</span>
+          <div className="flex flex-col">
+            <span className="font-medium text-sm ">{label}</span>
+            <span className={`text-lg font-bold ${status === 'critical' ? 'text-red-500' : 'text-greenbg-green-500'}`}>
+              {value} {unit}
+            </span>
+          </div>
         </div>
-        <span className={`text-lg font-bold ${status === 'critical' ? 'text-red-500' : 'text-greenbg-green-500'}`}>
-          {value} {unit}
-        </span>
+        <div onClick={toggle} className="cursor-pointer">
+          <Pencil className="size-4" />
+        </div>
       </div>
       <div className="w-full bg-secondary-foreground/20 rounded-full h-2 mb-2">
         <div
