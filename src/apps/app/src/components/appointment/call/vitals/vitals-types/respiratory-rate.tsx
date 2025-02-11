@@ -6,6 +6,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@helsa/ui/components/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2, TreesIcon as Lungs, X } from 'lucide-react';
+import { useOptimisticAction } from 'next-safe-action/hooks';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -39,10 +40,12 @@ export const RespiratoryRateForm = ({
   respiratoryRate,
   toggle,
   appointmentId,
+  execute,
 }: {
   respiratoryRate: number;
   toggle: VoidFunction;
   appointmentId: string;
+  execute: any;
 }) => {
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -55,7 +58,7 @@ export const RespiratoryRateForm = ({
 
   const submit = async (data: z.infer<typeof formSchema>) => {
     try {
-      await saveVitals({
+      await execute({
         appointmentId: appointmentId,
         respiratoryRate: Number(data.respiratoryRate),
       });
@@ -109,6 +112,10 @@ export const RespiratoryRateForm = ({
 
 export const RespiratoryRate = ({ value, appointmentId }: { value: number; appointmentId: string }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const { optimisticState, execute } = useOptimisticAction(saveVitals, {
+    currentState: { respiratoryRate: value },
+    updateFn: (state, newValue) => ({ respiratoryRate: newValue.respiratoryRate! }),
+  });
 
   if (isEditing) {
     return (
@@ -116,9 +123,12 @@ export const RespiratoryRate = ({ value, appointmentId }: { value: number; appoi
         respiratoryRate={value}
         toggle={() => setIsEditing((current) => !current)}
         appointmentId={appointmentId}
+        execute={execute}
       />
     );
   }
 
-  return <RespiratoryRateInfo value={value} toggle={() => setIsEditing((current) => !current)} />;
+  return (
+    <RespiratoryRateInfo value={optimisticState.respiratoryRate} toggle={() => setIsEditing((current) => !current)} />
+  );
 };

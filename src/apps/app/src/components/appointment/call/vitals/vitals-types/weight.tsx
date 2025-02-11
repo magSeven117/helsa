@@ -6,6 +6,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@helsa/ui/components/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2, Weight as WeightIcon, X } from 'lucide-react';
+import { useOptimisticAction } from 'next-safe-action/hooks';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -39,10 +40,12 @@ const WeightForm = ({
   weight,
   toggle,
   appointmentId,
+  execute,
 }: {
   weight: number;
   toggle: VoidFunction;
   appointmentId: string;
+  execute: any;
 }) => {
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -55,7 +58,7 @@ const WeightForm = ({
 
   const submit = async (data: z.infer<typeof formSchema>) => {
     try {
-      await saveVitals({
+      await execute({
         appointmentId: appointmentId,
         weight: Number(data.weight),
       });
@@ -109,12 +112,21 @@ const WeightForm = ({
 
 export const Weight = ({ value, appointmentId }: { value: number; appointmentId: string }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const { optimisticState, execute } = useOptimisticAction(saveVitals, {
+    currentState: { weight: value },
+    updateFn: (state, newValue) => ({ weight: newValue.weight! }),
+  });
 
   if (isEditing) {
     return (
-      <WeightForm weight={value} toggle={() => setIsEditing((current) => !current)} appointmentId={appointmentId} />
+      <WeightForm
+        weight={value}
+        toggle={() => setIsEditing((current) => !current)}
+        appointmentId={appointmentId}
+        execute={execute}
+      />
     );
   }
 
-  return <WeightInfo value={value} toggle={() => setIsEditing((current) => !current)} />;
+  return <WeightInfo value={optimisticState.weight} toggle={() => setIsEditing((current) => !current)} />;
 };

@@ -6,6 +6,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@helsa/ui/components/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Activity, Loader2, X } from 'lucide-react';
+import { useOptimisticAction } from 'next-safe-action/hooks';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -39,10 +40,12 @@ export const BloodPressureForm = ({
   bloodPressure,
   toggle,
   appointmentId,
+  execute,
 }: {
   bloodPressure: number;
   toggle: VoidFunction;
   appointmentId: string;
+  execute: any;
 }) => {
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -55,7 +58,7 @@ export const BloodPressureForm = ({
 
   const submit = async (data: z.infer<typeof formSchema>) => {
     try {
-      await saveVitals({
+      await execute({
         appointmentId: appointmentId,
         bloodPressure: Number(data.bloodPressure),
       });
@@ -109,6 +112,10 @@ export const BloodPressureForm = ({
 
 export const BloodPressure = ({ value, appointmentId }: { value: number; appointmentId: string }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const { optimisticState, execute } = useOptimisticAction(saveVitals, {
+    currentState: { bloodPressure: value },
+    updateFn: (state, newValue) => ({ bloodPressure: newValue.bloodPressure! }),
+  });
 
   if (isEditing) {
     return (
@@ -116,9 +123,10 @@ export const BloodPressure = ({ value, appointmentId }: { value: number; appoint
         bloodPressure={value}
         toggle={() => setIsEditing((current) => !current)}
         appointmentId={appointmentId}
+        execute={execute}
       />
     );
   }
 
-  return <BloodPressureInfo value={value} toggle={() => setIsEditing((current) => !current)} />;
+  return <BloodPressureInfo value={optimisticState.bloodPressure} toggle={() => setIsEditing((current) => !current)} />;
 };
