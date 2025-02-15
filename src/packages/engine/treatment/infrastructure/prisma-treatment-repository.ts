@@ -23,8 +23,18 @@ export class PrismaTreatmentRepository implements TreatmentRepository {
     });
   }
   async search(criteria: Criteria): Promise<Treatment[]> {
-    const { where, include, orderBy, skip, take } = this.converter.criteria(criteria);
-    const treatments = await this.model.findMany({ where, include, orderBy, skip, take });
+    const { where, orderBy, skip, take } = this.converter.criteria(criteria);
+    const treatments = await this.model.findMany({
+      where,
+      include: {
+        medication: true,
+        therapy: true,
+        procedure: true,
+      },
+      orderBy,
+      skip,
+      take,
+    });
     return treatments.map((treatment) => Treatment.fromPrimitives(treatment as Primitives<Treatment>));
   }
   async find(criteria: Criteria): Promise<Treatment | null> {

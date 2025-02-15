@@ -13,7 +13,7 @@ type Props = {
 
 const DiagnosisSheet = async ({ data }: Props) => {
   const [responseDiagnoses, responsePathologies] = await Promise.all([
-    getDiagnoses({ appointmentId: data?.id }),
+    getDiagnoses({ appointmentId: data?.id ?? '' }),
     getPathologies(),
   ]);
   const pathologies = responsePathologies?.data ?? [];

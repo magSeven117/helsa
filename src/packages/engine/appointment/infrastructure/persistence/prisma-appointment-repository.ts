@@ -100,13 +100,7 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
       notes: true,
       type: true,
       symptoms: true,
-      treatments: {
-        include: {
-          medication: true,
-          therapy: true,
-          procedure: true,
-        },
-      },
+
       doctor: {
         include: {
           user: true,

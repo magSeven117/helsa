@@ -6,7 +6,7 @@ import { Primitives } from '@helsa/ddd/types/primitives';
 import { CreateTreatment } from '@helsa/engine/treatment/application/create-treatment';
 import { Treatment } from '@helsa/engine/treatment/domain/treatment';
 import { PrismaTreatmentRepository } from '@helsa/engine/treatment/infrastructure/prisma-treatment-repository';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import { z } from 'zod';
 
 const schema = z.object({
@@ -44,9 +44,10 @@ export const createTreatment = authActionClient
   .metadata({
     actionName: 'create-treatment',
   })
-  .action(async ({ parsedInput }) => {
+  .action(async ({ parsedInput, ctx: { user } }) => {
     const service = new CreateTreatment(new PrismaTreatmentRepository(database));
 
     await service.run(parsedInput as unknown as Primitives<Treatment>);
+    revalidateTag(`get-appointment-treatments-${user.id}-${parsedInput.appointmentId}`);
     revalidatePath(`/appointments/${parsedInput.appointmentId}`);
   });
