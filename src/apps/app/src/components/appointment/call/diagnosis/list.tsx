@@ -1,3 +1,4 @@
+'use client';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { Diagnostic } from '@helsa/engine/diagnostic/domain/diagnostic';
 import { Pathology } from '@helsa/engine/diagnostic/domain/pathology';

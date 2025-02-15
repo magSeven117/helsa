@@ -3,7 +3,6 @@ import { createDiagnosis } from '@/src/actions/diagnostic/create-diagnosis';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { Appointment } from '@helsa/engine/appointment/domain/appointment';
 import { Symptom } from '@helsa/engine/appointment/domain/symptom';
-import { Diagnostic } from '@helsa/engine/diagnostic/domain/diagnostic';
 import { Pathology } from '@helsa/engine/diagnostic/domain/pathology';
 import { Button } from '@helsa/ui/components/button';
 import { Combobox } from '@helsa/ui/components/combobox';
@@ -32,12 +31,11 @@ function transformOption(specialty: { id: string; name: string }) {
 
 type Props = {
   pathologies: Primitives<Pathology>[];
-  diagnoses: Primitives<Diagnostic>[];
   symptoms: Primitives<Symptom>[];
   appointment: Primitives<Appointment>;
   toggle: VoidFunction;
 };
-const DiagnosisForm = ({ pathologies, diagnoses, toggle, symptoms, appointment }: Props) => {
+const DiagnosisForm = ({ pathologies, toggle, symptoms, appointment }: Props) => {
   const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([]);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

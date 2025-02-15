@@ -1,16 +1,16 @@
 import { getAppointment } from '@/src/actions/appointment/get-appointment';
-import { getPathologies } from '@/src/actions/diagnostic/get-pathologies';
-import dynamic from 'next/dynamic';
-const Buttons = dynamic(() => import('./buttons'), { ssr: false });
-const Title = dynamic(() => import('./title'), { ssr: false });
+import { getCurrentUser } from '@/src/actions/user/get-current-user';
+import Buttons from './buttons';
+import Title from './title';
 
 const Header = async ({ id }: { id: string }) => {
-  const [response, responsePathologies] = await Promise.all([getAppointment({ appointmentId: id }), getPathologies()]);
+  const [response, userResponse] = await Promise.all([getAppointment({ appointmentId: id }), getCurrentUser()]);
   const appointment = response?.data!;
+  const user = userResponse?.data!;
   return (
     <div className="w-full grid grid-cols-2 gap-3 max-md:grid-cols-1">
-      <Title appointment={appointment} />
-      <Buttons appointment={appointment} pathologies={responsePathologies?.data ?? []} />
+      <Title appointment={appointment} user={user} />
+      <Buttons appointment={appointment} user={user} />
     </div>
   );
 };

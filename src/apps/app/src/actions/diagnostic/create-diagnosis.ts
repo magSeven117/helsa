@@ -3,7 +3,7 @@ import { authActionClient } from '@helsa/actions';
 import { database } from '@helsa/database';
 import { CreateDiagnosis } from '@helsa/engine/diagnostic/application/create-diagnosis';
 import { PrismaDiagnosisRepository } from '@helsa/engine/diagnostic/infrastructure/prisma-diagnosis-repository';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import { z } from 'zod';
 
 const schema = z.object({
@@ -19,8 +19,9 @@ const schema = z.object({
 export const createDiagnosis = authActionClient
   .schema(schema)
   .metadata({ actionName: 'create-diagnosis' })
-  .action(async ({ parsedInput }) => {
+  .action(async ({ parsedInput, ctx: { user } }) => {
     const service = new CreateDiagnosis(new PrismaDiagnosisRepository(database));
     await service.run(parsedInput);
+    revalidateTag(`get-diagnoses-${user.id}`);
     revalidatePath(`/appointments/${parsedInput.appointmentId}`);
   });

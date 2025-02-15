@@ -6,7 +6,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@helsa/ui/components/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Droplet, Loader2, X } from 'lucide-react';
-import { useOptimisticAction } from 'next-safe-action/hooks';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -40,12 +39,10 @@ const OxygenSaturationForm = ({
   oxygenSaturation,
   toggle,
   appointmentId,
-  execute,
 }: {
   oxygenSaturation: number;
   toggle: VoidFunction;
   appointmentId: string;
-  execute: any;
 }) => {
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -58,7 +55,7 @@ const OxygenSaturationForm = ({
 
   const submit = async (data: z.infer<typeof formSchema>) => {
     try {
-      await execute({
+      await saveVitals({
         appointmentId: appointmentId,
         oxygenSaturation: Number(data.oxygenSaturation),
       });
@@ -112,10 +109,6 @@ const OxygenSaturationForm = ({
 
 export const OxygenSaturation = ({ value, appointmentId }: { value: number; appointmentId: string }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const { optimisticState, execute } = useOptimisticAction(saveVitals, {
-    currentState: { oxygenSaturation: value },
-    updateFn: (state, newValue) => ({ oxygenSaturation: newValue.oxygenSaturation! }),
-  });
 
   if (isEditing) {
     return (
@@ -123,12 +116,9 @@ export const OxygenSaturation = ({ value, appointmentId }: { value: number; appo
         oxygenSaturation={value}
         toggle={() => setIsEditing((current) => !current)}
         appointmentId={appointmentId}
-        execute={execute}
       />
     );
   }
 
-  return (
-    <OxygenSaturationInfo value={optimisticState.oxygenSaturation} toggle={() => setIsEditing((current) => !current)} />
-  );
+  return <OxygenSaturationInfo value={value} toggle={() => setIsEditing((current) => !current)} />;
 };

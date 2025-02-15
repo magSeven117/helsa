@@ -1,14 +1,12 @@
-'use client';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { Appointment } from '@helsa/engine/appointment/domain/appointment';
 import { UserRoleValue } from '@helsa/engine/user/domain/user-role';
-import { useLocalStorage } from 'usehooks-ts';
 
 type Props = {
   appointment: Primitives<Appointment>;
+  user: any;
 };
-const Title = ({ appointment }: Props) => {
-  const [user] = useLocalStorage<any | null>('user', null);
+const Title = async ({ appointment, user }: Props) => {
   return (
     <div>
       <h1 className="text-3xl font-bold">Consulta con</h1>
