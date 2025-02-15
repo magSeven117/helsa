@@ -2,7 +2,6 @@ import { Primitives } from '@helsa/ddd/types/primitives';
 import { Appointment } from '@helsa/engine/appointment/domain/appointment';
 import { UserRoleValue } from '@helsa/engine/user/domain/user-role';
 import Details from './details';
-import DetailsDoctor from './details-doctor';
 import Diagnosis from './diagnosis';
 import Treatment from './treatment';
 import Vitals from './vitals';
@@ -15,10 +14,9 @@ type Props = {
 const Buttons = ({ appointment, user }: Props) => {
   return (
     <div className="p-0 bg-transparent items-center justify-end  hover:bg-transparent flex h-full gap-3">
-      {user?.role === UserRoleValue.PATIENT && <DetailsDoctor data={appointment} />}
+      <Details data={appointment} user={user} />
       {user.role === UserRoleValue.DOCTOR && (
         <>
-          <Details data={appointment} />
           <Vitals appointment={appointment} />
           <Diagnosis data={appointment} />
           <Treatment data={appointment} />

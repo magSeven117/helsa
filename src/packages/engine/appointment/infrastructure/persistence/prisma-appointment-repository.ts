@@ -3,6 +3,7 @@ import { PrismaCriteriaConverter } from '@helsa/database/converter';
 import { Collection } from '@helsa/ddd/core/collection.';
 import { Criteria } from '@helsa/ddd/core/criteria';
 import { Primitives } from '@helsa/ddd/types/primitives';
+import { Document } from '../../../document/domain/document';
 import { Appointment } from '../../domain/appointment';
 import { AppointmentRepository } from '../../domain/appointment-repository';
 import { AppointmentType } from '../../domain/appointment-type';
@@ -23,7 +24,6 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
     const include = {
       room: true,
       rating: true,
-      telemetry: true,
       recipes: true,
       notes: true,
       type: true,
@@ -37,11 +37,6 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
       patient: {
         include: {
           user: true,
-          allergies: true,
-          diseases: true,
-          contacts: true,
-          vaccines: true,
-          surgeries: true,
         },
       },
     };
@@ -96,11 +91,8 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
       room: true,
       rating: true,
       telemetry: true,
-      recipes: true,
-      notes: true,
       type: true,
       symptoms: true,
-
       doctor: {
         include: {
           user: true,
@@ -110,11 +102,6 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
       patient: {
         include: {
           user: true,
-          allergies: true,
-          diseases: true,
-          contacts: true,
-          vaccines: true,
-          surgeries: true,
         },
       },
       documents: true,
@@ -178,5 +165,23 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
         oxygenSaturation: telemetry.oxygenSaturation.value,
       },
     });
+  }
+
+  async getAppointmentDocuments(appointmentId: string): Promise<Document[]> {
+    const documents = await this.client.medicalDocument.findMany({
+      where: {
+        appointmentId,
+      },
+    });
+    return documents.map((document) => Document.fromPrimitives(document as unknown as Primitives<Document>));
+  }
+
+  async getAppointmentNotes(appointmentId: string): Promise<AppointmentNote[]> {
+    const notes = await this.client.appointmentNote.findMany({
+      where: {
+        appointmentId,
+      },
+    });
+    return notes.map((note) => AppointmentNote.fromPrimitives(note as unknown as Primitives<AppointmentNote>));
   }
 }
