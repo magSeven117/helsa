@@ -1,4 +1,4 @@
-import { getDiagnoses } from '@/src/actions/diagnostic/get-diagnoses';
+import { getAppointmentDiagnoses } from '@/src/actions/diagnostic/get-appointment-diagnoses';
 import { getPathologies } from '@/src/actions/diagnostic/get-pathologies';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { Appointment } from '@helsa/engine/appointment/domain/appointment';
@@ -13,7 +13,7 @@ type Props = {
 
 const DiagnosisSheet = async ({ data }: Props) => {
   const [responseDiagnoses, responsePathologies] = await Promise.all([
-    getDiagnoses({ appointmentId: data?.id ?? '' }),
+    getAppointmentDiagnoses({ appointmentId: data?.id ?? '' }),
     getPathologies(),
   ]);
   const pathologies = responsePathologies?.data ?? [];

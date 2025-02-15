@@ -9,22 +9,22 @@ import { unstable_cache as cache } from 'next/cache';
 import { z } from 'zod';
 
 const schema = z.object({
-  appointmentId: z.string(),
+  patientId: z.string(),
 });
 
-export const getAppointmentTreatments = authActionClient
+export const getPatientTreatments = authActionClient
   .schema(schema)
   .metadata({
-    actionName: 'get-appointment-treatments',
+    actionName: 'get-patient-treatments',
   })
   .action(async ({ parsedInput, ctx: { user } }) => {
     const service = new GetTreatments(new PrismaTreatmentRepository(database));
 
     return cache(
-      () => service.run([{ field: 'appointmentId', operator: Operator.EQUAL, value: parsedInput.appointmentId }]),
-      ['get-appointment-treatments', user.id, parsedInput.appointmentId],
+      () => service.run([{ field: 'patientId', operator: Operator.EQUAL, value: parsedInput.patientId }]),
+      ['get-patient-treatments', user.id, parsedInput.patientId],
       {
-        tags: [`get-appointment-treatments-${user.id}-${parsedInput.appointmentId}`],
+        tags: [`get-patient-treatments-${user.id}-${parsedInput.patientId}`],
         revalidate: 3600,
       }
     )();
