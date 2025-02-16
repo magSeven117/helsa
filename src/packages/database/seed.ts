@@ -19,6 +19,10 @@ async function main() {
   await prisma.pathology.createMany({
     data: pathologies,
   });
+
+  await prisma.test.createMany({
+    data: test,
+  });
 }
 
 const specialties = [
@@ -186,6 +190,81 @@ const appointmentTypes = [
   { name: 'Consulta', color: '#FF0000' },
   { name: 'Estudio', color: '#00FF00' },
   { name: 'Procedimiento', color: '#0000FF' },
+];
+
+const test = [
+  {
+    name: 'Blood test',
+  },
+  {
+    name: 'Urine test',
+  },
+  {
+    name: 'X-ray',
+  },
+  {
+    name: 'MRI',
+  },
+  {
+    name: 'CT Scan',
+  },
+  {
+    name: 'Ultrasound',
+  },
+  {
+    name: 'Biopsy',
+  },
+  {
+    name: 'Endoscopy',
+  },
+  {
+    name: 'Colonoscopy',
+  },
+  {
+    name: 'Laparoscopy',
+  },
+  {
+    name: 'Angiography',
+  },
+  {
+    name: 'Echocardiography',
+  },
+  {
+    name: 'Electrocardiogram',
+  },
+  {
+    name: 'Electroencephalogram',
+  },
+  {
+    name: 'Electromyography',
+  },
+  {
+    name: 'Pulmonary function test',
+  },
+  {
+    name: 'Bone marrow test',
+  },
+  {
+    name: 'Skin test',
+  },
+  {
+    name: 'Sweat test',
+  },
+  {
+    name: 'Tilt table test',
+  },
+  {
+    name: 'Treadmill test',
+  },
+  {
+    name: 'Ultraviolet light test',
+  },
+  {
+    name: 'Vascular test',
+  },
+  {
+    name: 'Vestibular test',
+  },
 ];
 
 main()

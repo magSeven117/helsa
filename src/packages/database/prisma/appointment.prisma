@@ -34,6 +34,7 @@ model Appointment {
   diagnostics Diagnostic[]
   documents   MedicalDocument[]
   treatments  Treatment[]
+  orders      Order[]
 }
 
 enum AppointmentStatus {
