@@ -20,5 +20,5 @@ export const HeaderSkeleton = () => {
 };
 
 export const CallSkeleton = () => {
-  return <Skeleton className="h-full   col-span-6"></Skeleton>;
+  return <Skeleton className="h-full   col-span-6 rounded-none"></Skeleton>;
 };
