@@ -11,6 +11,7 @@ export class Order extends Aggregate {
     public type: OrderType,
     public status: OrderStatus,
     public appointmentId: Uuid,
+    public patientId: Uuid,
     createdAt: DateValueObject,
     updatedAt: DateValueObject
   ) {
@@ -24,6 +25,7 @@ export class Order extends Aggregate {
       type: this.type.value,
       status: this.status.value,
       appointmentId: this.appointmentId.toString(),
+      patientId: this.patientId.toString(),
       createdAt: this.createdAt.value,
       updatedAt: this.updatedAt.value,
     };
@@ -36,18 +38,27 @@ export class Order extends Aggregate {
       OrderType.fromString(data.type),
       OrderStatus.fromString(data.status),
       new Uuid(data.appointmentId),
+      new Uuid(data.patientId),
       new DateValueObject(data.createdAt),
       new DateValueObject(data.updatedAt)
     );
   }
 
-  static create(id: string, description: string, type: string, status: string, appointmentId: string): Order {
+  static create(
+    id: string,
+    description: string,
+    type: string,
+    status: string,
+    appointmentId: string,
+    patientId: string
+  ): Order {
     return new Order(
       new Uuid(id),
       new StringValueObject(description),
       OrderType.fromString(type),
       OrderStatus.fromString(status),
       new Uuid(appointmentId),
+      new Uuid(patientId),
       DateValueObject.today(),
       DateValueObject.today()
     );

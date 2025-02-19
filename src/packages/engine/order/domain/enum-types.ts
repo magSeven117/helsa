@@ -2,7 +2,7 @@ import { Enum } from '@helsa/ddd/core/value-objects/enum';
 
 export enum OrderTypeValues {
   TEST = 'TEST',
-  ATTENDANCE = 'ATTENDANCE',
+  REMITTANCE = 'REMITTANCE',
 }
 export class OrderType extends Enum<OrderTypeValues> {
   constructor(value: OrderTypeValues) {
@@ -17,8 +17,8 @@ export class OrderType extends Enum<OrderTypeValues> {
     return new OrderType(OrderTypeValues.TEST);
   }
 
-  static Attendance(): OrderType {
-    return new OrderType(OrderTypeValues.ATTENDANCE);
+  static Remittance(): OrderType {
+    return new OrderType(OrderTypeValues.REMITTANCE);
   }
 }
 

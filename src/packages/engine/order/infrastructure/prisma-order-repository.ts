@@ -15,7 +15,7 @@ export class PrismaOrderRepository implements OrderRepository {
 
   async save(order: Order): Promise<void> {
     const data = order.toPrimitives();
-    this.model.upsert({
+    await this.model.upsert({
       where: { id: order.id.value },
       update: {
         type: data.type as any,
@@ -28,6 +28,7 @@ export class PrismaOrderRepository implements OrderRepository {
         status: data.status as any,
         description: data.description,
         appointmentId: data.appointmentId,
+        patientId: data.patientId,
       },
     });
   }

@@ -14,6 +14,7 @@ const schema = z.object({
   id: z.string(),
   type: z.string(),
   appointmentId: z.string(),
+  patientId: z.string(),
 });
 
 export const createOrder = authActionClient
@@ -29,6 +30,7 @@ export const createOrder = authActionClient
       id: parsedInput.id,
       type: parsedInput.type as any,
       appointmentId: parsedInput.appointmentId,
+      patientId: parsedInput.patientId,
     } as Primitives<Order>);
 
     revalidateTag(`get-appointment-orders-${user.id}`);

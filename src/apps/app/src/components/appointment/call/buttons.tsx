@@ -3,6 +3,7 @@ import { Appointment } from '@helsa/engine/appointment/domain/appointment';
 import { UserRoleValue } from '@helsa/engine/user/domain/user-role';
 import Details from './details';
 import Diagnosis from './diagnosis';
+import Orders from './orders';
 import Treatment from './treatment';
 import Vitals from './vitals';
 
@@ -17,6 +18,7 @@ const Buttons = ({ appointment, user }: Props) => {
       <Details data={appointment} user={user} />
       {user.role === UserRoleValue.DOCTOR && (
         <>
+          <Orders data={appointment} />
           <Vitals appointment={appointment} />
           <Diagnosis data={appointment} />
           <Treatment data={appointment} />
