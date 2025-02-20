@@ -1,8 +1,8 @@
-import { GetPatient } from '@/src/patient/application/services/get-patient';
 import { Meta } from '@helsa/ddd/core/collection.';
 import { Direction } from '@helsa/ddd/core/criteria';
 import { NotFoundError } from '@helsa/ddd/core/errors/not-found-error';
 import { Primitives } from '@helsa/ddd/types/primitives';
+import { GetPatient } from '../../patient/application/services/get-patient';
 import { Appointment } from '../domain/appointment';
 import {
   AppointmentCriteria,
