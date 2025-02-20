@@ -22,16 +22,11 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
   async search(criteria: Criteria): Promise<Collection<Appointment>> {
     const { orderBy, skip, take, where } = this.converter.criteria(criteria);
     const include = {
-      room: true,
-      rating: true,
-      recipes: true,
-      notes: true,
       type: true,
-      symptoms: true,
+      specialty: true,
       doctor: {
         include: {
           user: true,
-          specialty: true,
         },
       },
       patient: {
@@ -51,6 +46,7 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
       }),
       this.client.appointment.count({ where }),
     ]);
+    console.log(JSON.stringify(where));
     const appointments = data.map((appointment) =>
       Appointment.fromPrimitives(appointment as unknown as Primitives<Appointment>)
     );
@@ -77,6 +73,7 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
       patient,
       price,
       documents,
+      specialty,
       ...data
     } = appointment.toPrimitives();
     await this.model.upsert({
@@ -87,28 +84,9 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
   }
 
   async get(id: string, include?: any): Promise<Appointment | null> {
-    const includeAll = {
-      room: true,
-      rating: true,
-      telemetry: true,
-      type: true,
-      symptoms: true,
-      doctor: {
-        include: {
-          user: true,
-          specialty: true,
-        },
-      },
-      patient: {
-        include: {
-          user: true,
-        },
-      },
-      documents: true,
-    };
     const appointment = await this.model.findUnique({
       where: { id },
-      include: include || includeAll,
+      include: include || {},
     });
     if (!appointment) {
       return null;

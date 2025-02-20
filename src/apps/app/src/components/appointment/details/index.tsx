@@ -32,7 +32,9 @@ import {
   Video,
 } from 'lucide-react';
 import Link from 'next/link';
+import { Suspense } from 'react';
 import { StateColumn } from '../table/columns';
+import Indications from './indications';
 
 type Props = {
   setOpen: (open: boolean) => void;
@@ -100,12 +102,6 @@ const AppointmentDetailsSheet = ({ data, isOpen, setOpen, types }: Props) => {
             <TabsList className="flex justify-start items-center gap-1 bg-transparent rounded-none">
               <TabsTrigger className="data-[state=active]:bg-secondary rounded-none" value="general">
                 General
-              </TabsTrigger>
-              <TabsTrigger className="data-[state=active]:bg-secondary rounded-none" value="pre">
-                Pre consulta
-              </TabsTrigger>
-              <TabsTrigger className="data-[state=active]:bg-secondary rounded-none" value="diagnostic">
-                Diagnostico
               </TabsTrigger>
               <TabsTrigger className="data-[state=active]:bg-secondary rounded-none" value="indications">
                 Indicaciones
@@ -208,6 +204,9 @@ const AppointmentDetailsSheet = ({ data, isOpen, setOpen, types }: Props) => {
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
+            </TabsContent>
+            <TabsContent value="indications">
+              <Indications data={data!} />
             </TabsContent>
           </Tabs>
         </div>

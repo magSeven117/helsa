@@ -28,16 +28,12 @@ export const HeaderPatient = ({ data }: { data: Primitives<Appointment> }) => {
       </SheetHeader>
       <div className="flex gap-2 px-1 border-b py-2">
         <div className="flex justify-start items-center gap-2 text-sm">
-          <p className="">Estado civil:</p>
-          <Badge variant={'outline'}>{data.patient?.demographic.civilStatus}</Badge>
+          <p className="">Especialidad:</p>
+          <Badge variant={'outline'}>{data.specialty?.name || ''}</Badge>
         </div>
         <div className="flex justify-start items-center gap-2 text-sm">
-          <p className="">Educación:</p>
-          <Badge variant={'outline'}>{data.patient?.demographic.educativeLevel}</Badge>
-        </div>
-        <div className="flex justify-start items-center gap-2 text-sm">
-          <p className="">Ocupación:</p>
-          <Badge variant={'outline'}>{data.patient?.demographic.occupation}</Badge>
+          <p className="">Nº de Licencia:</p>
+          <Badge variant={'outline'}>{data.doctor?.licenseMedicalNumber || ''}</Badge>
         </div>
       </div>
     </>
@@ -69,12 +65,16 @@ export const HeaderDoctor = ({ data }: { data: Primitives<Appointment> }) => {
       </SheetHeader>
       <div className="flex gap-2 px-1 border-b py-2">
         <div className="flex justify-start items-center gap-2 text-sm">
-          <p className="">Especialidad:</p>
-          <Badge variant={'outline'}>{data.doctor?.specialty?.name || ''}</Badge>
+          <p className="">Estado civil:</p>
+          <Badge variant={'outline'}>{data.patient?.demographic.civilStatus}</Badge>
         </div>
         <div className="flex justify-start items-center gap-2 text-sm">
-          <p className="">Nº de Licencia:</p>
-          <Badge variant={'outline'}>{data.doctor?.licenseMedicalNumber || ''}</Badge>
+          <p className="">Educación:</p>
+          <Badge variant={'outline'}>{data.patient?.demographic.educativeLevel}</Badge>
+        </div>
+        <div className="flex justify-start items-center gap-2 text-sm">
+          <p className="">Ocupación:</p>
+          <Badge variant={'outline'}>{data.patient?.demographic.occupation}</Badge>
         </div>
       </div>
     </>

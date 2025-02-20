@@ -58,7 +58,7 @@ export const columns: ColumnDef<Primitives<Appointment>>[] = [
   {
     accessorKey: 'specialty',
     header: 'Especialidad',
-    cell: ({ row }) => row.original.doctor?.specialty?.name,
+    cell: ({ row }) => row.original.specialty?.name,
   },
   {
     accessorKey: 'type',

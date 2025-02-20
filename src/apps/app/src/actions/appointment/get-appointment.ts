@@ -7,6 +7,7 @@ import { z } from 'zod';
 
 const schema = z.object({
   appointmentId: z.string(),
+  include: z.any().optional(),
 });
 
 export const getAppointment = authActionClient
@@ -14,7 +15,7 @@ export const getAppointment = authActionClient
   .metadata({
     actionName: 'get-appointment',
   })
-  .action(async ({ parsedInput: { appointmentId } }) => {
+  .action(async ({ parsedInput: { appointmentId, include } }) => {
     const service = new GetAppointment(new PrismaAppointmentRepository(database));
-    return await service.run(appointmentId);
+    return await service.run(appointmentId, include);
   });

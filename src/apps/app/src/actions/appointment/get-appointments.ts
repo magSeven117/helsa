@@ -1,12 +1,16 @@
 'use server';
 import { authActionClient } from '@helsa/actions';
 import { database } from '@helsa/database';
-import { Meta } from '@helsa/ddd/core/collection.';
-import { GetAppointments } from '@helsa/engine/appointment/application/get-appointments';
+import { GetDoctorAppointments } from '@helsa/engine/appointment/application/get-doctor-appointments';
+import { GetPatientAppointments } from '@helsa/engine/appointment/application/get-patient-appointments';
 import { PrismaAppointmentRepository } from '@helsa/engine/appointment/infrastructure/persistence/prisma-appointment-repository';
+import { GetDoctor } from '@helsa/engine/doctor/application/services/get-doctor';
+import { PrismaDoctorRepository } from '@helsa/engine/doctor/infrastructure/persistence/prisma-doctor-repository';
+import { GetPatient } from '@helsa/engine/patient/application/services/get-patient';
+import { PrismaPatientRepository } from '@helsa/engine/patient/infrastructure/prisma-patient-repository';
+import { UserRoleValue } from '@helsa/engine/user/domain/user-role';
+import { unstable_cache as cache } from 'next/cache';
 import { z } from 'zod';
-import { getDoctor } from '../doctor/get-doctor';
-import { getPatient } from '../patient/get-patient';
 
 const schema = z.object({
   start: z.string().optional(),
@@ -29,20 +33,37 @@ export const getAppointments = authActionClient
     },
   })
   .action(async ({ parsedInput, ctx: { user } }) => {
-    const role = user.role === 'DOCTOR' ? getDoctor({ userId: user.id }) : getPatient({ userId: user.id });
-    const data = (await role)?.data || null;
-    if (!data) {
-      return { data: [], meta: {} as Meta };
+    const repository = new PrismaAppointmentRepository(database);
+
+    let service;
+
+    if (user.role === UserRoleValue.DOCTOR) {
+      const doctorGetter = new GetDoctor(new PrismaDoctorRepository(database));
+      service = new GetDoctorAppointments(repository, doctorGetter);
+    } else {
+      const patientGetter = new GetPatient(new PrismaPatientRepository(database));
+      service = new GetPatientAppointments(repository, patientGetter);
     }
-    const service = new GetAppointments(new PrismaAppointmentRepository(database));
-    return await service.run(
-      data.id,
-      user.role,
-      parsedInput ?? {},
-      {
-        page: parsedInput.page,
-        pageSize: parsedInput.pageSize,
-      },
-      { sortBy: parsedInput.sortBy, order: parsedInput.order },
-    );
+
+    return cache(
+      () =>
+        service.run(
+          user.id,
+          {
+            end: parsedInput.end,
+            start: parsedInput.start,
+            states: parsedInput.states,
+            specialties: parsedInput.specialties,
+            types: parsedInput.types,
+          },
+          {
+            page: parsedInput.page,
+            pageSize: parsedInput.pageSize,
+          },
+          { sortBy: parsedInput.sortBy, order: parsedInput.order }
+        ),
+
+      ['get-appointments', user.id],
+      { tags: [`get-appointments-${user.id}`], revalidate: 3600 }
+    )();
   });
