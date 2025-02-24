@@ -32,7 +32,6 @@ import {
   Video,
 } from 'lucide-react';
 import Link from 'next/link';
-import { Suspense } from 'react';
 import { StateColumn } from '../table/columns';
 import Indications from './indications';
 

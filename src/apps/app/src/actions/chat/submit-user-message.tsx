@@ -1,14 +1,15 @@
 'use server';
+import { ChatAIProvider } from '@/src/components/chat/chat-ai-provider';
+import { SpinnerMessage } from '@/src/components/chat/messages';
+import { generateRateLimit } from '@/src/components/chat/tools/generate-rate-limit';
+import { generateText } from '@/src/components/chat/tools/generate-text';
+import { getUpcomingAppointmentTool } from '@/src/components/chat/tools/upcoming-appointments';
 import { anthropic } from '@ai-sdk/anthropic';
 import { createRateLimiter, fixedWindow } from '@helsa/rate-limit';
 import { createStreamableValue, getMutableAIState, streamUI } from 'ai/rsc';
 import { headers } from 'next/headers';
 import { v4 } from 'uuid';
 import { ClientMessage } from './types';
-import { ChatAIProvider } from '@/src/components/chat/chat-ai-provider';
-import { SpinnerMessage, BotMessage } from '@/src/components/chat/messages';
-import { generateRateLimit } from '@/src/components/chat/widgets/generate-rate-limit';
-import { getUpcomingAppointmentTool } from '@/src/components/chat/widgets/get-upcoming-appointment-tool';
 
 const ratelimit = createRateLimiter({
   limiter: fixedWindow(10, '10 s'),
@@ -59,30 +60,7 @@ export async function submitUserMessage(content: string): Promise<ClientMessage>
         display: null,
       })),
     ],
-    text: ({ content, done, delta }: { content: string; done: boolean; delta: string }) => {
-      if (!textStream) {
-        textStream = createStreamableValue('');
-        textNode = <BotMessage content={textStream.value} />;
-      }
-
-      if (done) {
-        textStream.done();
-        aiState.done({
-          ...aiState.get(),
-          messages: [
-            ...aiState.get().messages,
-            {
-              id: v4(),
-              role: 'assistant',
-              content,
-            },
-          ],
-        });
-      } else {
-        textStream.update(delta);
-      }
-      return textNode;
-    },
+    text: generateText(aiState, textStream, textNode),
     tools: {
       getUpcomingAppointment: getUpcomingAppointmentTool({ aiState }),
     },

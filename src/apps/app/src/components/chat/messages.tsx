@@ -3,10 +3,10 @@
 import { useStreamableText } from '@helsa/ui/hooks/use-streamable-text';
 import { cn } from '@helsa/ui/lib/utils';
 import type { StreamableValue } from 'ai/rsc';
+import { Loader2 } from 'lucide-react';
 import { ErrorBoundary } from 'next/dist/client/components/error-boundary';
 import { ErrorFallback } from '../error-fallback';
 import { ChatAvatar } from './chat-avatar';
-import { spinner } from './spinner';
 
 export function UserMessage({ children }: { children: React.ReactNode }) {
   return (
@@ -27,7 +27,9 @@ export function SpinnerMessage() {
         <ChatAvatar role="assistant" />
       </div>
 
-      <div className="ml-4 flex-1 space-y-2 overflow-hidden pl-2">{spinner}</div>
+      <div className="ml-4 flex-1 space-y-2 overflow-hidden pl-2">
+        <Loader2 className="animate-spin" />
+      </div>
     </div>
   );
 }

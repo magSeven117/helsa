@@ -8,5 +8,14 @@ export const ChatAIProvider = createAI<AIState, UIState>({
     submitUserMessage,
   },
   initialUIState: [],
+  initialAIState: {
+    user: {
+      id: '',
+      name: '',
+      image: '',
+    },
+    chatId: '',
+    messages: [],
+  },
   onSetAIState: updateChatState,
 });

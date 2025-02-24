@@ -1,15 +1,41 @@
+import { getUpcomingAppointment } from '@/src/actions/appointment/get-upcoming-appointment';
+import { MutableAIState } from '@/src/actions/chat/types';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { Appointment } from '@helsa/engine/appointment/domain/appointment';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@helsa/ui/components/table';
 import { cn } from '@helsa/ui/lib/utils';
 import { format } from 'date-fns';
+import { v4 } from 'uuid';
+import { z } from 'zod';
 import { BotCard } from '../messages';
+import { addToolMessage } from '../utils';
+
+type Args = {
+  aiState: MutableAIState;
+};
+export function getUpcomingAppointmentTool({ aiState }: Args) {
+  return {
+    description: 'Get the next upcoming appointment',
+    parameters: z.object({
+      fromDate: z.coerce.date().describe('Filter appointment from this date, in ISO-8601 format').optional(),
+    }),
+    generate: async (props: any) => {
+      const toolCallId = v4();
+      const response = await getUpcomingAppointment();
+      const appointments = response?.data ?? [];
+
+      addToolMessage(aiState, toolCallId, 'getUpcomingAppointment', props, { appointments });
+
+      return <UpcomingAppointments data={appointments} />;
+    },
+  };
+}
 
 type Props = {
   data: Primitives<Appointment>[];
 };
 
-const UpcomingAppointments = ({ data }: Props) => {
+export const UpcomingAppointments = ({ data }: Props) => {
   return (
     <BotCard className="space-y-4">
       {data.length > 0 && <p>Encontré {data.length} próximas citas medicas agendadas </p>}
@@ -45,5 +71,3 @@ const UpcomingAppointments = ({ data }: Props) => {
     </BotCard>
   );
 };
-
-export default UpcomingAppointments;
