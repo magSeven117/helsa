@@ -26,7 +26,6 @@ model User {
   patient  Patient?
   doctor   Doctor?
 
-
   @@map("user")
 }
 
