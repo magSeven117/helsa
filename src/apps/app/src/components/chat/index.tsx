@@ -1,58 +1,19 @@
 'use client';
-import { ClientMessage } from '@/src/actions/chat/types';
 import { ScrollArea } from '@helsa/ui/components/scroll-area';
 import { Textarea } from '@helsa/ui/components/textarea';
 import { useEnterSubmit } from '@helsa/ui/hooks/use-enter-submit';
 import { useScrollAnchor } from '@helsa/ui/hooks/use-scroll-anchor';
-import { useActions } from 'ai/rsc';
 import { useEffect, useRef } from 'react';
 import { v4 } from 'uuid';
-import { useAssistantStore } from '../../store/assistant/assistant-store';
 import { ChatEmpty } from './chat-empty';
 import { ChatExamples } from './chat-examples';
 import { ChatFooter } from './chat-footer';
 import { ChatList } from './chat-list';
-import { UserMessage } from './messages';
 
-const Chat = ({ messages, submitMessage, user, onNewChat, input, setInput, showFeedback }: any) => {
-  const { submitUserMessage } = useActions();
-  const { formRef, onKeyDown } = useEnterSubmit();
+const Chat = ({ messages, input, setInput, handleSubmit, onNewChat, setChatId, user, showFeedback, chatId }: any) => {
   const ref = useRef(false);
+  const { formRef, onKeyDown } = useEnterSubmit();
   const inputRef = useRef<HTMLTextAreaElement>(null);
-
-  const { message } = useAssistantStore();
-
-  const onSubmit = async (input: string) => {
-    const value = input.trim();
-
-    if (value.length === 0) {
-      return null;
-    }
-
-    setInput('');
-    scrollToBottom();
-
-    submitMessage((message: ClientMessage[]) => [
-      ...message,
-      {
-        id: v4(),
-        role: 'user',
-        display: <UserMessage>{value}</UserMessage>,
-      },
-    ]);
-
-    const responseMessage = await submitUserMessage(value);
-
-    submitMessage((messages: ClientMessage[]) => [...messages, responseMessage]);
-  };
-
-  useEffect(() => {
-    if (!ref.current && message) {
-      onNewChat();
-      onSubmit(message);
-      ref.current = true;
-    }
-  }, []);
 
   useEffect(() => {
     requestAnimationFrame(() => {
@@ -76,12 +37,22 @@ const Chat = ({ messages, submitMessage, user, onNewChat, input, setInput, showF
         </div>
       </ScrollArea>
       <div className="fixed bottom-[1px] left-[1px] right-[1px] md:h-[88px] bg-background border-border border-t-[1px]">
-        {showExamples && <ChatExamples onSubmit={onSubmit} />}
+        {showExamples && <ChatExamples onSubmit={handleSubmit} setInput={setInput} />}
         <form
           ref={formRef}
-          onSubmit={(evt) => {
-            evt.preventDefault();
-            onSubmit(input);
+          onSubmit={(e) => {
+            e.preventDefault();
+            const newId = v4();
+            if (!chatId) {
+              setChatId(newId);
+            }
+            handleSubmit(e, {
+              body: {
+                chatId: chatId || newId,
+                user,
+              },
+            });
+            scrollToBottom();
           }}
         >
           <Textarea
@@ -99,7 +70,7 @@ const Chat = ({ messages, submitMessage, user, onNewChat, input, setInput, showF
             }}
           />
         </form>
-        <ChatFooter onSubmit={() => onSubmit(input)} showFeedback={showFeedback} />
+        <ChatFooter onSubmit={handleSubmit} showFeedback={showFeedback} />
       </div>
     </div>
   );

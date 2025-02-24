@@ -22,7 +22,7 @@ const itemVariant = {
   show: { y: 0, opacity: 1 },
 };
 
-export function ChatExamples({ onSubmit }: { onSubmit: (example: string) => void }) {
+export function ChatExamples({ onSubmit, setInput }: { onSubmit: VoidFunction; setInput: any }) {
   const items = useMemo(() => chatExamples, []);
   const ref = useRef();
   const { events } = useDraggable(ref as any);
@@ -45,7 +45,14 @@ export function ChatExamples({ onSubmit }: { onSubmit: (example: string) => void
         style={{ width: `${totalLength}px` }}
       >
         {items.map((example) => (
-          <button key={example} type="button" onClick={() => onSubmit(example)}>
+          <button
+            key={example}
+            type="button"
+            onClick={() => {
+              setInput(example);
+              onSubmit();
+            }}
+          >
             <motion.li
               variants={itemVariant}
               className=" text-[#878787] bg-[#F2F1EF] text-xs dark:bg-[#1D1D1D] px-3 py-2 rounded-full cursor-default"

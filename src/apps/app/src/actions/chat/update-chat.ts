@@ -1,27 +1,21 @@
 'use server';
 
 import { Chat } from '@helsa/engine/chat/domain/chat';
+import { CoreMessage } from 'ai';
 import { saveChat } from './save-chat';
-import { AIState } from './types';
 
-export async function updateChatState({ state, done }: { state: AIState; done: boolean }) {
+export async function updateChat(chatId: string, userId: string, messages: CoreMessage[], newMessages: CoreMessage[]) {
   const createdAt = new Date();
-  const userId = state.user.id;
-
-  const { chatId, messages } = state;
 
   const firstMessageContent = messages?.at(0)?.content ?? '';
   const title = typeof firstMessageContent === 'string' ? firstMessageContent.substring(0, 100) : '';
-
   const chat: Chat = {
     id: chatId,
     title,
     userId,
     createdAt,
-    messages,
+    messages: [...messages, ...newMessages],
   };
 
-  if (done) {
-    await saveChat(chat);
-  }
+  await saveChat(chat);
 }

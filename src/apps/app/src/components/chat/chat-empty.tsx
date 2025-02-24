@@ -1,5 +1,5 @@
-import logo2 from '@/src/assets/images/Helsa Logo black.png';
-import logo from '@/src/assets/images/Helsa Logo white.png';
+import logo from '@/src/assets/images/HELSA NUEVO BLANCO ISOTIPO.png';
+import logo2 from '@/src/assets/images/HELSA NUEVO NEGRO ISOTIPO.png';
 import { useTheme } from 'next-themes';
 
 type Props = {

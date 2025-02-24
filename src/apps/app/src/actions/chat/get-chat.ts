@@ -11,7 +11,6 @@ export async function getChat(id: string) {
 
   const repository = new RedisChatRepository(client);
   const chat = await repository.getChat(id);
-
   if (!chat || (userId && chat.userId !== userId)) {
     return null;
   }

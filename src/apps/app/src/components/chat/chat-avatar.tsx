@@ -1,25 +1,25 @@
 'use client';
-import logo from '@/src/assets/images/Helsa Logo black - white.png';
-import logo2 from '@/src/assets/images/Helsa Logo white.png';
-import type { ChatAIProvider } from '@/src/components/chat/chat-ai-provider';
+import logo from '@/src/assets/images/HELSA NUEVO BLANCO ISOTIPO.png';
+import logo2 from '@/src/assets/images/HELSA NUEVO NEGRO ISOTIPO.png';
+import { User } from '@helsa/database';
 import { Avatar, AvatarFallback, AvatarImage } from '@helsa/ui/components/avatar';
 
-import { useAIState } from 'ai/rsc';
 import { useTheme } from 'next-themes';
+import { useLocalStorage } from 'usehooks-ts';
 
 type Props = {
   role: 'assistant' | 'user';
 };
 export function ChatAvatar({ role }: Props) {
-  const [aiState] = useAIState<typeof ChatAIProvider>();
-  const theme = useTheme();
+  const [user] = useLocalStorage<User | null>('user', null);
+  const { resolvedTheme } = useTheme();
   switch (role) {
     case 'user': {
       return (
         <Avatar className="size-6">
-          <AvatarImage src={aiState.user.image} alt={aiState.user.name} className="object-contain" />
+          <AvatarImage src={user?.image!} alt={user?.name} className="object-contain" />
           <AvatarFallback>
-            {aiState.user.name
+            {user?.name
               .split(' ')
               .map((n: any) => n[0])
               .join('')}
@@ -30,13 +30,14 @@ export function ChatAvatar({ role }: Props) {
 
     default:
       return (
-        <div className="size-8">
-          {theme.theme === 'dark' || theme.theme === 'system' ? (
-            <img src={logo.src} alt="" className="rounded-full border" />
-          ) : (
-            <img src={logo2.src} alt="" className="rounded-full border" />
-          )}
-        </div>
+        <Avatar className="size-6">
+          <AvatarImage
+            src={resolvedTheme === 'dark' ? logo.src : logo2.src}
+            alt={user?.name}
+            className="object-contain"
+          />
+          <AvatarFallback>H</AvatarFallback>
+        </Avatar>
       );
   }
 }

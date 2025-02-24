@@ -9,7 +9,7 @@ export class GetUpcomingAppointment {
     const appointments = await this.repository.search(
       Criteria.fromValues(
         [
-          { field: 'patientId', value: patientId, operator: Operator.EQUAL },
+          { field: 'doctorId', value: patientId, operator: Operator.EQUAL },
           { field: 'date', value: new Date().toISOString(), operator: Operator.GT },
           { field: 'status', value: AppointmentStatusEnum.SCHEDULED, operator: Operator.EQUAL },
         ],

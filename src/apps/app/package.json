@@ -12,6 +12,8 @@
   "dependencies": {
     "@ably/chat": "^0.2.1",
     "@ai-sdk/anthropic": "^1.0.2",
+    "@ai-sdk/azure": "^1.1.13",
+    "@ai-sdk/react": "^1.1.17",
     "@helsa/actions": "*",
     "@helsa/analytics": "^0.1.0",
     "@helsa/auth": "*",

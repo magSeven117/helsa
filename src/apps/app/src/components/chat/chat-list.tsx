@@ -1,10 +1,12 @@
 'use client';
 
-import { ClientMessage } from '@/src/actions/chat/types';
 import { cn } from '@helsa/ui/lib/utils';
+import { UIMessage } from 'ai';
+import { BotMessage, SpinnerMessage, UserMessage } from './messages';
+import { UpcomingAppointments } from './tools/upcoming-appointments';
 
 type Props = {
-  messages: ClientMessage[];
+  messages: UIMessage[];
   className?: string;
 };
 
@@ -14,15 +16,33 @@ export function ChatList({ messages, className }: Props) {
   }
 
   return (
-    <div className={cn('flex flex-col select-text', className)}>
-      {messages
-        .filter((tool) => tool.display !== undefined)
-        .map((message, index) => (
-          <div key={message.id}>
-            {message.display}
-            {index < messages.length - 1 && <div className="my-6" />}
-          </div>
-        ))}
+    <div className={cn('flex flex-col select-text gap-2', className)}>
+      {messages.map((message) => (
+        <div key={message.id} className="mb-2">
+          {message.role === 'user' && <UserMessage>{message.content}</UserMessage>}
+          {message.role === 'assistant' && (!message.toolInvocations || message.toolInvocations.length <= 0) && (
+            <BotMessage content={message.content} />
+          )}
+          {message.role === 'assistant' && message.toolInvocations?.length! > 0 && (
+            <div>
+              {message.toolInvocations?.map((toolInvocation) => {
+                if (toolInvocation.state !== 'result') {
+                  return <SpinnerMessage key={toolInvocation.toolCallId} />;
+                }
+                switch (toolInvocation.toolName) {
+                  case 'getUpcomingAppointment': {
+                    return (
+                      <UpcomingAppointments data={toolInvocation.result.appointments} key={toolInvocation.toolCallId} />
+                    );
+                  }
+                  default:
+                    return null;
+                }
+              })}
+            </div>
+          )}
+        </div>
+      ))}
     </div>
   );
 }

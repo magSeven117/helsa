@@ -1,6 +1,4 @@
 import { getChatsAction } from '@/src/actions/chat/get-chats-action';
-import { ChatAIProvider } from '@/src/components/chat/chat-ai-provider';
-import { useAIState } from 'ai/rsc';
 import { useEffect, useState } from 'react';
 
 import { Chat } from '@helsa/engine/chat/domain/chat';
@@ -29,7 +27,6 @@ const formatRange = (key: string) => {
 export function SidebarItems({ onSelect, chatId }: SidebarItemsProps) {
   const [items, setItems] = useState<Chat[]>([]);
   const [isLoading, setLoading] = useState(false);
-  const [aiState] = useAIState<typeof ChatAIProvider>();
 
   useEffect(() => {
     async function fetchData() {
@@ -44,10 +41,10 @@ export function SidebarItems({ onSelect, chatId }: SidebarItemsProps) {
       setLoading(false);
     }
 
-    if ((!items.length && !isLoading) || (items.length !== aiState?.messages.length && !isLoading)) {
+    if (!items.length && !isLoading) {
       fetchData();
     }
-  }, [aiState]);
+  }, [chatId]);
 
   return (
     <div className="overflow-auto relative h-screen md:h-[410px] mt-16 scrollbar-hide p-4 pt-0 pb-[50px] flex flex-col space-y-6">

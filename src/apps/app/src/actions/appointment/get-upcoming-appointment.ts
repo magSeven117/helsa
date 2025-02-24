@@ -3,14 +3,14 @@ import { authActionClient } from '@helsa/actions';
 import { database } from '@helsa/database';
 import { GetUpcomingAppointment } from '@helsa/engine/appointment/application/get-upcoming-appointments';
 import { PrismaAppointmentRepository } from '@helsa/engine/appointment/infrastructure/persistence/prisma-appointment-repository';
-import { getPatient } from '../patient/get-patient';
+import { getDoctor } from '../doctor/get-doctor';
 
 export const getUpcomingAppointment = authActionClient
   .metadata({
     actionName: 'get-upcoming-appointment',
   })
   .action(async ({ ctx: { user } }) => {
-    const patient = await getPatient({ userId: user.id });
+    const patient = await getDoctor({ userId: user.id });
     if (!patient) {
       return [];
     }

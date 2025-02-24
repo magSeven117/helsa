@@ -1,78 +1,126 @@
-import { Chat, Message } from '@helsa/engine/chat/domain/chat';
-import { v4 } from 'uuid';
-import { MutableAIState } from '../../actions/chat/types';
-import { BotMessage, UserMessage } from './messages';
-import { UpcomingAppointments } from './tools/upcoming-appointments';
+import { CoreMessage, CoreToolMessage, generateId, Message, ToolInvocation } from 'ai';
+import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
-export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+import { Chat } from '@helsa/engine/chat/domain/chat';
 
-function getUIComponentFromMessage(message: Message) {
-  if (message.role === 'user') {
-    return <UserMessage>{message.content as any}</UserMessage>;
-  }
-
-  if (message.role === 'assistant' && typeof message.content === 'string') {
-    return <BotMessage content={message.content} />;
-  }
-
-  if (message.role === 'tool') {
-    return message.content.map((tool: any) => {
-      switch (tool.toolName) {
-        case 'getUpcomingAppointment': {
-          return <UpcomingAppointments data={tool.result.appointments} />;
-        }
-
-        default:
-          return null;
-      }
-    });
-  }
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
 }
 
-export const getUIStateFromAIState = (aiState: Chat) => {
-  return aiState?.messages
-    .filter((message) => message.role !== 'system')
-    .map((message, index) => ({
-      id: `${aiState.id}-${index}`,
-      display: getUIComponentFromMessage(message),
-    }));
+interface ApplicationError extends Error {
+  info: string;
+  status: number;
+}
+
+export const fetcher = async (url: string) => {
+  const res = await fetch(url);
+
+  if (!res.ok) {
+    const error = new Error('An error occurred while fetching the data.') as ApplicationError;
+
+    error.info = await res.json();
+    error.status = res.status;
+
+    throw error;
+  }
+
+  return res.json();
 };
 
-export const addToolMessage = (
-  aiState: MutableAIState,
-  toolName: string,
-  toolCallId: string,
-  args: any,
-  result: any
-) => {
-  aiState.done({
-    ...aiState.get(),
-    messages: [
-      ...aiState.get().messages,
-      {
-        id: v4(),
-        role: 'assistant',
-        content: [
-          {
-            type: 'tool-call',
-            toolName,
-            toolCallId,
-            args,
-          },
-        ],
-      },
-      {
-        id: v4(),
-        role: 'tool',
-        content: [
-          {
-            type: 'tool-result',
-            toolName,
-            toolCallId,
-            result,
-          },
-        ],
-      },
-    ],
+export function getLocalStorage(key: string) {
+  if (typeof window !== 'undefined') {
+    return JSON.parse(localStorage.getItem(key) || '[]');
+  }
+  return [];
+}
+
+export function generateUUID(): string {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    const r = (Math.random() * 16) | 0;
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
   });
-};
+}
+
+function addToolMessageToChat({
+  toolMessage,
+  messages,
+}: {
+  toolMessage: CoreToolMessage;
+  messages: Array<Message>;
+}): Array<Message> {
+  return messages.map((message) => {
+    if (message.toolInvocations) {
+      return {
+        ...message,
+        toolInvocations: message.toolInvocations.map((toolInvocation) => {
+          const toolResult = toolMessage.content.find((tool) => tool.toolCallId === toolInvocation.toolCallId);
+
+          if (toolResult) {
+            return {
+              ...toolInvocation,
+              state: 'result',
+              result: toolResult.result,
+            };
+          }
+
+          return toolInvocation;
+        }),
+      };
+    }
+
+    return message;
+  });
+}
+
+export function convertToUIMessages(messages: Array<CoreMessage>): Array<Message> {
+  return messages.reduce((chatMessages: Array<Message>, message) => {
+    if (message.role === 'tool') {
+      return addToolMessageToChat({
+        toolMessage: message as CoreToolMessage,
+        messages: chatMessages,
+      });
+    }
+
+    let textContent = '';
+    let toolInvocations: Array<ToolInvocation> = [];
+
+    if (typeof message.content === 'string') {
+      textContent = message.content;
+    } else if (Array.isArray(message.content)) {
+      for (const content of message.content) {
+        if (content.type === 'text') {
+          textContent += content.text;
+        } else if (content.type === 'tool-call') {
+          toolInvocations.push({
+            state: 'call',
+            toolCallId: content.toolCallId,
+            toolName: content.toolName,
+            args: content.args,
+          });
+        }
+      }
+    }
+
+    chatMessages.push({
+      id: generateId(),
+      role: message.role,
+      content: textContent,
+      toolInvocations,
+    });
+
+    return chatMessages;
+  }, []);
+}
+
+export function getTitleFromChat(chat: Chat) {
+  const messages = convertToUIMessages(chat.messages as Array<CoreMessage>);
+  const firstMessage = messages[0];
+
+  if (!firstMessage) {
+    return 'Untitled';
+  }
+
+  return firstMessage.content;
+}

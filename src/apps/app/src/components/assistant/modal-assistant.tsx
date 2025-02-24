@@ -11,7 +11,7 @@ const ModalAssistant = () => {
   });
   return (
     <Dialog open={isOpen} onOpenChange={setOpen as any}>
-      <DialogContent className="overflow-hidden sm:rounded-none p-0 max-w-full w-full h-full md:max-w-[740px] md:h-[480px] m-0 select-text focus-visible:outline-none focus-visible:ring-0">
+      <DialogContent className="overflow-hidden sm:rounded-none p-0 max-w-full w-full h-full md:max-w-[60%] md:h-[600px] m-0 select-text focus-visible:outline-none focus-visible:ring-0">
         <Assistant />
       </DialogContent>
     </Dialog>
