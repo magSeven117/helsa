@@ -21,6 +21,8 @@
     "@helsa/env": "*",
     "@helsa/rate-limit": "*",
     "@helsa/tasks": "*",
+    "@hono/zod-openapi": "^0.18.4",
+    "@hono/zod-validator": "^0.4.3",
     "@stream-io/node-sdk": "^0.4.5",
     "@trigger.dev/sdk": "3.3.5",
     "@vercel/blob": "^0.27.0",
@@ -29,13 +31,16 @@
     "date-fns": "^3.6.0",
     "date-fns-tz": "^3.2.0",
     "hono": "^4.7.2",
+    "hono-openapi": "^0.4.5",
     "next": "14.2.4",
     "next-safe-action": "7.10.2",
     "react": "^18",
     "react-dom": "^18",
     "svix": "^1.24.0",
     "uuid": "^10.0.0",
-    "voyage-ai-provider": "^0.0.1"
+    "voyage-ai-provider": "^0.0.1",
+    "zod": "^3.24.2",
+    "zod-openapi": "^4.2.3"
   },
   "devDependencies": {
     "@helsa/typescript-config": "*",

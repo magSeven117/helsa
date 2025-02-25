@@ -28,6 +28,7 @@
     "@helsa/supabase": "^0.1.0",
     "@helsa/tasks": "*",
     "@helsa/ui": "*",
+    "@hono/swagger-ui": "^0.5.0",
     "@hookform/resolvers": "^3.10.0",
     "@stream-io/node-sdk": "^0.4.5",
     "@stream-io/video-react-sdk": "^1.8.5",
