@@ -2,6 +2,8 @@ import { PrismaClient } from '@helsa/database';
 import { PrismaCriteriaConverter } from '@helsa/database/converter';
 import { Criteria } from '@helsa/ddd/core/criteria';
 import { Primitives } from '@helsa/ddd/types/primitives';
+import { subDays } from 'date-fns';
+import { AppointmentTelemetry } from '../../appointment/domain/telemetry';
 import { Patient } from '../domain/patient';
 import { PatientRepository } from '../domain/patient-repository';
 
@@ -58,5 +60,26 @@ export class PrismaPatientRepository implements PatientRepository {
       take,
     });
     return patients.map((patient) => Patient.fromPrimitives(patient as unknown as Primitives<Patient>));
+  }
+
+  async getVitals(userId: string): Promise<AppointmentTelemetry[]> {
+    const patient = await this.model.findFirst({
+      where: { userId },
+      include: {
+        appointments: {
+          where: { date: { gte: subDays(new Date(), 30) } },
+          select: {
+            telemetry: true,
+          },
+        },
+      },
+    });
+    if (!patient) throw new Error('Patient not found');
+    const vitals = patient.appointments
+      .filter((a) => a.telemetry)
+      .map((appointment) =>
+        AppointmentTelemetry.fromPrimitives(appointment.telemetry! as unknown as Primitives<AppointmentTelemetry>)
+      );
+    return vitals;
   }
 }

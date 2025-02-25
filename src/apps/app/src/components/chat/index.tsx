@@ -26,7 +26,7 @@ const Chat = ({ messages, input, setInput, handleSubmit, onNewChat, setChatId, u
 
   return (
     <div className="relative">
-      <ScrollArea className="md:h-[335px]" ref={scrollRef}>
+      <ScrollArea className="md:h-[445px]" ref={scrollRef}>
         <div ref={messagesRef}>
           {messages.length ? (
             <ChatList messages={messages} className="p-4 pb-8" />
