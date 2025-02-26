@@ -1,4 +1,4 @@
-import { AppointmentTelemetry } from '@/src/appointment/domain/telemetry';
+import { AppointmentTelemetry } from '../../appointment/domain/telemetry';
 import { Criteria } from '@helsa/ddd/core/criteria';
 import { Patient } from './patient';
 

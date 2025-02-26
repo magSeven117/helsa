@@ -12,5 +12,5 @@ export const useAssistantStore = create<AssistantState>()((set) => ({
   message: undefined,
   chats: [],
   setOpen: (message) => set((state) => ({ isOpen: !state.isOpen, message })),
-  setChats: (chats) => set({ chats }),
+  setChats: (chats: any[]) => set({ chats }),
 }));
