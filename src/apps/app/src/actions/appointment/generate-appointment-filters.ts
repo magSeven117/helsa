@@ -1,5 +1,5 @@
 'use server';
-import { anthropic } from '@ai-sdk/anthropic';
+import { deepseek } from '@ai-sdk/deepseek';
 import { streamObject } from 'ai';
 import { createStreamableValue } from 'ai/rsc';
 import { isValid } from 'date-fns';
@@ -22,7 +22,7 @@ export async function generateAppointmentFilters(prompt: string, context: string
 
   (async () => {
     const { partialObjectStream } = await streamObject({
-      model: anthropic('claude-3-sonnet-20240229'),
+      model: deepseek('deepseek-chat'),
       system: `You are a helpful assistant that generates filters for a given prompt. \n
       Current date is: ${new Date().toISOString().split('T')[0]} \n
       ${context}
