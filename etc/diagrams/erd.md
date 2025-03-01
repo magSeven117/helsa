@@ -1,4 +1,9 @@
 ```mermaid
+---
+config:
+  look: handDrown
+  theme: default
+---
 erDiagram
   USER ||--o{ ACCOUNT : "has"
   USER ||--o{ SESSION : "has"
