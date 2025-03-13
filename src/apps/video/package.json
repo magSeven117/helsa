@@ -1,0 +1,32 @@
+{
+  "name": "@helsa/video",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "nodemon src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@helsa/auth": "*",
+    "@helsa/cache": "*",
+    "@helsa/database": "*",
+    "@helsa/ddd": "*",
+    "@helsa/engine": "*",
+    "@helsa/rate-limit": "*",
+    "express": "^4.21.2",
+    "node-webrtc": "^0.0.0",
+    "peer": "^1.0.2",
+    "peerjs": "^1.5.4",
+    "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "@helsa/typescript-config": "*",
+    "@types/express": "^5.0.0",
+    "@types/node": "^20",
+    "eslint": "^8",
+    "eslint-config-next": "15.2.2",
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2",
+    "typescript": "^5"
+  }
+}

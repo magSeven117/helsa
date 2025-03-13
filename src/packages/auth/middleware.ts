@@ -10,6 +10,9 @@ export async function betterAuthMiddleware(req: NextRequest, publicRoutes: strin
       cookie: req.headers.get('cookie') || '',
     },
   });
+  if (req.nextUrl.pathname == '/call') {
+    return NextResponse.next();
+  }
   if (!session && !publicRoutes.includes(req.nextUrl.pathname)) {
     return NextResponse.redirect(new URL('/sign-in', req.url));
   }

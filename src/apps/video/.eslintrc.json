@@ -1,0 +1,6 @@
+{
+  "rules": {
+    "@typescript-eslint/consistent-type-definitions": "off",
+    "@typescript-eslint/require-await": "off"
+  }
+}
