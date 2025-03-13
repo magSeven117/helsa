@@ -182,6 +182,8 @@ Helsa is designed to be deployed on Vercel, but you can deploy it on any platfor
 ## Contributing
 
 - [José Véliz (Duccem)](https://github.com/Duccem)
+- [Altair De Melo](https://github.com/Aldor112)
+- [Jesus Brito](https://github.com/JesusBritoS)
 
 <a href="https://github.com/duccem/ducen/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=duccem/helsa" />
