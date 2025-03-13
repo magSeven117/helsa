@@ -169,6 +169,11 @@ Helsa is designed to be deployed on Vercel, but you can deploy it on any platfor
    - Set up the environment variables in the Vercel dashboard.
    - Deploy your project.
 
+# Docs
+
+- [Gitflow Diagram](docs/gitflow-diagram.md)
+- [ER Diagram](docs/er-diagram.md)
+
 ## Other links
 
 - [Changelog](https://github.com/Duccem/ducen-hospital/blob/main/CHANGELOG.md)
