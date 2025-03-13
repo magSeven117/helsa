@@ -9,7 +9,7 @@
   "devDependencies": {
     "@helsa/env": "*",
     "@helsa/typescript-config": "*",
-    "next": "14.2.4"
+    "next": "15.2.2"
   },
   "dependencies": {
     "@prisma/nextjs-monorepo-workaround-plugin": "^6.0.1"

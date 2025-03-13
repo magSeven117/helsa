@@ -1,6 +1,6 @@
+'use client';
 import { Table } from '@tanstack/react-table';
 import { LucideIcon } from 'lucide-react';
-import * as React from 'react';
 import { DataTableFacetedFilter } from './data-table-faceted-filter';
 
 interface DataTableTagFilterProps<TData> {

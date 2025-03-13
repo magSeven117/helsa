@@ -7,7 +7,6 @@ import { DataTableIdColumn } from '@helsa/ui/components/data-table/data-table-id
 import { DataTableIdHeader } from '@helsa/ui/components/data-table/data-table-id-header';
 import { DataTablePagination } from '@helsa/ui/components/data-table/data-table-pagination';
 import { DataTableSearcher } from '@helsa/ui/components/data-table/data-table-searcher';
-import DataTableTagFilter from '@helsa/ui/components/data-table/data-table-tag-filter';
 import { DataTableViewOptions } from '@helsa/ui/components/data-table/data-table-view-options';
 import {
   DropdownMenu,
@@ -189,7 +188,6 @@ const PatientsTable = () => {
       <div className="flex justify-between items-center">
         <div className="flex flex-1 items-center space-x-2">
           <DataTableSearcher searchColumn="name" table={table} />
-          <DataTableTagFilter table={table} columnFilterTagName="type" columnTags={statuses} title="Tipo" />
           <DataTableButtonReset table={table} />
         </div>
         <DataTableViewOptions table={table} />

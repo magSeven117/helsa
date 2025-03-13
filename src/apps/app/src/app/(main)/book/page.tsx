@@ -13,7 +13,10 @@ const searchParamsCache = createSearchParamsCache({
   experience: parseAsInteger,
 });
 
-const Page = async ({ searchParams }: { searchParams: Record<string, string | string[] | undefined> }) => {
+const Page = async (
+  props: { searchParams: Promise<Record<string, string | string[] | undefined>> }
+) => {
+  const searchParams = await props.searchParams;
   const {
     q,
     experience,

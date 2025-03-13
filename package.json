@@ -8,9 +8,7 @@
     "test": "turbo test"
   },
   "dependencies": {
-    "-": "^0.0.1",
-    "@helsa/auth": "^0.1.0",
-    "@helsa/patients": "^1.0.0"
+    "-": "^0.0.1"
   },
   "devDependencies": {
     "@helsa/typescript-config": "*",

@@ -24,7 +24,7 @@ const itemVariant = {
 
 export function ChatExamples({ onSubmit, setInput }: { onSubmit: VoidFunction; setInput: any }) {
   const items = useMemo(() => chatExamples, []);
-  const ref = useRef();
+  const ref = useRef(undefined);
   const { events } = useDraggable(ref as any);
 
   const totalLength = chatExamples.reduce((accumulator, currentString) => {

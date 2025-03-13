@@ -9,7 +9,5 @@ export const config: NextConfig = {
 
     return config;
   },
-  experimental: {
-    serverComponentsExternalPackages: ['@simplewebauthn/server', '@trigger.dev/sdk'],
-  },
+  serverExternalPackages: ['@simplewebauthn/server', '@trigger.dev/sdk'],
 };

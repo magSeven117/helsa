@@ -1,3 +1,4 @@
+'use client';
 import { CheckIcon, PlusCircledIcon } from '@radix-ui/react-icons';
 import { Column } from '@tanstack/react-table';
 import * as React from 'react';

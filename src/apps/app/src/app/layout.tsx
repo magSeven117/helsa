@@ -10,6 +10,13 @@ const nunito = Nunito({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'Helsa',
   description: 'A platform for managing your health',
+  openGraph: {
+    title: 'My Site',
+    description: 'Welcome to My Site',
+    url: 'https://example.com',
+    siteName: 'My Site',
+    images: [{ url: 'https://example.com/og.png' }],
+  },
 };
 
 export default function RootLayout({

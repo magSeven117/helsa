@@ -10,8 +10,8 @@
   "dependencies": {
     "@helsa/env": "*",
     "@supabase/ssr": "^0.5.2",
-    "@supabase/supabase-js": "^2.47.10",
-    "supabase": "^2.1.1"
+    "@supabase/supabase-js": "^2.49.1",
+    "supabase": "^2.15.8"
   },
   "devDependencies": {
     "@helsa/typescript-config": "*",

@@ -1,4 +1,3 @@
-import { expo } from '@better-auth/expo';
 import { PrismaClient } from '@helsa/database';
 import { resend } from '@helsa/email';
 import ForgetPassword from '@helsa/email/templates/forget-password';
@@ -35,7 +34,7 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
-  trustedOrigins: ['helsapatient://', 'exp://', 'https://app.helsahealthcare.com'],
+  trustedOrigins: ['https://app.helsahealthcare.com'],
   plugins: [
     emailOTP({
       otpLength: 6,
@@ -59,7 +58,6 @@ export const auth = betterAuth({
       sendVerificationOnSignUp: true,
     }),
     nextCookies(),
-    expo(),
     bearer(),
   ],
   socialProviders: {

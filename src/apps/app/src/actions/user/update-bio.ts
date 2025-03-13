@@ -13,5 +13,5 @@ export const updateBio = authActionClient
   .metadata({ actionName: 'update-bio' })
   .action(async ({ parsedInput }) => {
     const { bio } = parsedInput;
-    await auth.api.updateUser({ body: { bio }, headers: headers() });
+    await auth.api.updateUser({ body: { bio }, headers: await headers() });
   });

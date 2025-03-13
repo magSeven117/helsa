@@ -5,7 +5,8 @@ import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 
 const CallChat = dynamic(() => import('@/src/components/call-chat'), { ssr: false });
-const Page = async ({ params }: { params: { id: string } }) => {
+const Page = async (props: { params: Promise<{ id: string }> }) => {
+  const params = await props.params;
   return (
     <div className="w-full h-full flex flex-col justify-between px-5" defaultValue="chat" suppressHydrationWarning>
       <Suspense fallback={<HeaderSkeleton />}>

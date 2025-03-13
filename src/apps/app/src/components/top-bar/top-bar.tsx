@@ -14,8 +14,7 @@ import {
 } from '@helsa/ui/components/dropdown-menu';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@helsa/ui/components/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@helsa/ui/components/tabs';
-import { useKBar } from 'kbar';
-import { Bell, Command, Inbox, LogOut, Settings, Sparkles, SunMoon, User } from 'lucide-react';
+import { Bell, Inbox, LogOut, Settings, Sparkles, SunMoon, User } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { useRouter } from 'next/navigation';
 import { useAssistantStore } from '../../store/assistant/assistant-store';
@@ -28,7 +27,6 @@ const TopBar = () => {
       <div className="flex w-1/2 items-center gap-5">
         <SidebarTrigger />
         <AIButton />
-        <CommandButton />
       </div>
       <div className="flex items-center gap-3">
         <NotificationButton />
@@ -49,21 +47,6 @@ const AIButton = () => {
     >
       <span className="p-1 flex justify-center items-center rounded-none text-xs">
         <Sparkles className="size-4 mr-2" /> {'Ask Helsa a question'}
-      </span>
-    </div>
-  );
-};
-
-const CommandButton = () => {
-  const { query } = useKBar();
-
-  return (
-    <div
-      className="flex justify-start items-center gap-3 text-muted-foreground hover:text-foreground cursor-pointer text-sm"
-      onClick={() => query.toggle()}
-    >
-      <span className="bg-sidebar p-1 flex justify-center items-center border rounded-none text-xs">
-        <Command className="size-4" /> {' + K'}
       </span>
     </div>
   );

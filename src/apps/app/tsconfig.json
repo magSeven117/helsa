@@ -2,10 +2,14 @@
   "extends": "@helsa/typescript-config/next.json",
   "compilerOptions": {
     "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "@helsa/*": ["../../packages/*"]
+    }
   },
   "include": [
     "next-env.d.ts",
-    "next.config.mjs",
+    "next.config.ts",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",

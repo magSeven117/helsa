@@ -15,10 +15,10 @@
     "@helsa/observability": "^0.1.0",
     "@helsa/rate-limit": "*",
     "@helsa/typescript-config": "*",
-    "next": "14.2.4",
-    "next-safe-action": "7.10.2",
+    "next": "15.2.2",
+    "next-safe-action": "7.10.4",
     "server-only": "^0.0.1",
-    "zod": "^3.23.8"
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@types/node": "^20",

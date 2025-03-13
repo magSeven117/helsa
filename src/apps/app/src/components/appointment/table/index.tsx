@@ -16,7 +16,7 @@ type Props = {
 
 export async function AppointmentTable({ filter, pageSize, page, sort, specialties, types }: Props) {
   const hasFilters = Object.values(filter).some((value) => value !== null);
-  const initialColumnVisibility = JSON.parse(cookies().get('appointment-column-visibility')?.value || '[]');
+  const initialColumnVisibility = JSON.parse((await cookies()).get('appointment-column-visibility')?.value || '[]');
   const response = await getAppointments({
     start: filter.start ?? undefined,
     end: filter.end ?? undefined,

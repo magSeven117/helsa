@@ -8,7 +8,7 @@ const ratelimit = createRateLimiter({
   prefix: 'helsa',
 });
 export const rateLimitMiddleware = createMiddleware().define(async ({ next, clientInput, metadata }) => {
-  const ip = headers().get('x-forwarded-for');
+  const ip = (await headers()).get('x-forwarded-for');
 
   const { success, remaining } = await ratelimit.limit(`${ip}-${metadata.name}`);
 
