@@ -1,7 +1,7 @@
+import '@/src/assets/globals.css';
 import icon from '@/src/assets/images/HELSA NUEVO BLANCO ISOTIPO.png';
 import { Provider as Analytics } from '@helsa/analytics/client';
 import { DesignSystemProvider } from '@helsa/ui';
-import '@helsa/ui/styles/global.css';
 import type { Metadata } from 'next';
 import { Nunito } from 'next/font/google';
 
