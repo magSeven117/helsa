@@ -1,21 +1,36 @@
-# Helsa - Healthcare Platform
+![hero](github.png)
+
+<p align="center">
+	<h1 align="center"><b>Helsa</b></h1>
+<p align="center">
+   <strong>Modern telemedicine platform for virtual consultations and health monitoring.</strong>
+    <br />
+    <br />
+    <a href="https://discord.gg/helsa-care">Discord</a>
+    ·
+    <a href="https://helsahealthcare.com">Website</a>
+    ·
+    <a href="https://github.com/duccem/helsa/issues">Issues</a>
+  </p>
+</p>
 
 ## Table of Contents
 
-- [Helsa - Healthcare Platform](#helsa---healthcare-platform)
-  - [Table of Contents](#table-of-contents)
-  - [Introduction](#introduction)
-  - [Features](#features)
+- [Table of Contents](#table-of-contents)
+- [Introduction](#introduction)
+- [Features](#features)
+- [Architecture](#architecture)
   - [Tech Stack](#tech-stack)
-  - [Getting Started](#getting-started)
-    - [Prerequisites](#prerequisites)
-    - [Installation](#installation)
-    - [Deployment](#deployment)
-  - [Other links](#other-links)
-  - [Contributing](#contributing)
-  - [License](#license)
-  - [Contact](#contact)
-
+  - [Hosting](#hosting)
+  - [Services](#services)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Deployment](#deployment)
+- [Other links](#other-links)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
 
 ## Introduction
 
@@ -32,15 +47,35 @@ This repository contains both, backend, frontend and mobile source code, destine
 - **Responsive Design**: Optimized for both desktop and mobile devices.
 - **Modern UI/UX**: Based on the color scheme with hexadecimal code `#8167EC`.
 
-## Tech Stack
+## Architecture
 
-- **Frontend**: [Next.js](https://nextjs.org/)
-- **Backend**: [Next.js](https://nextjs.org/)
-- **Database**: [Supabase](https://supabase.com), [Prisma](https://www.prisma.io)
-- **Authentication**: [Better-auth](https://better-auth.com)
-- **Background jobs**: [Trigger.dev](https://trigger.dev)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com)
-- **Deployment**: [Vercel](https://vercel.com/home)
+Helsa is built using a modern tech stack that includes Next.js, Supabase, Prisma, and Trigger.dev. The frontend is built with Next.js, while the backend is also built with Next.js and uses Supabase for the database and Prisma for ORM. Trigger.dev is used for background jobs, and Better-auth is used for authentication.
+
+### Tech Stack
+
+- [Next.js](https://nextjs.org) (frontend and backend)
+- [Postgres](https://postgresql.org) (database)
+- [Redis](https://upstash.com) (cache)
+- [Better Auth](https://betterauth.com) (authentication)
+- [Tailwindcss](https://tailwindcss.com) (styles)
+- [Shadcn](https://shadcn.com) (components)
+- [Payload](https://payloadcms.com) (cms)
+
+### Hosting
+
+- [Supabase](https://supabase.com) (database, storage, realtime)
+- [Vercel](https://vercel.com/home) (Website, edge-config, and metrics)
+- [Upstash](https://upstash.com) (redis)
+
+### Services
+
+- [Trigger.dev](https://trigger.dev) (background jobs)
+- [Betterstack](https://betterstack.com) (logs)
+- [OpenPanel](https://openpanel.dev) (observability)
+- [Stream](https://getstream.io) (video-chat)
+- [Resend](https://resend.io) (email)
+- [Anthropic](https://anthropic.com) (AI)
+- [Polar](https://polar.sh) (Payments)
 
 ## Getting Started
 
@@ -56,21 +91,21 @@ Before you begin, ensure you have the following installed:
 ### Installation
 
 1. **Clone the repository**:
+
    ```bash
    git clone https://github.com/Duccem/helsa.git
    cd helsa
    ```
 
 2. **Install dependencies**:
+
    ```bash
    npm install
-   # or
-   yarn install
    ```
 
 3. **Set up environment variables**:
 
-   Create a `.env.local` file for each app:
+   Create a `.env` file for each app:
 
    ```bash
     NODE_ENV=development
@@ -111,17 +146,17 @@ Before you begin, ensure you have the following installed:
     NEXT_PUBLIC_SUPABASE_URL=https://subdomain.supabase.co
     NEXT_PUBLIC_SUPABASE_KEY=supabase-key
 
-    BASEHUB_TOKEN=basehub-key
+    DEEPSEEK_API_KEY=deepseek-key
+
    ```
 
 4. **Run the development server**:
+
    ```bash
-   npm run dev
-   # or
-   yarn dev
+   npm run dev -w $app
    ```
 
-   Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+   Open [http://localhost:$port](http://localhost:3000) with your browser to see the result.
 
 ### Deployment
 
@@ -134,10 +169,10 @@ Helsa is designed to be deployed on Vercel, but you can deploy it on any platfor
    - Set up the environment variables in the Vercel dashboard.
    - Deploy your project.
 
-
 ## Other links
 
 - [Changelog](https://github.com/Duccem/ducen-hospital/blob/main/CHANGELOG.md)
+- [Roadmap](https://github.com/Duccem/ducen-hospital/blob/main/ROADMAP.md)
 
 ## Contributing
 
@@ -146,7 +181,6 @@ Helsa is designed to be deployed on Vercel, but you can deploy it on any platfor
 <a href="https://github.com/duccem/ducen/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=duccem/ducen" />
 </a>
-
 
 ## License
 
