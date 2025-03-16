@@ -1,9 +1,9 @@
-import NewCall from '@/src/components/call/new';
+import VideoCall from '@/src/components/call/new';
 
 const Page = () => {
   return (
     <div>
-      <NewCall />
+      <VideoCall />
     </div>
   );
 };

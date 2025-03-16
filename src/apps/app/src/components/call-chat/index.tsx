@@ -11,12 +11,11 @@ import { useEffect, useRef, useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 const CallCHat = ({ id }: { id: string }) => {
   const [user] = useLocalStorage<User | null>('user', null);
-  if (!user) return null;
   return (
     <>
       <div className="h-2"></div>
-      <ChatList userId={user!.id} appointmentId={id} />
-      <ChatFooter userId={user!.id} appointmentId={id} />
+      <ChatList userId={user?.id || ''} appointmentId={id} />
+      <ChatFooter userId={user?.id || ''} appointmentId={id} />
     </>
   );
 };
@@ -73,13 +72,28 @@ const ChatList = ({ userId, appointmentId }: { userId: string; appointmentId: st
                 {formatDistance(
                   toDate(message.createdAt!, { timeZone: 'UTC' }),
                   fromZonedTime(new Date(), Intl.DateTimeFormat().resolvedOptions().timeZone),
-                  { addSuffix: false, locale: es }
+                  { addSuffix: false, locale: es },
                 )}
               </span>
             </div>
           </div>
         );
       })}
+    </div>
+  );
+};
+
+export const ChatSkeleton = () => {
+  return (
+    <div className="flex-auto h-[50vh] overflow-y-scroll py-2 no-scroll">
+      {[1, 2, 3, 4, 5].map((_, index) => (
+        <div key={`skeleton-${index}`} className="py-2 px-2 w-full text-sm flex items-center">
+          <div className="p-2 bg-stone-600 text-right justify-end text-sm flex flex-col rounded-none">
+            <div className="animate-pulse bg-stone-600 h-5 w-1/2 rounded-none"></div>
+            <div className="animate-pulse bg-stone-600 h-3 w-1/4 rounded-none"></div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 };
