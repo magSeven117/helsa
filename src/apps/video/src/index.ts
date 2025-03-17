@@ -1,9 +1,7 @@
-import { RTCPeerConnection, nonstandard } from '@roamhq/wrtc';
 import express from 'express';
 import ffmpeg from 'fluent-ffmpeg';
 import { createServer } from 'http';
 import { Server as SocketIOServer } from 'socket.io';
-const { RTCVideoSink, RTCAudioSink } = nonstandard;
 
 const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
 
@@ -21,9 +19,6 @@ const io = new SocketIOServer(httpServer, {
 });
 io.on('connection', (socket) => {
   console.log('a user connected', socket.id);
-  let peerConnection: RTCPeerConnection;
-  let audioSink: nonstandard.RTCAudioSink;
-  let videoSink: nonstandard.RTCVideoSink;
 
   socket.on('join-room', (roomId) => {
     console.log('Socket joined room', socket.id, roomId);

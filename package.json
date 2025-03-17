@@ -8,9 +8,7 @@
     "test": "turbo test"
   },
   "dependencies": {
-    "-": "^0.0.1",
-    "@roamhq/wrtc": "^0.8.0",
-    "ffmpeg-static": "^5.2.0"
+    "-": "^0.0.1"
   },
   "devDependencies": {
     "@helsa/typescript-config": "*",
