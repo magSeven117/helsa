@@ -1,6 +1,13 @@
+import { RTCPeerConnection, nonstandard } from '@roamhq/wrtc';
 import express from 'express';
+import ffmpeg from 'fluent-ffmpeg';
 import { createServer } from 'http';
 import { Server as SocketIOServer } from 'socket.io';
+const { RTCVideoSink, RTCAudioSink } = nonstandard;
+
+const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
+
+ffmpeg.setFfmpegPath(ffmpegPath);
 
 let rooms: Record<string, any> = {};
 
@@ -12,9 +19,11 @@ const io = new SocketIOServer(httpServer, {
     methods: ['GET', 'POST'],
   },
 });
-
 io.on('connection', (socket) => {
   console.log('a user connected', socket.id);
+  let peerConnection: RTCPeerConnection;
+  let audioSink: nonstandard.RTCAudioSink;
+  let videoSink: nonstandard.RTCVideoSink;
 
   socket.on('join-room', (roomId) => {
     console.log('Socket joined room', socket.id, roomId);
@@ -45,6 +54,14 @@ io.on('connection', (socket) => {
   socket.on('leave-call', (roomId) => {
     console.log('Socket leave-call', socket.id, roomId);
     socket.to(roomId).emit('user-left', socket.id);
+  });
+
+  socket.on('start-recording', async (roomId) => {
+    socket.to(roomId).emit('start-recording', socket.id);
+  });
+
+  socket.on('stop-recording', async (roomId) => {
+    socket.to(roomId).emit('stop-recording', socket.id);
   });
 });
 

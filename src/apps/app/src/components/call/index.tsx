@@ -17,7 +17,19 @@ import { Separator } from '@helsa/ui/components/separator';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@helsa/ui/components/tooltip';
 import { cn } from '@helsa/ui/lib/utils';
 import { motion } from 'framer-motion';
-import { Mic, MicOff, PhoneIncoming, PhoneOff, Settings, Video, VideoOff } from 'lucide-react';
+import {
+  AudioLines,
+  Mic,
+  MicOff,
+  PhoneIncoming,
+  PhoneOff,
+  Play,
+  Settings,
+  StopCircle,
+  Video,
+  VideoOff,
+  Volume2,
+} from 'lucide-react';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 import { CallProvider, useCallStore } from './provider';
@@ -139,7 +151,7 @@ const LocalVideo = () => {
   return (
     <div ref={setNodeRef} style={style} {...listeners} {...attributes}>
       {!cameraEnable ? (
-        <div className="h-[125px] aspect-video">
+        <div className="h-[125px] aspect-video bg-background border ">
           <div className="flex items-center justify-center h-full w-full">
             <VideoOff className="size-16" />
           </div>
@@ -154,14 +166,15 @@ const LocalVideo = () => {
 };
 
 const RemoteVideo = () => {
-  const { remoteStream, remoteParticipant } = useCallStore((store) => store);
+  const { remoteStream, remoteParticipant, selectedOutputDevice } = useCallStore((store) => store);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.srcObject = remoteStream;
+      videoRef.current.setSinkId(selectedOutputDevice?.deviceId ?? 'default');
     }
-  }, [remoteStream, remoteParticipant, videoRef.current]);
+  }, [remoteStream, remoteParticipant, videoRef.current, selectedOutputDevice]);
 
   if (!remoteParticipant) {
     return (
@@ -179,8 +192,16 @@ const RemoteVideo = () => {
 };
 
 const CallControls = () => {
-  const { micEnable, cameraEnable } = useCallStore((store) => store);
-  const { toggleMicrophone, toggleCamera, leftCall } = useCall();
+  const { micEnable, cameraEnable, isRecording, isTranscribing } = useCallStore((store) => store);
+  const {
+    toggleMicrophone,
+    toggleCamera,
+    leftCall,
+    startRecording,
+    stopRecording,
+    startTranscription,
+    stopTranscription,
+  } = useCall();
   return (
     <motion.div
       className="absolute inset-x-0 bottom-2 flex justify-center"
@@ -210,6 +231,7 @@ const CallControls = () => {
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
+
         <TooltipProvider delayDuration={0}>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -229,6 +251,51 @@ const CallControls = () => {
 
             <TooltipContent sideOffset={15} className="text-[10px] px-2 py-1 rounded-sm font-medium">
               <p>Camera</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <Separator orientation="vertical" />
+        <TooltipProvider delayDuration={0}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => {
+                  if (isRecording) {
+                    stopRecording();
+                  } else {
+                    startRecording();
+                  }
+                }}
+              >
+                {!isRecording ? <Play className="size-4" /> : <StopCircle className="size-4 text-primary" />}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent sideOffset={15} className="text-[10px] px-2 py-1 rounded-sm font-medium">
+              <p>Mute</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <TooltipProvider delayDuration={0}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => {
+                  if (isTranscribing) {
+                    stopTranscription();
+                  } else {
+                    startTranscription();
+                  }
+                }}
+              >
+                {!isTranscribing ? <AudioLines className="size-4" /> : <AudioLines className="size-4 text-red-500" />}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent sideOffset={15} className="text-[10px] px-2 py-1 rounded-sm font-medium">
+              <p>Transcribe</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
@@ -257,7 +324,15 @@ const CallControls = () => {
 };
 
 const ListDevices = () => {
-  const { videoDevices, audioDevices } = useCallStore((store) => store);
+  const {
+    videoDevices,
+    audioDevices,
+    selectedVideoDevice,
+    selectedAudioDevice,
+    outputDevices,
+    selectedOutputDevice,
+    setSelectedOutputDevice,
+  } = useCallStore((store) => store);
   const { setVideoDevice, setAudioDevice } = useCall();
   return (
     <TooltipProvider delayDuration={0}>
@@ -287,7 +362,9 @@ const ListDevices = () => {
                 <DropdownMenuSubContent className="rounded-none">
                   {videoDevices.map((device) => (
                     <DropdownMenuItem
-                      className="gap-2 rounded-none"
+                      className={cn('gap-2 rounded-none', {
+                        'bg-secondary': selectedVideoDevice?.deviceId === device.deviceId,
+                      })}
                       key={device.deviceId}
                       onClick={() => {
                         setVideoDevice(device);
@@ -313,10 +390,40 @@ const ListDevices = () => {
                 <DropdownMenuSubContent className="rounded-none">
                   {audioDevices.map((device) => (
                     <DropdownMenuItem
-                      className="gap-2 rounded-none"
+                      className={cn('gap-2 rounded-none', {
+                        'bg-secondary': selectedAudioDevice?.deviceId === device.deviceId,
+                      })}
                       key={device.deviceId}
                       onClick={() => {
                         setAudioDevice(device);
+                      }}
+                    >
+                      <div className="w-4 h-4 mr-2 flex justify-center items-center">
+                        <Mic />
+                      </div>
+                      <span className="text-sm font-semibold">{device.label}</span>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuSubContent>
+              </DropdownMenuPortal>
+            </DropdownMenuSub>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger className="gap-2">
+                <div className="w-4 h-4 mr-2 flex justify-center items-center">
+                  <Volume2 />
+                </div>
+                <span className="text-sm">Selecciona el parlante</span>
+              </DropdownMenuSubTrigger>
+              <DropdownMenuPortal>
+                <DropdownMenuSubContent className="rounded-none">
+                  {outputDevices.map((device) => (
+                    <DropdownMenuItem
+                      className={cn('gap-2 rounded-none', {
+                        'bg-secondary': selectedOutputDevice?.deviceId === device.deviceId,
+                      })}
+                      key={device.deviceId}
+                      onClick={() => {
+                        setSelectedOutputDevice(device);
                       }}
                     >
                       <div className="w-4 h-4 mr-2 flex justify-center items-center">

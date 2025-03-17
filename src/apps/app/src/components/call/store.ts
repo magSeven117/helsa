@@ -1,3 +1,4 @@
+import { RealtimeChannel } from '@helsa/supabase/client';
 import { createRef } from 'react';
 import { Socket } from 'socket.io-client';
 import { create } from 'zustand';
@@ -21,6 +22,7 @@ export interface CallStore {
   localVideoRef: React.RefObject<HTMLVideoElement | null>;
   remoteVideoRef: React.RefObject<HTMLVideoElement | null>;
   peerConnection: RTCPeerConnection | null;
+  recordingPeerConnection: RTCPeerConnection | null;
   socket: Socket | null;
   callState: CallState;
   localParticipant: CallParticipant | null;
@@ -30,13 +32,19 @@ export interface CallStore {
   roomState: 'out-room' | 'in-room';
   videoDevices: MediaDeviceInfo[];
   audioDevices: MediaDeviceInfo[];
+  outputDevices: MediaDeviceInfo[];
   selectedVideoDevice: MediaDeviceInfo | null;
   selectedAudioDevice: MediaDeviceInfo | null;
+  selectedOutputDevice: MediaDeviceInfo | null;
+  isRecording: boolean;
+  isTranscribing: boolean;
+  channel: RealtimeChannel | null;
 
   setLocalStream: (stream: MediaStream | null) => void;
   setRemoteStream: (stream: MediaStream | null) => void;
   setRoomId: (roomId: string) => void;
   setPeerConnection: (peerConnection: RTCPeerConnection | null) => void;
+  setRecordingPeerConnection: (peerConnection: RTCPeerConnection | null) => void;
   setSocket: (socket: Socket | null) => void;
   setCallState: (callState: CallState) => void;
 
@@ -50,9 +58,16 @@ export interface CallStore {
 
   setVideoDevices: (devices: MediaDeviceInfo[]) => void;
   setAudioDevices: (devices: MediaDeviceInfo[]) => void;
+  setOutputDevices: (devices: MediaDeviceInfo[]) => void;
 
   setSelectedVideoDevice: (device: MediaDeviceInfo) => void;
   setSelectedAudioDevice: (device: MediaDeviceInfo) => void;
+  setSelectedOutputDevice: (device: MediaDeviceInfo) => void;
+
+  setIsRecording: (isRecording: boolean) => void;
+  setIsTranscribing: (isTranscribing: boolean) => void;
+
+  setChannel: (channel: RealtimeChannel | null) => void;
 }
 
 export const createCallStore = () =>
@@ -72,8 +87,14 @@ export const createCallStore = () =>
     roomState: 'out-room',
     videoDevices: [],
     audioDevices: [],
+    outputDevices: [],
     selectedVideoDevice: null,
     selectedAudioDevice: null,
+    selectedOutputDevice: null,
+    recordingPeerConnection: null,
+    isRecording: false,
+    isTranscribing: false,
+    channel: null,
 
     setLocalStream: (stream) => set({ localStream: stream }),
     setRemoteStream: (stream) => set({ remoteStream: stream }),
@@ -91,7 +112,14 @@ export const createCallStore = () =>
 
     setVideoDevices: (devices) => set({ videoDevices: devices }),
     setAudioDevices: (devices) => set({ audioDevices: devices }),
+    setOutputDevices: (devices) => set({ outputDevices: devices }),
 
     setSelectedVideoDevice: (device) => set({ selectedVideoDevice: device }),
     setSelectedAudioDevice: (device) => set({ selectedAudioDevice: device }),
+    setSelectedOutputDevice: (device) => set({ selectedOutputDevice: device }),
+
+    setRecordingPeerConnection: (peerConnection) => set({ recordingPeerConnection: peerConnection }),
+    setIsRecording: (isRecording) => set({ isRecording }),
+    setIsTranscribing: (isTranscribing) => set({ isTranscribing }),
+    setChannel: (channel) => set({ channel }),
   }));
