@@ -1,4 +1,3 @@
-import { RealtimeChannel } from '@helsa/supabase/client';
 import { createRef } from 'react';
 import { Socket } from 'socket.io-client';
 import { create } from 'zustand';
@@ -38,7 +37,6 @@ export interface CallStore {
   selectedOutputDevice: MediaDeviceInfo | null;
   isRecording: boolean;
   isTranscribing: boolean;
-  channel: RealtimeChannel | null;
 
   setLocalStream: (stream: MediaStream | null) => void;
   setRemoteStream: (stream: MediaStream | null) => void;
@@ -66,8 +64,6 @@ export interface CallStore {
 
   setIsRecording: (isRecording: boolean) => void;
   setIsTranscribing: (isTranscribing: boolean) => void;
-
-  setChannel: (channel: RealtimeChannel | null) => void;
 }
 
 export const createCallStore = () =>
@@ -94,7 +90,6 @@ export const createCallStore = () =>
     recordingPeerConnection: null,
     isRecording: false,
     isTranscribing: false,
-    channel: null,
 
     setLocalStream: (stream) => set({ localStream: stream }),
     setRemoteStream: (stream) => set({ remoteStream: stream }),
@@ -121,5 +116,4 @@ export const createCallStore = () =>
     setRecordingPeerConnection: (peerConnection) => set({ recordingPeerConnection: peerConnection }),
     setIsRecording: (isRecording) => set({ isRecording }),
     setIsTranscribing: (isTranscribing) => set({ isTranscribing }),
-    setChannel: (channel) => set({ channel }),
   }));

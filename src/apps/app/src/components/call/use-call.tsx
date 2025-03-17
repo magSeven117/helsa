@@ -1,4 +1,3 @@
-import { createClient } from '@helsa/supabase/client';
 import { useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
 import { useCallStore } from './provider';
@@ -38,8 +37,6 @@ export const useCall = () => {
     selectedVideoDevice,
     setIsRecording,
     setIsTranscribing,
-    channel,
-    setChannel,
   } = useCallStore((store) => store);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -62,15 +59,6 @@ export const useCall = () => {
 
   const createSocket = () => {
     const newSocket = io(process.env.NEXT_PUBLIC_SOCKET_URL!);
-    const client = createClient();
-    const channel = client.channel(roomId);
-    channel.on('broadcast', { event: 'user-joined' }, (payload) => {
-      setRemoteParticipant(payload.data);
-    });
-    channel.on('broadcast', { event: 'user-left' }, (_payload) => {
-      setRemoteParticipant(null);
-    });
-    setChannel(channel);
     newSocket.on('connect', () => {
       console.log('connected', newSocket.id);
     });
