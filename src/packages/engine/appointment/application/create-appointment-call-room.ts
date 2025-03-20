@@ -10,6 +10,8 @@ export class CreateAppointmentCallRoom {
 
   async run(appointmentId: string): Promise<void> {
     const appointment = await this.repository.get(appointmentId, {
+      type: true,
+      specialty: true,
       doctor: {
         include: {
           user: true,

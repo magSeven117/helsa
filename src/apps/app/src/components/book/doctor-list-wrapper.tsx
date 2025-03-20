@@ -20,7 +20,7 @@ const DoctorListWrapper = async ({ filters }: Props) => {
     getSymptoms(),
   ]);
   const symptoms = responseSymptoms?.data ?? [];
-  const doctors = responseDoctors?.data ?? [];
+  const doctors = JSON.parse(JSON.stringify(responseDoctors?.data ?? []));
   const types = responseTypes?.data ?? [];
 
   return <DoctorList doctors={doctors} types={types} symptoms={symptoms} />;

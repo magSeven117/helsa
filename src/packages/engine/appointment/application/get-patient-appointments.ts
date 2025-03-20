@@ -14,23 +14,31 @@ import {
 import { AppointmentRepository } from '../domain/appointment-repository';
 
 export class GetPatientAppointments {
-  constructor(private appointmentRepository: AppointmentRepository, private patientGetter: GetPatient) {}
+  constructor(
+    private appointmentRepository: AppointmentRepository,
+    private patientGetter: GetPatient,
+  ) {}
 
   async run(
     id: string,
     filters: AppointmentFilter,
     pagination?: AppointmentPagination,
-    sort?: AppointmentSort
+    sort?: AppointmentSort,
   ): Promise<{ data: Primitives<Appointment>[]; meta: Meta }> {
     const patient = await this.patientGetter.run(id);
 
+    console.log('PATIENT id: ', patient.id);
     if (!patient) {
       throw new NotFoundError(`Patient of user ${id} not found`);
     }
 
-    const criteria = AppointmentCriteria.searchByPatientId(id)
-      .and(transformFiltersToCriteria(filters))
-      .paginate(pagination?.pageSize ?? 10, pagination?.page ?? 0);
+    const criteria = AppointmentCriteria.searchByPatientId(patient.id);
+
+    if (filters.end || filters.start || filters.specialties || filters.states || filters.types) {
+      criteria.and(transformFiltersToCriteria(filters));
+    }
+
+    criteria.paginate(pagination?.pageSize ?? 10, pagination?.page ?? 0);
 
     if (sort && sort.order && sort.sortBy) {
       criteria.orderBy(sort.sortBy, sort.order as Direction);

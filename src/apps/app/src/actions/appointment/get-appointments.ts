@@ -60,10 +60,10 @@ export const getAppointments = authActionClient
             page: parsedInput.page,
             pageSize: parsedInput.pageSize,
           },
-          { sortBy: parsedInput.sortBy, order: parsedInput.order }
+          { sortBy: parsedInput.sortBy, order: parsedInput.order },
         ),
 
       ['get-appointments', user.id],
-      { tags: [`get-appointments-${user.id}`], revalidate: 3600 }
+      { tags: [`get-appointments-${user.id}`], revalidate: 3600 },
     )();
   });

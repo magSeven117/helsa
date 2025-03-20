@@ -256,6 +256,7 @@ const CustomVideoPlaceholder = ({ style }: VideoPlaceholderProps) => {
 };
 
 const ActionsBar = () => {
+  const [user] = useLocalStorage<BetterUser | null>('user', null);
   const call = useCall();
 
   const { useMicrophoneState, useCameraState } = useCallStateHooks();
@@ -313,8 +314,12 @@ const ActionsBar = () => {
           </Tooltip>
         </TooltipProvider>
         <Separator orientation="vertical" className="mr-3 ml-2 h-4" />
-        <RecordingButton />
-        <TranscriptionButton />
+        {user?.role === 'DOCTOR' && (
+          <>
+            <RecordingButton />
+            <TranscriptionButton />
+          </>
+        )}
         <Separator orientation="vertical" className="mr-3 ml-2 h-4" />
         <Info />
         <DevicesList />
@@ -522,6 +527,7 @@ const useSessionTimerAlert = (remainingMs: number, threshold: number, onAlert: V
   }, [onAlert, remainingMs, threshold]);
 };
 const SessionTimer = () => {
+  const [user] = useLocalStorage<BetterUser | null>('user', null);
   const call = useCall();
   const [showAlert, setShowAlert] = useState(false);
   const [hasReachedZero, setHasReachedZero] = useState(false);
@@ -560,7 +566,7 @@ const SessionTimer = () => {
           .seconds?.toString()
           .padStart(2, '0')}
       </p>
-      {showAlert && <ExtendSessionButton duration={900} />}
+      {showAlert && user?.role === 'DOCTOR' && <ExtendSessionButton duration={900} />}
     </div>
   );
 };

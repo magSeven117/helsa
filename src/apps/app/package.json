@@ -6,6 +6,8 @@
     "dev": "next dev --turbopack -p 3000",
     "build": "next build",
     "trigger:dev": "npx trigger.dev dev",
+    "trigger:login": "npx trigger.dev login",
+    "trigger:deploy": "npx trigger.dev deploy",
     "start": "next start",
     "lint": "next lint"
   },
@@ -33,7 +35,7 @@
     "@stream-io/node-sdk": "^0.4.19",
     "@stream-io/video-react-sdk": "^1.12.10",
     "@tanstack/react-query": "5.66.0",
-    "@trigger.dev/sdk": "3.3.8",
+    "@trigger.dev/sdk": "3.3.17",
     "@trpc/client": "11.0.0-rc.446",
     "@trpc/react-query": "11.0.0-rc.446",
     "@trpc/server": "11.0.0-rc.446",
@@ -72,7 +74,7 @@
   "devDependencies": {
     "@helsa/next-config": "*",
     "@helsa/typescript-config": "*",
-    "@trigger.dev/build": "3.3.8",
+    "@trigger.dev/build": "3.3.17",
     "@types/node": "^20",
     "@types/react": "19.0.10",
     "@types/react-dom": "19.0.4",

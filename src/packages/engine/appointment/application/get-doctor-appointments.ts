@@ -14,15 +14,18 @@ import {
 import { AppointmentRepository } from '../domain/appointment-repository';
 
 export class GetDoctorAppointments {
-  constructor(private appointmentRepository: AppointmentRepository, private doctorGetter: GetDoctor) {}
+  constructor(
+    private appointmentRepository: AppointmentRepository,
+    private doctorGetter: GetDoctor,
+  ) {}
 
   async run(
     id: string,
     filters: AppointmentFilter,
     pagination?: AppointmentPagination,
-    sort?: AppointmentSort
+    sort?: AppointmentSort,
   ): Promise<{ data: Primitives<Appointment>[]; meta: Meta }> {
-    const doctor = await this.doctorGetter.run(id);
+    const doctor = await this.doctorGetter.run(id, 'id');
 
     if (!doctor) {
       throw new NotFoundError(`Doctor of user ${id} not found`);
