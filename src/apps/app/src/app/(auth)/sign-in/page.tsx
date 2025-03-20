@@ -1,6 +1,6 @@
 'use client';
 import SignInForm from '@/src/components/auth/sign-in-form';
 
-export default function SignUpPage() {
+export default function Page() {
   return <SignInForm />;
 }
