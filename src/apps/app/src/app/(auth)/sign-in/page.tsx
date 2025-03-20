@@ -1,7 +1,10 @@
-import { ping } from '@/src/actions/server-ping';
 import SignInForm from '@/src/components/auth/sign-in-form';
+import { Suspense } from 'react';
 
-export default async function Page() {
-  await ping();
-  return <SignInForm />;
+export default function Page() {
+  return (
+    <Suspense>
+      <SignInForm />
+    </Suspense>
+  );
 }

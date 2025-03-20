@@ -1,7 +1,10 @@
-import { ping } from '@/src/actions/server-ping';
 import RecoveryPasswordForm from '@/src/components/auth/recovery-password-form';
+import { Suspense } from 'react';
 
-export default async function Page() {
-  await ping();
-  return <RecoveryPasswordForm />;
+export default function Page() {
+  return (
+    <Suspense>
+      <RecoveryPasswordForm />
+    </Suspense>
+  );
 }

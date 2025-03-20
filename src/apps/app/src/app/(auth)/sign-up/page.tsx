@@ -1,7 +1,10 @@
-import { ping } from '@/src/actions/server-ping';
 import SignUpForm from '@/src/components/auth/sign-up-form';
+import { Suspense } from 'react';
 
-export default async function Page() {
-  await ping();
-  return <SignUpForm />;
+export default function Page() {
+  return (
+    <Suspense>
+      <SignUpForm />
+    </Suspense>
+  );
 }
