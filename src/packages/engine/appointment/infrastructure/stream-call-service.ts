@@ -1,7 +1,7 @@
-import { Doctor } from '@/src/doctor/domain/doctor';
-import { Patient } from '@/src/patient/domain/patient';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { StreamClient } from '@stream-io/node-sdk';
+import { Doctor } from '../../doctor/domain/doctor';
+import { Patient } from '../../patient/domain/patient';
 import { CallService } from '../domain/call-service';
 
 export class StreamCallService implements CallService {
