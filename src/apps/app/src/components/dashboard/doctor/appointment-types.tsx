@@ -22,23 +22,23 @@ const chartConfig = {
   },
   chrome: {
     label: 'Cita inicial',
-    color: 'hsl(var(--chart-1))',
+    color: 'var(--chart-1)',
   },
   safari: {
     label: 'Revision',
-    color: 'hsl(var(--chart-2))',
+    color: 'var(--chart-2)',
   },
   firefox: {
     label: 'Emergencia',
-    color: 'hsl(var(--chart-3))',
+    color: 'var(--chart-3)',
   },
   edge: {
     label: 'Control',
-    color: 'hsl(var(--chart-4))',
+    color: 'var(--chart-4)',
   },
   other: {
     label: 'Cirugía',
-    color: 'hsl(var(--chart-5))',
+    color: 'var(--chart-5)',
   },
 } satisfies ChartConfig;
 

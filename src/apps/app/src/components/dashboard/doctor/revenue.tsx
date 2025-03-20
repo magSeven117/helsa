@@ -23,7 +23,7 @@ const chartData = [
 const chartConfig = {
   desktop: {
     label: 'Desktop',
-    color: 'hsl(var(--chart-1))',
+    color: 'var(--chart-1)',
   },
 } satisfies ChartConfig;
 
@@ -46,7 +46,7 @@ export function Revenue() {
               tickFormatter={(value) => value.slice(0, 3)}
             />
             <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-            <Bar dataKey="desktop" fill="var(--color-desktop)" radius={8} />
+            <Bar dataKey="desktop" fill="var(--color-desktop)" radius={0} />
           </BarChart>
         </ChartContainer>
       </CardContent>

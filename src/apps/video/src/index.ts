@@ -1,11 +1,6 @@
 import express from 'express';
-import ffmpeg from 'fluent-ffmpeg';
 import { createServer } from 'http';
 import { Server as SocketIOServer } from 'socket.io';
-
-const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
-
-ffmpeg.setFfmpegPath(ffmpegPath);
 
 let rooms: Record<string, any> = {};
 

@@ -14,7 +14,7 @@ export const setupAnalytics = async (options?: Props) => {
 
   const client = new OpenPanel({
     clientId: env.NEXT_PUBLIC_OPENPANEL_CLIENT_ID!,
-    clientSecret: env.OPEN_PANEL_CLIENT_SECRET!,
+    clientSecret: env.NEXT_PUBLIC_OPENPANEL_CLIENT_SECRET!,
   });
 
   if (trackingConsent && userId && fullName) {

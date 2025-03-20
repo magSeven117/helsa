@@ -65,7 +65,9 @@ const DroppableContainer = ({ id, children, className }: { id: string; children?
 };
 
 const VideoCallContainer = ({ appointmentId }: { appointmentId: string }) => {
-  const { remoteParticipant, setRoomId, callState, setLocalParticipant } = useCallStore((store) => store);
+  const { remoteParticipant, setRoomId, callState, setLocalParticipant, transcription } = useCallStore(
+    (store) => store,
+  );
   const [user] = useLocalStorage<any>('user', null);
   const [parent, setParent] = useState<any>('drop-1');
 
@@ -101,7 +103,6 @@ const VideoCallContainer = ({ appointmentId }: { appointmentId: string }) => {
           <DroppableContainer className="py-15 px-4 bottom-0 right-0 flex items-end justify-end" id="drop-4">
             {parent === 'drop-4' && localVideo}
           </DroppableContainer>
-
           <RemoteVideo />
           <CallControls />
         </div>

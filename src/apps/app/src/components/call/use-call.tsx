@@ -16,6 +16,7 @@ export const useCall = () => {
     setSocket,
     roomId,
     localStream,
+    remoteStream,
     setLocalStream,
     setRemoteStream,
     setPeerConnection,
@@ -37,6 +38,8 @@ export const useCall = () => {
     selectedVideoDevice,
     setIsRecording,
     setIsTranscribing,
+    setTranscription,
+    isTranscribing,
   } = useCallStore((store) => store);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -165,8 +168,6 @@ export const useCall = () => {
 
       socket.on('start-recording', () => startRecording());
       socket.on('stop-recording', () => stopRecording());
-      socket.on('start-transcription', () => startTranscription());
-      socket.on('stop-transcription', () => stopTranscription());
       setPeerConnection(peerConnection);
     }
   };
@@ -255,47 +256,20 @@ export const useCall = () => {
     recognition.interimResults = true;
     recognition.lang = 'es-ES';
 
-    const handleResult = (event: any) => {
+    recognition.onresult = (event: any) => {
       let transcript = '';
       for (let i = event.resultIndex; i < event.results.length; ++i) {
         transcript += event.results[i][0].transcript;
       }
       console.log('Transcription:', transcript);
+      setTranscription(`${transcript}`);
     };
-
-    recognition.onresult = handleResult;
     recognition.onerror = (event: any) => {
       console.error('SpeechRecognition error:', event.error);
     };
     recognition.onend = () => {
       console.log('SpeechRecognition ended.');
     };
-
-    const localAudioStream = new MediaStream(localStream?.getAudioTracks() || []);
-    const remoteAudioStream = new MediaStream(peerConnection?.getReceivers().map((receiver) => receiver.track) || []);
-
-    const startRecognition = (stream: MediaStream) => {
-      const audioContext = new AudioContext();
-      const source = audioContext.createMediaStreamSource(stream);
-      const processor = audioContext.createScriptProcessor(2048, 1, 1);
-
-      source.connect(processor);
-      processor.connect(audioContext.destination);
-
-      processor.onaudioprocess = (event) => {
-        const inputData = event.inputBuffer.getChannelData(0);
-        const buffer = new Float32Array(inputData.length);
-        buffer.set(inputData);
-
-        const audioBlob = new Blob([buffer], { type: 'audio/wav' });
-        const audioURL = URL.createObjectURL(audioBlob);
-        const audio = new Audio(audioURL);
-        audio.play();
-      };
-    };
-
-    startRecognition(localAudioStream);
-    startRecognition(remoteAudioStream);
 
     recognition.start();
     recognitionRef.current = recognition;

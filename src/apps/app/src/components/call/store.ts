@@ -37,6 +37,7 @@ export interface CallStore {
   selectedOutputDevice: MediaDeviceInfo | null;
   isRecording: boolean;
   isTranscribing: boolean;
+  transcription: string;
 
   setLocalStream: (stream: MediaStream | null) => void;
   setRemoteStream: (stream: MediaStream | null) => void;
@@ -64,6 +65,8 @@ export interface CallStore {
 
   setIsRecording: (isRecording: boolean) => void;
   setIsTranscribing: (isTranscribing: boolean) => void;
+
+  setTranscription: (transcription: string) => void;
 }
 
 export const createCallStore = () =>
@@ -90,6 +93,8 @@ export const createCallStore = () =>
     recordingPeerConnection: null,
     isRecording: false,
     isTranscribing: false,
+    transcription: '',
+    setTranscription: (transcription) => set({ transcription }),
 
     setLocalStream: (stream) => set({ localStream: stream }),
     setRemoteStream: (stream) => set({ remoteStream: stream }),

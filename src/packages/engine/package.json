@@ -14,6 +14,7 @@
     "@helsa/env": "*",
     "@helsa/storage": "^0.1.0",
     "@helsa/typescript-config": "*",
+    "@stream-io/node-sdk": "^0.4.19",
     "date-fns": "^3.6.0",
     "date-fns-tz": "^3.2.0"
   },

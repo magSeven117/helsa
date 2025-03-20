@@ -1,5 +1,5 @@
 import { generateUserToken } from '@/src/actions/appointment/generate-user-token';
-import { VideoCallOld } from './old';
+import { VideoCallOld } from './stream';
 
 const WrapperCall = async ({ id }: { id: string }) => {
   const tokenResponse = await generateUserToken();
