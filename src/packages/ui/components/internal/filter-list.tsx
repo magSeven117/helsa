@@ -24,7 +24,7 @@ export type FilterListProps = {
   filters: { [key: string]: string | number | boolean | string[] | number[] | null };
   loading: boolean;
   onRemove: (key: any) => void;
-  renderFilter: ({ key, value }: { key: string; value: any }) => JSX.Element;
+  renderFilter: ({ key, value }: { key: string; value: any }) => React.ReactElement;
 };
 
 const FilterList = ({ filters, loading, onRemove, renderFilter }: FilterListProps) => {
