@@ -75,6 +75,9 @@ export const auth = betterAuth({
   },
 });
 
+export type BetterSession = typeof auth.$Infer.Session;
+export type BetterUser = typeof auth.$Infer.Session.user;
+
 export const getSession = cache(async () => {
   return await auth.api.getSession({
     headers: await headers(),

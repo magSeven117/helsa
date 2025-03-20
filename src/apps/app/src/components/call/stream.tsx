@@ -1,6 +1,7 @@
 'use client';
 import { DndContext, useDraggable, useDroppable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
+import { BetterUser } from '@helsa/auth/server';
 import { Button } from '@helsa/ui/components/button';
 import {
   DropdownMenu,
@@ -13,91 +14,80 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@helsa/ui/components/dropdown-menu';
+import { Popover, PopoverContent, PopoverTrigger } from '@helsa/ui/components/popover';
 import { Separator } from '@helsa/ui/components/separator';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@helsa/ui/components/tooltip';
 import { cn } from '@helsa/ui/lib/utils';
 import {
   Call,
   CallingState,
+  OwnCapability,
   ParticipantView,
   StreamCall,
   StreamVideo,
   StreamVideoClient,
   StreamVideoParticipant,
+  TranscriptionSettingsRequestModeEnum,
   useCall,
   useCallStateHooks,
   useParticipantViewContext,
-  useStreamVideoClient,
   VideoPlaceholderProps,
 } from '@stream-io/video-react-sdk';
 import '@stream-io/video-react-sdk/dist/css/styles.css';
-import { User } from 'better-auth';
+import { intervalToDuration } from 'date-fns';
 import { motion } from 'framer-motion';
-import { Mic, MicOff, PhoneIncoming, PhoneOff, PlayCircle, Settings, StopCircle, Video, VideoOff } from 'lucide-react';
-import { ReactNode, useCallback, useEffect, useState } from 'react';
+import {
+  AlarmClockPlus,
+  AudioLines,
+  InfoIcon,
+  Mic,
+  MicOff,
+  PhoneIncoming,
+  PhoneOff,
+  PlayCircle,
+  Settings,
+  StopCircle,
+  Video,
+  VideoOff,
+  Volume2Icon,
+} from 'lucide-react';
+import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 
+const apiKey = process.env.NEXT_PUBLIC_STREAM_CLIENT_KEY!;
+
 export const VideoCallOld = ({ id, token }: { id: string; token: string }) => {
-  const [user] = useLocalStorage<User | null>('user', null);
+  const [user] = useLocalStorage<BetterUser | null>('user', null);
   const [client, setClient] = useState<StreamVideoClient | null>(null);
+  const [call, setCall] = useState<Call | null>(null);
   useEffect(() => {
-    const init = async () => {
-      if (!user) {
-        return;
-      }
-      const newClient = StreamVideoClient.getOrCreateInstance({
-        apiKey: process.env.NEXT_PUBLIC_STREAM_CLIENT_KEY ?? '',
-        user: {
-          id: user!.id ?? '',
-        },
-        token,
-      });
-      await newClient.connectUser({ id: user!.id ?? '' }, token);
-      setClient(newClient);
+    if (!user) {
+      return;
+    }
+    const streamUser = {
+      id: user.id,
+      name: user.name,
+      image: user.image ?? '',
+      role: user.role === 'PATIENT' ? 'patient' : 'doctor',
     };
-
-    init();
-
-    return () => {
-      if (client) {
-        client.disconnectUser();
-        setClient(null);
-      }
-    };
+    const newClient = new StreamVideoClient({
+      apiKey,
+      user: streamUser,
+      token,
+    });
+    const newCall = newClient.call('appointment', id);
+    setClient(newClient);
+    setCall(newCall);
   }, [user]);
-  if (!client) {
+  if (!client || !call) {
     return null;
   }
   return (
     <StreamVideo client={client}>
-      <VideoCallPage id={id} />
+      <StreamCall call={call}>
+        <MyUILayout />
+      </StreamCall>
     </StreamVideo>
-  );
-};
-
-export const VideoCallPage = ({ id }: { id: string }) => {
-  const client = useStreamVideoClient();
-
-  if (!client) {
-    return null;
-  }
-
-  const [call, setCall] = useState<Call | null>(null);
-  useEffect(() => {
-    const initCall = async () => {
-      const newCall = client.call('default', id);
-      await newCall.getOrCreate();
-      setCall(newCall);
-    };
-    initCall();
-  }, []);
-  if (!call) {
-    return null;
-  }
-  return (
-    <StreamCall call={call}>
-      <MyUILayout />
-    </StreamCall>
   );
 };
 
@@ -276,7 +266,7 @@ const ActionsBar = () => {
               </Button>
             </TooltipTrigger>
             <TooltipContent sideOffset={15} className="text-[10px] px-2 py-1 rounded-sm font-medium">
-              <p>Mute</p>
+              <p>Mutear</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
@@ -298,34 +288,15 @@ const ActionsBar = () => {
             </TooltipTrigger>
 
             <TooltipContent sideOffset={15} className="text-[10px] px-2 py-1 rounded-sm font-medium">
-              <p>Camera</p>
+              <p>Cámara</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
         <Separator orientation="vertical" className="mr-3 ml-2 h-4" />
         <RecordingButton />
-        <TooltipProvider delayDuration={0}>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className={cn('rounded-full size-8', {
-                  'bg-destructive': cameraMute,
-                })}
-                onClick={() => {
-                  camera.toggle();
-                }}
-              >
-                {cameraMute ? <VideoOff className="size-4" /> : <Video className="size-4 text-primary" />}
-              </Button>
-            </TooltipTrigger>
-
-            <TooltipContent sideOffset={15} className="text-[10px] px-2 py-1 rounded-sm font-medium">
-              <p>Camera</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <TranscriptionButton />
+        <Separator orientation="vertical" className="mr-3 ml-2 h-4" />
+        <Info />
         <DevicesList />
         <Separator orientation="vertical" className="mr-3 ml-2 h-4" />
         <TooltipProvider delayDuration={0}>
@@ -334,7 +305,7 @@ const ActionsBar = () => {
               <Button
                 variant="ghost"
                 size="icon"
-                className="rounded-full w-8 h-6 ml-5 bg-destructive"
+                className="rounded-full w-8 h-6  bg-destructive"
                 onClick={() => {
                   call?.leave();
                 }}
@@ -347,6 +318,8 @@ const ActionsBar = () => {
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
+        <Separator orientation="vertical" className="mr-3 ml-2 h-4" />
+        <SessionTimer />
       </div>
     </motion.div>
   );
@@ -434,7 +407,7 @@ const DevicesList = () => {
             <DropdownMenuSub>
               <DropdownMenuSubTrigger className="gap-2">
                 <div className="w-4 h-4 mr-2 flex justify-center items-center">
-                  <Mic />
+                  <Volume2Icon />
                 </div>
                 <span className="text-sm">Selecciona el parlante</span>
               </DropdownMenuSubTrigger>
@@ -451,7 +424,7 @@ const DevicesList = () => {
                       }}
                     >
                       <div className="w-4 h-4 mr-2 flex justify-center items-center">
-                        <Mic />
+                        <Volume2Icon />
                       </div>
                       <span className="text-sm font-semibold">{device.label}</span>
                     </DropdownMenuItem>
@@ -487,7 +460,7 @@ const RecordingButton = () => {
     <TooltipProvider delayDuration={0}>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button variant="ghost" size="icon" onClick={toggleRecording}>
+          <Button variant="ghost" size="icon" className="size-8 rounded-full" onClick={toggleRecording}>
             {isCallRecordingInProgress ? (
               <StopCircle className="size-4" />
             ) : (
@@ -500,5 +473,145 @@ const RecordingButton = () => {
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
+  );
+};
+
+const useSessionTimer = () => {
+  const { useCallSession } = useCallStateHooks();
+  const session = useCallSession();
+  const [remainingMs, setRemainingMs] = useState(Number.NaN);
+  useEffect(() => {
+    if (!session?.timer_ends_at) return;
+    const timerEndAt = new Date(session.timer_ends_at);
+    const handle = setInterval(() => {
+      const now = new Date();
+      const remainingMs = +timerEndAt - +now;
+      setRemainingMs(remainingMs);
+    }, 500);
+    return () => clearInterval(handle);
+  }, [session]);
+  return remainingMs;
+};
+
+const useSessionTimerAlert = (remainingMs: number, threshold: number, onAlert: VoidFunction) => {
+  const didAlert = useRef(false);
+  useEffect(() => {
+    if (!didAlert.current && remainingMs < threshold) {
+      onAlert();
+    }
+  }, [onAlert, remainingMs, threshold]);
+};
+const SessionTimer = () => {
+  const remainingMs: number = useSessionTimer();
+  const [showAlert, setShowAlert] = useState(false);
+  const [hasReachedZero, setHasReachedZero] = useState(false);
+  useSessionTimerAlert(remainingMs, 5 * 60 * 1000, () => setShowAlert(true));
+  useSessionTimerAlert(remainingMs, 0, () => setHasReachedZero(true));
+
+  if (hasReachedZero) {
+    return <div className="mx-2 text-sm">The time has ran out</div>;
+  }
+
+  return (
+    <div className="mx-2 text-sm flex items-center gap-3">
+      <p className={cn({ 'text-red-500': showAlert })}>
+        {
+          intervalToDuration({
+            start: Date.now(),
+            end: Date.now() + remainingMs,
+          }).minutes
+        }
+        :
+        {intervalToDuration({
+          start: Date.now(),
+          end: Date.now() + remainingMs,
+        })
+          .seconds?.toString()
+          .padStart(2, '0')}
+      </p>
+      {showAlert && <ExtendSessionButton duration={900} />}
+    </div>
+  );
+};
+
+const ExtendSessionButton = ({ duration }: { duration: number }) => {
+  const call = useCall();
+  const { useCallSettings, useHasPermissions } = useCallStateHooks();
+  const settings = useCallSettings();
+  const canExtend = useHasPermissions(OwnCapability.CHANGE_MAX_DURATION);
+
+  const extendTime = useCallback(() => {
+    if (!call) return;
+    call.update({
+      settings_override: {
+        limits: {
+          max_duration_seconds: (settings!.limits!.max_duration_seconds ?? 0) + duration,
+        },
+      },
+    });
+  }, [call, duration]);
+  if (!canExtend) {
+    return null;
+  }
+  return (
+    <TooltipProvider delayDuration={0}>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button variant="ghost" size="icon" className="rounded-full size-8" onClick={extendTime}>
+            <AlarmClockPlus className="size-4" />
+          </Button>
+        </TooltipTrigger>
+
+        <TooltipContent sideOffset={15} className="text-[10px] px-2 py-1 rounded-sm font-medium">
+          <p>Tiempo restante en la llamada, extiéndela</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+};
+
+const TranscriptionButton = () => {
+  const call = useCall();
+  const { useCallSettings, useIsCallTranscribingInProgress } = useCallStateHooks();
+  const { transcription } = useCallSettings() || {};
+
+  const isTranscribing = useIsCallTranscribingInProgress();
+
+  if (transcription?.mode === TranscriptionSettingsRequestModeEnum.DISABLED) {
+    // transcriptions are not available, render nothing
+    return null;
+  }
+
+  const toggleTranscription = useCallback(() => {
+    if (!isTranscribing) {
+      call?.startTranscription({ language: 'es' });
+    } else {
+      call?.stopTranscription();
+    }
+  }, []);
+
+  return (
+    <Button variant="ghost" size="icon" className="rounded-full size-8" onClick={toggleTranscription}>
+      {!isTranscribing ? (
+        <AudioLines className="size-4" />
+      ) : (
+        <AudioLines className="size-4 text-red-500 animate-pulse" />
+      )}
+    </Button>
+  );
+};
+
+const Info = () => {
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button variant="ghost" size="icon" className="rounded-full size-8">
+          <InfoIcon className="size-4" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="rounded-none" alignOffset={10} sideOffset={20}>
+        Tanto las grabaciones como las transcripciones de la llamada las podrás encontrar en la sección de historial
+      </PopoverContent>
+    </Popover>
   );
 };

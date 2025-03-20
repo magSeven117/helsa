@@ -17,6 +17,7 @@ export const generateUserToken = authActionClient
           id: user.id,
           name: user.name,
           image: user.image ?? '',
+          role: user.role === 'PATIENT' ? 'patient' : 'doctor',
         },
       ]);
 

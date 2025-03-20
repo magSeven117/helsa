@@ -15,7 +15,8 @@ export class StreamCallService implements CallService {
     const call = this.client.video.call('appointment', appointmentId);
     await call.create({
       data: {
-        members: [{ user_id: doctor.id }, { user_id: patient.id }],
+        members: [{ user_id: doctor.userId }, { user_id: patient.userId }],
+        created_by_id: doctor.id,
       },
     });
   }
