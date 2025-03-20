@@ -11,10 +11,10 @@ export const metadata: Metadata = {
   title: 'Helsa',
   description: 'A platform for managing your health',
   openGraph: {
-    title: 'My Site',
-    description: 'Welcome to My Site',
-    url: 'https://example.com',
-    siteName: 'My Site',
+    title: 'Helsa',
+    description: 'A platform for managing your health',
+    url: 'https://helsahealthcare.com',
+    siteName: 'Helsa',
     images: [{ url: 'https://example.com/og.png' }],
   },
 };
