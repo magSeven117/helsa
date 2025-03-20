@@ -1,6 +1,8 @@
+import { ping } from '@/src/actions/server-ping';
 import logo from '@/src/assets/images/HELSA NUEVO BLANCO.png';
 import banner from '@/src/assets/images/banner.png';
-const AuthLayout = ({ children }: { children: React.ReactNode }) => {
+const AuthLayout = async ({ children }: { children: React.ReactNode }) => {
+  await ping();
   return (
     <div className="grid grid-cols-1 box-border h-full w-full lg:grid-cols-2">
       <div className="flex flex-col h-full justify-center items-center">
