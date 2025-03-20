@@ -210,8 +210,12 @@ export const MyFloatingLocalParticipant = (props: { participant?: StreamVideoPar
   };
 
   return (
-    <div ref={setNodeRef} style={style} {...listeners} {...attributes}>
-      <div className="h-[125px] aspect-video bg-background border">
+    <div
+      ref={setNodeRef}
+      style={style}
+      className="h-[125px] aspect-video bg-background border resize max-h-[200px] max-w-[340px] min-h-[125px] min-w-[200px] overflow-auto no-scroll"
+    >
+      <div {...listeners} {...attributes} className="h-full w-full">
         <ParticipantView
           participant={participant!}
           className="h-full"
