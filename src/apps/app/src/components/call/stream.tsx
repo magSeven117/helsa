@@ -113,12 +113,23 @@ export const MyUILayout = () => {
   const remoteParticipants = useRemoteParticipants();
   const [parent, setParent] = useState<any>('drop-1');
 
+  if (call?.state.endedAt) {
+    return (
+      <div className="relative w-full flex-1">
+        <div className="h-full w-full flex flex-col justify-center items-center gap-3">
+          <p className="text-lg font-semibold">La llamada ha finalizado</p>
+        </div>
+      </div>
+    );
+  }
+
   if (!localParticipant || callCallingState === CallingState.LEFT) {
     return (
       <div className="relative w-full flex-1">
         <div className="h-full w-full flex flex-col justify-center items-center gap-3">
           <p className="text-lg font-semibold">
-            {remoteParticipants.length > 0 ? 'Te están esperando' : 'No hay nadie en la llamada'}
+            {remoteParticipants.length > 0 ? 'Te están esperando' : 'No hay nadie en la llamada'}{' '}
+            {call?.state.endedAt?.toISOString()}
           </p>
           <Button onClick={() => call?.join()} className="rounded-full gap-3" variant={'outline'}>
             <PhoneIncoming className="size-4" />
@@ -128,6 +139,7 @@ export const MyUILayout = () => {
       </div>
     );
   }
+
   const handleDragEnd = ({ over }: any) => {
     setParent(over?.id ?? 'drop-1');
   };
@@ -502,14 +514,25 @@ const useSessionTimerAlert = (remainingMs: number, threshold: number, onAlert: V
   }, [onAlert, remainingMs, threshold]);
 };
 const SessionTimer = () => {
-  const remainingMs: number = useSessionTimer();
+  const call = useCall();
   const [showAlert, setShowAlert] = useState(false);
   const [hasReachedZero, setHasReachedZero] = useState(false);
+  const remainingMs: number = useSessionTimer();
   useSessionTimerAlert(remainingMs, 5 * 60 * 1000, () => setShowAlert(true));
   useSessionTimerAlert(remainingMs, 0, () => setHasReachedZero(true));
+  const { useHasPermissions } = useCallStateHooks();
+  const canEnd = useHasPermissions(OwnCapability.END_CALL);
+
+  useEffect(() => {
+    if (hasReachedZero && canEnd) {
+      setTimeout(() => {
+        call?.endCall();
+      }, 60000);
+    }
+  }, [hasReachedZero]);
 
   if (hasReachedZero) {
-    return <div className="mx-2 text-sm">The time has ran out</div>;
+    return <div>El tiempo se ha acabado la llamada se cerrará en 1 minuto</div>;
   }
 
   return (
