@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import RecoveryPasswordForm from '@/src/components/auth/recovery-password-form';
 import { Suspense } from 'react';
 

@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import SignUpForm from '@/src/components/auth/sign-up-form';
 import { Suspense } from 'react';
 
