@@ -76,8 +76,12 @@ export const VideoCallOld = ({ id, token }: { id: string; token: string }) => {
       token,
     });
     const newCall = newClient.call('appointment', id);
-    setClient(newClient);
-    setCall(newCall);
+    const init = async () => {
+      newCall.getOrCreate();
+      setClient(newClient);
+      setCall(newCall);
+    };
+    init();
   }, [user]);
   if (!client || !call) {
     return null;
