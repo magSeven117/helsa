@@ -1,5 +1,4 @@
-import { ThemeProvider } from 'next-themes';
-import { ThemeProviderProps } from 'next-themes/dist/types';
+import { ThemeProvider, type ThemeProviderProps } from 'next-themes';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { Toaster } from 'sonner';
 import Progress from './components/internal/progress';
