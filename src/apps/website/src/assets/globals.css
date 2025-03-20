@@ -1,2 +1,2 @@
-@import 'tailwindcss';
-@import url('@helsa/ui/styles/globals.css');
+@import '@helsa/ui/styles/global.css';
+@import '@helsa/ui/styles/theme.css';

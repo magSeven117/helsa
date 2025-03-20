@@ -92,7 +92,7 @@ const SideBar = ({ user }: { user: any }) => {
                         'border  bg-sidebar': path == route.url,
                       })}
                     >
-                      <Link href={route.url}>
+                      <Link href={route.url} prefetch={true}>
                         {<route.icon />}
                         <span>{route.title}</span>
                       </Link>
