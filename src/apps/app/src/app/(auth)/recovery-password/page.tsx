@@ -1,8 +1,7 @@
-import { getCurrentUser } from '@/src/actions/user/get-current-user';
+'use client';
 import RecoveryPasswordForm from '@/src/components/auth/recovery-password-form';
 
-const Page = async () => {
-  await getCurrentUser();
+const Page = () => {
   return <RecoveryPasswordForm />;
 };
 
