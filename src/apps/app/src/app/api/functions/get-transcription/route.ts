@@ -12,5 +12,5 @@ export const GET = async (req: NextRequest) => {
 
   const transcriptions = await call.listTranscriptions();
 
-  return NextResponse.json({ transcriptions });
+  return NextResponse.json({ success: true, transcriptions: JSON.parse(JSON.stringify(transcriptions)) });
 };
