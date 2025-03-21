@@ -26,6 +26,7 @@
     "@helsa/email": "*",
     "@helsa/engine": "*",
     "@helsa/env": "*",
+    "@helsa/payment": "*",
     "@helsa/rate-limit": "*",
     "@helsa/storage": "^0.1.0",
     "@helsa/supabase": "^0.1.0",

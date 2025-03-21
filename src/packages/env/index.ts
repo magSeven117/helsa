@@ -21,6 +21,8 @@ export const env = createEnv({
     LOGTAIL_SOURCE_TOKEN: z.string(),
     BETTER_STACK_API_KEY: z.string(),
     DEEPSEEK_API_KEY: z.string(),
+    POLAR_SECRET_KEY: z.string(),
+    POLAR_WEBHOOK_SECRET: z.string(),
   },
   client: {
     NEXT_PUBLIC_BASE_URL: z.string(),
@@ -57,5 +59,7 @@ export const env = createEnv({
     NEXT_PUBLIC_OPENPANEL_CLIENT_SECRET: process.env.NEXT_PUBLIC_OPENPANEL_CLIENT_SECRET,
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_KEY: process.env.NEXT_PUBLIC_SUPABASE_KEY,
+    POLAR_SECRET_KEY: process.env.POLAR_SECRET_KEY,
+    POLAR_WEBHOOK_SECRET: process.env.POLAR_WEBHOOK_SECRET,
   },
 });
