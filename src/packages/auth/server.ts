@@ -29,6 +29,11 @@ export const auth = betterAuth({
         defaultValue: '',
         input: true,
       },
+      plan: {
+        type: 'string',
+        defaultValue: 'free',
+        input: true,
+      },
     },
   },
   emailAndPassword: {
