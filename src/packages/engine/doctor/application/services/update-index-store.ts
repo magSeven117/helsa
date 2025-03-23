@@ -11,7 +11,7 @@ export class UpdateIndexStore {
     private doctorRepository: DoctorRepository,
     private doctorIndexStore: DoctorSearcher,
     private getUser: GetUser,
-    private getAppointments: GetDoctorAppointments
+    private getAppointments: GetDoctorAppointments,
   ) {}
 
   async run(doctorId: string) {
@@ -19,9 +19,9 @@ export class UpdateIndexStore {
       Criteria.fromValues([{ field: 'id', value: doctorId, operator: Operator.EQUAL }], undefined, undefined, [
         { field: 'schedule' },
         { field: 'specialty' },
-      ])
+      ]),
     );
-    const appointments = (await this.getAppointments.run(doctorId, {})).data;
+    const appointments = (await this.getAppointments.run(doctorId, {}, undefined, undefined, 'id')).data;
     const user = await this.getUser.run(doctor.userId.toString());
 
     if (!doctor || !user) {

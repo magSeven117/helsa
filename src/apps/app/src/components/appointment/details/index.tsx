@@ -5,34 +5,20 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@h
 import { Avatar, AvatarFallback, AvatarImage } from '@helsa/ui/components/avatar';
 import { Badge } from '@helsa/ui/components/badge';
 import { Button } from '@helsa/ui/components/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@helsa/ui/components/dropdown-menu';
 import { CopyInput } from '@helsa/ui/components/internal/copy-input';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@helsa/ui/components/sheet';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@helsa/ui/components/tabs';
 import { Textarea } from '@helsa/ui/components/textarea';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import {
-  Ban,
-  CalendarDays,
-  Clock,
-  ExternalLink,
-  FileText,
-  MapPin,
-  MoreHorizontal,
-  Paperclip,
-  Shapes,
-  Stethoscope,
-  StickyNote,
-  Video,
-} from 'lucide-react';
+import { Clock, ExternalLink, FileText, MapPin, Paperclip, Shapes, Stethoscope, StickyNote } from 'lucide-react';
 import Link from 'next/link';
 import { StateColumn } from '../table/columns';
+import Cancel from './actions/cancel';
+import Confirm from './actions/confirm';
+import Enter from './actions/enter';
+import Pay from './actions/pay';
+import ReSchedule from './actions/re-schedule';
 import Indications from './indications';
 
 type Props = {
@@ -61,40 +47,22 @@ const AppointmentDetailsSheet = ({ data, isOpen, setOpen, types }: Props) => {
                   </Link>{' '}
                 </SheetTitle>
                 <p className="text-xs text-muted-foreground">
-                  {format(data?.date ?? new Date(), 'PPP', { locale: es })}
+                  {format(data?.date ?? new Date(), 'PPPp', { locale: es })}
                 </p>
               </div>
             </div>
             <StateColumn state={data?.status ?? 'SCHEDULED'} />
           </SheetHeader>
-          <div className="flex justify-between w-full items-center gap-3 border-b  pb-5 mt-7">
-            <Button className="flex-1 h-9 gap-2" variant={'secondary'}>
-              <CalendarDays className="size-4" />
-              Re agendar
-            </Button>
-            <Link href={`/appointments/${data?.id}`}>
-              <Button className="flex-1 h-9 gap-2" variant={'secondary'}>
-                <Video className="size-4" />
-                Entrar a llamada
-              </Button>
-            </Link>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button className="h-9" size={'icon'} variant={'secondary'}>
-                  <span className="sr-only">Open menu</span>
-                  <MoreHorizontal />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="rounded-none">
-                <DropdownMenuItem
-                  onClick={() => console.log('View details')}
-                  className="rounded-none border-destructive text-destructive gap-2 hover:text-destructive"
-                >
-                  <Ban className="size-4" />
-                  Cancelar
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+          <div className="flex justify-start w-full items-center gap-3 border-b  pb-5 mt-7">
+            {data?.status !== 'CANCELLED' && (
+              <>
+                <ReSchedule status={data?.status ?? ''} />
+                <Confirm status={data?.status ?? ''} />
+                <Enter id={data?.id ?? ''} status={data?.status ?? ''} />
+                <Pay id={data?.id ?? ''} status={data?.status ?? ''} />
+                <Cancel status={data?.status ?? ''} />
+              </>
+            )}
           </div>
 
           <Tabs defaultValue="general">

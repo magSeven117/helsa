@@ -3,14 +3,14 @@ import payment from '@helsa/payment';
 import { appointment } from '@helsa/payment/products';
 import { NextRequest, NextResponse } from 'next/server';
 
-export const GET = async (req: NextRequest, { searchParams }: { searchParams: Promise<{ appointmentId: string }> }) => {
+export const GET = async (req: NextRequest) => {
   const session = await getSession();
 
   if (!session) {
     throw new Error('Not authenticated');
   }
-
-  const { appointmentId } = await searchParams;
+  const searchParams = req.nextUrl.searchParams;
+  const appointmentId = searchParams.get('appointmentId') ?? '';
 
   const successUrl = new URL(`/appointments?id=${appointmentId}`, req.url).toString();
 

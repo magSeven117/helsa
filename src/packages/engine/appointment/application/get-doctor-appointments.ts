@@ -24,8 +24,9 @@ export class GetDoctorAppointments {
     filters: AppointmentFilter,
     pagination?: AppointmentPagination,
     sort?: AppointmentSort,
+    field = 'userId',
   ): Promise<{ data: Primitives<Appointment>[]; meta: Meta }> {
-    const doctor = await this.doctorGetter.run(id, 'id');
+    const doctor = await this.doctorGetter.run(id, field);
 
     if (!doctor) {
       throw new NotFoundError(`Doctor of user ${id} not found`);

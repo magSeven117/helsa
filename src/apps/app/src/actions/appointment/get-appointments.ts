@@ -9,7 +9,6 @@ import { PrismaDoctorRepository } from '@helsa/engine/doctor/infrastructure/pers
 import { GetPatient } from '@helsa/engine/patient/application/services/get-patient';
 import { PrismaPatientRepository } from '@helsa/engine/patient/infrastructure/prisma-patient-repository';
 import { UserRoleValue } from '@helsa/engine/user/domain/user-role';
-import { unstable_cache as cache } from 'next/cache';
 import { z } from 'zod';
 
 const schema = z.object({
@@ -45,25 +44,20 @@ export const getAppointments = authActionClient
       service = new GetPatientAppointments(repository, patientGetter);
     }
 
-    return cache(
-      () =>
-        service.run(
-          user.id,
-          {
-            end: parsedInput.end,
-            start: parsedInput.start,
-            states: parsedInput.states,
-            specialties: parsedInput.specialties,
-            types: parsedInput.types,
-          },
-          {
-            page: parsedInput.page,
-            pageSize: parsedInput.pageSize,
-          },
-          { sortBy: parsedInput.sortBy, order: parsedInput.order },
-        ),
-
-      ['get-appointments', user.id],
-      { tags: [`get-appointments-${user.id}`], revalidate: 3600 },
-    )();
+    return await service.run(
+      user.id,
+      {
+        end: parsedInput.end,
+        start: parsedInput.start,
+        states: parsedInput.states,
+        specialties: parsedInput.specialties,
+        types: parsedInput.types,
+      },
+      {
+        page: parsedInput.page,
+        pageSize: parsedInput.pageSize,
+      },
+      { sortBy: parsedInput.sortBy, order: parsedInput.order },
+      'userId',
+    );
   });

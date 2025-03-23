@@ -1,39 +1,31 @@
 export const stateLabel: Record<string, { label: string; color: string }> = {
   SCHEDULED: {
     label: 'Agendada',
-    color: '#88C107',
-  },
-  RESCHEDULED: {
-    label: 'Reagendada',
-    color: '#FF9800',
+    color: 'var(--border)',
   },
   CONFIRMED: {
     label: 'Confirmada',
-    color: '#4CAF50',
+    color: '#0043ce',
   },
-  LATE: {
-    label: 'Tarde',
-    color: '#F44336',
+  PAYED: {
+    label: 'Pagada',
+    color: '#8167ec',
   },
-  CANCELLED: {
-    label: 'Cancelada',
-    color: '#9E9E9E',
-  },
-  WAITING_DOCTOR: {
-    label: 'Esperando al doctor',
-    color: '#03A9F4',
-  },
-  WAITING_PATIENT: {
-    label: 'Esperando al paciente',
-    color: '#00BCD4',
+  READY: {
+    label: 'Lista',
+    color: '#22a094',
   },
   STARTED: {
     label: 'Iniciada',
-    color: '#8BC34A',
+    color: '#22a094',
   },
   MISSED: {
     label: 'Perdida',
-    color: '#E91E63',
+    color: '#f1b603',
+  },
+  CANCELLED: {
+    label: 'Cancelada',
+    color: '#ea3a3d',
   },
   FINISHED: {
     label: 'Finalizada',

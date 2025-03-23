@@ -16,7 +16,7 @@ import { AppointmentNote } from './note';
 import { AppointmentRating } from './rating';
 import { AppointmentRecipe } from './recipe';
 import { AppointmentRoom } from './room';
-import { AppointmentStatus } from './status';
+import { AppointmentStatus, AppointmentStatusEnum } from './status';
 import { Symptom } from './symptom';
 import { AppointmentTelemetry } from './telemetry';
 
@@ -50,7 +50,7 @@ export class Appointment extends Aggregate {
     public diagnostics?: Diagnostic[],
     public documents?: Document[],
     public treatments?: Treatment[],
-    public specialty?: Specialty
+    public specialty?: Specialty,
   ) {
     super(id, createdAt, updatedAt);
   }
@@ -115,7 +115,7 @@ export class Appointment extends Aggregate {
       data.diagnostics ? data.diagnostics.map((diagnosis) => Diagnostic.fromPrimitives(diagnosis)) : undefined,
       data.documents ? data.documents.map((document) => Document.fromPrimitives(document)) : undefined,
       data.treatments ? data.treatments.map((treatment) => Treatment.fromPrimitives(treatment)) : undefined,
-      data.specialty ? Specialty.fromPrimitives(data.specialty) : undefined
+      data.specialty ? Specialty.fromPrimitives(data.specialty) : undefined,
     );
   }
 
@@ -127,7 +127,7 @@ export class Appointment extends Aggregate {
     doctorId: string,
     typeId: string,
     specialtyId: string,
-    priceId: string
+    priceId: string,
   ): Appointment {
     const appointment = new Appointment(
       new Uuid(id),
@@ -142,7 +142,7 @@ export class Appointment extends Aggregate {
       new Uuid(specialtyId),
       new Uuid(priceId),
       DateValueObject.today(),
-      DateValueObject.today()
+      DateValueObject.today(),
     );
     appointment.record(new AppointmentScheduled(appointment.toPrimitives()));
     return appointment;
@@ -152,16 +152,30 @@ export class Appointment extends Aggregate {
     this.telemetry = AppointmentTelemetry.fromPrimitives({
       appointmentId: this.id.toString(),
       id: this.telemetry?.id.toString() ?? Uuid.random().toString(),
-      bloodPressure: telemetry.bloodPressure ? telemetry.bloodPressure : this.telemetry?.bloodPressure.value ?? 120,
-      heartRate: telemetry.heartRate ? telemetry.heartRate : this.telemetry?.heartRate.value ?? 72,
-      temperature: telemetry.temperature ? telemetry.temperature : this.telemetry?.temperature.value ?? 36.6,
-      weight: telemetry.weight ? telemetry.weight : this.telemetry?.weight.value ?? 70,
+      bloodPressure: telemetry.bloodPressure ? telemetry.bloodPressure : (this.telemetry?.bloodPressure.value ?? 120),
+      heartRate: telemetry.heartRate ? telemetry.heartRate : (this.telemetry?.heartRate.value ?? 72),
+      temperature: telemetry.temperature ? telemetry.temperature : (this.telemetry?.temperature.value ?? 36.6),
+      weight: telemetry.weight ? telemetry.weight : (this.telemetry?.weight.value ?? 70),
       oxygenSaturation: telemetry.oxygenSaturation
         ? telemetry.oxygenSaturation
-        : this.telemetry?.oxygenSaturation.value ?? 98,
+        : (this.telemetry?.oxygenSaturation.value ?? 98),
       respiratoryRate: telemetry.respiratoryRate
         ? telemetry.respiratoryRate
-        : this.telemetry?.respiratoryRate.value ?? 16,
+        : (this.telemetry?.respiratoryRate.value ?? 16),
     });
+  }
+
+  isPayable(): boolean {
+    return (
+      this.status.value === AppointmentStatusEnum.SCHEDULED || this.status.value === AppointmentStatusEnum.CONFIRMED
+    );
+  }
+
+  pay(): void {
+    this.status = AppointmentStatus.payed();
+  }
+
+  markAsReady(): void {
+    this.status = AppointmentStatus.ready();
   }
 }

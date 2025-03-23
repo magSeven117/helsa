@@ -43,7 +43,7 @@ export const columns: ColumnDef<Primitives<Appointment>>[] = [
   {
     accessorKey: 'date',
     header: 'Fecha',
-    cell: ({ row }) => formatDate(row.original.date, 'PPp', { locale: es }),
+    cell: ({ row }) => formatDate(row.original.date, 'PPPp', { locale: es }),
   },
   {
     accessorKey: 'status',
@@ -122,7 +122,14 @@ export const columns: ColumnDef<Primitives<Appointment>>[] = [
 export const StateColumn = ({ state }: { state: string }) => {
   return (
     <div className="flex items-center space-x-2">
-      <span className="text-xs font-semibold px-3 py-1 rounded-full border">{stateLabel[state].label}</span>
+      <span
+        className="text-xs font-semibold px-3 py-1 rounded-full border"
+        style={{
+          borderColor: stateLabel[state].color,
+        }}
+      >
+        {stateLabel[state].label}
+      </span>
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import { Criteria, Operator } from '@helsa/ddd/core/criteria';
+import { AppointmentStatusEnum } from './status';
 
 export class AppointmentCriteria {
   static searchByDoctorId(doctorId: string): Criteria {
@@ -14,6 +15,16 @@ export class AppointmentCriteria {
   }
   static searchByPatientId(patientId: string): Criteria {
     return Criteria.fromValues([{ field: 'patientId', value: patientId, operator: Operator.EQUAL }]);
+  }
+
+  static listNextAppointmentsInTheNextHour(): Criteria {
+    const now = new Date();
+    const nextHour = new Date(now.getTime() + 60 * 60 * 1000);
+    return Criteria.fromValues([
+      { field: 'date', value: now, operator: Operator.GTE },
+      { field: 'date', value: nextHour, operator: Operator.LTE },
+      { field: 'status', value: AppointmentStatusEnum.PAYED, operator: Operator.EQUAL },
+    ]);
   }
 }
 
@@ -39,12 +50,12 @@ export const transformFiltersToCriteria = (filter: AppointmentFilter) => {
   let criteria = Criteria.empty();
   if (filter.start) {
     criteria = criteria.and(
-      Criteria.fromValues([{ field: 'date', value: new Date(filter.start), operator: Operator.GTE }])
+      Criteria.fromValues([{ field: 'date', value: new Date(filter.start), operator: Operator.GTE }]),
     );
   }
   if (filter.end) {
     criteria = criteria.and(
-      Criteria.fromValues([{ field: 'date', value: new Date(filter.end), operator: Operator.LTE }])
+      Criteria.fromValues([{ field: 'date', value: new Date(filter.end), operator: Operator.LTE }]),
     );
   }
   if (filter.states) {
@@ -52,7 +63,7 @@ export const transformFiltersToCriteria = (filter: AppointmentFilter) => {
   }
   if (filter.specialties) {
     criteria = criteria.and(
-      Criteria.fromValues([{ field: 'specialtyId', value: filter.specialties, operator: Operator.IN }])
+      Criteria.fromValues([{ field: 'specialtyId', value: filter.specialties, operator: Operator.IN }]),
     );
   }
   if (filter.types) {

@@ -46,10 +46,10 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
       }),
       this.client.appointment.count({ where }),
     ]);
-    console.log(JSON.stringify(where));
     const appointments = data.map((appointment) =>
-      Appointment.fromPrimitives(appointment as unknown as Primitives<Appointment>)
+      Appointment.fromPrimitives(appointment as unknown as Primitives<Appointment>),
     );
+
     return Collection.fromResponse({
       data: appointments,
       total: count,

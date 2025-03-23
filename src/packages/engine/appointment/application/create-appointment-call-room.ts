@@ -28,6 +28,11 @@ export class CreateAppointmentCallRoom {
       throw new NotFoundError('Doctor or patient not found');
     }
 
-    await this.service.createRoom(appointmentId, appointment.doctor.toPrimitives(), appointment.patient.toPrimitives());
+    await this.service.createRoom(
+      appointmentId,
+      appointment.doctor.toPrimitives(),
+      appointment.patient.toPrimitives(),
+      appointment.date.value,
+    );
   }
 }
