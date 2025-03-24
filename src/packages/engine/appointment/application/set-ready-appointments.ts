@@ -1,5 +1,5 @@
-import { AppointmentCriteria } from 'appointment/domain/appointment-criteria';
-import { AppointmentRepository } from 'appointment/domain/appointment-repository';
+import { AppointmentCriteria } from '../domain/appointment-criteria';
+import { AppointmentRepository } from '../domain/appointment-repository';
 
 export class SetReadyAppointments {
   constructor(private readonly repository: AppointmentRepository) {}
