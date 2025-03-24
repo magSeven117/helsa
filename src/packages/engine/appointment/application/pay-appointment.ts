@@ -1,5 +1,5 @@
 import { NotFoundError } from '@helsa/ddd/core/errors/not-found-error';
-import { AppointmentRepository } from 'appointment/domain/appointment-repository';
+import { AppointmentRepository } from '../domain/appointment-repository';
 
 export class PayAppointment {
   constructor(private readonly repository: AppointmentRepository) {}
