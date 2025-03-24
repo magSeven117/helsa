@@ -1,11 +1,11 @@
-import { env } from '@helsa/env';
 import { OpenPanelComponent, type PostEventPayload, useOpenPanel } from '@openpanel/nextjs';
+import { keys } from './keys';
 
-const isProd = env.NODE_ENV === 'production';
+const isProd = process.env.NODE_ENV === 'production';
 
 const Provider = () => (
   <OpenPanelComponent
-    clientId={env.NEXT_PUBLIC_OPENPANEL_CLIENT_ID!}
+    clientId={keys().NEXT_PUBLIC_OPENPANEL_CLIENT_ID!}
     trackAttributes={true}
     trackScreenViews={isProd}
     trackOutgoingLinks={isProd}

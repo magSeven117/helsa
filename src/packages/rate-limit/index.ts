@@ -1,6 +1,7 @@
-import { env } from '@helsa/env';
 import { Ratelimit, type RatelimitConfig } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
+import { keys } from './keys';
+const env = keys();
 
 export const redis = new Redis({
   url: env.UPSTASH_REDIS_REST_URL,

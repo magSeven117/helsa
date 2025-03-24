@@ -1,4 +1,4 @@
-import { env } from '@helsa/env';
+import { keys } from '../keys';
 import { Body, Container, Head, Heading, Hr, Img, Link, Preview, Section, Text } from '@react-email/components';
 import { Html } from '@react-email/html';
 import * as React from 'react';
@@ -7,7 +7,7 @@ interface VerifyEmailProps {
   verificationCode?: string;
 }
 
-const baseUrl = `https://${env.NEXT_PUBLIC_BASE_URL}`;
+const baseUrl = `https://${keys().NEXT_PUBLIC_BASE_URL}`;
 
 export default function ForgetPassword({ verificationCode = '596853' }: VerifyEmailProps) {
   return (

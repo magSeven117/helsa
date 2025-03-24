@@ -1,22 +1,18 @@
 {
-  "name": "@helsa/tasks",
+  "name": "@helsa/ai",
   "version": "0.1.0",
   "private": true,
-  "main": "./index.ts",
-  "types": "./index.ts",
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
-    "@trigger.dev/sdk": "3.3.5",
-    "server-only": "^0.0.1",
-    "zod": "^3.24.1"
+    "@ai-sdk/deepseek": "^0.1.12",
+    "ai": "^4.1.46",
+    "voyage-ai-provider": "^0.0.1"
   },
   "devDependencies": {
-    "@helsa/typescript-config": "*",
     "@types/node": "^20",
-    "prisma": "^5.16.1",
     "ts-node": "^10.9.2",
     "typescript": "^5"
   }

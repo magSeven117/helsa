@@ -1,11 +1,11 @@
-import { env } from '@helsa/env';
 import { Body, Container, Head, Heading, Hr, Html, Img, Link, Preview, Section, Text } from '@react-email/components';
+import { keys } from '../keys';
 
 interface VerifyEmailProps {
   verificationCode?: string;
 }
 
-const baseUrl = `https://${env.NEXT_PUBLIC_BASE_URL}`;
+const baseUrl = `https://${keys().NEXT_PUBLIC_BASE_URL}`;
 
 export default function VerifyEmail({ verificationCode = '596853' }: VerifyEmailProps) {
   return (

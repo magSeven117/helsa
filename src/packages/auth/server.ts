@@ -2,15 +2,16 @@ import { PrismaClient } from '@helsa/database';
 import { resend } from '@helsa/email';
 import ForgetPassword from '@helsa/email/templates/forget-password';
 import VerifyEmail from '@helsa/email/templates/verify-email';
-import { env } from '@helsa/env';
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { nextCookies } from 'better-auth/next-js';
 import { bearer, emailOTP } from 'better-auth/plugins';
 import { headers } from 'next/headers';
 import { cache } from 'react';
+import { keys } from './keys';
 
 const prisma = new PrismaClient();
+const env = keys();
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: 'postgresql',
