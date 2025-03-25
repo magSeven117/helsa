@@ -3,6 +3,7 @@ import { PrismaCriteriaConverter } from '@helsa/database/converter';
 import { Collection } from '@helsa/ddd/core/collection.';
 import { Criteria } from '@helsa/ddd/core/criteria';
 import { Primitives } from '@helsa/ddd/types/primitives';
+import { AppointmentRoom } from 'appointment/domain/room';
 import { Document } from '../../../document/domain/document';
 import { Appointment } from '../../domain/appointment';
 import { AppointmentRepository } from '../../domain/appointment-repository';
@@ -19,7 +20,7 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
     return this.client.appointment;
   }
 
-  async search(criteria: Criteria): Promise<Collection<Appointment>> {
+  async search(criteria: Criteria, otherInclude = {}): Promise<Collection<Appointment>> {
     const { orderBy, skip, take, where } = this.converter.criteria(criteria);
     const include = {
       type: true,
@@ -34,6 +35,7 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
           user: true,
         },
       },
+      ...otherInclude,
     };
 
     const [data, count] = await this.client.$transaction([
@@ -141,6 +143,22 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
         heartRate: telemetry.heartRate.value,
         respiratoryRate: telemetry.respiratoryRate.value,
         oxygenSaturation: telemetry.oxygenSaturation.value,
+      },
+    });
+  }
+
+  async saveRoom(room: AppointmentRoom): Promise<void> {
+    await this.client.appointmentRoom.upsert({
+      where: { id: room.id.toString() },
+      create: {
+        id: room.id.toString(),
+        patientEnter: room.patientEnter.value,
+        doctorEnter: room.doctorEnter.value,
+        appointmentId: room.appointmentId.toString(),
+      },
+      update: {
+        patientEnter: room.patientEnter.value,
+        doctorEnter: room.doctorEnter.value,
       },
     });
   }

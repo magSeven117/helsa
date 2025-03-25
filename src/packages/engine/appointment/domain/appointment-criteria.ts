@@ -26,6 +26,17 @@ export class AppointmentCriteria {
       { field: 'status', value: AppointmentStatusEnum.PAYED, operator: Operator.EQUAL },
     ]);
   }
+
+  static listPastHourAppointments(): Criteria {
+    const now = new Date();
+    const pastHour = new Date(now.getTime() - 90 * 60 * 1000);
+    const pastHalfHour = new Date(now.getTime() - 60 * 60 * 1000);
+    return Criteria.fromValues([
+      { field: 'date', value: pastHour, operator: Operator.GTE },
+      { field: 'date', value: pastHalfHour, operator: Operator.LTE },
+      { field: 'status', value: AppointmentStatusEnum.READY, operator: Operator.EQUAL },
+    ]);
+  }
 }
 
 export type AppointmentFilter = {

@@ -7,7 +7,8 @@ export enum AppointmentStatusEnum {
   READY = 'READY',
   STARTED = 'STARTED',
   CANCELLED = 'CANCELLED',
-  MISSED = 'MISSED',
+  MISSED_BY_PATIENT = 'MISSED_BY_PATIENT',
+  MISSED_BY_DOCTOR = 'MISSED_BY_DOCTOR',
   FINISHED = 'FINISHED',
 }
 
@@ -36,9 +37,14 @@ export class AppointmentStatus extends Enum<AppointmentStatusEnum> {
     return new AppointmentStatus(AppointmentStatusEnum.CANCELLED);
   }
 
-  public static missed(): AppointmentStatus {
-    return new AppointmentStatus(AppointmentStatusEnum.MISSED);
+  public static missedByPatient(): AppointmentStatus {
+    return new AppointmentStatus(AppointmentStatusEnum.MISSED_BY_PATIENT);
   }
+
+  public static missedByDoctor(): AppointmentStatus {
+    return new AppointmentStatus(AppointmentStatusEnum.MISSED_BY_DOCTOR);
+  }
+
   public static finished(): AppointmentStatus {
     return new AppointmentStatus(AppointmentStatusEnum.FINISHED);
   }

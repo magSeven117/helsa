@@ -107,6 +107,14 @@ const DroppableContainer = ({ id, children, className }: { id: string; children?
   );
 };
 
+const calculateParticipantTimeInCall = (joinedAt: Date) => {
+  const now = new Date();
+  return intervalToDuration({
+    start: joinedAt,
+    end: now,
+  });
+};
+
 export const MyUILayout = () => {
   const call = useCall();
 
@@ -518,6 +526,30 @@ const useSessionTimer = () => {
   return remainingMs;
 };
 
+const useUserTimer = () => {
+  const [user] = useLocalStorage<BetterUser | null>('', null);
+  const { useCallSession } = useCallStateHooks();
+  const session = useCallSession();
+  const { joined_at } = session?.participants.find((p) => p.user.id === user?.id) ?? {};
+
+  const [timeInCall, setTimeInCall] = useState(Number.NaN);
+
+  useEffect(() => {
+    if (!joined_at) return;
+    const handle = setInterval(() => {
+      const time = calculateParticipantTimeInCall(new Date(joined_at));
+      setTimeInCall(time.minutes ?? 0);
+    }, 500);
+    return () => clearInterval(handle);
+  }, [session]);
+
+  useEffect(() => {
+    if (timeInCall >= 5) {
+      // Set user in call
+    }
+  }, [timeInCall]);
+};
+
 const useSessionTimerAlert = (remainingMs: number, threshold: number, onAlert: VoidFunction) => {
   const didAlert = useRef(false);
   useEffect(() => {
@@ -534,6 +566,7 @@ const SessionTimer = () => {
   const remainingMs: number = useSessionTimer();
   useSessionTimerAlert(remainingMs, 5 * 60 * 1000, () => setShowAlert(true));
   useSessionTimerAlert(remainingMs, 0, () => setHasReachedZero(true));
+  useUserTimer();
   const { useHasPermissions } = useCallStateHooks();
   const canEnd = useHasPermissions(OwnCapability.END_CALL);
 

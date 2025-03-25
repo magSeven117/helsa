@@ -24,6 +24,14 @@ export class BooleanValueObject extends ValueObject<boolean> {
   public validation(value: boolean): void {
     if (typeof value !== 'boolean') throw new Error(`${value} is not a valid boolean`);
   }
+
+  static false(): BooleanValueObject {
+    return new BooleanValueObject(false);
+  }
+
+  static true(): BooleanValueObject {
+    return new BooleanValueObject(true);
+  }
 }
 
 export class DateValueObject extends ValueObject<Date> {
@@ -77,7 +85,7 @@ export class OptionalDate extends ValueObject<Date | undefined> {
         ? typeof value === 'string' && !value.includes('-')
           ? new Date(Number(value))
           : new Date(value)
-        : undefined
+        : undefined,
     );
   }
   protected validation(value: Date | undefined): void {

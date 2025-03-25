@@ -178,4 +178,23 @@ export class Appointment extends Aggregate {
   markAsReady(): void {
     this.status = AppointmentStatus.ready();
   }
+
+  createRoom() {
+    this.room = AppointmentRoom.create(Uuid.random(), this.id);
+  }
+
+  finalize() {
+    if (
+      (this.room?.patientEnter.value == false && this.room?.doctorEnter.value == false) ||
+      (this.room?.patientEnter.value == true && this.room?.doctorEnter.value == true)
+    ) {
+      this.status = AppointmentStatus.finished();
+    } else {
+      if (this.room?.patientEnter.value == false) {
+        this.status = AppointmentStatus.missedByPatient();
+      } else if (this.room?.doctorEnter.value == false) {
+        this.status = AppointmentStatus.missedByDoctor();
+      }
+    }
+  }
 }

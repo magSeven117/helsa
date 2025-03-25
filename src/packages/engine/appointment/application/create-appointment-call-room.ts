@@ -27,12 +27,13 @@ export class CreateAppointmentCallRoom {
     if (!appointment || !appointment.doctor || !appointment.patient) {
       throw new NotFoundError('Doctor or patient not found');
     }
-
+    appointment.createRoom();
     await this.service.createRoom(
       appointmentId,
       appointment.doctor.toPrimitives(),
       appointment.patient.toPrimitives(),
       appointment.date.value,
     );
+    await this.repository.saveRoom(appointment.room!);
   }
 }

@@ -44,7 +44,8 @@ enum AppointmentStatus {
   READY
   STARTED
   CANCELLED
-  MISSED
+  MISSED_BY_PATIENT
+  MISSED_BY_DOCTOR
   FINISHED
 }
 
@@ -61,8 +62,8 @@ model AppointmentType {
 
 model AppointmentRoom {
   id            String      @id @default(uuid())
-  token         String
-  url           String
+  patientEnter  Boolean     @default(false)
+  doctorEnter   Boolean     @default(false)
   appointmentId String      @unique
   appointment   Appointment @relation(fields: [appointmentId], references: [id])
 }
