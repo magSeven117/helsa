@@ -23,5 +23,6 @@
   "workspaces": [
     "src/packages/*",
     "src/apps/*"
-  ]
+  ],
+  "packageManager": "npm@10.2.3"
 }
