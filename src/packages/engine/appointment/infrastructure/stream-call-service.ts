@@ -26,4 +26,9 @@ export class StreamCallService implements CallService {
       },
     });
   }
+
+  async endRoom(appointmentId: string): Promise<void> {
+    const call = this.client.video.call('appointment', appointmentId);
+    await call.end();
+  }
 }

@@ -31,4 +31,12 @@ export class AppointmentRoom {
       appointmentId: this.appointmentId.toString(),
     };
   }
+
+  public enterPatient(): void {
+    this.patientEnter = BooleanValueObject.true();
+  }
+
+  public enterDoctor(): void {
+    this.doctorEnter = BooleanValueObject.true();
+  }
 }

@@ -9,4 +9,5 @@ export interface CallService {
     patient: Primitives<Patient>,
     date: Date,
   ): Promise<void>;
+  endRoom(appointmentId: string): Promise<void>;
 }

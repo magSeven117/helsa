@@ -197,4 +197,12 @@ export class Appointment extends Aggregate {
       }
     }
   }
+
+  enterRoom(role: 'PATIENT' | 'DOCTOR') {
+    if (role === 'PATIENT') {
+      this.room?.enterPatient();
+    } else {
+      this.room?.enterDoctor();
+    }
+  }
 }
