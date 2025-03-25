@@ -3,12 +3,12 @@ import { PrismaCriteriaConverter } from '@helsa/database/converter';
 import { Collection } from '@helsa/ddd/core/collection.';
 import { Criteria } from '@helsa/ddd/core/criteria';
 import { Primitives } from '@helsa/ddd/types/primitives';
-import { AppointmentRoom } from 'appointment/domain/room';
 import { Document } from '../../../document/domain/document';
 import { Appointment } from '../../domain/appointment';
 import { AppointmentRepository } from '../../domain/appointment-repository';
 import { AppointmentType } from '../../domain/appointment-type';
 import { AppointmentNote } from '../../domain/note';
+import { AppointmentRoom } from '../../domain/room';
 import { Symptom } from '../../domain/symptom';
 import { AppointmentTelemetry } from '../../domain/telemetry';
 
