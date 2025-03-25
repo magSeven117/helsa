@@ -1,4 +1,4 @@
-import '@/src/env';
+import '@/env';
 import { withPayload } from '@payloadcms/next/withPayload';
 import type { NextConfig } from 'next';
 
