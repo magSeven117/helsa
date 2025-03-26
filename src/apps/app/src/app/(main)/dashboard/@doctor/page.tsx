@@ -1,8 +1,8 @@
 import { AppointmentTypes } from '@/src/components/dashboard/doctor/appointment-types';
-import PatientsTable from '@/src/components/dashboard/doctor/patients-table';
+import { AppointmentsCalendar } from '@/src/components/dashboard/doctor/appointments-calendar';
+import { PatientsList } from '@/src/components/dashboard/doctor/patient-list';
 import { Revenue } from '@/src/components/dashboard/doctor/revenue';
-import { UpcomingAppointments } from '@/src/components/dashboard/doctor/upcoming-appointments';
-import { Card, CardContent, CardHeader, CardTitle } from '@helsa/ui/components/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@helsa/ui/components/card';
 import { DateRangePicker } from '@helsa/ui/components/date-range-picker';
 import { Calendar, DollarSign, Stethoscope, Users } from 'lucide-react';
 
@@ -19,7 +19,7 @@ const Page = () => {
           <div className="w-full flex-col gap-2 flex">
             <p className="text-lg font-semibold mb-5">Indicadores</p>
             <div className="flex justify-between items-center gap-4">
-              <Card className="rounded-none w-1/4">
+              <Card className=" w-1/4 rounded-lg backdrop-blur-xl bg-background border shadow-none">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">Ganancia total</CardTitle>
                   <DollarSign />
@@ -29,7 +29,7 @@ const Page = () => {
                   <p className="text-xs text-muted-foreground">+20.1% del mes pasado</p>
                 </CardContent>
               </Card>
-              <Card className="rounded-none w-1/4">
+              <Card className=" w-1/4 rounded-lg backdrop-blur-xl bg-background border">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">Promedio de pacients</CardTitle>
                   <Users />
@@ -39,7 +39,7 @@ const Page = () => {
                   <p className="text-xs text-muted-foreground">-16.4% del mes pasado</p>
                 </CardContent>
               </Card>
-              <Card className="rounded-none w-1/4">
+              <Card className=" w-1/4 rounded-lg backdrop-blur-xl bg-background border">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">Promedio de edad</CardTitle>
                   <Calendar />
@@ -49,7 +49,7 @@ const Page = () => {
                   <p className="text-xs text-muted-foreground">Por debajo de los 40</p>
                 </CardContent>
               </Card>
-              <Card className="rounded-none w-1/4">
+              <Card className=" w-1/4 rounded-lg backdrop-blur-xl bg-background border">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">Tipos de consulta</CardTitle>
                   <Stethoscope />
@@ -61,14 +61,31 @@ const Page = () => {
               </Card>
             </div>
           </div>
-          <div className="w-full grid grid-cols-2 max-sm:grid-cols-1 gap-4 mb-5">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card className="lg:col-span-1 glass-card">
+              <CardHeader>
+                <CardTitle>Today`s Appointments</CardTitle>
+                <CardDescription>You have 8 appointments scheduled</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <AppointmentsCalendar />
+              </CardContent>
+            </Card>
+
             <AppointmentTypes />
-            <Revenue />
           </div>
-          <PatientsTable />
-        </div>
-        <div className="max-sm:w-full border-l px-3 h-full justify-center">
-          <UpcomingAppointments />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Revenue />
+            <Card className="lg:col-span-1 glass-card">
+              <CardHeader>
+                <CardTitle>Recent Patients</CardTitle>
+                <CardDescription>Last 10 patient records</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <PatientsList />
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     </div>

@@ -34,7 +34,11 @@ export class AppointmentCriteria {
     return Criteria.fromValues([
       { field: 'date', value: pastHour, operator: Operator.GTE },
       { field: 'date', value: pastHalfHour, operator: Operator.LTE },
-      { field: 'status', value: AppointmentStatusEnum.READY, operator: Operator.EQUAL },
+      {
+        field: 'status',
+        value: [AppointmentStatusEnum.READY, AppointmentStatusEnum.STARTED],
+        operator: Operator.IN,
+      },
     ]);
   }
 }

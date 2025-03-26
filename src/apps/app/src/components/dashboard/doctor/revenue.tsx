@@ -29,7 +29,7 @@ const chartConfig = {
 
 export function Revenue() {
   return (
-    <Card className="rounded-none md:col-span-1">
+    <Card className="lg:col-span-1 rounded-lg backdrop-blur-xl bg-background border">
       <CardHeader>
         <CardTitle>Ganancia por mes</CardTitle>
         <CardDescription>Enero - Octubre 2024</CardDescription>

@@ -1,10 +1,10 @@
 'use client';
 import logoiso from '@/src/assets/images/HELSA NUEVO BLANCO ISOTIPO.png';
-import logo from '@/src/assets/images/HELSA NUEVO BLANCO.png';
 import logoiso2 from '@/src/assets/images/HELSA NUEVO NEGRO ISOTIPO.png';
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -15,6 +15,7 @@ import {
   useSidebar,
 } from '@helsa/ui/components/sidebar';
 import { cn } from '@helsa/ui/lib/utils';
+import { motion } from 'framer-motion';
 import {
   BookMarked,
   Calendar,
@@ -29,6 +30,9 @@ import {
 import { useTheme } from 'next-themes';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { SidebarTrigger } from './sidabar-trigger';
+import SidebarNotifications from './sidebar-notifications';
+import { NavUser } from './user-sidebar';
 
 export interface Section {
   title: string;
@@ -48,37 +52,34 @@ const SideBar = ({ user }: { user: any }) => {
   }));
   const path = usePathname();
   const theme = useTheme();
-  const { open } = useSidebar();
+  const { open, state } = useSidebar();
+  const isCollapsed = state === 'collapsed';
   return (
-    <Sidebar collapsible="icon" className="bg-background border-r">
-      <SidebarHeader className="bg-background">
-        <SidebarMenuButton
-          size="lg"
-          className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground rounded-none justify-start data-[state=close]:hidden"
+    <Sidebar collapsible="icon" className="" variant="inset">
+      <SidebarHeader
+        className={cn(
+          'flex md:pt-3.5',
+          isCollapsed ? 'items-center justify-between gap-y-4 flex-col' : 'flex-row items-center justify-between',
+        )}
+      >
+        <Link href={'/'}>
+          {theme.resolvedTheme === 'dark' ? (
+            <img src={logoiso.src} alt="" className="rounded-lg object-contain h-[40px]" />
+          ) : (
+            <img src={logoiso2.src} alt="" className="rounded-lg object-contain h-[40px]" />
+          )}
+        </Link>
+        <motion.div
+          key={isCollapsed ? 'header-collapsed' : 'header-expanded'}
+          className={`flex ${isCollapsed ? 'flex-row md:flex-col-reverse' : 'flex-row'} items-center gap-2`}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
         >
-          <Link href="/dashboard" className="flex items-center justify-center gap-2">
-            {open && (
-              <>
-                {theme.resolvedTheme === 'dark' ? (
-                  <img src={logo.src} alt="" className="rounded-lg object-contain h-[40px]" />
-                ) : (
-                  <img src={logo.src} alt="" className="rounded-lg object-contain h-[40px]" />
-                )}
-              </>
-            )}
-            {!open && (
-              <>
-                {theme.resolvedTheme === 'dark' ? (
-                  <img src={logoiso.src} alt="" className="rounded-lg object-contain h-[40px]" />
-                ) : (
-                  <img src={logoiso2.src} alt="" className="rounded-lg object-contain h-[40px]" />
-                )}
-              </>
-            )}
-          </Link>
-        </SidebarMenuButton>
+          <SidebarTrigger />
+        </motion.div>
       </SidebarHeader>
-      <SidebarContent className="bg-background">
+      <SidebarContent className="">
         {sections.map((section) => (
           <SidebarGroup key={section.title}>
             <SidebarGroupLabel className="text-muted-foreground">{section.title}</SidebarGroupLabel>
@@ -88,8 +89,8 @@ const SideBar = ({ user }: { user: any }) => {
                   <SidebarMenuItem key={route.title}>
                     <SidebarMenuButton
                       asChild
-                      className={cn('hover:bg-sidebar hover:border rounded-none', {
-                        'border  bg-sidebar': path == route.url,
+                      className={cn('hover:bg-background/40', {
+                        'bg-background/40': path == route.url,
                       })}
                     >
                       <Link href={route.url} prefetch={true}>
@@ -104,6 +105,10 @@ const SideBar = ({ user }: { user: any }) => {
           </SidebarGroup>
         ))}
       </SidebarContent>
+      <SidebarFooter>
+        <SidebarNotifications />
+        <NavUser user={user} />
+      </SidebarFooter>
     </Sidebar>
   );
 };

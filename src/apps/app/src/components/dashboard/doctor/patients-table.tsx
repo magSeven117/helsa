@@ -180,7 +180,7 @@ const PatientsTable = () => {
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
   return (
-    <div className="space-y-4 rounded-none border p-4">
+    <div className="space-y-4 border bg-background rounded-md p-4">
       <div className="flex flex-col gap-1 mb-4">
         <p className="text-lg font-semibold">Pacientes</p>
         <p className="text-sm text-muted-foreground">Aquí puedes ver el historial de citas de tus pacientes</p>
@@ -192,7 +192,7 @@ const PatientsTable = () => {
         </div>
         <DataTableViewOptions table={table} />
       </div>
-      <div className="rounded-none border">
+      <div className="border rounded-md bg-background">
         <DataTable table={table} />
       </div>
       <DataTablePagination table={table} />

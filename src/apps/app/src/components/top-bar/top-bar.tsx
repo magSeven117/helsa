@@ -18,19 +18,13 @@ import { Bell, Inbox, LogOut, Settings, Sparkles, SunMoon, User } from 'lucide-r
 import { useTheme } from 'next-themes';
 import { useRouter } from 'next/navigation';
 import { useAssistantStore } from '../../store/assistant/assistant-store';
-import { SidebarTrigger } from '../side-bar/sidabar-trigger';
 
 const TopBar = () => {
   const { data } = authClient.useSession();
   return (
     <div className="flex w-full justify-between items-center pl-5  pr-8 py-5">
       <div className="flex w-1/2 items-center gap-5">
-        <SidebarTrigger />
         <AIButton />
-      </div>
-      <div className="flex items-center gap-3">
-        <NotificationButton />
-        <ProfileButton user={data?.user!} />
       </div>
     </div>
   );

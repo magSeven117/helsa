@@ -1,5 +1,4 @@
 import { PrismaClient } from '@prisma/client';
-import 'server-only';
 
 const createPrismaClient = () =>
   new PrismaClient({

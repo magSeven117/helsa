@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning={true}>
       <link rel="icon" href={icon.src} sizes="any" />
-      <body className={nunito.className + ' styled-scroll'} suppressHydrationWarning={true}>
+      <body className={nunito.className + ' styled-scroll h-screen box-border'} suppressHydrationWarning={true}>
         <DesignSystemProvider>{children}</DesignSystemProvider>
         <Analytics />
       </body>

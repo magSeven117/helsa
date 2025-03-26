@@ -7,7 +7,7 @@ import { useState } from 'react';
 export function UpcomingAppointments() {
   const [date, setDate] = useState<Date | undefined>(new Date());
   return (
-    <div className="py-5 w-full">
+    <div className="py-5 border bg-background rounded-md w-full">
       <p className="text-center text-lg font-semibold">Agenda</p>
       <div className="w-full flex justify-center">
         <Calendar mode="single" selected={date} onSelect={setDate} />

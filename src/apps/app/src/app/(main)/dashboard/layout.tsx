@@ -19,7 +19,7 @@ const Layout = async ({
     return redirect(`/select-role?userId=${user.id}`);
   }
   return (
-    <div className="flex flex-col items-start w-full h-full">
+    <div className="flex flex-col items-start w-full">
       {user.role === 'DOCTOR' && doctor}
       {user.role === 'PATIENT' && patient}
       {user.role === 'HOSPITAL' && hospital}

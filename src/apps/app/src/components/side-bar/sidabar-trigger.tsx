@@ -30,7 +30,7 @@ export function SidebarTrigger() {
       data-sidebar="trigger"
       variant="ghost"
       size="icon"
-      className={cn('w-10 h-10 border p-4')}
+      className={cn('w-10 h-10 p-4')}
       onClick={(event) => {
         toggleSidebar();
       }}

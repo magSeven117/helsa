@@ -1,4 +1,5 @@
 'use client';
+import { enterRoom } from '@/src/actions/appointment/enter-room';
 import { DndContext, useDraggable, useDroppable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
 import { BetterUser } from '@helsa/auth/server';
@@ -125,6 +126,13 @@ export const MyUILayout = () => {
   const remoteParticipants = useRemoteParticipants();
   const [parent, setParent] = useState<any>('drop-1');
 
+  const joinCall = useCallback(async () => {
+    if (call) {
+      call.join();
+      await enterRoom({ appointmentId: call.id });
+    }
+  }, [call]);
+
   if (call?.state.endedAt) {
     return (
       <div className="relative w-full flex-1">
@@ -143,7 +151,7 @@ export const MyUILayout = () => {
             {remoteParticipants.length > 0 ? 'Te están esperando' : 'No hay nadie en la llamada'}{' '}
             {call?.state.endedAt?.toISOString()}
           </p>
-          <Button onClick={() => call?.join()} className="rounded-full gap-3" variant={'outline'}>
+          <Button onClick={joinCall} className="rounded-full gap-3" variant={'outline'}>
             <PhoneIncoming className="size-4" />
             Entrar
           </Button>
@@ -321,9 +329,9 @@ const ActionsBar = () => {
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
-        <Separator orientation="vertical" className="mr-3 ml-2 h-4" />
         {user?.role === 'DOCTOR' && (
           <>
+            <Separator orientation="vertical" className="mr-3 ml-2 h-4" />
             <RecordingButton />
             <TranscriptionButton />
           </>
@@ -527,6 +535,7 @@ const useSessionTimer = () => {
 };
 
 const useUserTimer = () => {
+  const call = useCall();
   const [user] = useLocalStorage<BetterUser | null>('', null);
   const { useCallSession } = useCallStateHooks();
   const session = useCallSession();
@@ -545,7 +554,7 @@ const useUserTimer = () => {
 
   useEffect(() => {
     if (timeInCall >= 5) {
-      // Set user in call
+      enterRoom({ appointmentId: call?.id ?? '' });
     }
   }, [timeInCall]);
 };
@@ -566,7 +575,6 @@ const SessionTimer = () => {
   const remainingMs: number = useSessionTimer();
   useSessionTimerAlert(remainingMs, 5 * 60 * 1000, () => setShowAlert(true));
   useSessionTimerAlert(remainingMs, 0, () => setHasReachedZero(true));
-  useUserTimer();
   const { useHasPermissions } = useCallStateHooks();
   const canEnd = useHasPermissions(OwnCapability.END_CALL);
 

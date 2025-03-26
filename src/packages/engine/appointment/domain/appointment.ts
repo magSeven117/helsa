@@ -12,6 +12,7 @@ import { Patient } from '../../patient/domain/patient';
 import { Treatment } from '../../treatment/domain/treatment';
 import { AppointmentType } from './appointment-type';
 import { AppointmentScheduled } from './events/appointment-scheduled';
+import { UserEnteredAppointment } from './events/user-enter';
 import { AppointmentNote } from './note';
 import { AppointmentRating } from './rating';
 import { AppointmentRecipe } from './recipe';
@@ -183,6 +184,12 @@ export class Appointment extends Aggregate {
     this.room = AppointmentRoom.create(Uuid.random(), this.id);
   }
 
+  start(): void {
+    if (this.room?.patientEnter.value == true && this.room?.doctorEnter.value == true) {
+      this.status = AppointmentStatus.started();
+    }
+  }
+
   finalize() {
     if (
       (this.room?.patientEnter.value == false && this.room?.doctorEnter.value == false) ||
@@ -204,5 +211,11 @@ export class Appointment extends Aggregate {
     } else {
       this.room?.enterDoctor();
     }
+    this.record(
+      new UserEnteredAppointment({
+        appointmentId: this.id.toString(),
+        role,
+      }),
+    );
   }
 }
