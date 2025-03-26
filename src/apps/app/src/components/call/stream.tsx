@@ -54,6 +54,7 @@ import {
 } from 'lucide-react';
 import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
+import CallCHat from '../call-chat';
 
 const apiKey = process.env.NEXT_PUBLIC_STREAM_CLIENT_KEY!;
 
@@ -182,6 +183,7 @@ export const MyUILayout = () => {
             {parent === 'drop-4' && localVideo}
           </DroppableContainer>
           <ActionsBar />
+          <CallCHat id={call?.id ?? ''} />
         </DndContext>
       )}
     </div>
@@ -229,7 +231,7 @@ export const MyFloatingLocalParticipant = (props: { participant?: StreamVideoPar
     <div
       ref={setNodeRef}
       style={style}
-      className="h-[125px] aspect-video bg-background border resize max-h-[200px] max-w-[340px] min-h-[125px] min-w-[200px] overflow-auto no-scroll"
+      className="h-[125px] aspect-video bg-background rounded-lg border resize max-h-[200px] max-w-[340px] min-h-[125px] min-w-[200px] overflow-auto no-scroll"
     >
       <div {...listeners} {...attributes} className="h-full w-full">
         <ParticipantView

@@ -4,7 +4,7 @@ import ModalAssistant from '@/src/components/assistant/modal-assistant';
 import SessionUser from '@/src/components/session-user';
 import SideBar from '@/src/components/side-bar/side-bar';
 import TopBar from '@/src/components/top-bar/top-bar';
-import { SidebarInset, SidebarProvider } from '@helsa/ui/components/sidebar';
+import { SidebarProvider } from '@helsa/ui/components/sidebar';
 import React, { Suspense } from 'react';
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
@@ -17,10 +17,10 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
         <SessionUser userProvide={user} />
         <SidebarProvider>
           <SideBar user={user} />
-          <SidebarInset className="flex flex-col items-start w-full styled-scroll  overflow-y-scroll pb-8  bg-background">
+          <div className="flex flex-col items-start w-full styled-scroll  overflow-y-scroll pb-8  bg-background">
             <TopBar />
             <Suspense>{children}</Suspense>
-          </SidebarInset>
+          </div>
           <ModalAssistant />
         </SidebarProvider>
       </TRPCReactProvider>

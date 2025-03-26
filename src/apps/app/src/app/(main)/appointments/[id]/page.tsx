@@ -15,14 +15,14 @@ const Page = async (props: { params: Promise<{ id: string }> }) => {
         <Suspense fallback={<CallSkeleton />}>
           <WrapperCall id={params.id} />
         </Suspense>
-        <div
+        {/* <div
           className="col-span-2 mt-0 h-full border box-border flex-col justify-end flex gap-2 max-md:col-span-1"
           suppressHydrationWarning
         >
           <Suspense fallback={<ChatSkeleton />}>
             <CallCHat id={params.id} />
           </Suspense>
-        </div>
+        </div> */}
       </div>
     </div>
   );

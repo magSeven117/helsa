@@ -48,7 +48,7 @@ const appointments = [
 export function AppointmentsCalendar() {
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
         <div className="p-4 rounded-lg bg-[#8167ec]/20 border border-[#8167ec]">
           <div className="flex justify-between items-center mb-4">
             <div>

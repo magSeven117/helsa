@@ -46,7 +46,7 @@ export function AppointmentPagination({ meta }: Props) {
             onValueChange={(value) => createPageSizeQuery(value)}
             disabled={meta.total < 10}
           >
-            <SelectTrigger className="h-8 w-[70px] rounded-none">
+            <SelectTrigger className="h-8 w-[70px] ">
               <SelectValue placeholder={pageSize} />
             </SelectTrigger>
             <SelectContent side="top">

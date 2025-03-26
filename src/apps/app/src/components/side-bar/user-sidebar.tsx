@@ -38,7 +38,10 @@ export function NavUser({ user }: { user: any }) {
       <SidebarMenuItem>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <SidebarMenuButton size="lg" className="bg-background/40">
+            <SidebarMenuButton
+              size="lg"
+              className="bg-[var(--color-brand-primary)] hover:bg-[var(--color-brand-primary)]/60 dark:hover:bg-indigo-600 hover:text-white text-white"
+            >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage src={user?.image} alt={user.name} className="object-contain" />
                 <AvatarFallback className="rounded-lg">
@@ -47,7 +50,7 @@ export function NavUser({ user }: { user: any }) {
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{user.name}</span>
-                <span className="truncate text-xs text-muted-foreground">{user.email}</span>
+                <span className="truncate text-xs text-gray-100">{user.email}</span>
               </div>
               <MoreVerticalIcon className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -56,7 +59,7 @@ export function NavUser({ user }: { user: any }) {
             className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
             side={'top'}
             align="start"
-            sideOffset={4}
+            sideOffset={8}
           >
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
@@ -96,10 +99,10 @@ export function NavUser({ user }: { user: any }) {
                   Tema
                 </div>
                 <Select defaultValue={theme} onValueChange={changeTheme}>
-                  <SelectTrigger className="rounded-none w-1/2 p-2 h-[25px]">
+                  <SelectTrigger className=" w-1/2 p-2 h-[25px]">
                     <SelectValue placeholder="select" />
                   </SelectTrigger>
-                  <SelectContent className="rounded-none">
+                  <SelectContent className="">
                     <SelectItem value={'light'}>
                       <span className="flex w-full justify-between items-center gap-3">Light</span>
                     </SelectItem>

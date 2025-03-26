@@ -1,22 +1,37 @@
 'use client';
 import { useMessages } from '@/src/hooks/use-messages';
 import { Button } from '@helsa/ui/components/button';
-import { Input } from '@helsa/ui/components/input';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@helsa/ui/components/sheet';
 import { User } from 'better-auth';
 import { formatDistance } from 'date-fns';
 import { fromZonedTime, toDate } from 'date-fns-tz';
 import { es } from 'date-fns/locale';
-import { Send } from 'lucide-react';
+import { MessageSquare } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
+import ChatInput from './input';
 const CallCHat = ({ id }: { id: string }) => {
+  const [open, setOpen] = useState(false);
   const [user] = useLocalStorage<User | null>('user', null);
   return (
-    <>
-      <div className="h-2"></div>
-      <ChatList userId={user?.id || ''} appointmentId={id} />
-      <ChatFooter userId={user?.id || ''} appointmentId={id} />
-    </>
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger asChild>
+        <Button variant={'outline'} size={'icon'} className="absolute top-5 right-5">
+          <MessageSquare />
+        </Button>
+      </SheetTrigger>
+      <SheetContent className="sm:w-1/3 sm:max-w-full p-4 bg-transparent border-none focus-visible:outline-none ">
+        <div className="bg-background p-6 border border-sidebar h-full overflow-y-auto no-scroll space-y-5 rounded-xl flex flex-col justify-between">
+          <SheetHeader>
+            <SheetTitle>Chat</SheetTitle>
+          </SheetHeader>
+          <div className="h-full flex flex-col justify-end">
+            <ChatList userId={user?.id || ''} appointmentId={id} />
+            <ChatFooter userId={user?.id || ''} appointmentId={id} />
+          </div>
+        </div>
+      </SheetContent>
+    </Sheet>
   );
 };
 
@@ -27,20 +42,7 @@ const ChatFooter = ({ appointmentId, userId }: { appointmentId: string; userId: 
     sendMessage({ text: message, userId, appointmentId });
     setMessage('');
   };
-  return (
-    <div className="h-16 flex justify-between items-center relative px-3 py-2">
-      <Input
-        className="h-10 border border-primary rounded-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 pr-8 py-0"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-        placeholder="Escribe un mensaje..."
-      />
-      <Button className="size-8 p-0 rounded-none absolute right-4" size={'icon'} onClick={handleSend}>
-        <Send className="size-3" />
-      </Button>
-    </div>
-  );
+  return <ChatInput message={message} setMessage={setMessage} submit={handleSend} />;
 };
 
 const ChatList = ({ userId, appointmentId }: { userId: string; appointmentId: string }) => {
@@ -65,7 +67,7 @@ const ChatList = ({ userId, appointmentId }: { userId: string; appointmentId: st
             <div
               className={`p-2 ${
                 isUserMessage ? 'bg-stone-600 text-right  justify-end' : 'bg-sidebar text-left'
-              } text-sm flex flex-col justify-center rounded-none`}
+              } text-sm flex flex-col justify-center rounded-xl`}
             >
               {message.text}
               <span className={`text-xs ${isUserMessage ? '' : 'text-muted-foreground'}`}>

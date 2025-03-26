@@ -31,11 +31,7 @@ export const columns: ColumnDef<Primitives<Appointment>>[] = [
   {
     id: 'select',
     cell: ({ row }) => (
-      <Checkbox
-        className="rounded-none"
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-      />
+      <Checkbox className="" checked={row.getIsSelected()} onCheckedChange={(value) => row.toggleSelected(!!value)} />
     ),
     enableSorting: false,
     enableHiding: false,
@@ -79,23 +75,20 @@ export const columns: ColumnDef<Primitives<Appointment>>[] = [
                 <MoreHorizontal />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="rounded-none">
-              <DropdownMenuItem
-                onClick={() => (table.options.meta as any).setOpen(row.original.id)}
-                className="rounded-none"
-              >
+            <DropdownMenuContent align="end" className="">
+              <DropdownMenuItem onClick={() => (table.options.meta as any).setOpen(row.original.id)} className="">
                 View details
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               {row.original?.status === 'SCHEDULED' && (
                 <AlertDialogTrigger asChild>
-                  <DropdownMenuItem className="text-destructive rounded-none">Cancelar</DropdownMenuItem>
+                  <DropdownMenuItem className="text-destructive ">Cancelar</DropdownMenuItem>
                 </AlertDialogTrigger>
               )}
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <AlertDialogContent className="sm:rounded-none">
+          <AlertDialogContent className="sm:">
             <AlertDialogHeader>
               <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
               <AlertDialogDescription>
@@ -136,8 +129,8 @@ export const StateColumn = ({ state }: { state: string }) => {
 
 const TypeColumn = ({ name, color }: { name: string; color: string }) => {
   return (
-    <div className="flex items-center space-x-2">
-      <div className="size-3" style={{ backgroundColor: color }}></div>
+    <div className="flex items-center space-x-2 ">
+      <div className="size-3 rounded-sm" style={{ backgroundColor: color }}></div>
       <span className="text-xs font-semibold px-3 py-1">{name}</span>
     </div>
   );

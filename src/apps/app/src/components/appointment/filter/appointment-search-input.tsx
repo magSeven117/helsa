@@ -128,7 +128,7 @@ const AppointmentSearchInput = ({ specialties, types, states }: Props) => {
             ref={inputRef}
             value={prompt}
             onChange={handleSearch}
-            className="pl-9 w-full lg:w-[350px] pr-8 rounded-none h-9 focus-visible:outline-none focus-visible:ring-0"
+            className="pl-9 w-full lg:w-[350px] pr-8  h-9 focus-visible:outline-none focus-visible:ring-0"
             autoComplete="off"
             autoCapitalize="none"
             autoCorrect="off"
@@ -157,21 +157,15 @@ const AppointmentSearchInput = ({ specialties, types, states }: Props) => {
           types={types}
         />
       </div>
-      <DropdownMenuContent
-        className="rounded-none w-[350px]"
-        align="end"
-        sideOffset={19}
-        alignOffset={-11}
-        side="bottom"
-      >
+      <DropdownMenuContent className=" w-[350px]" align="end" sideOffset={19} alignOffset={-11} side="bottom">
         <DropdownMenuSub>
-          <DropdownMenuSubTrigger className="rounded-none">
+          <DropdownMenuSubTrigger className="">
             <Stethoscope className="size-4 mr-2" />
             <span>Especialidad</span>
           </DropdownMenuSubTrigger>
 
           <DropdownMenuPortal>
-            <DropdownMenuSubContent sideOffset={14} alignOffset={-4} className="p-0 w-[250px] h-[270px] rounded-none">
+            <DropdownMenuSubContent sideOffset={14} alignOffset={-4} className="p-0 w-[250px] h-[270px] ">
               <SelectSpecialty
                 headless
                 specialties={specialties}
@@ -189,13 +183,13 @@ const AppointmentSearchInput = ({ specialties, types, states }: Props) => {
           </DropdownMenuPortal>
         </DropdownMenuSub>
         <DropdownMenuSub>
-          <DropdownMenuSubTrigger className="rounded-none">
+          <DropdownMenuSubTrigger className="">
             <CalendarDays className="size-4 mr-2" />
             <span>Fechas</span>
           </DropdownMenuSubTrigger>
 
           <DropdownMenuPortal>
-            <DropdownMenuSubContent sideOffset={14} alignOffset={-4} className="p-0 rounded-none">
+            <DropdownMenuSubContent sideOffset={14} alignOffset={-4} className="p-0 ">
               <Calendar
                 mode="range"
                 initialFocus
@@ -218,13 +212,13 @@ const AppointmentSearchInput = ({ specialties, types, states }: Props) => {
           </DropdownMenuPortal>
         </DropdownMenuSub>
         <DropdownMenuSub>
-          <DropdownMenuSubTrigger className="rounded-none">
+          <DropdownMenuSubTrigger className="">
             <Route className="size-4 mr-2" />
             <span>Estado de la cita</span>
           </DropdownMenuSubTrigger>
 
           <DropdownMenuPortal>
-            <DropdownMenuSubContent sideOffset={14} alignOffset={-4} className="p-0 w-[250px] h-[270px] rounded-none">
+            <DropdownMenuSubContent sideOffset={14} alignOffset={-4} className="p-0 w-[250px] h-[270px] ">
               <SelectState
                 headless
                 states={states}
@@ -242,13 +236,13 @@ const AppointmentSearchInput = ({ specialties, types, states }: Props) => {
           </DropdownMenuPortal>
         </DropdownMenuSub>
         <DropdownMenuSub>
-          <DropdownMenuSubTrigger className="rounded-none">
+          <DropdownMenuSubTrigger className="">
             <SquareStack className="size-4 mr-2" />
             <span>Tipo de cita</span>
           </DropdownMenuSubTrigger>
 
           <DropdownMenuPortal>
-            <DropdownMenuSubContent sideOffset={14} alignOffset={-4} className="p-0 w-[250px] h-[270px] rounded-none">
+            <DropdownMenuSubContent sideOffset={14} alignOffset={-4} className="p-0 w-[250px] h-[270px] ">
               <SelectType
                 headless
                 types={types}

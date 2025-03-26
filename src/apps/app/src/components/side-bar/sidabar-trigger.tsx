@@ -35,7 +35,7 @@ export function SidebarTrigger() {
         toggleSidebar();
       }}
     >
-      <Sidebar className="size-4" />
+      <Sidebar className="size-4 dark:text-white" />
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   );

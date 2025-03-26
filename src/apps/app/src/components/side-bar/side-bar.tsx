@@ -1,6 +1,4 @@
 'use client';
-import logoiso from '@/src/assets/images/HELSA NUEVO BLANCO ISOTIPO.png';
-import logoiso2 from '@/src/assets/images/HELSA NUEVO NEGRO ISOTIPO.png';
 import {
   Sidebar,
   SidebarContent,
@@ -30,6 +28,7 @@ import {
 import { useTheme } from 'next-themes';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Icon from './icon';
 import { SidebarTrigger } from './sidabar-trigger';
 import SidebarNotifications from './sidebar-notifications';
 import { NavUser } from './user-sidebar';
@@ -55,7 +54,7 @@ const SideBar = ({ user }: { user: any }) => {
   const { open, state } = useSidebar();
   const isCollapsed = state === 'collapsed';
   return (
-    <Sidebar collapsible="icon" className="" variant="inset">
+    <Sidebar collapsible="icon" className="bg-background" variant="inset">
       <SidebarHeader
         className={cn(
           'flex md:pt-3.5',
@@ -63,11 +62,7 @@ const SideBar = ({ user }: { user: any }) => {
         )}
       >
         <Link href={'/'}>
-          {theme.resolvedTheme === 'dark' ? (
-            <img src={logoiso.src} alt="" className="rounded-lg object-contain h-[40px]" />
-          ) : (
-            <img src={logoiso2.src} alt="" className="rounded-lg object-contain h-[40px]" />
-          )}
+          <Icon />
         </Link>
         <motion.div
           key={isCollapsed ? 'header-collapsed' : 'header-expanded'}
@@ -89,8 +84,8 @@ const SideBar = ({ user }: { user: any }) => {
                   <SidebarMenuItem key={route.title}>
                     <SidebarMenuButton
                       asChild
-                      className={cn('hover:bg-background/40', {
-                        'bg-background/40': path == route.url,
+                      className={cn('hover:bg-[var(--color-brand-primary)] hover:text-white dark:text-white', {
+                        'bg-[var(--color-brand-primary)] text-white': path == route.url,
                       })}
                     >
                       <Link href={route.url} prefetch={true}>

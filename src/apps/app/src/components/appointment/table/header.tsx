@@ -43,17 +43,17 @@ export function AppointmentsTableHeader({ table, loading }: Props) {
       .getIsVisible();
 
   return (
-    <TableHeader>
-      <TableRow className="h-[45px] hover:bg-transparent">
-        <TableHead className="min-w-[50px] hidden md:table-cell px-3 md:px-4 py-2 border">
+    <TableHeader className="rounded-lg">
+      <TableRow className="h-[45px] hover:bg-transparent rounded-lg border-none">
+        <TableHead className="min-w-[50px] hidden md:table-cell px-3 md:px-4 py-2">
           <Checkbox
-            className="rounded-none"
+            className=""
             checked={table?.getIsAllPageRowsSelected() || (table?.getIsSomePageRowsSelected() && 'indeterminate')}
             onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
           />
         </TableHead>
         {isVisible('date') && (
-          <TableHead className="border">
+          <TableHead className="border-b">
             <Button
               className="p-0 hover:bg-transparent space-x-2"
               variant="ghost"
@@ -66,7 +66,7 @@ export function AppointmentsTableHeader({ table, loading }: Props) {
           </TableHead>
         )}
         {isVisible('status') && (
-          <TableHead className="border">
+          <TableHead className="border-b">
             <Button
               className="p-0 hover:bg-transparent space-x-2"
               variant="ghost"
@@ -79,19 +79,19 @@ export function AppointmentsTableHeader({ table, loading }: Props) {
           </TableHead>
         )}
         {isVisible('doctor') && (
-          <TableHead className="border">
+          <TableHead className="border-b">
             <span>Doctor</span>
           </TableHead>
         )}
 
         {isVisible('specialty') && (
-          <TableHead className="border">
+          <TableHead className="border-b">
             <span>Especialidad</span>
           </TableHead>
         )}
 
         {isVisible('type') && (
-          <TableHead className="border">
+          <TableHead className="border-b">
             <span>Tipo de consulta</span>
           </TableHead>
         )}

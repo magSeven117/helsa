@@ -76,8 +76,8 @@ export function DataTable<TData, TValue>({
   }, [initialData]);
 
   return (
-    <div className="mb-8 relative w-full">
-      <Table className="border">
+    <div className="mb-8 relative w-full rounded-lg border  ">
+      <Table className="">
         <AppointmentsTableHeader table={table} />
         <TableBody className="w-full">
           {table.getRowModel().rows.length ? (
@@ -87,7 +87,7 @@ export function DataTable<TData, TValue>({
                   <TableCell
                     key={cell.id}
                     className={cn(
-                      'px-3 md:px-4 py-2 border',
+                      'px-3 md:px-4 py-2 border-y',
                       (cell.column.id === 'select' ||
                         cell.column.id === 'date' ||
                         cell.column.id === 'doctor' ||

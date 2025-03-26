@@ -11,12 +11,12 @@ export function ColumnVisibility({ disabled }: { disabled?: boolean }) {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" size="icon" disabled={disabled} className="h-9 rounded-none">
+        <Button variant="outline" size="icon" disabled={disabled} className="h-9 ">
           <SlidersIcon size={18} />
         </Button>
       </PopoverTrigger>
 
-      <PopoverContent className="w-[200px] p-0 rounded-none" align="start">
+      <PopoverContent className="w-[200px] p-0 " align="start">
         <div className="flex flex-col p-4 space-y-2 max-h-[352px] overflow-auto">
           {columns
             .filter((column) => column.columnDef.enableHiding !== false && column.id !== 'status')
@@ -24,7 +24,7 @@ export function ColumnVisibility({ disabled }: { disabled?: boolean }) {
               return (
                 <div key={column.id} className="flex items-center space-x-2">
                   <Checkbox
-                    className="rounded-none"
+                    className=""
                     id={column.id}
                     checked={column.getIsVisible()}
                     onCheckedChange={(checked) => column.toggleVisibility(checked)}

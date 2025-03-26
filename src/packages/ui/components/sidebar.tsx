@@ -124,10 +124,7 @@ function SidebarProvider({
               ...style,
             } as React.CSSProperties
           }
-          className={cn(
-            'group/sidebar-wrapper has-data-[variant=inset]:bg-[#8167ec]/60  flex min-h-svh w-full',
-            className,
-          )}
+          className={cn('group/sidebar-wrapper has-data-[variant=inset]:bg-sidebar  flex min-h-svh w-full', className)}
           {...props}
         >
           {children}
@@ -224,7 +221,7 @@ function Sidebar({
       >
         <div
           data-sidebar="sidebar"
-          className="bg-transparent group-data-[variant=floating]:border-sidebar-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm"
+          className="bg-primary dark:bg-secondary text-primary-foreground rounded-md group-data-[variant=floating]:border-sidebar-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm"
         >
           {children}
         </div>
