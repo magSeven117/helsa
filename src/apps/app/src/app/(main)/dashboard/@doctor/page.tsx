@@ -17,7 +17,6 @@ const Page = () => {
           </div>
 
           <div className="w-full flex-col gap-2 flex">
-            <p className="text-lg font-semibold mb-5">Indicadores</p>
             <div className="flex justify-between items-center gap-4">
               <Card className=" w-1/4 rounded-lg bg-secondary shadow-none">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

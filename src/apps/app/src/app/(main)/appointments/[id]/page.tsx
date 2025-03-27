@@ -1,7 +1,6 @@
 import Header from '@/src/components/appointment/call/header';
 import { CallSkeleton, HeaderSkeleton } from '@/src/components/appointment/call/skeletons';
 import WrapperCall from '@/src/components/call/wrapper';
-import CallCHat, { ChatSkeleton } from '@/src/components/call-chat';
 import { Suspense } from 'react';
 
 const Page = async (props: { params: Promise<{ id: string }> }) => {
@@ -15,14 +14,6 @@ const Page = async (props: { params: Promise<{ id: string }> }) => {
         <Suspense fallback={<CallSkeleton />}>
           <WrapperCall id={params.id} />
         </Suspense>
-        {/* <div
-          className="col-span-2 mt-0 h-full border box-border flex-col justify-end flex gap-2 max-md:col-span-1"
-          suppressHydrationWarning
-        >
-          <Suspense fallback={<ChatSkeleton />}>
-            <CallCHat id={params.id} />
-          </Suspense>
-        </div> */}
       </div>
     </div>
   );

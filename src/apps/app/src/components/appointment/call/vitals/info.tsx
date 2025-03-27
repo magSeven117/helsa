@@ -21,7 +21,7 @@ export function VitalSign({
   const status = value < min || value > max ? 'critical' : 'normal';
 
   return (
-    <div className="relative overflow-hidden  border p-4">
+    <div className="relative overflow-hidden  border p-4 rounded-xl">
       <div className="flex items-start justify-between mb-2">
         <div className="flex items-center space-x-2">
           <div className={`p-2 rounded-full ${status === 'critical' ? 'bg-red-500' : 'bg-green-500'}`}>{icon}</div>

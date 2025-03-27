@@ -9,8 +9,8 @@ const data = [...Array(10)].map((_, i) => ({ id: i.toString() }));
 
 export function Loading({ isEmpty }: { isEmpty?: boolean }) {
   return (
-    <div className="mb-8 relative w-full">
-      <Table className="border">
+    <div className="mb-8 relative w-full border rounded-xl">
+      <Table className="">
         <AppointmentsTableHeader loading />
 
         <TableBody className="w-full">

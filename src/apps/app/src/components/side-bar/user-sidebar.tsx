@@ -71,7 +71,7 @@ export function NavUser({ user }: { user: any }) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem className="gap-2 text-sm rounded-xs cursor-pointer">
+              <DropdownMenuItem className="gap-2 text-sm rounded-sm cursor-pointer">
                 <Sparkles className="size-4" />
                 Mejora a pro
               </DropdownMenuItem>
@@ -79,14 +79,14 @@ export function NavUser({ user }: { user: any }) {
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem
-                className="gap-2 text-sm rounded-xs cursor-pointer"
+                className="gap-2 text-sm rounded-sm cursor-pointer"
                 onClick={() => router.push('/profile')}
               >
                 <User className="size-4" />
                 Perfil
               </DropdownMenuItem>
 
-              <DropdownMenuItem className="gap-2 text-sm rounded-xs cursor-pointer">
+              <DropdownMenuItem className="gap-2 text-sm rounded-sm cursor-pointer">
                 <Bell className="size-4" />
                 Notificaciones
               </DropdownMenuItem>
@@ -117,7 +117,7 @@ export function NavUser({ user }: { user: any }) {
               </div>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="gap-2 text-sm rounded-xs cursor-pointer" onClick={onClick}>
+            <DropdownMenuItem className="gap-2 text-sm rounded-sm cursor-pointer" onClick={onClick}>
               <LogOut className="size-4" />
               Salir
             </DropdownMenuItem>
