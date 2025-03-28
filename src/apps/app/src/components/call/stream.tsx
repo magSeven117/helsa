@@ -668,7 +668,7 @@ const TranscriptionButton = () => {
     } else {
       call?.stopTranscription();
     }
-  }, []);
+  }, [isTranscribing]);
 
   return (
     <Button variant="ghost" size="icon" className="rounded-full size-8" onClick={toggleTranscription}>
