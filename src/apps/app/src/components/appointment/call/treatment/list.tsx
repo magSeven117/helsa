@@ -22,7 +22,7 @@ const TreatmentList = ({ toggle, treatments }: Props) => {
         {treatments?.map((treatment, index) => (
           <div
             key={`${treatment.id}-${index}`}
-            className="flex flex-col items-start justify-between p-3 gap-2 border rounded-none"
+            className="flex flex-col items-start justify-between p-3 gap-2 border rounded-lg"
           >
             <div className="flex justify-between items-center w-full">
               <div className="flex justify-start items-center gap-2">

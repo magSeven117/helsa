@@ -20,19 +20,19 @@ export function InputSelect({ onChange, options }: Props) {
     <div className="space-y-2">
       <div className="flex ">
         <Input
-          className="-me-px rounded-none shadow-none focus-visible:z-10 flex-1 focus-visible:outline-none focus-visible:ring-0"
+          className="-me-px rounded-r-none shadow-none focus-visible:z-10 flex-1 focus-visible:outline-none focus-visible:ring-0"
           placeholder=""
           type="text"
           value={value}
           onChange={(e) => setValue(e.target.value)}
         />
         <Select onValueChange={(v) => setOther(v)} value={other} defaultValue={options[0]}>
-          <SelectTrigger className="outline-none rounded-none shadow-none focus-visible:z-10 w-fit gap-2">
+          <SelectTrigger className="outline-none rounded-l-none shadow-none focus-visible:z-10 w-fit gap-2">
             <SelectValue className=""></SelectValue>
           </SelectTrigger>
-          <SelectContent className="rounded-none">
+          <SelectContent className="">
             {options.map((option, index) => (
-              <SelectItem key={index} value={option} className="rounded-none">
+              <SelectItem key={index} value={option} className="">
                 {option}
               </SelectItem>
             ))}

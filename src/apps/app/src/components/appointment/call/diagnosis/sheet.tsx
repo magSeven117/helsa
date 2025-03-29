@@ -27,7 +27,7 @@ const DiagnosisSheet = async ({ data }: Props) => {
         </Button>
       </SheetTrigger>
       <SheetContent className="sm:w-1/3 sm:max-w-full p-4 bg-transparent border-none focus-visible:outline-none ">
-        <div className="bg-background p-6 border border-sidebar h-full overflow-y-auto no-scroll space-y-3 flex flex-col">
+        <div className="bg-background p-6 border border-sidebar h-full overflow-y-auto no-scroll space-y-3 flex flex-col rounded-xl">
           <SheetHeader className="flex flex-row justify-between items-center gap-4 border-b mb-3">
             <div className="flex flex-row justify-between w-full items-center gap-4">
               <div className="flex flex-col gap-2 py-2">

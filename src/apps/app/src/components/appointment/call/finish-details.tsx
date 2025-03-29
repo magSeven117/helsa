@@ -47,7 +47,7 @@ const FinishDetails = ({
   return (
     <Card className="w-full">
       <CardContent className="space-y-6 py-5">
-        <div className="grid grid-cols-1 gap-6">
+        <div className="grid grid-cols-2 gap-6">
           <div className="space-y-4">
             <div>
               <h3 className="text-lg  font-medium text-[var(--color-brand-primary)]">Fecha y Hora</h3>
@@ -84,7 +84,6 @@ const FinishDetails = ({
               <p className="mt-1">{appointment.motive}</p>
             </div>
           </div>
-          <Separator />
           <div className="space-y-4">
             <div>
               <h3 className="text-lg  font-medium text-[var(--color-brand-primary)]">Diagnóstico</h3>
@@ -118,38 +117,41 @@ const FinishDetails = ({
                 ))}
               </ul>
             </div>
-          </div>
-          <Separator />
-          <div className="space-y-4">
-            <div>
-              <h3 className="text-lg  font-medium text-[var(--color-brand-primary)]">Signos vitales</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 py-4">
-                <HeartRate
-                  appointmentId={appointment.id}
-                  value={appointment.telemetry?.heartRate ?? defaultData.heartRate}
-                />
-                <BloodPressure
-                  appointmentId={appointment.id}
-                  value={appointment.telemetry?.bloodPressure ?? Number(defaultData.bloodPressure.split('/')[0])}
-                />
-                <Temperature
-                  appointmentId={appointment.id}
-                  value={appointment.telemetry?.temperature ?? defaultData.temperature}
-                />
-                <Weight appointmentId={appointment.id} value={appointment.telemetry?.weight ?? defaultData.weight} />
-                <RespiratoryRate
-                  appointmentId={appointment.id}
-                  value={appointment.telemetry?.respiratoryRate ?? defaultData.respiratoryRate}
-                />
-                <OxygenSaturation
-                  appointmentId={appointment.id}
-                  value={appointment.telemetry?.oxygenSaturation ?? defaultData.oxygenSaturation}
-                />
-              </div>
-            </div>
+            <Button>
+              <Printer className="h-4 w-4 mr-2" />
+              Descargar Receta
+            </Button>
           </div>
         </div>
         <Separator />
+        <div className="space-y-4">
+          <div>
+            <h3 className="text-lg  font-medium text-[var(--color-brand-primary)]">Signos vitales</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 py-4">
+              <HeartRate
+                appointmentId={appointment.id}
+                value={appointment.telemetry?.heartRate ?? defaultData.heartRate}
+              />
+              <BloodPressure
+                appointmentId={appointment.id}
+                value={appointment.telemetry?.bloodPressure ?? Number(defaultData.bloodPressure.split('/')[0])}
+              />
+              <Temperature
+                appointmentId={appointment.id}
+                value={appointment.telemetry?.temperature ?? defaultData.temperature}
+              />
+              <Weight appointmentId={appointment.id} value={appointment.telemetry?.weight ?? defaultData.weight} />
+              <RespiratoryRate
+                appointmentId={appointment.id}
+                value={appointment.telemetry?.respiratoryRate ?? defaultData.respiratoryRate}
+              />
+              <OxygenSaturation
+                appointmentId={appointment.id}
+                value={appointment.telemetry?.oxygenSaturation ?? defaultData.oxygenSaturation}
+              />
+            </div>
+          </div>
+        </div>
         <div>
           <h3 className="text-sm font-medium text-muted-foreground mb-2">Próxima Cita</h3>
           <div className="flex items-center mt-1">
@@ -160,10 +162,6 @@ const FinishDetails = ({
         </div>
       </CardContent>
       <CardFooter className="flex items-start flex-col sm:flex-row gap-3 pt-2">
-        <Button>
-          <Printer className="h-4 w-4 mr-2" />
-          Descargar Receta
-        </Button>
         <Button variant="outline">
           <Calendar className="h-4 w-4 mr-2" />
           Agendar Seguimiento

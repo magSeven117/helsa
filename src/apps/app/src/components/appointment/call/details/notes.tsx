@@ -69,7 +69,7 @@ export const NotesForm = ({ data, toggle }: { data: Primitives<Appointment>; tog
             render={({ field }) => (
               <FormItem className="my-2">
                 <FormControl>
-                  <Textarea placeholder="Agrega una nota" {...field} className="min-h-[100px] rounded-none" />
+                  <Textarea placeholder="Agrega una nota" {...field} className="min-h-[100px]" />
                 </FormControl>
                 <FormMessage></FormMessage>
               </FormItem>

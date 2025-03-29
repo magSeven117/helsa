@@ -111,19 +111,19 @@ const TreatmentForm = ({ appointment, toggle }: Props) => {
                     defaultValue={field.value}
                     className="flex justify-between items-center"
                   >
-                    <FormItem className="flex  items-center p-3 gap-3 border flex-1 space-y-0">
+                    <FormItem className="flex  items-center p-3 gap-3 border flex-1 space-y-0 rounded-lg">
                       <FormControl>
                         <RadioGroupItem value="MEDICATION" />
                       </FormControl>
                       <FormLabel className="font-normal">Medicina</FormLabel>
                     </FormItem>
-                    <FormItem className="flex items-center p-3 gap-3 border flex-1 space-y-0">
+                    <FormItem className="flex items-center p-3 gap-3 border flex-1 space-y-0 rounded-lg">
                       <FormControl>
                         <RadioGroupItem value="THERAPY" />
                       </FormControl>
                       <FormLabel className="font-normal">Terapia</FormLabel>
                     </FormItem>
-                    <FormItem className="flex items-center p-3 gap-3 border flex-1 space-y-0">
+                    <FormItem className="flex items-center p-3 gap-3 border flex-1 space-y-0 rounded-lg">
                       <FormControl>
                         <RadioGroupItem value="PROCEDURE" />
                       </FormControl>
@@ -145,7 +145,7 @@ const TreatmentForm = ({ appointment, toggle }: Props) => {
                   <FormItem className="">
                     <FormLabel className="text-sm">Nombre de la medicina</FormLabel>
                     <FormControl>
-                      <Input {...field} className="rounded-none"></Input>
+                      <Input {...field} className=""></Input>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -202,7 +202,7 @@ const TreatmentForm = ({ appointment, toggle }: Props) => {
                   <FormItem className="">
                     <FormLabel className="text-sm">Descripción de la terapia</FormLabel>
                     <FormControl>
-                      <Textarea {...field} className="rounded-none resize-none"></Textarea>
+                      <Textarea {...field} className=" resize-none"></Textarea>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -219,7 +219,7 @@ const TreatmentForm = ({ appointment, toggle }: Props) => {
                   <FormItem className="">
                     <FormLabel className="text-sm">Descripción del procedimiento</FormLabel>
                     <FormControl>
-                      <Textarea {...field} className="rounded-none resize-none"></Textarea>
+                      <Textarea {...field} className=" resize-none"></Textarea>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -235,7 +235,7 @@ const TreatmentForm = ({ appointment, toggle }: Props) => {
               <FormItem className="">
                 <FormLabel className="text-sm">Instrucciones</FormLabel>
                 <FormControl>
-                  <Textarea {...field} className="rounded-none resize-none"></Textarea>
+                  <Textarea {...field} className=" resize-none"></Textarea>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -274,7 +274,7 @@ const TreatmentForm = ({ appointment, toggle }: Props) => {
           <Button onClick={() => toggle()} className="flex-1">
             Cancelar
           </Button>
-          <Button type="submit" disabled={form.formState.isSubmitting} className="rounded-none flex-1">
+          <Button type="submit" disabled={form.formState.isSubmitting} className=" flex-1">
             {form.formState.isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Guardar diagnostico'}
           </Button>
         </div>

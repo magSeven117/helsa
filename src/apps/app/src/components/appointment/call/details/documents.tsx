@@ -93,7 +93,7 @@ export const DocumentForm = ({ data, toggle }: { data: Primitives<Appointment>; 
       <Form {...form}>
         <form action="" onSubmit={form.handleSubmit(onSubmit)}>
           <Input
-            className="rounded-none"
+            className=""
             type="file"
             onChange={(e) => {
               setDocument(e.target.files?.[0]!);
@@ -108,7 +108,7 @@ export const DocumentForm = ({ data, toggle }: { data: Primitives<Appointment>; 
                   <Textarea
                     placeholder="Describe el contenido del documento aqui"
                     {...field}
-                    className="min-h-[100px] rounded-none"
+                    className="min-h-[100px] "
                   />
                 </FormControl>
                 <FormMessage></FormMessage>
@@ -122,13 +122,13 @@ export const DocumentForm = ({ data, toggle }: { data: Primitives<Appointment>; 
               <FormItem className="flex-1 mb-3">
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
-                    <SelectTrigger className="w-full rounded-none">
+                    <SelectTrigger className="w-full ">
                       <SelectValue placeholder="Selecciona un tipo de documento" />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent className="rounded-none">
+                  <SelectContent className="">
                     {documentTypes.map((method) => (
-                      <SelectItem key={method.id} value={method.id} className="rounded-none">
+                      <SelectItem key={method.id} value={method.id} className="">
                         {method.name}
                       </SelectItem>
                     ))}

@@ -28,7 +28,7 @@ const OrdersList = ({ data, orders, toggle }: Props) => {
         {orders?.map((order, index) => (
           <div
             key={`${order.id}-${index}`}
-            className="flex flex-col items-start justify-between p-3 gap-2 border rounded-none"
+            className="flex flex-col items-start justify-between p-3 gap-2 border  rounded-lg"
           >
             <div className="flex justify-between items-center w-full">
               <div className="px-2 py-1 bg-color-brand-primary rounded-sm w-fit text-xs">{orderTypes[order.type]}</div>

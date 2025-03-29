@@ -81,7 +81,7 @@ export const BloodPressureForm = ({
           control={form.control}
           name="bloodPressure"
           render={({ field }) => (
-            <FormItem className="border p-4 my-0 h-full">
+            <FormItem className="border p-4 my-0 h-full rounded-xl">
               <FormLabel className="text-sm flex justify-between">
                 Presión Arterial
                 <div onClick={toggle} className="cursor-pointer">
@@ -90,12 +90,12 @@ export const BloodPressureForm = ({
               </FormLabel>
               <FormControl className="flex">
                 <div>
-                  <Input {...field} className="rounded-none focus-visible:ring-0"></Input>
+                  <Input {...field} className="rounded-r-none focus-visible:ring-0"></Input>
                   <Button
                     type="submit"
                     variant={'secondary'}
                     disabled={form.formState.isSubmitting}
-                    className="rounded-none p-0 px-2 h-10"
+                    className="rounded-l-none p-0 px-2 h-10"
                   >
                     {form.formState.isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Guardar '}
                   </Button>

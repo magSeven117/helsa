@@ -71,13 +71,13 @@ const OrdersForm = ({ data, toggle }: Props) => {
                     defaultValue={field.value}
                     className="flex justify-between items-center"
                   >
-                    <FormItem className="flex  items-center p-3 gap-3 border flex-1 space-y-0">
+                    <FormItem className="flex  items-center p-3 gap-3 border flex-1 space-y-0 rounded-lg">
                       <FormControl>
                         <RadioGroupItem value="TEST" />
                       </FormControl>
                       <FormLabel className="font-normal">Prueba</FormLabel>
                     </FormItem>
-                    <FormItem className="flex items-center p-3 gap-3 border flex-1 space-y-0">
+                    <FormItem className="flex items-center p-3 gap-3 border flex-1 space-y-0 rounded-lg">
                       <FormControl>
                         <RadioGroupItem value="REMITTANCE" />
                       </FormControl>
@@ -96,7 +96,7 @@ const OrdersForm = ({ data, toggle }: Props) => {
               <FormItem className="">
                 <FormLabel className="text-sm">Descripcion</FormLabel>
                 <FormControl>
-                  <Textarea {...field} className="rounded-none"></Textarea>
+                  <Textarea {...field} className=""></Textarea>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -107,7 +107,7 @@ const OrdersForm = ({ data, toggle }: Props) => {
           <Button onClick={toggle} className="flex-1">
             Cancelar
           </Button>
-          <Button type="submit" disabled={form.formState.isSubmitting} className="rounded-none flex-1">
+          <Button type="submit" disabled={form.formState.isSubmitting} className=" flex-1">
             {form.formState.isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Guardar orden'}
           </Button>
         </div>

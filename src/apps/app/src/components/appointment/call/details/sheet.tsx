@@ -52,7 +52,7 @@ const DetailsSheet = async ({ data, user }: { data: Primitives<Appointment>; use
         </Button>
       </SheetTrigger>
       <SheetContent className="sm:w-1/3 sm:max-w-full p-4 bg-transparent border-none focus-visible:outline-none ">
-        <div className="bg-background p-6 border border-sidebar h-full overflow-y-auto no-scroll space-y-3">
+        <div className="bg-background p-6 border border-sidebar h-full overflow-y-auto no-scroll space-y-3 rounded-xl">
           {user.role === 'DOCTOR' && <HeaderDoctor data={data} />}
           {user.role === 'PATIENT' && <HeaderPatient data={data} />}
 
@@ -101,7 +101,7 @@ const DetailsSheet = async ({ data, user }: { data: Primitives<Appointment>; use
                 {diagnoses?.map((diagnosis, index) => (
                   <div
                     key={`${diagnosis.id}-${index}`}
-                    className="flex flex-col items-start justify-between p-3 gap-2 border rounded-none"
+                    className="flex flex-col items-start justify-between p-3 gap-2 border rounded-lg"
                   >
                     <div className="flex justify-between items-center w-full">
                       <div className="px-2 py-1 bg-color-brand-primary rounded-sm w-fit text-xs">I70.173</div>
@@ -127,7 +127,7 @@ const DetailsSheet = async ({ data, user }: { data: Primitives<Appointment>; use
                 {treatments?.map((treatment, index) => (
                   <div
                     key={`${treatment.id}-${index}`}
-                    className="flex flex-col items-start justify-between p-3 gap-2 border rounded-none"
+                    className="flex flex-col items-start justify-between p-3 gap-2 border rounded-lg"
                   >
                     <div className="flex justify-between items-center w-full">
                       <div className="flex justify-start items-center gap-2">

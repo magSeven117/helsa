@@ -80,19 +80,19 @@ const DiagnosisForm = ({ pathologies, toggle, symptoms, appointment }: Props) =>
                     defaultValue={field.value}
                     className="flex justify-between items-center"
                   >
-                    <FormItem className="flex  items-center p-3 gap-3 border flex-1 space-y-0">
+                    <FormItem className="flex  items-center p-3 gap-3 border flex-1 space-y-0 rounded-lg">
                       <FormControl>
                         <RadioGroupItem value="ALLERGY" />
                       </FormControl>
                       <FormLabel className="font-normal">Alergia</FormLabel>
                     </FormItem>
-                    <FormItem className="flex items-center p-3 gap-3 border flex-1 space-y-0">
+                    <FormItem className="flex items-center p-3 gap-3 border flex-1 space-y-0 rounded-lg">
                       <FormControl>
                         <RadioGroupItem value="DISEASE" />
                       </FormControl>
                       <FormLabel className="font-normal">Enfermedad</FormLabel>
                     </FormItem>
-                    <FormItem className="flex items-center p-3 gap-3 border flex-1 space-y-0">
+                    <FormItem className="flex items-center p-3 gap-3 border flex-1 space-y-0 rounded-lg">
                       <FormControl>
                         <RadioGroupItem value="CHRONIC_DISEASE" />
                       </FormControl>
@@ -110,7 +110,7 @@ const DiagnosisForm = ({ pathologies, toggle, symptoms, appointment }: Props) =>
               const symptom = symptoms?.find((s) => s.name == value);
               if (!symptom) return;
               setSelectedSymptoms((current) =>
-                current.includes(symptom.name) ? current.filter((s) => s !== symptom.name) : [...current, symptom.name]
+                current.includes(symptom.name) ? current.filter((s) => s !== symptom.name) : [...current, symptom.name],
               );
             }}
             options={(symptoms || []).map(transformOption)}
@@ -155,7 +155,7 @@ const DiagnosisForm = ({ pathologies, toggle, symptoms, appointment }: Props) =>
               <FormItem className="">
                 <FormLabel className="text-sm">Notas adicionales</FormLabel>
                 <FormControl>
-                  <Textarea {...field} className="rounded-none"></Textarea>
+                  <Textarea {...field} className=""></Textarea>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -166,7 +166,7 @@ const DiagnosisForm = ({ pathologies, toggle, symptoms, appointment }: Props) =>
           <Button onClick={toggle} className="flex-1">
             Cancelar
           </Button>
-          <Button type="submit" disabled={form.formState.isSubmitting} className="rounded-none flex-1">
+          <Button type="submit" disabled={form.formState.isSubmitting} className="flex-1">
             {form.formState.isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Guardar diagnostico'}
           </Button>
         </div>
