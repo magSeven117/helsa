@@ -10,10 +10,7 @@ export const GET = async (req: NextRequest) => {
   );
   const call = client.video.call('appointment', id);
 
-  const transcriptions = await call.listTranscriptions();
+  const recordings = await call.listRecordings();
 
-  return NextResponse.json({
-    success: true,
-    transcriptions: JSON.parse(JSON.stringify(transcriptions.transcriptions)),
-  });
+  return NextResponse.json({ success: true, recordings: JSON.parse(JSON.stringify(recordings.recordings)) });
 };

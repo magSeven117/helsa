@@ -30,6 +30,7 @@ import Confirm from './actions/confirm';
 import Enter from './actions/enter';
 import Pay from './actions/pay';
 import ReSchedule from './actions/re-schedule';
+import History from './history';
 import Indications from './indications';
 
 type Props = {
@@ -168,6 +169,9 @@ const AppointmentDetailsSheet = ({ data, isOpen, setOpen }: Props) => {
               >
                 <Indications data={data!} />
               </Suspense>
+            </TabsContent>
+            <TabsContent value="history">
+              <History />
             </TabsContent>
           </Tabs>
         </div>
