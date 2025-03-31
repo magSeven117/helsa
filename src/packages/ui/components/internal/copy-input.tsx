@@ -1,7 +1,6 @@
 'use client';
 import { motion } from 'framer-motion';
 import { Check, Copy } from 'lucide-react';
-import * as React from 'react';
 import { useState } from 'react';
 import { cn } from '../../lib/utils';
 
@@ -29,7 +28,7 @@ export function CopyInput({ value, className }: Props) {
     <button
       type="button"
       onClick={handleClipboard}
-      className={cn('flex items-center relative w-full border py-2 px-4 cursor-pointer', className)}
+      className={cn('flex items-center relative w-full border py-2 px-4 cursor-pointer rounded-md', className)}
     >
       <div className="pr-8 text-[#878787] text-sm truncate">{value}</div>
 

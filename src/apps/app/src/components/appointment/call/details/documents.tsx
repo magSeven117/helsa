@@ -1,5 +1,6 @@
 'use client';
 import { uploadDocument } from '@/src/actions/medical-document/upload-document';
+import { BetterUser } from '@helsa/auth/server';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { Appointment } from '@helsa/engine/appointment/domain/appointment';
 import { Document } from '@helsa/engine/document/domain/document';
@@ -15,6 +16,7 @@ import { ClipboardMinus, FileText, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import { useLocalStorage } from 'usehooks-ts';
 import { z } from 'zod';
 export const DocumentList = ({
   documents,
@@ -161,19 +163,20 @@ export const DocumentForm = ({ data, toggle }: { data: Primitives<Appointment>; 
 
 export const DocumentsContent = ({
   data,
-  patient,
   documents,
 }: {
   data: Primitives<Appointment>;
   documents: Primitives<Document>[];
-  patient?: boolean;
 }) => {
   const [editing, setEditing] = useState(false);
+  const [user] = useLocalStorage<BetterUser | null>('user', null);
+
+  const isPatient = user?.role === 'PATIENT';
 
   return (
     <>
       {!editing && (
-        <DocumentList documents={documents} toggle={() => setEditing((current) => !current)} patient={patient} />
+        <DocumentList documents={documents} toggle={() => setEditing((current) => !current)} patient={isPatient} />
       )}
       {editing && <DocumentForm data={data} toggle={() => setEditing((current) => !current)} />}
     </>

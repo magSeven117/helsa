@@ -46,7 +46,10 @@ export class GetDoctorAppointments {
       criteria.orderBy('day', Direction.DESC);
     }
 
-    const response = await this.appointmentRepository.search(criteria);
+    const response = await this.appointmentRepository.search(criteria, {
+      documents: true,
+      notes: true,
+    });
 
     return {
       data: response.getItems().map((appointment) => appointment.toPrimitives()),

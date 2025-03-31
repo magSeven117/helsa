@@ -78,7 +78,7 @@ const DetailsSheet = async ({ data, user }: { data: Primitives<Appointment>; use
                 </div>
               </AccordionTrigger>
               <AccordionContent className="flex flex-col gap-3">
-                <DocumentsContent data={data} patient={user.role === 'PATIENT'} documents={documents} />
+                <DocumentsContent data={data} documents={documents} />
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="notes">
@@ -88,7 +88,7 @@ const DetailsSheet = async ({ data, user }: { data: Primitives<Appointment>; use
                 </div>
               </AccordionTrigger>
               <AccordionContent className="flex flex-col gap-3">
-                <NotesContent data={data} patient={user.role === 'PATIENT'} notes={notes} />
+                <NotesContent data={data} notes={notes} />
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="diagnoses">

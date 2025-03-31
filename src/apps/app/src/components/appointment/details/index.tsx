@@ -1,6 +1,5 @@
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { Appointment } from '@helsa/engine/appointment/domain/appointment';
-import { AppointmentType } from '@helsa/engine/appointment/domain/appointment-type';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@helsa/ui/components/accordion';
 import { Avatar, AvatarFallback, AvatarImage } from '@helsa/ui/components/avatar';
 import { Badge } from '@helsa/ui/components/badge';
@@ -8,11 +7,23 @@ import { Button } from '@helsa/ui/components/button';
 import { CopyInput } from '@helsa/ui/components/internal/copy-input';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@helsa/ui/components/sheet';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@helsa/ui/components/tabs';
-import { Textarea } from '@helsa/ui/components/textarea';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { Clock, ExternalLink, FileText, MapPin, Paperclip, Shapes, Stethoscope, StickyNote } from 'lucide-react';
+import {
+  Clock,
+  Download,
+  ExternalLink,
+  Loader2,
+  MapPin,
+  Paperclip,
+  Shapes,
+  Stethoscope,
+  StickyNote,
+} from 'lucide-react';
 import Link from 'next/link';
+import { Suspense } from 'react';
+import { DocumentsContent } from '../call/details/documents';
+import { NotesContent } from '../call/details/notes';
 import { StateColumn } from '../table/columns';
 import Cancel from './actions/cancel';
 import Confirm from './actions/confirm';
@@ -25,10 +36,9 @@ type Props = {
   setOpen: (open: boolean) => void;
   isOpen: boolean;
   data?: Primitives<Appointment>;
-  types?: Primitives<AppointmentType>[];
 };
 
-const AppointmentDetailsSheet = ({ data, isOpen, setOpen, types }: Props) => {
+const AppointmentDetailsSheet = ({ data, isOpen, setOpen }: Props) => {
   return (
     <Sheet open={isOpen} onOpenChange={setOpen}>
       <SheetContent className="sm:w-1/3 sm:max-w-full p-4 bg-transparent border-none focus-visible:outline-none ">
@@ -66,12 +76,15 @@ const AppointmentDetailsSheet = ({ data, isOpen, setOpen, types }: Props) => {
           </div>
 
           <Tabs defaultValue="general">
-            <TabsList className="flex justify-start items-center gap-1 bg-transparent rounded-none">
-              <TabsTrigger className="data-[state=active]:bg-secondary rounded-none" value="general">
+            <TabsList className="flex justify-start items-center gap-1 bg-transparent ">
+              <TabsTrigger className="data-[state=active]:bg-secondary " value="general">
                 General
               </TabsTrigger>
-              <TabsTrigger className="data-[state=active]:bg-secondary rounded-none" value="indications">
+              <TabsTrigger className="data-[state=active]:bg-secondary " value="indications">
                 Indicaciones
+              </TabsTrigger>
+              <TabsTrigger className="data-[state=active]:bg-secondary " value="history">
+                Registro
               </TabsTrigger>
             </TabsList>
             <TabsContent value="general">
@@ -92,7 +105,7 @@ const AppointmentDetailsSheet = ({ data, isOpen, setOpen, types }: Props) => {
                     Tipo de consulta
                   </div>
                   <div className="flex justify-start items-center gap-3">
-                    <div className="size-3" style={{ backgroundColor: data?.type?.color }}></div>
+                    <div className="size-3 rounded-lg" style={{ backgroundColor: data?.type?.color }}></div>
                     <span className="">{data?.type?.name}</span>
                   </div>
                 </div>
@@ -108,9 +121,9 @@ const AppointmentDetailsSheet = ({ data, isOpen, setOpen, types }: Props) => {
                     <Stethoscope className="size-4" />
                     Especialidad
                   </div>
-                  <span className="">{data?.doctor?.specialty?.name}</span>
+                  <span className="">{data?.specialty?.name}</span>
                 </div>
-                <CopyInput value="https://helsa.com/appointment/call" />
+                <CopyInput value={`https://helsa.com/appointments/appointments/${data?.id}`} />
                 <Link href={'https://maps.google.com'} target="_blank" className="w-full">
                   <Button className="h-9 w-full mt-3 gap-2" variant={'outline'}>
                     Calle la sardina, Pampatar, Nueva Esparta
@@ -118,7 +131,7 @@ const AppointmentDetailsSheet = ({ data, isOpen, setOpen, types }: Props) => {
                   </Button>
                 </Link>
               </div>
-              <Accordion type="multiple" defaultValue={['attachments']} className="w-full px-1">
+              <Accordion type="multiple" defaultValue={['attachments', 'notes']} className="w-full px-1">
                 <AccordionItem value="attachments">
                   <AccordionTrigger className="hover:no-underline">
                     <div className="flex justify-start items-center gap-2">
@@ -126,24 +139,7 @@ const AppointmentDetailsSheet = ({ data, isOpen, setOpen, types }: Props) => {
                     </div>
                   </AccordionTrigger>
                   <AccordionContent className="flex flex-col gap-3">
-                    <div className="flex justify-start items-center gap-2 text-muted-foreground">
-                      <FileText className="size-4" />
-                      <span>Archivo adjunto</span>
-                      <span>130 KBs</span>
-                    </div>
-                    <div className="flex justify-start items-center gap-2 text-muted-foreground">
-                      <FileText className="size-4" />
-                      <span>Análisis de sangre</span>
-                      <span>130 KBs</span>
-                    </div>
-                    <div className="flex justify-start items-center gap-2 text-muted-foreground">
-                      <FileText className="size-4" />
-                      <span>Archivo adjunto</span>
-                      <span>130 KBs</span>
-                    </div>
-                    <Button className="w-full gap-3 h-9" variant={'secondary'}>
-                      Adjuntar archivo <Paperclip className="size-4" />
-                    </Button>
+                    <DocumentsContent data={data!} documents={data?.documents ?? []} />
                   </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="notes">
@@ -153,27 +149,25 @@ const AppointmentDetailsSheet = ({ data, isOpen, setOpen, types }: Props) => {
                     </div>
                   </AccordionTrigger>
                   <AccordionContent className="flex flex-col gap-3">
-                    <div className="flex justify-start items-center gap-2 text-muted-foreground">
-                      <StickyNote className="size-4" />
-                      <span>Lorem ipsum, dolor sit amet consectetur adipisicing elit.</span>
-                    </div>
-                    <div className="flex justify-start items-center gap-2 text-muted-foreground">
-                      <StickyNote className="size-4" />
-                      <span>Temporibus molestias quibusdam accusantium magni numquam saepe!</span>
-                    </div>
-                    <Textarea
-                      className="mt-2 rounded-none resize-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-transparent"
-                      placeholder="Escribe cualquier comentario"
-                    ></Textarea>
-                    <Button className="w-full gap-3 h-9" variant={'secondary'}>
-                      Agregar nota <StickyNote className="size-4" />
-                    </Button>
+                    <NotesContent data={data!} notes={data?.notes ?? []} />
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
             </TabsContent>
             <TabsContent value="indications">
-              <Indications data={data!} />
+              <Button className="gap-2" variant={'secondary'}>
+                <Download className="" />
+                Descargar receta
+              </Button>
+              <Suspense
+                fallback={
+                  <div className="flex w-full h-full items-center justify-center">
+                    <Loader2 className="size-10 animate-spin" />
+                  </div>
+                }
+              >
+                <Indications data={data!} />
+              </Suspense>
             </TabsContent>
           </Tabs>
         </div>

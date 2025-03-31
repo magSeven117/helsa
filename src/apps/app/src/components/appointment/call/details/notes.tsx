@@ -1,5 +1,6 @@
 'use client';
 import { createAppointmentNote } from '@/src/actions/appointment/create-appointment-note';
+import { BetterUser } from '@helsa/auth/server';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { Appointment } from '@helsa/engine/appointment/domain/appointment';
 import { AppointmentNote } from '@helsa/engine/appointment/domain/note';
@@ -11,6 +12,7 @@ import { ClipboardMinus, Loader2, StickyNote } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import { useLocalStorage } from 'usehooks-ts';
 import { z } from 'zod';
 export const NoteList = ({
   notes,
@@ -98,18 +100,19 @@ export const NotesForm = ({ data, toggle }: { data: Primitives<Appointment>; tog
 
 export const NotesContent = ({
   data,
-  patient,
   notes,
 }: {
   data: Primitives<Appointment>;
-  patient?: boolean;
   notes: Primitives<AppointmentNote>[];
 }) => {
+  const [user] = useLocalStorage<BetterUser | null>('user', null);
   const [editing, setEditing] = useState(false);
+
+  const isPatient = user?.role === 'PATIENT';
 
   return (
     <>
-      {!editing && <NoteList notes={notes} toggle={() => setEditing((current) => !current)} patient={patient} />}
+      {!editing && <NoteList notes={notes} toggle={() => setEditing((current) => !current)} patient={isPatient} />}
       {editing && <NotesForm data={data} toggle={() => setEditing((current) => !current)} />}
     </>
   );
