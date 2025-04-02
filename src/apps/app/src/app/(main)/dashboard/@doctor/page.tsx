@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@hels
 import { DateRangePicker } from '@helsa/ui/components/date-range-picker';
 import { Calendar, DollarSign, Stethoscope, Users } from 'lucide-react';
 
-const Page = () => {
+const Page = async () => {
   return (
     <div className="md:pl-9 w-full h-full">
       <div className="h-full flex justify-between items-center max-sm:flex-col mb-3">
