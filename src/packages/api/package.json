@@ -1,5 +1,5 @@
 {
-  "name": "@helsa/actions",
+  "name": "@helsa/api",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -7,23 +7,28 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
-    "@helsa/analytics": "*",
     "@helsa/auth": "*",
-    "@helsa/database": "*",
     "@helsa/ddd": "*",
-    "@helsa/env": "*",
-    "@helsa/observability": "^0.1.0",
+    "@helsa/database": "*",
+    "@helsa/engine": "*",
     "@helsa/rate-limit": "*",
     "@helsa/typescript-config": "*",
     "next": "15.2.2",
     "next-safe-action": "7.10.4",
     "server-only": "^0.0.1",
-    "zod": "^3.24.1"
+    "zod": "^3.24.1",
+    "@tanstack/react-query": "^5.69.0",
+    "@trpc/client": "^11.0.0",
+    "@trpc/react-query": "11.0.0",
+    "@trpc/tanstack-react-query": "^11.0.0",
+    "@trpc/server": "^11.0.0",
+    "react": "19.0.0",
+    "react-dom": "19.0.0"
   },
   "devDependencies": {
     "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@types/react": "19.0.0",
+    "@types/react-dom": "19.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^5"
   }

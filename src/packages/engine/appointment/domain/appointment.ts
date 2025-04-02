@@ -8,6 +8,7 @@ import { Doctor } from '../../doctor/domain/doctor';
 import { Price } from '../../doctor/domain/price';
 import { Specialty } from '../../doctor/domain/specialty';
 import { Document } from '../../document/domain/document';
+import { Order } from '../../order/domain/order';
 import { Patient } from '../../patient/domain/patient';
 import { Treatment } from '../../treatment/domain/treatment';
 import { AppointmentType } from './appointment-type';
@@ -52,6 +53,7 @@ export class Appointment extends Aggregate {
     public documents?: Document[],
     public treatments?: Treatment[],
     public specialty?: Specialty,
+    public orders?: Order[],
   ) {
     super(id, createdAt, updatedAt);
   }
@@ -85,6 +87,7 @@ export class Appointment extends Aggregate {
       documents: this.documents ? this.documents.map((document) => document.toPrimitives()) : undefined,
       treatments: this.treatments ? this.treatments.map((treatment) => treatment.toPrimitives()) : undefined,
       specialty: this.specialty ? this.specialty.toPrimitives() : undefined,
+      orders: this.orders ? this.orders.map((order) => order.toPrimitives()) : undefined,
     };
   }
 
@@ -117,6 +120,7 @@ export class Appointment extends Aggregate {
       data.documents ? data.documents.map((document) => Document.fromPrimitives(document)) : undefined,
       data.treatments ? data.treatments.map((treatment) => Treatment.fromPrimitives(treatment)) : undefined,
       data.specialty ? Specialty.fromPrimitives(data.specialty) : undefined,
+      data.orders ? data.orders.map((order) => Order.fromPrimitives(order)) : undefined,
     );
   }
 

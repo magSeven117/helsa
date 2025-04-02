@@ -1,26 +1,30 @@
-import { appRouter } from '@/src/api/trpc/router';
-import { createTRPCContext } from '@/src/api/trpc/trpc';
+import { appRouter } from '@helsa/api/src/router';
+import { createTRPCContext } from '@helsa/api/src/server-client';
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
 import { type NextRequest } from 'next/server';
 
-const createContext = async (req: NextRequest) => {
-  return createTRPCContext({
-    headers: req.headers,
-  });
+const setCorsHeaders = (res: Response) => {
+  res.headers.set('Access-Control-Allow-Origin', '*');
+  res.headers.set('Access-Control-Request-Method', '*');
+  res.headers.set('Access-Control-Allow-Methods', 'OPTIONS, GET, POST');
+  res.headers.set('Access-Control-Allow-Headers', '*');
 };
 
-const handler = (req: NextRequest) =>
-  fetchRequestHandler({
+const handler = async (req: NextRequest) => {
+  const response = await fetchRequestHandler({
     endpoint: '/api/trpc',
-    req,
     router: appRouter,
-    createContext: () => createContext(req),
-    onError:
-      process.env.NODE_ENV === 'development'
-        ? ({ path, error }) => {
-            console.error(`❌ tRPC failed on ${path ?? '<no-path>'}: ${error.message}`);
-          }
-        : undefined,
+    req,
+    createContext: () =>
+      createTRPCContext({
+        headers: req.headers,
+      }),
+    onError({ error, path }) {
+      console.error(`>>> tRPC Error on '${path}'`, error);
+    },
   });
+  setCorsHeaders(response);
+  return response;
+};
 
 export { handler as GET, handler as POST };

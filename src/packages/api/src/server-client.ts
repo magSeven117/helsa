@@ -14,18 +14,21 @@ export const createTRPCContext = async (opts: { headers: Headers }) => {
   };
 };
 
-const t = initTRPC.context<typeof createTRPCContext>().create({
-  transformer: superjson,
-  errorFormatter({ shape, error }) {
-    return {
-      ...shape,
-      data: {
-        ...shape.data,
-        zodError: error.cause instanceof ZodError ? error.cause.flatten() : null,
-      },
-    };
-  },
-});
+const t = initTRPC
+  .context<typeof createTRPCContext>()
+  .meta<{ name: string }>()
+  .create({
+    transformer: superjson,
+    errorFormatter({ shape, error }) {
+      return {
+        ...shape,
+        data: {
+          ...shape.data,
+          zodError: error.cause instanceof ZodError ? error.cause.flatten() : null,
+        },
+      };
+    },
+  });
 
 export const createCallerFactory = t.createCallerFactory;
 

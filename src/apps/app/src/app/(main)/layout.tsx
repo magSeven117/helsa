@@ -1,5 +1,4 @@
 import { getCurrentUser } from '@/src/actions/user/get-current-user';
-import { TRPCReactProvider } from '@/src/api/trpc/provider';
 import ModalAssistant from '@/src/components/assistant/modal-assistant';
 import SessionUser from '@/src/components/session-user';
 import SideBar from '@/src/components/side-bar/side-bar';
@@ -13,17 +12,15 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="flex justify-start items-start h-full w-full styled-scroll ">
-      <TRPCReactProvider>
-        <SessionUser userProvide={user} />
-        <SidebarProvider>
-          <SideBar user={user} />
-          <div className="flex flex-col items-start w-full styled-scroll  overflow-y-scroll pb-8  bg-background">
-            <TopBar />
-            <Suspense>{children}</Suspense>
-          </div>
-          <ModalAssistant />
-        </SidebarProvider>
-      </TRPCReactProvider>
+      <SessionUser userProvide={user} />
+      <SidebarProvider>
+        <SideBar user={user} />
+        <div className="flex flex-col items-start w-full styled-scroll  overflow-y-scroll pb-8  bg-background">
+          <TopBar />
+          <Suspense>{children}</Suspense>
+        </div>
+        <ModalAssistant />
+      </SidebarProvider>
     </div>
   );
 };

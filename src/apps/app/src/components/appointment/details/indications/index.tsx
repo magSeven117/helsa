@@ -1,18 +1,10 @@
 'use client';
-import { getAppointmentDiagnoses } from '@/src/actions/diagnostic/get-appointment-diagnoses';
-import { getPathologies } from '@/src/actions/diagnostic/get-pathologies';
-import { getAppointmentOrders } from '@/src/actions/order/get-appointment-orders';
-import { getAppointmentTreatments } from '@/src/actions/treatment/get-appointment-treatments';
+import { useAppointment } from '@/src/hooks/appointment/use-appointment';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { Appointment } from '@helsa/engine/appointment/domain/appointment';
-import { Diagnostic } from '@helsa/engine/diagnostic/domain/diagnostic';
-import { Pathology } from '@helsa/engine/diagnostic/domain/pathology';
-import { Order } from '@helsa/engine/order/domain/order';
-import { Treatment } from '@helsa/engine/treatment/domain/treatment';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@helsa/ui/components/accordion';
 import { Badge } from '@helsa/ui/components/badge';
 import { Loader2, Paperclip, Pill, Stethoscope } from 'lucide-react';
-import { useEffect, useState } from 'react';
 
 const typesDiagnosis = {
   ALLERGY: 'Alergia',
@@ -32,41 +24,8 @@ const typesOrders = {
   REMITTANCE: 'Remisión',
 };
 
-const Indications = ({ data: appointment }: { data: Primitives<Appointment> }) => {
-  const [data, setData] = useState<{
-    diagnoses: Primitives<Diagnostic>[];
-    pathologies: Primitives<Pathology>[];
-    treatments: Primitives<Treatment>[];
-    orders: Primitives<Order>[];
-  }>({
-    diagnoses: [],
-    pathologies: [],
-    treatments: [],
-    orders: [],
-  });
-
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      const [diagnosesResponse, pathologiesResponse, treatmentsResponse, ordersResponse] = await Promise.all([
-        getAppointmentDiagnoses({ appointmentId: appointment.id }),
-        getPathologies(),
-        getAppointmentTreatments({ appointmentId: appointment.id }),
-        getAppointmentOrders({ appointmentId: appointment.id }),
-      ]);
-
-      setData({
-        diagnoses: diagnosesResponse?.data ?? [],
-        pathologies: pathologiesResponse?.data ?? [],
-        treatments: treatmentsResponse?.data ?? [],
-        orders: ordersResponse?.data ?? [],
-      });
-      setIsLoading(false);
-    };
-    fetchData();
-  }, []);
+const Indications = ({ data }: { data: Primitives<Appointment> }) => {
+  const { appointment, isLoading } = useAppointment(data?.id ?? undefined);
 
   if (isLoading) {
     return (
@@ -85,13 +44,13 @@ const Indications = ({ data: appointment }: { data: Primitives<Appointment> }) =
         </AccordionTrigger>
 
         <AccordionContent className="space-y-3">
-          {data.diagnoses?.map((diagnosis, index) => (
+          {appointment?.diagnostics?.map((diagnosis, index) => (
             <div
               key={`${diagnosis.id}-${index}`}
               className="flex flex-col items-start justify-between p-3 gap-2 border rounded-lg"
             >
               <div className="flex justify-between items-center w-full">
-                <p className="text-sm">{data.pathologies.find((c) => c.id === diagnosis.pathologyId)?.name!}</p>
+                {/* <p className="text-sm">{pathologies?.find((c) => c.id === diagnosis.pathologyId)?.name ?? ''}</p> */}
                 <Badge className="" variant={'default'}>
                   {typesDiagnosis[diagnosis.type]}
                 </Badge>
@@ -108,7 +67,7 @@ const Indications = ({ data: appointment }: { data: Primitives<Appointment> }) =
         </AccordionTrigger>
 
         <AccordionContent className="space-y-3">
-          {data.treatments?.map((treatment, index) => (
+          {appointment?.treatments?.map((treatment, index) => (
             <div
               key={`${treatment.id}-${index}`}
               className="flex flex-col items-start justify-between p-3 gap-2 border rounded-lg"
@@ -131,7 +90,7 @@ const Indications = ({ data: appointment }: { data: Primitives<Appointment> }) =
         </AccordionTrigger>
 
         <AccordionContent className="space-y-3">
-          {data.orders?.map((order, index) => (
+          {appointment?.orders?.map((order, index) => (
             <div
               key={`${order.id}-${index}`}
               className="flex flex-col items-start justify-between p-3 gap-2 border rounded-lg"
