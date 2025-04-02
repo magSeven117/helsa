@@ -15,7 +15,6 @@
     "@helsa/database": "*",
     "@helsa/ddd": "*",
     "@helsa/email": "*",
-    "@helsa/env": "*",
     "@helsa/rate-limit": "*",
     "@helsa/ui": "*",
     "@hookform/resolvers": "^3.10.0",

@@ -7,7 +7,6 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
-    "@helsa/env": "*",
     "@polar-sh/nextjs": "^0.3.23",
     "@polar-sh/sdk": "^0.32.0",
     "server-only": "^0.0.1"

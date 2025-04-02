@@ -11,7 +11,7 @@ const patients = [
     condition: 'Hypertension',
     lastVisit: 'Today, 10:30 AM',
     status: 'Scheduled',
-    avatar: '/placeholder.svg?height=40&width=40',
+    avatar: '/images/placeholder.svg?height=40&width=40',
   },
   {
     id: 'P-1002',
@@ -20,7 +20,7 @@ const patients = [
     condition: 'Diabetes Type 2',
     lastVisit: 'Today, 11:45 AM',
     status: 'In Progress',
-    avatar: '/placeholder.svg?height=40&width=40',
+    avatar: '/images/placeholder.svg?height=40&width=40',
   },
   {
     id: 'P-1003',
@@ -29,7 +29,7 @@ const patients = [
     condition: 'Pregnancy',
     lastVisit: 'Today, 1:15 PM',
     status: 'Completed',
-    avatar: '/placeholder.svg?height=40&width=40',
+    avatar: '/images/placeholder.svg?height=40&width=40',
   },
   {
     id: 'P-1004',
@@ -38,7 +38,7 @@ const patients = [
     condition: 'Cardiac Arrhythmia',
     lastVisit: 'Today, 2:30 PM',
     status: 'Scheduled',
-    avatar: '/placeholder.svg?height=40&width=40',
+    avatar: '/images/placeholder.svg?height=40&width=40',
   },
   {
     id: 'P-1005',
@@ -47,7 +47,7 @@ const patients = [
     condition: 'Migraine',
     lastVisit: 'Today, 3:45 PM',
     status: 'Scheduled',
-    avatar: '/placeholder.svg?height=40&width=40',
+    avatar: '/images/placeholder.svg?height=40&width=40',
   },
 ];
 

@@ -9,7 +9,7 @@ const appointments = [
     time: '10:30 AM',
     duration: '30 min',
     type: 'Follow-up',
-    avatar: '/placeholder.svg?height=32&width=32',
+    avatar: '/images/placeholder.svg?height=32&width=32',
   },
   {
     id: 'A-1002',
@@ -17,7 +17,7 @@ const appointments = [
     time: '11:45 AM',
     duration: '45 min',
     type: 'Consultation',
-    avatar: '/placeholder.svg?height=32&width=32',
+    avatar: '/images/placeholder.svg?height=32&width=32',
   },
   {
     id: 'A-1003',
@@ -25,7 +25,7 @@ const appointments = [
     time: '1:15 PM',
     duration: '30 min',
     type: 'Prenatal',
-    avatar: '/placeholder.svg?height=32&width=32',
+    avatar: '/images/placeholder.svg?height=32&width=32',
   },
   {
     id: 'A-1004',
@@ -33,7 +33,7 @@ const appointments = [
     time: '2:30 PM',
     duration: '45 min',
     type: 'Cardiology',
-    avatar: '/placeholder.svg?height=32&width=32',
+    avatar: '/images/placeholder.svg?height=32&width=32',
   },
   {
     id: 'A-1005',
@@ -41,7 +41,7 @@ const appointments = [
     time: '3:45 PM',
     duration: '30 min',
     type: 'Neurology',
-    avatar: '/placeholder.svg?height=32&width=32',
+    avatar: '/images/placeholder.svg?height=32&width=32',
   },
 ];
 
@@ -60,7 +60,7 @@ export function AppointmentsCalendar() {
 
           <div className="flex items-center gap-3">
             <Avatar>
-              <AvatarImage src="/placeholder.svg?height=48&width=48" />
+              <AvatarImage src="/images/placeholder.svg?height=48&width=48" />
               <AvatarFallback className="bg-[#8167ec]/20 text-[#8167ec]">
                 <User className="size-8" />
               </AvatarFallback>
@@ -85,7 +85,7 @@ export function AppointmentsCalendar() {
 
           <div className="flex items-center gap-3">
             <Avatar>
-              <AvatarImage src="/placeholder.svg?height=48&width=48" />
+              <AvatarImage src="/images/placeholder.svg?height=48&width=48" />
               <AvatarFallback className="bg-[#8167ec]/20 text-[#8167ec]">SM</AvatarFallback>
             </Avatar>
             <div>

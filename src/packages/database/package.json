@@ -12,7 +12,6 @@
     "seed": "prisma db seed"
   },
   "dependencies": {
-    "@helsa/env": "*",
     "@prisma/client": "^5.16.1",
     "server-only": "^0.0.1"
   },

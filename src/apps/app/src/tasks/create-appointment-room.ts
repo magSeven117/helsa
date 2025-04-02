@@ -2,7 +2,7 @@ import { database } from '@helsa/database';
 import { CreateAppointmentCallRoom } from '@helsa/engine/appointment/application/create-appointment-call-room';
 import { PrismaAppointmentRepository } from '@helsa/engine/appointment/infrastructure/persistence/prisma-appointment-repository';
 import { StreamCallService } from '@helsa/engine/appointment/infrastructure/stream-call-service';
-import { env } from '@helsa/env';
+import { env } from '@/env';
 import { StreamClient } from '@stream-io/node-sdk';
 import { task } from '@trigger.dev/sdk/v3';
 

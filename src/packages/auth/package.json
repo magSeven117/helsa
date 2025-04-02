@@ -9,7 +9,6 @@
   "dependencies": {
     "@helsa/database": "*",
     "@helsa/email": "*",
-    "@helsa/env": "*",
     "@helsa/typescript-config": "*",
     "@upstash/redis": "^1.34.3",
     "better-auth": "^1.2.4",

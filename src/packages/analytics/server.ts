@@ -1,4 +1,5 @@
-import { env } from '@helsa/env';
+import { keys } from './keys';
+const env = keys();
 import { OpenPanel, type PostEventPayload } from '@openpanel/nextjs';
 import { cookies } from 'next/headers';
 

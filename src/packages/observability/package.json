@@ -7,7 +7,6 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
-    "@helsa/env": "*",
     "@logtail/next": "^0.1.7",
     "server-only": "^0.0.1"
   },

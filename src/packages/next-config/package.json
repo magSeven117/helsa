@@ -7,7 +7,6 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "devDependencies": {
-    "@helsa/env": "*",
     "@helsa/typescript-config": "*",
     "next": "15.2.2"
   },

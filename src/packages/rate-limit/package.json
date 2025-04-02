@@ -7,7 +7,6 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
-    "@helsa/env": "*",
     "@upstash/ratelimit": "^2.0.4",
     "@upstash/redis": "^1.34.3"
   },
