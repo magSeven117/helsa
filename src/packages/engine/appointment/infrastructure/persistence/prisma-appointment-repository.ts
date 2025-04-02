@@ -76,6 +76,7 @@ export class PrismaAppointmentRepository implements AppointmentRepository {
       price,
       documents,
       specialty,
+      orders,
       ...data
     } = appointment.toPrimitives();
     await this.model.upsert({

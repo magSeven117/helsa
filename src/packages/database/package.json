@@ -12,16 +12,16 @@
     "seed": "prisma db seed"
   },
   "dependencies": {
-    "@prisma/client": "^5.16.1",
     "@helsa/env": "*",
+    "@prisma/client": "^5.16.1",
     "server-only": "^0.0.1"
   },
   "devDependencies": {
     "@helsa/typescript-config": "*",
     "@types/node": "^20",
     "prisma": "^5.16.1",
-    "typescript": "^5",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "typescript": "^5"
   },
   "prisma": {
     "schema": "./prisma/",

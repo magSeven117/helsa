@@ -1,4 +1,4 @@
-import { AppointmentRepository } from 'appointment/domain/appointment-repository';
+import { AppointmentRepository } from '../../appointment/domain/appointment-repository';
 
 export class StartAppointment {
   constructor(private readonly repository: AppointmentRepository) {}
