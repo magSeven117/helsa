@@ -21,9 +21,7 @@ const searchParamsCache = createSearchParamsCache({
   pageSize: parseAsInteger.withDefault(10),
 });
 
-const Page = async (
-  props: { searchParams: Promise<Record<string, string | string[] | undefined>> }
-) => {
+const Page = async (props: { searchParams: Promise<Record<string, string | string[] | undefined>> }) => {
   const searchParams = await props.searchParams;
   const {
     page,
@@ -41,10 +39,10 @@ const Page = async (
     states: selectedStates,
     types: selectedTypes,
   };
-  const responseSpecialties = await getSpecialties();
+  const [responseSpecialties, responseAppointmentTypes] = await Promise.all([getSpecialties(), getAppointmentTypes()]);
+
   const specialties = responseSpecialties?.data ?? [];
-  const data = await getAppointmentTypes();
-  const types = data?.data ?? [];
+  const types = responseAppointmentTypes?.data ?? [];
 
   const sort = (searchParams?.sort as string)?.split(':');
 
