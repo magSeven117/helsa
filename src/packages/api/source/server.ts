@@ -6,7 +6,9 @@ export interface ServerMeta {
   name?: string;
 }
 
-export const base = os.$meta<ServerMeta>({}).$context<{ user?: BetterUser; database?: PrismaClient }>();
+export type ServerContext = { user?: BetterUser; database?: PrismaClient };
+
+export const base = os.$meta<ServerMeta>({}).$context<ServerContext>();
 
 const loggerMiddleware = base.middleware(async ({ context, next, procedure }) => {
   const start = Date.now();

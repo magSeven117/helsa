@@ -10,7 +10,7 @@ export const getUpcomingAppointment = authActionClient
     actionName: 'get-upcoming-appointment',
   })
   .action(async ({ ctx: { user } }) => {
-    const patient = await getDoctor({ userId: user.id });
+    const patient = await getDoctor();
     if (!patient) {
       return [];
     }

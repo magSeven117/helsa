@@ -15,7 +15,7 @@ export const removePrice = authActionClient
   .schema(schema)
   .metadata({ actionName: 'remove-price' })
   .action(async ({ parsedInput: { id }, ctx: { user } }) => {
-    const doctor = await getDoctor({ userId: user.id });
+    const doctor = await getDoctor();
     const doctorId = doctor?.data?.id ?? null;
     if (!doctorId) {
       throw new Error('Doctor not found');

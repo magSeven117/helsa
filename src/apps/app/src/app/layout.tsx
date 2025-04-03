@@ -1,7 +1,7 @@
 import '@/src/assets/globals.css';
 import icon from '@/src/assets/images/HELSA NUEVO BLANCO ISOTIPO.png';
 import { Provider as Analytics } from '@helsa/analytics/client';
-import { TRPCReactProvider } from '@helsa/api/src/providers/client';
+import { ORPCProvider } from '@helsa/api/source/client';
 import { DesignSystemProvider } from '@helsa/ui';
 import type { Metadata } from 'next';
 import { Nunito } from 'next/font/google';
@@ -30,7 +30,7 @@ export default function RootLayout({
       <link rel="icon" href={icon.src} sizes="any" />
       <body className={nunito.className + ' styled-scroll h-screen box-border'} suppressHydrationWarning={true}>
         <DesignSystemProvider>
-          <TRPCReactProvider>{children}</TRPCReactProvider>
+          <ORPCProvider>{children}</ORPCProvider>
         </DesignSystemProvider>
         <Analytics />
       </body>

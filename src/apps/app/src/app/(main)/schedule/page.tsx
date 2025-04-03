@@ -1,14 +1,8 @@
 import { getDoctor } from '@/src/actions/doctor/get-doctor';
-import { getCurrentUser } from '@/src/actions/user/get-current-user';
 import DoctorScheduleModal from '@/src/components/schedule/create-schedule';
 
 const Page = async () => {
-  const res = await getCurrentUser();
-  const user = res?.data ?? null;
-  if (!user) {
-    return null;
-  }
-  const doctorResponse = await getDoctor({ userId: user.id });
+  const doctorResponse = await getDoctor();
   const doctor = doctorResponse?.data ?? null;
   if (!doctor) {
     return null;

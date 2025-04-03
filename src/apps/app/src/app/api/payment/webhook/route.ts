@@ -14,8 +14,6 @@ export const POST = paymentWebhook({
 
     revalidatePath(`/api/appointments`);
     revalidatePath(`/api/appointments/${payload.data.metadata.appointmentId}`);
-
-    console.log('Order paid', payload.data.metadata.appointmentId);
   },
   onSubscriptionActive: async (payload) => {},
   onSubscriptionCanceled: async (payload) => {},
