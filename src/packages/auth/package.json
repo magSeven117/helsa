@@ -11,7 +11,7 @@
     "@helsa/email": "*",
     "@helsa/typescript-config": "*",
     "@upstash/redis": "^1.34.3",
-    "better-auth": "^1.2.4",
+    "better-auth": "1.2.4",
     "better-fetch": "^1.1.2",
     "next": "15.2.2",
     "react": "^19.0.0",
