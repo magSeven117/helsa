@@ -16,8 +16,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@helsa/ui/components/sidebar';
 import { Bell, LogOut, MoreVerticalIcon, Sparkles, SunMoon, User } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useSession } from '../auth/session-provider';
 
-export function NavUser({ user }: { user: any }) {
+export function NavUser() {
+  const { user } = useSession();
   const router = useRouter();
   const onClick = async () => {
     await authClient.signOut({
@@ -43,7 +45,7 @@ export function NavUser({ user }: { user: any }) {
               className="bg-[var(--color-brand-primary)] hover:bg-[var(--color-brand-primary)]/60 dark:hover:bg-indigo-600 hover:text-white text-white"
             >
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={user?.image} alt={user.name} className="object-contain" />
+                <AvatarImage src={user?.image ?? ''} alt={user.name} className="object-contain" />
                 <AvatarFallback className="rounded-lg">
                   <User className="size-4" />
                 </AvatarFallback>

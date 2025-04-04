@@ -18,6 +18,11 @@ export const auth = betterAuth({
   }),
   advanced: {
     generateId: false,
+    cookies: {
+      session_token: {
+        name: 'helsa_token',
+      },
+    },
   },
   user: {
     additionalFields: {

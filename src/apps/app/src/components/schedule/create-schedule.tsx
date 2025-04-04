@@ -16,8 +16,8 @@ export default function DoctorScheduleModal({ doctor }: { doctor: Primitives<Doc
       <SheetTrigger asChild>
         <Button variant="outline">Horarios</Button>
       </SheetTrigger>
-      <SheetContent className="sm:w-1/4 sm:max-w-full p-4 bg-transparent border-none">
-        <div className="bg-background p-6 border border-sidebar h-full overflow-y-hidden">
+      <SheetContent className="sm:w-1/3 sm:max-w-full p-4 bg-transparent border-none">
+        <div className="bg-background p-6 border border-sidebar h-full overflow-y-hidden rounded-xl">
           <SheetHeader className="py-5">
             <DialogTitle className="my-3 text-xl">Modifica y establece tu disponibilidad</DialogTitle>
             <p className="text-xs text-muted-foreground">

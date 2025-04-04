@@ -1,11 +1,9 @@
 'use client';
 
-import { authClient } from '@helsa/auth/client';
 import { Sparkles } from 'lucide-react';
 import { useAssistantStore } from '../../store/assistant/assistant-store';
 
 const TopBar = () => {
-  const { data } = authClient.useSession();
   return (
     <div className="flex w-full justify-between items-center pl-5  pr-8 py-5">
       <div className="flex w-1/2 items-center gap-5">

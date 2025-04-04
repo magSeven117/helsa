@@ -25,9 +25,9 @@ import {
   Stethoscope,
   Users,
 } from 'lucide-react';
-import { useTheme } from 'next-themes';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useSession } from '../auth/session-provider';
 import Icon from './icon';
 import { SidebarTrigger } from './sidabar-trigger';
 import SidebarNotifications from './sidebar-notifications';
@@ -44,14 +44,14 @@ export interface SectionRoute {
   path: string;
 }
 
-const SideBar = ({ user }: { user: any }) => {
+const SideBar = () => {
+  const { user } = useSession();
   const sections = sideBarItems.map((section) => ({
     title: section.title,
     routes: section.routes.filter((route) => route.roles.includes(user.role)),
   }));
   const path = usePathname();
-  const theme = useTheme();
-  const { open, state } = useSidebar();
+  const { state } = useSidebar();
   const isCollapsed = state === 'collapsed';
   return (
     <Sidebar collapsible="icon" className="bg-background" variant="inset">
@@ -102,7 +102,7 @@ const SideBar = ({ user }: { user: any }) => {
       </SidebarContent>
       <SidebarFooter>
         <SidebarNotifications />
-        <NavUser user={user} />
+        <NavUser />
       </SidebarFooter>
     </Sidebar>
   );

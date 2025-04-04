@@ -124,9 +124,9 @@ export default function DoctorSchedule({ doctorId, schedule, setIsOpen }: Doctor
 
   return (
     <div className="flex flex-col gap-5 justify-between flex-1">
-      <div className="flex flex-col gap-5 max-h-[600px] overflow-y-scroll no-scroll border p-3">
+      <div className="flex flex-col gap-5 max-h-[600px] overflow-y-scroll no-scroll p-3">
         {Object.entries(enabledDays).map(([day, enabled]: [string, boolean]) => (
-          <div key={day} className="space-y-4 rounded-none border px-3 py-3 flex flex-col items-center justify-center">
+          <div key={day} className="space-y-4 rounded-lg border px-3 py-3 flex flex-col items-center justify-center">
             <div className="flex items-center justify-between gap-3 w-full">
               <Label htmlFor={day} className="text-sm capitalize ">
                 {daysLocale[day as keyof typeof daysLocale]}
@@ -141,12 +141,12 @@ export default function DoctorSchedule({ doctorId, schedule, setIsOpen }: Doctor
                     <div className="w-full">
                       <Popover>
                         <PopoverTrigger asChild>
-                          <Button variant="outline" role="combobox" className="h-10 border   rounded-none w-full">
+                          <Button variant="outline" role="combobox" className="h-10 border    w-full">
                             Agrega horas a tu dia
                             <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                           </Button>
                         </PopoverTrigger>
-                        <PopoverContent className="w-[371px] p-0 rounded-none" align="end">
+                        <PopoverContent className="w-[371px] p-0 " align="end">
                           <Command>
                             <CommandInput placeholder="Search hour..." />
                             <CommandList>
@@ -176,7 +176,7 @@ export default function DoctorSchedule({ doctorId, schedule, setIsOpen }: Doctor
                           variant="outline"
                           size="sm"
                           onClick={() => handleHourRemove(day, hour)}
-                          className="gap-2 rounded-none"
+                          className="gap-2 "
                         >
                           <Clock className="h-4 w-4" />
                           {hour}
@@ -194,14 +194,14 @@ export default function DoctorSchedule({ doctorId, schedule, setIsOpen }: Doctor
         {isPending ? <Loader2 className="size-4 animate-spin" /> : 'Guardar horario'}
       </Button>
       <AlertDialog open={hasErrored ? true : false}>
-        <AlertDialogContent className="sm:rounded-none">
-          <AlertDialogHeader className="rounded-none">
+        <AlertDialogContent className="sm:">
+          <AlertDialogHeader className="">
             <AlertDialogTitle>Ups, error.</AlertDialogTitle>
             <AlertDialogDescription>Error al guardar el horario, por favor intenta de nuevo.</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogAction asChild>
-              <Button className="rounded-none" variant={'default'} onClick={reset}>
+              <Button className="" variant={'default'} onClick={reset}>
                 Entendido
               </Button>
             </AlertDialogAction>

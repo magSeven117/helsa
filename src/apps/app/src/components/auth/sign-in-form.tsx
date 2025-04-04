@@ -73,7 +73,7 @@ export default function SignInForm() {
                   <FormItem className="my-2">
                     <FormLabel className="text-sm  font-bold ">Email</FormLabel>
                     <FormControl>
-                      <Input {...field} className="rounded-none"></Input>
+                      <Input {...field} className=""></Input>
                     </FormControl>
                     <FormMessage></FormMessage>
                   </FormItem>
@@ -86,11 +86,7 @@ export default function SignInForm() {
                   <FormItem className="my-2">
                     <FormLabel className="text-sm  font-bold">Contraseña</FormLabel>
                     <FormControl>
-                      <PasswordInput
-                        {...field}
-                        autoComplete="current-password"
-                        className="rounded-none"
-                      ></PasswordInput>
+                      <PasswordInput {...field} autoComplete="current-password" className=""></PasswordInput>
                     </FormControl>
                     <FormMessage></FormMessage>
                   </FormItem>
@@ -100,23 +96,11 @@ export default function SignInForm() {
                 or
               </p>
               <div className="grid grid-cols-2 gap-x-4 mt-3">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  type="button"
-                  className="rounded-none"
-                  onClick={() => onOauthPress('google')}
-                >
+                <Button size="sm" variant="outline" type="button" className="" onClick={() => onOauthPress('google')}>
                   <Icons.google className="mr-2 size-4" />
                   Google
                 </Button>
-                <Button
-                  onClick={() => onOauthPress('facebook')}
-                  className="rounded-none"
-                  size="sm"
-                  variant="outline"
-                  type="button"
-                >
+                <Button onClick={() => onOauthPress('facebook')} className="" size="sm" variant="outline" type="button">
                   <Icons.facebook className="mr-2 size-4" />
                   Facebook
                 </Button>
@@ -124,7 +108,7 @@ export default function SignInForm() {
             </CardContent>
             <CardFooter>
               <div className="grid w-full">
-                <Button type="submit" disabled={isSubmitting} className="rounded-none">
+                <Button type="submit" disabled={isSubmitting} className="">
                   {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Iniciar sesión'}
                 </Button>
                 <Button variant="link" size="sm">

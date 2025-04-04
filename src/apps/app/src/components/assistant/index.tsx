@@ -5,8 +5,8 @@ import Chat from '@/src/components/chat';
 import { useChat } from '@ai-sdk/react';
 import { useEffect, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { useLocalStorage } from 'usehooks-ts';
 import { v4 } from 'uuid';
+import { useSession } from '../auth/session-provider';
 import { convertToUIMessages } from '../chat/utils';
 import { AssistantFeedback } from './feedback';
 import { Header } from './header';
@@ -16,7 +16,7 @@ const Assistant = () => {
   const [isExpanded, setExpanded] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
   const [chatId, setChatId] = useState<string>();
-  const [user] = useLocalStorage('user', null);
+  const { user } = useSession();
   const [initialMessages, setInitialMessages] = useState<any[]>([]);
 
   const { messages, input, setInput, handleSubmit, setMessages } = useChat({
