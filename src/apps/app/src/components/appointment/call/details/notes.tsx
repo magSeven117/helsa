@@ -1,6 +1,6 @@
 'use client';
-import { createAppointmentNote } from '@/src/actions/appointment/create-appointment-note';
-import { BetterUser } from '@helsa/auth/server';
+import { useSession } from '@/src/components/auth/session-provider';
+import { useNotes } from '@/src/hooks/appointment/use-notes';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { Appointment } from '@helsa/engine/appointment/domain/appointment';
 import { AppointmentNote } from '@helsa/engine/appointment/domain/note';
@@ -9,10 +9,10 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from '@helsa/ui/c
 import { Textarea } from '@helsa/ui/components/textarea';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ClipboardMinus, Loader2, StickyNote } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { useLocalStorage } from 'usehooks-ts';
 import { z } from 'zod';
 export const NoteList = ({
   notes,
@@ -50,11 +50,14 @@ export const NotesForm = ({ data, toggle }: { data: Primitives<Appointment>; tog
     resolver: zodResolver(formSchema),
     defaultValues: { description: '' },
   });
+  const { createNote } = useNotes();
+  const router = useRouter();
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await createAppointmentNote({ appointmentId: data.id, note: values.description });
+      await createNote({ appointmentId: data.id, note: values.description });
       toast.success('Nota agregada correctamente');
       form.reset();
+      router.refresh();
       toggle();
     } catch (error) {
       toast.error('Error al agregar la nota');
@@ -105,7 +108,7 @@ export const NotesContent = ({
   data: Primitives<Appointment>;
   notes: Primitives<AppointmentNote>[];
 }) => {
-  const [user] = useLocalStorage<BetterUser | null>('user', null);
+  const { user } = useSession();
   const [editing, setEditing] = useState(false);
 
   const isPatient = user?.role === 'PATIENT';

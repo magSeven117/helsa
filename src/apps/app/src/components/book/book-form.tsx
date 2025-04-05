@@ -1,6 +1,6 @@
 'use client';
 
-import { createAppointment } from '@/src/actions/appointment/create-appointment';
+import { useCreateAppointment } from '@/src/hooks/appointment/use-appointment';
 import { Symptom } from '@helsa/database';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { AppointmentType } from '@helsa/engine/appointment/domain/appointment-type';
@@ -68,6 +68,7 @@ export default function DoctorAppointment({
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
   const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([]);
   const [_, setId] = useQueryState('id');
+  const { createAppointment } = useCreateAppointment();
 
   useEffect(() => {
     if (!date) {
@@ -78,8 +79,8 @@ export default function DoctorAppointment({
     const availableSlots = hours.filter(
       (hour) =>
         !doctor.appointments!.some(
-          (appointment) => appointment.hour === hour.hour && appointment.day === format(date, 'yyyy-MM-dd')
-        )
+          (appointment) => appointment.hour === hour.hour && appointment.day === format(date, 'yyyy-MM-dd'),
+        ),
     );
     setTimeSlots(availableSlots.map((hour) => ({ id: hour.hour, time: hour.hour })));
     form.setValue('date', date);
@@ -197,7 +198,7 @@ export default function DoctorAppointment({
                     setSelectedSymptoms((current) =>
                       current.includes(symptom.name)
                         ? current.filter((s) => s !== symptom.name)
-                        : [...current, symptom.name]
+                        : [...current, symptom.name],
                     );
                   }}
                   options={symptoms.map(transformOption)}

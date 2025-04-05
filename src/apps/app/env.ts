@@ -1,6 +1,5 @@
 import { keys as ai } from '@helsa/ai/keys';
 import { keys as analytics } from '@helsa/analytics/keys';
-import { keys as api } from '@helsa/api/keys';
 import { keys as auth } from '@helsa/auth/keys';
 import { keys as cache } from '@helsa/cache/keys';
 import { keys as database } from '@helsa/database/keys';
@@ -15,7 +14,6 @@ import { createEnv } from '@t3-oss/env-nextjs';
 
 export const env = createEnv({
   extends: [
-    api(),
     ai(),
     analytics(),
     auth(),

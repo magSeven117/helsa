@@ -2,7 +2,7 @@ import { database } from '@helsa/database';
 import { CreateAppointmentNote } from '@helsa/engine/appointment/application/create-appointment-note';
 import { GetDocuments } from '@helsa/engine/appointment/application/get-documents';
 import { PrismaAppointmentRepository } from '@helsa/engine/appointment/infrastructure/persistence/prisma-appointment-repository';
-import { unstable_cache as cache } from 'next/cache';
+import { unstable_cache as cache, revalidatePath, revalidateTag } from 'next/cache';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { withUser } from '../../../withUser';
@@ -30,6 +30,9 @@ export const POST = withUser(async ({ user, params, req }) => {
   const service = new CreateAppointmentNote(new PrismaAppointmentRepository(database));
 
   await service.run(id, note);
+
+  revalidatePath(`/appointments`);
+  revalidateTag(`get-appointments-${user.id}`);
 
   return NextResponse.json({ message: 'success' }, { status: 201 });
 });

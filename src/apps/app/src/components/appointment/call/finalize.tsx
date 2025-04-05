@@ -1,5 +1,5 @@
 'use client';
-import { finalizeAppointment } from '@/src/actions/appointment/finalize-appointment';
+import { useFinalizeAppointment } from '@/src/hooks/appointment/use-appointment';
 import { Button } from '@helsa/ui/components/button';
 import {
   Dialog,
@@ -19,10 +19,11 @@ const apiKey = process.env.NEXT_PUBLIC_STREAM_CLIENT_KEY!;
 
 const Finalize = () => {
   const params = useParams();
+  const { finalizeAppointment } = useFinalizeAppointment(params.id as string);
   const finalizeCall = useCallback(async () => {
     try {
       const id = params.id as string;
-      await finalizeAppointment({ id });
+      await finalizeAppointment();
     } catch (error) {
       console.log(error);
       toast.error('Error finalizing appointment');

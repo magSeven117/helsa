@@ -1,6 +1,6 @@
 'use client';
 import { uploadDocument } from '@/src/actions/medical-document/upload-document';
-import { BetterUser } from '@helsa/auth/server';
+import { useSession } from '@/src/components/auth/session-provider';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { Appointment } from '@helsa/engine/appointment/domain/appointment';
 import { Document } from '@helsa/engine/document/domain/document';
@@ -16,7 +16,6 @@ import { ClipboardMinus, FileText, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { useLocalStorage } from 'usehooks-ts';
 import { z } from 'zod';
 export const DocumentList = ({
   documents,
@@ -169,7 +168,7 @@ export const DocumentsContent = ({
   documents: Primitives<Document>[];
 }) => {
   const [editing, setEditing] = useState(false);
-  const [user] = useLocalStorage<BetterUser | null>('user', null);
+  const { user } = useSession();
 
   const isPatient = user?.role === 'PATIENT';
 

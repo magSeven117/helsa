@@ -1,5 +1,5 @@
 'use client';
-import { enterRoom } from '@/src/actions/appointment/enter-room';
+import { useRoom } from '@/src/hooks/appointment/use-room';
 import { DndContext, useDraggable, useDroppable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
 import { BetterUser } from '@helsa/auth/server';
@@ -55,6 +55,7 @@ import {
 import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 import CallCHat from '../call-chat';
+import { enterRoom } from '@/src/actions/appointment/enter-room';
 
 const apiKey = process.env.NEXT_PUBLIC_STREAM_CLIENT_KEY!;
 
@@ -126,11 +127,12 @@ export const MyUILayout = () => {
   const localParticipant = useLocalParticipant();
   const remoteParticipants = useRemoteParticipants();
   const [parent, setParent] = useState<any>('drop-1');
+  const { enterRoom } = useRoom();
 
   const joinCall = useCallback(async () => {
     if (call) {
       call.join();
-      await enterRoom({ appointmentId: call.id });
+      await enterRoom(call.id);
     }
   }, [call]);
 
