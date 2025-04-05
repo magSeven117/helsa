@@ -4,6 +4,7 @@ export class GetSpecialties {
   constructor(private readonly doctorRepository: DoctorRepository) {}
 
   async run() {
-    return this.doctorRepository.getSpecialties();
+    const specialties = await this.doctorRepository.getSpecialties();
+    return specialties.map((specialty) => specialty.toPrimitives());
   }
 }

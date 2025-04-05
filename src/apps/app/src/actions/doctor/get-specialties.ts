@@ -12,5 +12,5 @@ export const getSpecialties = actionClient
   .action(async (_) => {
     const service = new GetSpecialties(new PrismaDoctorRepository(database));
     const specialties = await service.run();
-    return specialties.map((specialty) => specialty.toPrimitives());
+    return specialties;
   });
