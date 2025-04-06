@@ -13,17 +13,19 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { useSession } from '../../auth/session-provider';
 
 const formSchema = z.object({
   image: z.string().optional(),
 });
 
 type AvatarSectionValues = z.infer<typeof formSchema>;
-const AvatarSection = ({ image }: AvatarSectionValues) => {
+const AvatarSection = () => {
+  const { user } = useSession();
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: { image },
+    defaultValues: { image: user.image ?? '' },
   });
   const { isSubmitting, isValid } = form.formState;
   const router = useRouter();

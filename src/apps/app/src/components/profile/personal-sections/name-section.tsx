@@ -12,6 +12,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { useSession } from '../../auth/session-provider';
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -21,12 +22,13 @@ const formSchema = z.object({
 
 type NameFormValues = z.infer<typeof formSchema>;
 
-export const NameSection = ({ name }: NameFormValues) => {
+export const NameSection = () => {
+  const { user } = useSession();
   const [isEditing, setIsEditing] = useState(false);
   const toggleEdit = () => setIsEditing((current) => !current);
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: { name },
+    defaultValues: { name: user.name },
   });
   const { isSubmitting, isValid } = form.formState;
 

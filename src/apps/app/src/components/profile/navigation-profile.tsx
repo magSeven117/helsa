@@ -3,12 +3,13 @@
 import { cn } from '@helsa/ui/lib/utils';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useSession } from '../auth/session-provider';
 
-interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
-  role: string;
-}
+interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {}
 
-export function NavigationProfile({ className, role, ...props }: SidebarNavProps) {
+export function NavigationProfile({ className, ...props }: SidebarNavProps) {
+  const { user } = useSession();
+  const role = user?.role ?? 'PATIENT';
   const pathname = usePathname();
   const items = navItems.filter((item) => item.roles.includes(role));
   return (

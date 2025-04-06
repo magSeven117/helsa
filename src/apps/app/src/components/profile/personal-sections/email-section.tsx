@@ -1,12 +1,10 @@
 'use client';
 
 import { Card, CardHeader, CardTitle } from '@helsa/ui/components/card';
+import { useSession } from '../../auth/session-provider';
 
-type EmailFormValues = {
-  email: string;
-};
-
-export const EmailSection = ({ email }: EmailFormValues) => {
+export const EmailSection = () => {
+  const { user } = useSession();
   return (
     <Card className="rounded-none bg-transparent">
       <CardHeader className="">
@@ -15,7 +13,7 @@ export const EmailSection = ({ email }: EmailFormValues) => {
           <p className="text-muted-foreground text-sm mt-5">
             Tu dirección de correo electrónico es privada y no será compartida con nadie.
           </p>
-          <p className="text-primary font-bold mt-3">{email}</p>
+          <p className="text-primary font-bold mt-3">{user.email}</p>
         </div>
       </CardHeader>
     </Card>

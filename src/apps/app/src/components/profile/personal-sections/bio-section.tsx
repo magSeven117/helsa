@@ -12,6 +12,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { useSession } from '../../auth/session-provider';
 
 const formSchema = z.object({
   bio: z.string().min(2, {
@@ -21,12 +22,13 @@ const formSchema = z.object({
 
 type BioFormValues = z.infer<typeof formSchema>;
 
-export const BioSection = ({ bio }: BioFormValues) => {
+export const BioSection = () => {
+  const { user } = useSession();
   const [isEditing, setIsEditing] = useState(false);
   const toggleEdit = () => setIsEditing((current) => !current);
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: { bio },
+    defaultValues: { bio: user.bio },
   });
   const { isSubmitting, isValid } = form.formState;
   const router = useRouter();
@@ -55,7 +57,7 @@ export const BioSection = ({ bio }: BioFormValues) => {
                 {isEditing ? 'Escribe una breve descripción sobre ti.' : 'Esto es lo que otros verán sobre ti.'}
               </p>
               {!isEditing ? (
-                <p className="text-primary font-bold mt-3">{bio}</p>
+                <p className="text-primary font-bold mt-3">{user.bio}</p>
               ) : (
                 <FormField
                   control={form.control}

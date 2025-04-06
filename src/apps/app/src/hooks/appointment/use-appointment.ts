@@ -1,17 +1,11 @@
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { Appointment } from '@helsa/engine/appointment/domain/appointment';
-import { useEffect, useState } from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 export const useAppointment = (id: string) => {
-  const [appointment, setAppointment] = useState<Primitives<Appointment> | undefined>(undefined);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
-
-  useEffect(() => {
-    if (!id) return;
-
-    const fetchAppointment = async () => {
-      setIsLoading(true);
+  const { data, isFetching, error } = useQuery({
+    queryKey: ['appointment'],
+    queryFn: async () => {
       const include = {
         specialty: true,
         doctor: { include: { user: true } },
@@ -20,67 +14,68 @@ export const useAppointment = (id: string) => {
         treatments: { include: { medication: true } },
         orders: true,
       };
-      try {
-        const response = await fetch(`/api/v1/appointment/${id}?include=${JSON.stringify(include)}`);
-        const json = await response.json();
-        setAppointment(json.data);
-      } catch (err) {
-        setError(err as Error);
-      } finally {
-        setIsLoading(false);
+      const response = await fetch(`/api/v1/appointment/${id}?include=${JSON.stringify(include)}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch appointment');
       }
-    };
-    fetchAppointment();
-  }, [id]);
+      const json = await response.json();
+      return json.data;
+    },
+    enabled: !!id,
+  });
 
   return {
-    appointment,
-    isLoading,
+    appointment: data as Primitives<Appointment>,
+    isLoading: isFetching,
     error,
   };
 };
 
 export const useFinalizeAppointment = (id: string) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
-  const [success, setSuccess] = useState(false);
-
-  const finalizeAppointment = async () => {
-    setIsLoading(true);
-    try {
-      await fetch(`/api/v1/appointment/${id}`, { method: 'PUT' });
-      setSuccess(true);
-    } catch (err) {
-      setError(err as Error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const {
+    mutateAsync: finalizeAppointment,
+    isPending,
+    error,
+    isSuccess,
+  } = useMutation({
+    mutationFn: async () => {
+      if (!id) {
+        throw new Error('ID is required');
+      }
+      const response = await fetch(`/api/v1/appointment/${id}`, {
+        method: 'PUT',
+      });
+      if (!response.ok) {
+        throw new Error('Failed to finalize appointment');
+      }
+    },
+  });
 
   return {
     finalizeAppointment,
-    isLoading,
+    isPending,
     error,
-    success,
+    isSuccess,
   };
 };
 
 export const useCreateAppointment = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
-  const [success, setSuccess] = useState(false);
-  const createAppointment = async (data: {
-    date: Date;
-    motive: string;
-    symptoms: string[];
-    doctorId: string;
-    typeId: string;
-    id: string;
-    specialtyId: string;
-    priceId: string;
-  }) => {
-    setIsLoading(true);
-    try {
+  const {
+    mutateAsync: createAppointment,
+    error,
+    isPending,
+    isSuccess,
+  } = useMutation({
+    mutationFn: async (data: {
+      date: Date;
+      motive: string;
+      symptoms: string[];
+      doctorId: string;
+      typeId: string;
+      id: string;
+      specialtyId: string;
+      priceId: string;
+    }) => {
       const response = await fetch('/api/v1/appointment', {
         method: 'POST',
         headers: {
@@ -91,17 +86,64 @@ export const useCreateAppointment = () => {
       if (!response.ok) {
         throw new Error('Failed to create appointment');
       }
-      setSuccess(true);
-    } catch (err) {
-      setError(err as Error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    },
+  });
   return {
     createAppointment,
+    isPending,
+    error,
+    isSuccess,
+  };
+};
+
+export const useAppointmentList = ({
+  filter,
+  pagination,
+  sort,
+}: {
+  filter: {
+    start?: string;
+    end?: string;
+    states?: string[];
+    specialties?: string[];
+    types?: string[];
+  };
+  pagination: {
+    page?: number;
+    pageSize?: number;
+  };
+  sort: {
+    sortBy?: string;
+    order?: string;
+  };
+}) => {
+  const { data, isLoading, error } = useQuery({
+    initialData: {
+      data: [],
+      meta: {
+        total: 0,
+        page: 0,
+        pageSize: 10,
+      },
+    },
+    queryKey: ['appointments'],
+    queryFn: async () => {
+      const response = await fetch(
+        `/api/v1/appointment?filter=${JSON.stringify(filter)}&pagination=${JSON.stringify(
+          pagination,
+        )}&sort=${JSON.stringify(sort)}`,
+      );
+      if (!response.ok) {
+        throw new Error('Failed to fetch appointments');
+      }
+      const json = await response.json();
+      return json.data;
+    },
+  });
+
+  return {
+    data,
     isLoading,
     error,
-    success,
   };
 };

@@ -31,8 +31,12 @@ const getAppointmentsSchema = z.object({
   }),
 });
 
-export const GET = withUser(async ({ req, user, params, searchParams }) => {
-  const parsedInput = getAppointmentsSchema.parse(searchParams);
+export const GET = withUser(async ({ user, searchParams }) => {
+  const parsedInput = getAppointmentsSchema.parse({
+    filter: JSON.parse(searchParams.filter as string),
+    pagination: JSON.parse(searchParams.pagination as string),
+    sort: JSON.parse(searchParams.sort as string),
+  });
   const repository = new PrismaAppointmentRepository(database);
 
   let service;
@@ -45,7 +49,7 @@ export const GET = withUser(async ({ req, user, params, searchParams }) => {
     service = new GetPatientAppointments(repository, patientGetter);
   }
 
-  const response = cache(
+  const response = await cache(
     () => service.run(user.id, parsedInput.filter, parsedInput.pagination, parsedInput.sort, 'userId'),
     ['get-appointments', user.id, JSON.stringify(parsedInput)],
     {

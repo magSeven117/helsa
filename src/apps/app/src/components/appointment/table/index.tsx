@@ -1,8 +1,8 @@
-import { getAppointments } from '@/src/actions/appointment/get-appointments';
-import { Meta } from '@helsa/ddd/core/collection.';
-import { cookies } from 'next/headers';
+'use client';
+import { useAppointmentList } from '@/src/hooks/appointment/use-appointment';
 import { columns } from './columns';
 import { NoResults } from './empty-state';
+import { Loading } from './loading';
 import { DataTable } from './table';
 
 type Props = {
@@ -14,25 +14,41 @@ type Props = {
   types: any[];
 };
 
-export async function AppointmentTable({ filter, pageSize, page, sort, specialties, types }: Props) {
+export function AppointmentTable({ filter, pageSize, page, sort, specialties, types }: Props) {
   const hasFilters = Object.values(filter).some((value) => value !== null);
-  const initialColumnVisibility = JSON.parse((await cookies()).get('appointment-column-visibility')?.value || '[]');
-  const response = await getAppointments({
-    start: filter.start ?? undefined,
-    end: filter.end ?? undefined,
-    states: filter.states ?? undefined,
-    specialties: filter.specialties
-      ? specialties.filter((s) => filter.specialties.includes(s.name)).map((s) => s.id)
-      : undefined,
-    types: filter.types ? types.filter((t) => filter.types.includes(t.name)).map((t) => t.id) : undefined,
-    page: !page ? 0 : (page - 1) * (pageSize ?? 10),
-    pageSize: !pageSize ? 10 : pageSize,
-    sortBy: sort ? sort[0] : undefined,
-    order: sort ? sort[1] : undefined,
+  const initialColumnVisibility = JSON.parse('[]');
+  const {
+    data: { data, meta },
+    isLoading,
+    error,
+  } = useAppointmentList({
+    filter: {
+      start: filter.start ?? undefined,
+      end: filter.end ?? undefined,
+      states: filter.states ?? undefined,
+      specialties: filter.specialties
+        ? specialties.filter((s) => filter.specialties.includes(s.name)).map((s) => s.id)
+        : undefined,
+      types: filter.types ?? undefined,
+    },
+    pagination: {
+      page: !page ? 0 : (page - 1) * (pageSize ?? 10),
+      pageSize: !pageSize ? 10 : pageSize,
+    },
+    sort: {
+      sortBy: sort ? sort[0] : undefined,
+      order: sort ? sort[1] : undefined,
+    },
   });
-  const { data, meta } = response?.data ?? { data: [], meta: {} as Meta };
-  if (data.length <= 0) {
+  if (data.length <= 0 && !isLoading) {
     return <NoResults hasFilters={hasFilters} />;
+  }
+
+  if (error) {
+    return <NoResults hasFilters={hasFilters} />;
+  }
+  if (isLoading) {
+    return <Loading />;
   }
 
   return (
