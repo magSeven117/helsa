@@ -1,15 +1,16 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@helsa/ui/components/card';
-import { Thermometer } from 'lucide-react';
+import { Activity } from 'lucide-react';
 
 const Temperature = () => {
   return (
-    <Card className="rounded-none w-1/4">
+    <Card className="rounded-xl ">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="font-medium">35 ° C</CardTitle>
-        <Thermometer />
+        <CardTitle className="text-sm font-medium">Progreso general</CardTitle>
+        <Activity />
       </CardHeader>
       <CardContent>
-        <p className="text-xs text-muted-foreground">Temperatura</p>
+        <div className="text-2xl font-bold">65%</div>
+        <p className="text-xs text-muted-foreground">Plan de tratamiento</p>
       </CardContent>
     </Card>
   );

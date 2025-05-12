@@ -1,6 +1,5 @@
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { Appointment } from '@helsa/engine/appointment/domain/appointment';
-import { OrganDonors } from '@helsa/engine/patient/domain/members/biometric';
 import { Avatar, AvatarFallback, AvatarImage } from '@helsa/ui/components/avatar';
 import { Badge } from '@helsa/ui/components/badge';
 import { SheetHeader, SheetTitle } from '@helsa/ui/components/sheet';
@@ -55,10 +54,6 @@ export const HeaderDoctor = ({ data }: { data: Primitives<Appointment> }) => {
               <Link href={`/patients/${data?.patient?.id}`} target="_blank">
                 <ExternalLink className="size-4 ml-3" />
               </Link>{' '}
-              <Badge variant={'outline'}>26 años</Badge>
-              <Badge variant={'outline'}>Masculino</Badge>
-              {data.patient?.biometric.organDonor === OrganDonors.Yes && <Badge variant={'outline'}>Donador</Badge>}
-              <Badge variant={'outline'}>{data.patient?.biometric.bloodType}</Badge>
             </SheetTitle>
           </div>
         </div>
@@ -66,11 +61,11 @@ export const HeaderDoctor = ({ data }: { data: Primitives<Appointment> }) => {
       <div className="flex gap-2 px-1 border-b py-2">
         <div className="flex justify-start items-center gap-2 text-sm">
           <p className="">Estado civil:</p>
-          <Badge variant={'outline'}>{data.patient?.demographic.civilStatus}</Badge>
+          <Badge variant={'outline'}>{civilStatuses[data.patient?.demographic.civilStatus!]}</Badge>
         </div>
         <div className="flex justify-start items-center gap-2 text-sm">
           <p className="">Educación:</p>
-          <Badge variant={'outline'}>{data.patient?.demographic.educativeLevel}</Badge>
+          <Badge variant={'outline'}>{educativeLevels[data.patient?.demographic.educativeLevel!]}</Badge>
         </div>
         <div className="flex justify-start items-center gap-2 text-sm">
           <p className="">Ocupación:</p>
@@ -79,4 +74,16 @@ export const HeaderDoctor = ({ data }: { data: Primitives<Appointment> }) => {
       </div>
     </>
   );
+};
+
+const civilStatuses: Record<string, string> = {
+  SINGLE: 'Soltero',
+  MARRIED: 'Casado',
+  WIDOW: 'Viudo',
+};
+
+const educativeLevels: Record<string, string> = {
+  PRIMARY: 'Primaria',
+  SECONDARY: 'Secundaria',
+  UNIVERSITY: 'Universidad',
 };

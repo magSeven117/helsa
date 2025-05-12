@@ -8,7 +8,7 @@ const appointments = [
     patientName: 'Emma Wilson',
     time: '10:30 AM',
     duration: '30 min',
-    type: 'Follow-up',
+    type: 'Seguimiento',
     avatar: '/images/placeholder.svg?height=32&width=32',
   },
   {
@@ -16,7 +16,7 @@ const appointments = [
     patientName: 'James Brown',
     time: '11:45 AM',
     duration: '45 min',
-    type: 'Consultation',
+    type: 'Primera cita',
     avatar: '/images/placeholder.svg?height=32&width=32',
   },
   {
@@ -24,7 +24,7 @@ const appointments = [
     patientName: 'Sophia Martinez',
     time: '1:15 PM',
     duration: '30 min',
-    type: 'Prenatal',
+    type: 'Terapia individual',
     avatar: '/images/placeholder.svg?height=32&width=32',
   },
   {
@@ -32,7 +32,7 @@ const appointments = [
     patientName: 'Robert Johnson',
     time: '2:30 PM',
     duration: '45 min',
-    type: 'Cardiology',
+    type: 'Evaluación',
     avatar: '/images/placeholder.svg?height=32&width=32',
   },
   {
@@ -40,7 +40,7 @@ const appointments = [
     patientName: 'Olivia Davis',
     time: '3:45 PM',
     duration: '30 min',
-    type: 'Neurology',
+    type: 'Alta',
     avatar: '/images/placeholder.svg?height=32&width=32',
   },
 ];
@@ -52,8 +52,8 @@ export function AppointmentsCalendar() {
         <div className="p-4 rounded-lg bg-[#8167ec]/20 border border-[#8167ec]">
           <div className="flex justify-between items-center mb-4">
             <div>
-              <h3 className="font-medium">Current</h3>
-              <p className="text-xs text-muted-foreground">In progress</p>
+              <h3 className="font-medium">Actual</h3>
+              <p className="text-xs text-muted-foreground">En progreso</p>
             </div>
             <Badge className="bg-[#8167ec] text-white border-none">11:45 AM</Badge>
           </div>
@@ -67,7 +67,7 @@ export function AppointmentsCalendar() {
             </Avatar>
             <div>
               <div className="font-medium">James Brown</div>
-              <div className="text-xs text-muted-foreground">Diabetes Type 2 • 45 min</div>
+              <div className="text-xs text-muted-foreground">Terapia individual • 45 min</div>
             </div>
           </div>
         </div>
@@ -75,8 +75,8 @@ export function AppointmentsCalendar() {
         <div className="p-4 rounded-lg backdrop-blur-xl bg-white/10 border border-white/20">
           <div className="flex justify-between items-center mb-4">
             <div>
-              <h3 className="font-medium">Next</h3>
-              <p className="text-xs text-muted-foreground">Upcoming</p>
+              <h3 className="font-medium">Proxima</h3>
+              <p className="text-xs text-muted-foreground">En espera</p>
             </div>
             <Badge variant="outline" className="border-white/20">
               1:15 PM
@@ -90,14 +90,14 @@ export function AppointmentsCalendar() {
             </Avatar>
             <div>
               <div className="font-medium">Sophia Martinez</div>
-              <div className="text-xs text-muted-foreground">Pregnancy • 30 min</div>
+              <div className="text-xs text-muted-foreground">Seguimiento • 30 min</div>
             </div>
           </div>
         </div>
       </div>
 
       <div className="space-y-2">
-        <h3 className="font-medium text-sm">Upcoming Appointments</h3>
+        <h3 className="font-medium text-sm">Siguientes</h3>
         <div className="space-y-2">
           {appointments
             .filter((_, index) => index > 1)

@@ -7,7 +7,6 @@ const Header = async ({ id }: { id: string }) => {
   const userResponse = await getCurrentUser();
   const user = userResponse?.data!;
   const includeDoctor = {
-    telemetry: true,
     symptoms: true,
     patient: {
       include: {

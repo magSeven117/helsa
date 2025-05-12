@@ -11,8 +11,7 @@ import { Badge } from '@helsa/ui/components/badge';
 import { Button } from '@helsa/ui/components/button';
 import { Sheet, SheetContent, SheetTrigger } from '@helsa/ui/components/sheet';
 import { cn } from '@helsa/ui/lib/utils';
-import { Ellipsis, Paperclip, Pill, ReceiptText, Stethoscope, StickyNote } from 'lucide-react';
-import { DocumentsContent } from './documents';
+import { Ellipsis, Pill, ReceiptText, Stethoscope, StickyNote } from 'lucide-react';
 import { HeaderDoctor, HeaderPatient } from './headers';
 import { NotesContent } from './notes';
 
@@ -60,27 +59,7 @@ const DetailsSheet = async ({ data, user }: { data: Primitives<Appointment>; use
             <p className="text-lg ">Detalles</p>
             <p className="text-sm text-muted-foreground">{data?.motive ?? ''}</p>
           </div>
-          <div className="space-y-3 px-1 py-3">
-            <p className="text-lg ">Síntomas</p>
-            <div className="flex justify-start items-center gap-2">
-              {data?.symptoms?.map((symptom) => (
-                <Badge key={symptom.id} variant={'outline'}>
-                  {symptom.name}
-                </Badge>
-              ))}
-            </div>
-          </div>
-          <Accordion type="multiple" defaultValue={['attachments']} className="w-full px-1">
-            <AccordionItem value="attachments">
-              <AccordionTrigger className="hover:no-underline">
-                <div className="flex justify-start items-center gap-2">
-                  Archivos y adjuntos <Paperclip className="size-4" />
-                </div>
-              </AccordionTrigger>
-              <AccordionContent className="flex flex-col gap-3">
-                <DocumentsContent data={data} documents={documents} />
-              </AccordionContent>
-            </AccordionItem>
+          <Accordion type="multiple" defaultValue={['notes']} className="w-full px-1">
             <AccordionItem value="notes">
               <AccordionTrigger className="hover:no-underline">
                 <div className="flex justify-start items-center gap-2">

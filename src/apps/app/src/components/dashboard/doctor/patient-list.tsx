@@ -1,6 +1,8 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@helsa/ui/components/avatar';
 import { Badge } from '@helsa/ui/components/badge';
 import { Button } from '@helsa/ui/components/button';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 import { FileText, MoreHorizontal } from 'lucide-react';
 
 const patients = [
@@ -9,7 +11,7 @@ const patients = [
     name: 'Emma Wilson',
     age: 42,
     condition: 'Hypertension',
-    lastVisit: 'Today, 10:30 AM',
+    lastVisit: '2025-05-11 10:00:00',
     status: 'Scheduled',
     avatar: '/images/placeholder.svg?height=40&width=40',
   },
@@ -18,7 +20,7 @@ const patients = [
     name: 'James Brown',
     age: 65,
     condition: 'Diabetes Type 2',
-    lastVisit: 'Today, 11:45 AM',
+    lastVisit: '2025-04-11 11:00:00',
     status: 'In Progress',
     avatar: '/images/placeholder.svg?height=40&width=40',
   },
@@ -27,7 +29,7 @@ const patients = [
     name: 'Sophia Martinez',
     age: 28,
     condition: 'Pregnancy',
-    lastVisit: 'Today, 1:15 PM',
+    lastVisit: '2025-04-11 09:00:00',
     status: 'Completed',
     avatar: '/images/placeholder.svg?height=40&width=40',
   },
@@ -36,7 +38,7 @@ const patients = [
     name: 'Robert Johnson',
     age: 72,
     condition: 'Cardiac Arrhythmia',
-    lastVisit: 'Today, 2:30 PM',
+    lastVisit: '2025-03-11 13:00:00',
     status: 'Scheduled',
     avatar: '/images/placeholder.svg?height=40&width=40',
   },
@@ -45,7 +47,7 @@ const patients = [
     name: 'Olivia Davis',
     age: 35,
     condition: 'Migraine',
-    lastVisit: 'Today, 3:45 PM',
+    lastVisit: '2025-03-11 10:00:00',
     status: 'Scheduled',
     avatar: '/images/placeholder.svg?height=40&width=40',
   },
@@ -58,7 +60,6 @@ export function PatientsList() {
         <thead>
           <tr className="border-b ">
             <th className="text-left py-3 px-4 font-medium">Patient</th>
-            <th className="text-left py-3 px-4 font-medium">Condition</th>
             <th className="text-left py-3 px-4 font-medium">Last Visit</th>
             <th className="text-left py-3 px-4 font-medium">Status</th>
             <th className="text-right py-3 px-4 font-medium">Actions</th>
@@ -81,13 +82,16 @@ export function PatientsList() {
                   <div>
                     <div className="font-medium">{patient.name}</div>
                     <div className="text-xs text-muted-foreground">
-                      {patient.age} years • {patient.id}
+                      {patient.age} años • {patient.id}
                     </div>
                   </div>
                 </div>
               </td>
-              <td className="py-3 px-4">{patient.condition}</td>
-              <td className="py-3 px-4">{patient.lastVisit}</td>
+              <td className="py-3 px-4">
+                {format(new Date(patient.lastVisit).toISOString(), 'Pp', {
+                  locale: es,
+                })}
+              </td>
               <td className="py-3 px-4">
                 <StatusBadge status={patient.status} />
               </td>

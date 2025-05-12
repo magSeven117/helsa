@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { Suspense } from 'react';
+import { useSession } from '../../auth/session-provider';
 import { DocumentsContent } from '../call/details/documents';
 import { NotesContent } from '../call/details/notes';
 import { StateColumn } from '../table/columns';
@@ -40,6 +41,7 @@ type Props = {
 };
 
 const AppointmentDetailsSheet = ({ data, isOpen, setOpen }: Props) => {
+  const { user } = useSession();
   return (
     <Sheet open={isOpen} onOpenChange={setOpen}>
       <SheetContent className="sm:w-1/3 sm:max-w-full p-4 bg-transparent border-none focus-visible:outline-none ">
@@ -156,10 +158,6 @@ const AppointmentDetailsSheet = ({ data, isOpen, setOpen }: Props) => {
               </Accordion>
             </TabsContent>
             <TabsContent value="indications">
-              <Button className="gap-2" variant={'secondary'}>
-                <Download className="" />
-                Descargar receta
-              </Button>
               <Suspense
                 fallback={
                   <div className="flex w-full h-full items-center justify-center">
@@ -169,6 +167,12 @@ const AppointmentDetailsSheet = ({ data, isOpen, setOpen }: Props) => {
               >
                 <Indications data={data!} />
               </Suspense>
+              {user.role === 'PATIENT' && (
+                <Button className="gap-2 w-full mt-10" variant={'secondary'}>
+                  <Download className="" />
+                  Descargar receta
+                </Button>
+              )}
             </TabsContent>
             <TabsContent value="history">
               <History />

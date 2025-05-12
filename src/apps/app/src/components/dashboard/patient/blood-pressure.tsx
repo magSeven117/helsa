@@ -1,15 +1,16 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@helsa/ui/components/card';
-import { HeartPulse } from 'lucide-react';
+import { Calendar } from 'lucide-react';
 
 const BloodPressure = () => {
   return (
-    <Card className="rounded-none w-1/4">
+    <Card className="rounded-xl">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="font-medium">120/80 mmHg</CardTitle>
-        <HeartPulse />
+        <CardTitle className="text-sm font-medium">Asistencia a citas</CardTitle>
+        <Calendar />
       </CardHeader>
       <CardContent>
-        <p className="text-xs text-muted-foreground">Presión sanguínea</p>
+        <div className="text-2xl font-bold">92%</div>
+        <p className="text-xs text-muted-foreground">Últimos 3 meses</p>
       </CardContent>
     </Card>
   );

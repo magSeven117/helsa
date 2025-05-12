@@ -1,11 +1,12 @@
 'use client';
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@helsa/ui/components/accordion';
-import { AudioLines, Video } from 'lucide-react';
+import { AudioLines, Loader2, Video } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 const History = () => {
+  const [loading, setLoading] = useState(false);
   const [recordings, setRecordings] = useState<{ url: string }[]>([]);
   const [transcriptions, setTranscriptions] = useState<{ url: string; start_time: string }[]>([]);
   const params = useSearchParams();
@@ -13,6 +14,7 @@ const History = () => {
 
   useEffect(() => {
     const fetchRecordings = async () => {
+      setLoading(true);
       try {
         if (!id) return null;
         const response = await fetch('/api/functions/get-recordings?id=' + id);
@@ -23,6 +25,8 @@ const History = () => {
         setRecordings(data.recordings);
       } catch (error) {
         console.error('Error fetching recordings:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -42,6 +46,14 @@ const History = () => {
     fetchTranscriptions();
     fetchRecordings();
   }, [id]);
+
+  if (loading) {
+    return (
+      <div className="flex w-full h-full items-center justify-center">
+        <Loader2 className="size-10 animate-spin" />
+      </div>
+    );
+  }
 
   if (recordings.length === 0) {
     return <div>No recordings available</div>;

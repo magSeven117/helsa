@@ -1,19 +1,21 @@
 'use server';
-import { authActionClient } from '@helsa/actions';
+import { getSession } from '@helsa/auth/server';
 import { database } from '@helsa/database';
 import { GetDoctor } from '@helsa/engine/doctor/application/services/get-doctor';
 import { PrismaDoctorRepository } from '@helsa/engine/doctor/infrastructure/persistence/prisma-doctor-repository';
-import { unstable_cache as cache } from 'next/cache';
 
-export const getDoctor = authActionClient
-  .metadata({
-    actionName: 'get-doctor',
-  })
-  .action(async ({ ctx: { user } }) => {
-    const service = new GetDoctor(new PrismaDoctorRepository(database));
+export const getDoctor = async () => {
+  const user = await getSession();
+  if (!user) {
+    return null;
+  }
+  const userId = user.user.id;
 
-    return cache(() => service.run(user.id), ['doctor', user.id], {
-      tags: [`doctor-${user.id}`],
-      revalidate: 60 * 60,
-    })();
-  });
+  const doctorRepository = new PrismaDoctorRepository(database);
+  const getDoctorService = new GetDoctor(doctorRepository);
+  const doctor = await getDoctorService.run(userId);
+  if (!doctor) {
+    return null;
+  }
+  return doctor;
+};

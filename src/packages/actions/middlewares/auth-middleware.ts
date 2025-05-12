@@ -6,6 +6,7 @@ import { createMiddleware } from 'next-safe-action';
 export const authMiddleware = createMiddleware().define(async ({ next }) => {
   const session = await getSession();
   if (!session?.user) {
+    console.log('Unauthorized');
     throw new AuthorizationError('Unauthorized');
   }
   return next({

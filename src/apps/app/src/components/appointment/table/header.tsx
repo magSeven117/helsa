@@ -84,12 +84,6 @@ export function AppointmentsTableHeader({ table, loading }: Props) {
           </TableHead>
         )}
 
-        {isVisible('specialty') && (
-          <TableHead className="border-b">
-            <span>Especialidad</span>
-          </TableHead>
-        )}
-
         {isVisible('type') && (
           <TableHead className="border-b">
             <span>Tipo de consulta</span>

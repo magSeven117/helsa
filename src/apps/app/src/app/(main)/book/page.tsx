@@ -2,33 +2,23 @@ import { getSpecialties } from '@/src/actions/doctor/get-specialties';
 import DoctorSkeleton from '@/src/components/book/doctor-list-loading';
 import DoctorListWrapper from '@/src/components/book/doctor-list-wrapper';
 import SearchDoctorInput from '@/src/components/book/search-doctor-input';
-import { createSearchParamsCache, parseAsArrayOf, parseAsInteger, parseAsString } from 'nuqs/server';
+import { createSearchParamsCache, parseAsInteger, parseAsString } from 'nuqs/server';
 import { Suspense } from 'react';
 
 const searchParamsCache = createSearchParamsCache({
   q: parseAsString,
-  specialties: parseAsArrayOf(parseAsString),
   availability: parseAsString,
   minRate: parseAsInteger,
   experience: parseAsInteger,
 });
 
-const Page = async (
-  props: { searchParams: Promise<Record<string, string | string[] | undefined>> }
-) => {
+const Page = async (props: { searchParams: Promise<Record<string, string | string[] | undefined>> }) => {
   const searchParams = await props.searchParams;
-  const {
-    q,
-    experience,
-    availability,
-    minRate,
-    specialties: selectedSpecialties,
-  } = searchParamsCache.parse(searchParams);
+  const { q, experience, availability, minRate } = searchParamsCache.parse(searchParams);
   const filter = {
     experience,
     availability,
     minRate,
-    specialties: selectedSpecialties,
   };
   const responseSpecialties = await getSpecialties();
   const specialties = responseSpecialties?.data ?? [];
@@ -46,7 +36,6 @@ const Page = async (
         <DoctorListWrapper
           filters={{
             q: q || undefined,
-            specialties: selectedSpecialties || undefined,
             availability: availability || undefined,
             minRate: minRate || undefined,
             experience: experience || undefined,

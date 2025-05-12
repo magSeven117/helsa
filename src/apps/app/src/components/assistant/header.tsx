@@ -18,7 +18,7 @@ export function Header({ toggleSidebar, isExpanded }: Props) {
           <Sidebar width={18} />
         </Button>
 
-        <h2>Assistant</h2>
+        <h2>Helsa</h2>
       </div>
 
       <Button className="flex md:hidden" size="icon" variant="ghost" onClick={() => setOpen()}>

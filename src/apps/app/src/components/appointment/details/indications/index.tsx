@@ -62,7 +62,7 @@ const Indications = ({ data }: { data: Primitives<Appointment> }) => {
       <AccordionItem value="treatments">
         <AccordionTrigger>
           <div className="flex justify-start items-center gap-2">
-            Treatments <Pill className="size-4" />
+            Tratamientos <Pill className="size-4" />
           </div>
         </AccordionTrigger>
 

@@ -1,45 +1,47 @@
-import { Activities } from '@/src/components/dashboard/patient/activities';
 import BloodPressure from '@/src/components/dashboard/patient/blood-pressure';
+import RegisterDays from '@/src/components/dashboard/patient/days';
 import Glucose from '@/src/components/dashboard/patient/glucose';
 import { HealthAverage } from '@/src/components/dashboard/patient/health-average';
 import HeartRate from '@/src/components/dashboard/patient/heart-rate';
+import TreatmentProgress from '@/src/components/dashboard/patient/progress';
+import { ResourcesSection } from '@/src/components/dashboard/patient/resources';
 import Temperature from '@/src/components/dashboard/patient/temperature';
-import { UpcomingAppointments } from '@/src/components/dashboard/patient/upcoming-appointments';
+import { UpcomingAppointments } from '@/src/components/dashboard/patient/uppcoming-appointments';
 import { Button } from '@helsa/ui/components/button';
 import { Calendar, PlusCircle } from 'lucide-react';
 import Link from 'next/link';
 
 const Page = () => {
   return (
-    <div className="md:pl-9 w-full h-full">
+    <div className="px-8 w-full h-full">
       <div className="h-full flex justify-between items-center max-sm:flex-col">
         <div className="flex justify-start flex-col w-full h-full pt-5 pr-9 gap-5">
           <div className="w-full flex items-center gap-4">
             <Link href={'/book'}>
-              <Button className="rounded-none gap-2" variant="outline">
+              <Button className="rounded-md gap-2" variant="outline">
                 Agendar <Calendar />
               </Button>
             </Link>
-            <Button className="rounded-none gap-2" variant="outline">
+            <Button className="rounded-md gap-2" variant="outline">
               Informar <PlusCircle />{' '}
             </Button>
           </div>
           <div className="w-full flex-col gap-2 flex">
             <p className="text-lg font-semibold mb-5">Indicadores</p>
-            <div className="flex justify-between items-center gap-4">
+            <div className="grid grid-cols-1  md:grid-cols-5 gap-3">
               <BloodPressure />
               <Glucose />
               <HeartRate />
               <Temperature />
+              <RegisterDays />
             </div>
           </div>
           <div className="w-full grid grid-cols-2 max-sm:grid-cols-1 gap-4 mb-5">
+            <TreatmentProgress />
+            <UpcomingAppointments />
             <HealthAverage />
-            <Activities />
+            <ResourcesSection />
           </div>
-        </div>
-        <div className="max-sm:w-full border-l px-3 h-full justify-center">
-          <UpcomingAppointments />
         </div>
       </div>
     </div>

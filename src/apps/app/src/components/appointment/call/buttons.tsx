@@ -6,7 +6,6 @@ import Diagnosis from './diagnosis';
 import Finalize from './finalize';
 import Orders from './orders';
 import Treatment from './treatment';
-import Vitals from './vitals';
 
 type Props = {
   appointment: Primitives<Appointment>;
@@ -20,7 +19,6 @@ const Buttons = ({ appointment, user }: Props) => {
       {user.role === UserRoleValue.DOCTOR && (
         <>
           <Orders data={appointment} />
-          <Vitals appointment={appointment} />
           <Diagnosis data={appointment} />
           <Treatment data={appointment} />
           {appointment.status !== 'FINISHED' && <Finalize />}

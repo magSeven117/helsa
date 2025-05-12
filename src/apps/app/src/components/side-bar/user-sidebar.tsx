@@ -30,7 +30,7 @@ export function NavUser() {
       },
     });
   };
-  const { isMobile } = useSidebar();
+  const { open } = useSidebar();
   const { setTheme, theme } = useTheme();
   const changeTheme = (theme: string) => {
     setTheme(theme);
@@ -44,9 +44,9 @@ export function NavUser() {
               size="lg"
               className="bg-[var(--color-brand-primary)] hover:bg-[var(--color-brand-primary)]/60 dark:hover:bg-indigo-600 hover:text-white text-white"
             >
-              <Avatar className="h-8 w-8 rounded-lg">
+              <Avatar className={`h-8 w-8 ${open ? 'rounded-lg' : 'rounded-none'}`}>
                 <AvatarImage src={user?.image ?? ''} alt={user.name} className="object-contain" />
-                <AvatarFallback className="rounded-lg">
+                <AvatarFallback className="rounded-none">
                   <User className="size-4" />
                 </AvatarFallback>
               </Avatar>

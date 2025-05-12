@@ -8,16 +8,16 @@ import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
 export const description = 'A bar chart';
 
 const chartData = [
-  { month: 'Enero', desktop: 186 },
-  { month: 'Febrero', desktop: 305 },
-  { month: 'Marzo', desktop: 237 },
-  { month: 'Abril', desktop: 73 },
-  { month: 'Mayo', desktop: 209 },
-  { month: 'Junio', desktop: 214 },
-  { month: 'Julio', desktop: 128 },
-  { month: 'Agosto', desktop: 345 },
-  { month: 'Septiembre', desktop: 64 },
-  { month: 'Octubre', desktop: 186 },
+  { month: 'Enero', desktop: 2 },
+  { month: 'Febrero', desktop: 3 },
+  { month: 'Marzo', desktop: 5 },
+  { month: 'Abril', desktop: 4.5 },
+  { month: 'Mayo', desktop: 5 },
+  { month: 'Junio', desktop: 4.2 },
+  { month: 'Julio', desktop: 5 },
+  { month: 'Agosto', desktop: 1 },
+  { month: 'Septiembre', desktop: 3.6 },
+  { month: 'Octubre', desktop: 5 },
 ];
 
 const chartConfig = {
@@ -29,9 +29,9 @@ const chartConfig = {
 
 export function Revenue() {
   return (
-    <Card className="lg:col-span-1 rounded-lg  bg-secondary shadow-none">
+    <Card className="lg:col-span-1 rounded-lg border shadow-none">
       <CardHeader>
-        <CardTitle>Ganancia por mes</CardTitle>
+        <CardTitle>Satisfacción por mes</CardTitle>
         <CardDescription>Enero - Octubre 2024</CardDescription>
       </CardHeader>
       <CardContent>
@@ -46,7 +46,7 @@ export function Revenue() {
               tickFormatter={(value) => value.slice(0, 3)}
             />
             <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-            <Bar dataKey="desktop" fill="var(--color-desktop)" radius={0} />
+            <Bar dataKey="desktop" fill="var(--color-desktop)" radius={10} />
           </BarChart>
         </ChartContainer>
       </CardContent>
@@ -55,7 +55,7 @@ export function Revenue() {
           Tendencia al alza en un 5.2% este mes <TrendingUp className="h-4 w-4" />
         </div>
         <div className="leading-none text-muted-foreground">
-          Mostrando el total de visitantes de los últimos 6 meses
+          Mostrando el promedio de satisfacción de los pacientes de los últimos 6 meses
         </div>
       </CardFooter>
     </Card>

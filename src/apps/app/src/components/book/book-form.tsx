@@ -7,14 +7,13 @@ import { AppointmentType } from '@helsa/engine/appointment/domain/appointment-ty
 import { Doctor } from '@helsa/engine/doctor/domain/doctor';
 import { Avatar, AvatarFallback, AvatarImage } from '@helsa/ui/components/avatar';
 import { Button } from '@helsa/ui/components/button';
-import { Combobox } from '@helsa/ui/components/combobox';
 import { DatePicker } from '@helsa/ui/components/date-picker';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@helsa/ui/components/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@helsa/ui/components/select';
 import { Textarea } from '@helsa/ui/components/textarea';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
-import { Check, Loader2, X } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useQueryState } from 'nuqs';
 import { useEffect, useState } from 'react';
@@ -66,7 +65,6 @@ export default function DoctorAppointment({
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
-  const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([]);
   const [_, setId] = useQueryState('id');
   const { createAppointment } = useCreateAppointment();
 
@@ -104,7 +102,7 @@ export default function DoctorAppointment({
         typeId: doctor.prices?.find((price) => price.id === data.priceId)?.typeId ?? types[0].id,
         priceId: data.priceId,
         specialtyId: doctor.specialtyId,
-        symptoms: selectedSymptoms.map((s) => symptoms.find((ss) => ss.name === s)?.id!),
+        symptoms: [],
       });
 
       toast.success('Cita creada correctamente');
@@ -120,18 +118,6 @@ export default function DoctorAppointment({
   }
 
   const finalTypes = [...(doctor.prices ?? [])];
-
-  function transformOption(specialty: { id: string; name: string }): {
-    value: string;
-    label: string;
-    icon: any;
-  } {
-    return {
-      value: specialty.name,
-      label: specialty.name,
-      icon: selectedSymptoms.includes(specialty.name) ? Check : null,
-    };
-  }
 
   return (
     <div className="w-full flex flex-col flex-1">
@@ -149,13 +135,13 @@ export default function DoctorAppointment({
                     <FormItem className="flex-1 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0">
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
-                          <SelectTrigger className="w-full rounded-none">
+                          <SelectTrigger className="w-full rounded-md">
                             <SelectValue placeholder="Tipo de consulta" />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent className="rounded-none">
+                        <SelectContent className="rounded-md">
                           {finalTypes.map((type) => (
-                            <SelectItem key={type.id} value={type.id} className="rounded-none">
+                            <SelectItem key={type.id} value={type.id} className="rounded-md">
                               <div className="flex justify-start items-center gap-3">
                                 <div
                                   className="size-3"
@@ -190,32 +176,6 @@ export default function DoctorAppointment({
             </div>
             <div className="col-span-1">
               <div className="mt-4">
-                <Combobox
-                  onChange={(v) => {
-                    const value = v as string;
-                    const symptom = symptoms.find((s) => s.name == value);
-                    if (!symptom) return;
-                    setSelectedSymptoms((current) =>
-                      current.includes(symptom.name)
-                        ? current.filter((s) => s !== symptom.name)
-                        : [...current, symptom.name],
-                    );
-                  }}
-                  options={symptoms.map(transformOption)}
-                  placeholder="Síntomas"
-                />
-                <div className="flex items-center gap-2 flex-wrap my-6">
-                  {selectedSymptoms.map((symptom, index) => (
-                    <Button
-                      key={index}
-                      className="rounded-full h-8 px-3 bg-secondary hover:bg-secondary font-normal text-[#878787] flex justify-start group "
-                      onClick={() => setSelectedSymptoms((current) => current.filter((s) => s !== symptom))}
-                    >
-                      <X className="scale-0 group-hover:scale-100 transition-all w-0 group-hover:w-4" />
-                      <span>{symptom}</span>
-                    </Button>
-                  ))}
-                </div>
                 <FormField
                   control={form.control}
                   name="motive"
@@ -225,7 +185,7 @@ export default function DoctorAppointment({
                         <Textarea
                           placeholder="Describe la razón de tu consulta aquí"
                           {...field}
-                          className="min-h-[100px] rounded-none"
+                          className="min-h-[100px] rounded-md resize-none"
                         />
                       </FormControl>
                       <FormMessage></FormMessage>
@@ -241,13 +201,13 @@ export default function DoctorAppointment({
                     <FormItem className="flex-1">
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
-                          <SelectTrigger className="w-full rounded-none">
+                          <SelectTrigger className="w-full rounded-md">
                             <SelectValue placeholder="Selecciona un método de pago" />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent className="rounded-none">
+                        <SelectContent className="rounded-md">
                           {paymentMethods.map((method) => (
-                            <SelectItem key={method.id} value={method.id} className="rounded-none">
+                            <SelectItem key={method.id} value={method.id} className="rounded-md">
                               {method.name}
                             </SelectItem>
                           ))}
@@ -287,7 +247,6 @@ function DoctorInfo({ doctor }: { doctor: Primitives<Doctor> }) {
       </Avatar>
       <div className="flex-1 w-1/3">
         <h2 className="text-xl font-semibold">{doctor.user?.name}</h2>
-        <p className="text-muted-foreground">{doctor.specialty?.name}</p>
         <div className="flex items-center mt-1">
           {[...Array(5)].map((_, i) => (
             <svg

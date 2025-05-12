@@ -48,7 +48,7 @@ export function AppointmentTypes() {
   }, []);
 
   return (
-    <Card className="flex flex-col lg:col-span-1 rounded-lg  bg-secondary shadow-none">
+    <Card className="flex flex-col lg:col-span-1 rounded-lg  border shadow-none">
       <CardHeader className="pb-0 text-left">
         <CardTitle>Tipos de consulta</CardTitle>
         <CardDescription>Enero - Octubre 2024</CardDescription>

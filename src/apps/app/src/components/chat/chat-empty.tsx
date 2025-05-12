@@ -17,10 +17,7 @@ export function ChatEmpty({ firstName }: Props) {
           <img src={logo2.src} alt="" className="rounded-lg" />
         )}
       </div>
-      <span className="font-medium text-xl mt-6">
-        Hi {firstName}, how can I help <br />
-        you today?
-      </span>
+      <span className="font-medium text-xl mt-6">Hola {firstName}, ¿como puedo ayudarte hoy?</span>
     </div>
   );
 }

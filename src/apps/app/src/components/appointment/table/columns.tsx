@@ -52,11 +52,6 @@ export const columns: ColumnDef<Primitives<Appointment>>[] = [
     cell: ({ row }) => row.original.doctor?.user?.name,
   },
   {
-    accessorKey: 'specialty',
-    header: 'Especialidad',
-    cell: ({ row }) => row.original.specialty?.name,
-  },
-  {
     accessorKey: 'type',
     header: 'Tipo de consulta',
     cell: ({ row }) => <TypeColumn name={row.original.type?.name || ''} color={row.original.type?.color || ''} />,

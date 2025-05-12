@@ -1,4 +1,4 @@
-import { getCurrentUser } from '@/src/actions/user/get-current-user';
+import { getSession } from '@helsa/auth/server';
 import { redirect } from 'next/navigation';
 
 const Layout = async ({
@@ -10,8 +10,8 @@ const Layout = async ({
   patient: React.ReactNode;
   hospital: React.ReactNode;
 }) => {
-  const userResponse = await getCurrentUser();
-  const user = userResponse?.data ?? null;
+  const session = await getSession();
+  const user = session?.user ?? null;
   if (!user) {
     return redirect('/sign-in');
   }

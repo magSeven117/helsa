@@ -26,9 +26,6 @@ export function AppointmentTable({ filter, pageSize, page, sort, specialties, ty
       start: filter.start ?? undefined,
       end: filter.end ?? undefined,
       states: filter.states ?? undefined,
-      specialties: filter.specialties
-        ? specialties.filter((s) => filter.specialties.includes(s.name)).map((s) => s.id)
-        : undefined,
       types: filter.types ?? undefined,
     },
     pagination: {

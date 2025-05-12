@@ -1,15 +1,19 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@helsa/ui/components/card';
-import { HeartPulse } from 'lucide-react';
+import { ArrowUpRight, TrendingUp } from 'lucide-react';
 
 const HeartRate = () => {
   return (
-    <Card className="rounded-none w-1/4">
+    <Card className="rounded-xl">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="font-medium">80 bpm</CardTitle>
-        <HeartPulse />
+        <CardTitle className="text-sm font-medium">Tendencia de animo</CardTitle>
+        <TrendingUp />
       </CardHeader>
       <CardContent>
-        <p className="text-xs text-muted-foreground">Ritmo cardíaco</p>
+        <div className="text-2xl font-bold text-emerald-500 flex items-center gap-2">
+          <ArrowUpRight />
+          Positiva
+        </div>
+        <p className="text-xs text-muted-foreground">Esta semana</p>
       </CardContent>
     </Card>
   );

@@ -7,7 +7,7 @@ const ComingSoon = () => {
       <p>
         <span className="text-2xl font-bold">Coming Soon</span>
       </p>
-      <Button className="rounded-none">
+      <Button className="rounded-md">
         <Link href="/dashboard">Go to dashboard</Link>
       </Button>
     </div>
