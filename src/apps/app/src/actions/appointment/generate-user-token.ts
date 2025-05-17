@@ -25,7 +25,7 @@ export const generateUserToken = authActionClient
         user_id: user.id,
         validity_in_seconds: 60 * 60 * 24,
       });
-
+      console.log(token);
       return token;
     } catch (error) {
       console.log(error);

@@ -1,22 +1,22 @@
 import { Primitives } from '@helsa/ddd/types/primitives';
-import { Pathology } from '@helsa/engine/diagnostic/domain/pathology';
+import { Symptom } from '@helsa/engine/appointment/domain/symptom';
 import { useQuery } from '@tanstack/react-query';
 
-export const usePathologies = () => {
+export const useSymptoms = () => {
   const { data, isLoading, error } = useQuery({
     initialData: [],
-    queryKey: ['pathologies'],
+    queryKey: ['symptoms'],
     queryFn: async () => {
-      const response = await fetch(`/api/v1/diagnosis/pathology`);
+      const response = await fetch(`/api/v1/symptom`);
       if (!response.ok) {
-        throw new Error('Failed to fetch pathologies');
+        throw new Error('Failed to fetch symptoms');
       }
       const json = await response.json();
-      return json.data as Primitives<Pathology>[];
+      return json.data as Primitives<Symptom>[];
     },
   });
   return {
-    pathologies: data,
+    symptoms: data,
     isLoading,
     error,
   };

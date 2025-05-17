@@ -11,12 +11,12 @@ export class CreateTreatment {
       data.description,
       data.type,
       data.status,
-      data.startDate,
-      data.endDate,
+      new Date(data.startDate),
+      new Date(data.endDate),
       data.patientId,
       data.doctorId,
       data.appointmentId,
-      data.type === 'MEDICATION' ? data.medication : data.type === 'THERAPY' ? data.therapy : data.procedure
+      data.type === 'MEDICATION' ? data.medication : data.type === 'THERAPY' ? data.therapy : data.procedure,
     );
 
     await this.repository.save(treatment);

@@ -37,15 +37,15 @@ export function AppointmentTable({ filter, pageSize, page, sort, specialties, ty
       order: sort ? sort[1] : undefined,
     },
   });
+  if (isLoading) {
+    return <Loading />;
+  }
   if (data.length <= 0 && !isLoading) {
     return <NoResults hasFilters={hasFilters} />;
   }
 
   if (error) {
     return <NoResults hasFilters={hasFilters} />;
-  }
-  if (isLoading) {
-    return <Loading />;
   }
 
   return (

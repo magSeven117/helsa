@@ -15,8 +15,8 @@ const schema = z.object({
   description: z.string(),
   type: z.string(),
   status: z.string(),
-  startDate: z.date(),
-  endDate: z.date(),
+  startDate: z.string(),
+  endDate: z.string(),
   patientId: z.string(),
   doctorId: z.string(),
   appointmentId: z.string(),
@@ -45,7 +45,7 @@ export const POST = withUser(async ({ req, user }) => {
   const service = new CreateTreatment(new PrismaTreatmentRepository(database));
 
   await service.run(parsedInput as unknown as Primitives<Treatment>);
-  revalidateTag(`get-appointment-treatments-${user.id}-${parsedInput.appointmentId}`);
+  revalidateTag(`get-treatments-${user.id}`);
   revalidatePath(`/appointments/${parsedInput.appointmentId}`);
 
   return NextResponse.json({ message: 'Treatment created successfully' }, { status: 201 });

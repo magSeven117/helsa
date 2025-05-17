@@ -1,19 +1,21 @@
+'use client';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { Appointment } from '@helsa/engine/appointment/domain/appointment';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
-export const useAppointment = (id: string) => {
+const defaultInclude = {
+  specialty: true,
+  doctor: { include: { user: true } },
+  patient: { include: { user: true } },
+  diagnostics: true,
+  treatments: { include: { medication: true } },
+  orders: true,
+};
+
+export const useAppointment = (id: string, include: any = defaultInclude) => {
   const { data, isFetching, error } = useQuery({
     queryKey: ['appointment'],
     queryFn: async () => {
-      const include = {
-        specialty: true,
-        doctor: { include: { user: true } },
-        patient: { include: { user: true } },
-        diagnostics: true,
-        treatments: { include: { medication: true } },
-        orders: true,
-      };
       const response = await fetch(`/api/v1/appointment/${id}?include=${JSON.stringify(include)}`);
       if (!response.ok) {
         throw new Error('Failed to fetch appointment');
@@ -117,7 +119,7 @@ export const useAppointmentList = ({
     order?: string;
   };
 }) => {
-  const { data, isLoading, error } = useQuery({
+  const { data, isPending, error } = useQuery({
     initialData: {
       data: [],
       meta: {
@@ -143,7 +145,7 @@ export const useAppointmentList = ({
 
   return {
     data,
-    isLoading,
+    isLoading: isPending,
     error,
   };
 };

@@ -1,4 +1,5 @@
 'use client';
+import { enterRoom } from '@/src/actions/appointment/enter-room';
 import { useRoom } from '@/src/hooks/appointment/use-room';
 import { DndContext, useDraggable, useDroppable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
@@ -54,13 +55,13 @@ import {
 } from 'lucide-react';
 import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
+import { useSession } from '../auth/session-provider';
 import CallCHat from '../call-chat';
-import { enterRoom } from '@/src/actions/appointment/enter-room';
 
 const apiKey = process.env.NEXT_PUBLIC_STREAM_CLIENT_KEY!;
 
 export const VideoCallOld = ({ id, token }: { id: string; token: string }) => {
-  const [user] = useLocalStorage<BetterUser | null>('user', null);
+  const { user } = useSession();
   const [client, setClient] = useState<StreamVideoClient | null>(null);
   const [call, setCall] = useState<Call | null>(null);
   useEffect(() => {
@@ -86,7 +87,7 @@ export const VideoCallOld = ({ id, token }: { id: string; token: string }) => {
     };
     init();
   }, [user]);
-  if (!client || !call) {
+  if (!client || !call || !user) {
     return null;
   }
   return (

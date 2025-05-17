@@ -1,14 +1,16 @@
+'use client';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { Appointment } from '@helsa/engine/appointment/domain/appointment';
 import { UserRoleValue } from '@helsa/engine/user/domain/user-role';
 import { Avatar, AvatarFallback, AvatarImage } from '@helsa/ui/components/avatar';
 import { UserIcon } from 'lucide-react';
+import { useSession } from '../../auth/session-provider';
 
 type Props = {
   appointment: Primitives<Appointment>;
-  user: any;
 };
-const Title = async ({ appointment, user }: Props) => {
+const Title = ({ appointment }: Props) => {
+  const { user } = useSession();
   return (
     <div>
       <h1 className="text-3xl font-bold">Consulta con</h1>

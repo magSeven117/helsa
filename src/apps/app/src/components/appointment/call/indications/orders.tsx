@@ -1,18 +1,75 @@
 'use client';
-
-import { createOrder } from '@/src/actions/order/create-order';
 import { Primitives } from '@helsa/ddd/types/primitives';
-import { Appointment } from '@helsa/engine/appointment/domain/appointment';
+import { OrderTypeValues } from '@helsa/engine/order/domain/enum-types';
+import { Order } from '@helsa/engine/order/domain/order';
+import { Badge } from '@helsa/ui/components/badge';
 import { Button } from '@helsa/ui/components/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@helsa/ui/components/form';
 import { RadioGroup, RadioGroupItem } from '@helsa/ui/components/radio-group';
 import { Textarea } from '@helsa/ui/components/textarea';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2 } from 'lucide-react';
+import { Ellipsis, Loader2, ScrollText } from 'lucide-react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { v4 } from 'uuid';
 import { z } from 'zod';
+import { useAddIndications } from './use-indications';
+
+const orderStatus = {
+  PENDING: 'Pendiente',
+  COMPLETED: 'Completado',
+  CANCELED: 'Cancelado',
+};
+const orderTypes = {
+  TEST: 'Prueba',
+  REMITTANCE: 'Remisión',
+};
+
+export const Orders = ({
+  orders,
+  patientId,
+  appointmentId,
+}: {
+  orders: Primitives<Order>[];
+  patientId: string;
+  appointmentId: string;
+}) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const toggle = () => setIsEditing((current) => !current);
+  return (
+    <>
+      {!isEditing && <OrdersList orders={orders} toggle={toggle} />}
+      {isEditing && <OrdersForm patientId={patientId} appointmentId={appointmentId} toggle={toggle} />}
+    </>
+  );
+};
+
+const OrdersList = ({ orders, toggle }: { orders: Primitives<Order>[]; toggle: VoidFunction }) => {
+  return (
+    <div className="flex justify-between flex-col gap-4 flex-1">
+      <div className="flex flex-col gap-3">
+        {orders?.map((order, index) => (
+          <div
+            key={`${order.id}-${index}`}
+            className="flex flex-col items-start justify-between p-3 gap-2 border  rounded-lg"
+          >
+            <div className="flex justify-between items-center w-full">
+              <div className="px-2 py-1 bg-color-brand-primary rounded-sm w-fit text-xs">{orderTypes[order.type]}</div>
+              <p className="text-sm">{order.description}</p>
+              <Badge variant={'outline'}>{orderStatus[order.status]}</Badge>
+              <Ellipsis className="size-4 cursor-pointer" />
+            </div>
+          </div>
+        ))}
+      </div>
+      <Button onClick={toggle}>
+        <ScrollText className="size-4" />
+        Agregar Orden
+      </Button>
+    </div>
+  );
+};
 
 const formSchema = z.object({
   type: z.enum(['TEST', 'REMITTANCE']),
@@ -21,12 +78,13 @@ const formSchema = z.object({
 
 type FormSchema = z.infer<typeof formSchema>;
 
-type Props = {
-  data: Primitives<Appointment>;
+type FormProps = {
   toggle: VoidFunction;
+  patientId: string;
+  appointmentId: string;
 };
 
-const OrdersForm = ({ data, toggle }: Props) => {
+const OrdersForm = ({ patientId, appointmentId, toggle }: FormProps) => {
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -34,15 +92,16 @@ const OrdersForm = ({ data, toggle }: Props) => {
       description: '',
     },
   });
+  const { createOrder } = useAddIndications();
   const submit = async (values: FormSchema) => {
     try {
       const id = v4();
       await createOrder({
         id,
-        type: values.type,
+        type: values.type as OrderTypeValues,
         description: values.description,
-        appointmentId: data.id,
-        patientId: data.patientId,
+        appointmentId,
+        patientId,
       });
       toast.success('Orden agregada correctamente');
       toggle();
@@ -115,5 +174,3 @@ const OrdersForm = ({ data, toggle }: Props) => {
     </Form>
   );
 };
-
-export default OrdersForm;

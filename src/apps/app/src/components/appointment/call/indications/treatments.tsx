@@ -1,8 +1,8 @@
-'use client';
-
-import { createTreatment } from '@/src/actions/treatment/create-treatment';
+import { cn } from '@/src/components/chat/utils';
 import { Primitives } from '@helsa/ddd/types/primitives';
-import { Appointment } from '@helsa/engine/appointment/domain/appointment';
+import { Treatment } from '@helsa/engine/treatment/domain/treatment';
+import { TreatmentStatusValues } from '@helsa/engine/treatment/domain/treatment-status';
+import { TreatmentTypeValues } from '@helsa/engine/treatment/domain/treatment-type';
 import { Button } from '@helsa/ui/components/button';
 import { DatePicker } from '@helsa/ui/components/date-picker';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@helsa/ui/components/form';
@@ -11,11 +11,88 @@ import { InputSelect } from '@helsa/ui/components/internal/input-select';
 import { RadioGroup, RadioGroupItem } from '@helsa/ui/components/radio-group';
 import { Textarea } from '@helsa/ui/components/textarea';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2 } from 'lucide-react';
+import { Ellipsis, Loader2, Pill } from 'lucide-react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { v4 } from 'uuid';
 import { z } from 'zod';
+import { useAddIndications } from './use-indications';
+
+const treatmentTypes = {
+  MEDICATION: 'Medicamento',
+  THERAPY: 'Terapia',
+  PROCEDURE: 'Procedimiento',
+};
+
+type Props = {
+  appointmentId: string;
+  doctorId: string;
+  patientId: string;
+  treatments: Primitives<Treatment>[];
+};
+
+export const Treatments = ({ appointmentId, doctorId, patientId, treatments }: Props) => {
+  const [editing, setEditing] = useState(false);
+  const toggle = () => setEditing((current) => !current);
+  return (
+    <>
+      {!editing && <TreatmentList treatments={treatments} toggle={toggle} />}
+      {editing && (
+        <TreatmentForm appointmentId={appointmentId} doctorId={doctorId} patientId={patientId} toggle={toggle} />
+      )}
+    </>
+  );
+};
+
+type ListProps = {
+  toggle: VoidFunction;
+  treatments: Primitives<Treatment>[];
+};
+
+const TreatmentList = ({ toggle, treatments }: ListProps) => {
+  return (
+    <div className="flex justify-between flex-col gap-4 flex-1">
+      <div className="flex flex-col gap-3">
+        {treatments?.map((treatment, index) => (
+          <div
+            key={`${treatment.id}-${index}`}
+            className="flex flex-col items-start justify-between p-3 gap-2 border rounded-lg"
+          >
+            <div className="flex justify-between items-center w-full">
+              <div className="flex justify-start items-center gap-2">
+                <div className="px-2 py-1 bg-color-brand-primary rounded-sm w-fit text-xs">
+                  {treatmentTypes[treatment.type]}
+                </div>
+                <div
+                  className={cn('text-xs py-1 px-2 rounded-sm', {
+                    'bg-green-600': treatment.status === TreatmentStatusValues.IN_PROGRESS,
+                    'bg-blue-600': treatment.status === TreatmentStatusValues.COMPLETED,
+                  })}
+                >
+                  {treatment.type === 'MEDICATION' && treatment.medication?.name}
+                  {treatment.type === 'THERAPY' && treatment.therapy?.description}
+                  {treatment.type === 'PROCEDURE' && treatment.procedure?.description}
+                </div>
+                <div>
+                  <span className="text-sm font-bold">
+                    {new Date(treatment.endDate).toLocaleDateString()}
+                    {treatment.type !== 'PROCEDURE' && ' - ' + new Date(treatment.startDate).toLocaleDateString()}
+                  </span>
+                </div>
+              </div>
+              <Ellipsis className="size-4" />
+            </div>
+          </div>
+        ))}
+      </div>
+      <Button onClick={toggle}>
+        <Pill className="size-4" />
+        Agregar tratamiento
+      </Button>
+    </div>
+  );
+};
 
 const formSchema = z.object({
   description: z.string(),
@@ -42,12 +119,14 @@ const formSchema = z.object({
     .optional(),
 });
 
-type Props = {
-  appointment: Primitives<Appointment>;
+type FormProps = {
+  appointmentId: string;
+  doctorId: string;
+  patientId: string;
   toggle: VoidFunction;
 };
 
-const TreatmentForm = ({ appointment, toggle }: Props) => {
+const TreatmentForm = ({ appointmentId, doctorId, patientId, toggle }: FormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -69,20 +148,21 @@ const TreatmentForm = ({ appointment, toggle }: Props) => {
       },
     },
   });
+  const { createTreatment } = useAddIndications();
   const submit = async (values: z.infer<typeof formSchema>) => {
     try {
       await createTreatment({
-        appointmentId: appointment.id,
+        appointmentId: appointmentId,
         description: values.description,
         startDate: values.startDate,
         endDate: values.endDate,
-        type: values.type,
+        type: values.type as TreatmentTypeValues,
         medication: values.medication,
         therapy: values.therapy,
         procedure: values.procedure,
-        doctorId: appointment.doctorId,
-        patientId: appointment.patientId,
-        status: 'IN_PROGRESS',
+        doctorId: doctorId,
+        patientId: patientId,
+        status: TreatmentStatusValues.IN_PROGRESS,
         id: v4(),
       });
       toast.success('Tratamiento guardado');
@@ -282,5 +362,3 @@ const TreatmentForm = ({ appointment, toggle }: Props) => {
     </Form>
   );
 };
-
-export default TreatmentForm;

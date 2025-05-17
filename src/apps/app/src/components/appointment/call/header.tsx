@@ -1,38 +1,33 @@
-import { getAppointment } from '@/src/actions/appointment/get-appointment';
-import { getCurrentUser } from '@/src/actions/user/get-current-user';
+'use client';
+import { useAppointment } from '@/src/hooks/appointment/use-appointment';
 import Buttons from './buttons';
+import { HeaderSkeleton } from './skeletons';
 import Title from './title';
 
-const Header = async ({ id }: { id: string }) => {
-  const userResponse = await getCurrentUser();
-  const user = userResponse?.data!;
-  const includeDoctor = {
-    symptoms: true,
-    patient: {
-      include: {
-        user: true,
-      },
-    },
-  };
-  const includePatient = {
-    symptoms: true,
-    specialty: true,
-    doctor: {
-      include: {
-        user: true,
-      },
-    },
-  };
-  const response = await getAppointment({
-    appointmentId: id,
-    include: user.role === 'DOCTOR' ? includeDoctor : includePatient,
+const Header = ({ id }: { id: string }) => {
+  const { appointment, error, isLoading } = useAppointment(id, {
+    doctor: { include: { user: true } },
+    patient: { include: { user: true } },
   });
-  const appointment = response?.data!;
+
+  if (isLoading) {
+    return <HeaderSkeleton />;
+  }
+
+  if (error) {
+    return (
+      <div className="w-full h-full flex flex-col justify-between px-5">
+        <div className="w-full h-full flex items-center justify-center">
+          <p className="text-red-500">Error loading appointment</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full grid grid-cols-3 gap-3 max-md:grid-cols-1">
-      <Title appointment={appointment} user={user} />
-      <Buttons appointment={appointment} user={user} />
+      <Title appointment={appointment} />
+      <Buttons appointment={appointment} />
     </div>
   );
 };
