@@ -42,7 +42,7 @@ const Indications = ({ appointment }: { appointment: Primitives<Appointment> }) 
           <SheetHeader>
             <SheetTitle>Indicaciones</SheetTitle>
           </SheetHeader>
-          <Tabs>
+          <Tabs defaultValue="orders" className="flex flex-col flex-1 h-max">
             <TabsList className="bg-transparent border-b-2 border-b-border rounded-none w-full justify-start">
               <TabsTrigger value="orders" className="gap-2  data-[state=active]:text-violet-500 cursor-pointer">
                 <ScrollText className="size-4" /> Ordenes
@@ -56,7 +56,7 @@ const Indications = ({ appointment }: { appointment: Primitives<Appointment> }) 
                 Diagnósticos
               </TabsTrigger>
             </TabsList>
-            <TabsContent value="orders">
+            <TabsContent value="orders" className="flex flex-col grow">
               <Orders orders={orders} appointmentId={appointment.id} patientId={appointment.patientId} />
             </TabsContent>
             <TabsContent value="treatments">
@@ -67,7 +67,7 @@ const Indications = ({ appointment }: { appointment: Primitives<Appointment> }) 
                 doctorId={appointment.doctorId}
               />
             </TabsContent>
-            <TabsContent value="diagnosis">
+            <TabsContent value="diagnosis" className="flex flex-col grow">
               <Diagnoses
                 diagnoses={diagnosis}
                 appointmentId={appointment.id}

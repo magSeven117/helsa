@@ -4,11 +4,17 @@ import { OrderTypeValues } from '@helsa/engine/order/domain/enum-types';
 import { Order } from '@helsa/engine/order/domain/order';
 import { Badge } from '@helsa/ui/components/badge';
 import { Button } from '@helsa/ui/components/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@helsa/ui/components/dropdown-menu';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@helsa/ui/components/form';
 import { RadioGroup, RadioGroupItem } from '@helsa/ui/components/radio-group';
 import { Textarea } from '@helsa/ui/components/textarea';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Ellipsis, Loader2, ScrollText } from 'lucide-react';
+import { Ellipsis, Loader2, Pencil, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -35,20 +41,41 @@ export const Orders = ({
   patientId: string;
   appointmentId: string;
 }) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const toggle = () => setIsEditing((current) => !current);
+  const [isCreating, setIsCreating] = useState(false);
+  const [editingOrder, setEditingOrder] = useState<Primitives<Order> | undefined>(undefined);
+  const toggle = () => setIsCreating((current) => !current);
+  const editOrder = (order: Primitives<Order>) => {
+    setEditingOrder(order);
+    setIsCreating(true);
+  };
   return (
     <>
-      {!isEditing && <OrdersList orders={orders} toggle={toggle} />}
-      {isEditing && <OrdersForm patientId={patientId} appointmentId={appointmentId} toggle={toggle} />}
+      {!isCreating && <OrdersList orders={orders} toggle={toggle} edit={editOrder} />}
+      {isCreating && (
+        <OrdersForm patientId={patientId} appointmentId={appointmentId} toggle={toggle} editingOrder={editingOrder} />
+      )}
     </>
   );
 };
 
-const OrdersList = ({ orders, toggle }: { orders: Primitives<Order>[]; toggle: VoidFunction }) => {
+const OrdersList = ({
+  orders,
+  toggle,
+  edit,
+}: {
+  orders: Primitives<Order>[];
+  toggle: VoidFunction;
+  edit: (order: Primitives<Order>) => void;
+}) => {
   return (
-    <div className="flex justify-between flex-col gap-4 flex-1">
-      <div className="flex flex-col gap-3">
+    <div className="flex justify-between flex-col gap-4 h-full">
+      <div>
+        <Button onClick={toggle} variant={'outline'}>
+          <Plus className="size-4" />
+          Agregar Orden
+        </Button>
+      </div>
+      <div className="flex flex-col gap-3 grow max-h-[650px] overflow-y-scroll no-scroll">
         {orders?.map((order, index) => (
           <div
             key={`${order.id}-${index}`}
@@ -58,15 +85,21 @@ const OrdersList = ({ orders, toggle }: { orders: Primitives<Order>[]; toggle: V
               <div className="px-2 py-1 bg-color-brand-primary rounded-sm w-fit text-xs">{orderTypes[order.type]}</div>
               <p className="text-sm">{order.description}</p>
               <Badge variant={'outline'}>{orderStatus[order.status]}</Badge>
-              <Ellipsis className="size-4 cursor-pointer" />
+              <DropdownMenu>
+                <DropdownMenuTrigger className="p-2 rounded-full hover:bg-color-secondary cursor-pointer">
+                  <Ellipsis className="h-4 w-4" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => edit(order)} className="flex items-center gap-2">
+                    <Pencil className="size-4" />
+                    Editar
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         ))}
       </div>
-      <Button onClick={toggle}>
-        <ScrollText className="size-4" />
-        Agregar Orden
-      </Button>
     </div>
   );
 };
@@ -82,20 +115,21 @@ type FormProps = {
   toggle: VoidFunction;
   patientId: string;
   appointmentId: string;
+  editingOrder?: Primitives<Order>;
 };
 
-const OrdersForm = ({ patientId, appointmentId, toggle }: FormProps) => {
+const OrdersForm = ({ patientId, appointmentId, toggle, editingOrder }: FormProps) => {
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      type: 'TEST',
-      description: '',
+      type: editingOrder ? editingOrder.type : 'TEST',
+      description: editingOrder ? editingOrder.description : '',
     },
   });
   const { createOrder } = useAddIndications();
   const submit = async (values: FormSchema) => {
     try {
-      const id = v4();
+      const id = editingOrder ? editingOrder.id : v4();
       await createOrder({
         id,
         type: values.type as OrderTypeValues,
@@ -103,11 +137,11 @@ const OrdersForm = ({ patientId, appointmentId, toggle }: FormProps) => {
         appointmentId,
         patientId,
       });
-      toast.success('Orden agregada correctamente');
+      toast.success('Orden guardada correctamente');
       toggle();
     } catch (error) {
       console.log(error);
-      toast.error('Error al agregar la orden');
+      toast.error('Error al guardar la orden');
     }
   };
   return (

@@ -5,13 +5,19 @@ import { TreatmentStatusValues } from '@helsa/engine/treatment/domain/treatment-
 import { TreatmentTypeValues } from '@helsa/engine/treatment/domain/treatment-type';
 import { Button } from '@helsa/ui/components/button';
 import { DatePicker } from '@helsa/ui/components/date-picker';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@helsa/ui/components/dropdown-menu';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@helsa/ui/components/form';
 import { Input } from '@helsa/ui/components/input';
 import { InputSelect } from '@helsa/ui/components/internal/input-select';
 import { RadioGroup, RadioGroupItem } from '@helsa/ui/components/radio-group';
 import { Textarea } from '@helsa/ui/components/textarea';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Ellipsis, Loader2, Pill } from 'lucide-react';
+import { Ellipsis, Loader2, Pencil, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -34,12 +40,23 @@ type Props = {
 
 export const Treatments = ({ appointmentId, doctorId, patientId, treatments }: Props) => {
   const [editing, setEditing] = useState(false);
+  const [editingTreatment, setEditingTreatment] = useState<Primitives<Treatment> | undefined>(undefined);
   const toggle = () => setEditing((current) => !current);
+  const editTreatment = (treatment: Primitives<Treatment>) => {
+    setEditingTreatment(treatment);
+    setEditing((current) => !current);
+  };
   return (
     <>
-      {!editing && <TreatmentList treatments={treatments} toggle={toggle} />}
+      {!editing && <TreatmentList treatments={treatments} toggle={toggle} edit={editTreatment} />}
       {editing && (
-        <TreatmentForm appointmentId={appointmentId} doctorId={doctorId} patientId={patientId} toggle={toggle} />
+        <TreatmentForm
+          appointmentId={appointmentId}
+          doctorId={doctorId}
+          patientId={patientId}
+          toggle={toggle}
+          editingTreatment={editingTreatment}
+        />
       )}
     </>
   );
@@ -48,12 +65,19 @@ export const Treatments = ({ appointmentId, doctorId, patientId, treatments }: P
 type ListProps = {
   toggle: VoidFunction;
   treatments: Primitives<Treatment>[];
+  edit: (treatment: Primitives<Treatment>) => void;
 };
 
-const TreatmentList = ({ toggle, treatments }: ListProps) => {
+const TreatmentList = ({ toggle, treatments, edit }: ListProps) => {
   return (
     <div className="flex justify-between flex-col gap-4 flex-1">
-      <div className="flex flex-col gap-3">
+      <div>
+        <Button onClick={toggle} variant={'outline'} className="gap-2">
+          <Plus className="size-4" />
+          Agregar tratamiento
+        </Button>
+      </div>
+      <div className="flex flex-col gap-3 grow max-h-[650px] overflow-y-scroll no-scroll">
         {treatments?.map((treatment, index) => (
           <div
             key={`${treatment.id}-${index}`}
@@ -81,15 +105,21 @@ const TreatmentList = ({ toggle, treatments }: ListProps) => {
                   </span>
                 </div>
               </div>
-              <Ellipsis className="size-4" />
+              <DropdownMenu>
+                <DropdownMenuTrigger className="p-2 rounded-full hover:bg-color-secondary cursor-pointer">
+                  <Ellipsis className="h-4 w-4" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => edit(treatment)} className="flex items-center gap-2">
+                    <Pencil className="size-4" />
+                    Editar
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         ))}
       </div>
-      <Button onClick={toggle}>
-        <Pill className="size-4" />
-        Agregar tratamiento
-      </Button>
     </div>
   );
 };
@@ -124,28 +154,35 @@ type FormProps = {
   doctorId: string;
   patientId: string;
   toggle: VoidFunction;
+  editingTreatment?: Primitives<Treatment>;
 };
 
-const TreatmentForm = ({ appointmentId, doctorId, patientId, toggle }: FormProps) => {
+const TreatmentForm = ({ appointmentId, doctorId, patientId, toggle, editingTreatment }: FormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      description: '',
-      type: 'MEDICATION',
-      startDate: new Date(),
-      endDate: new Date(),
-      medication: {
-        name: '',
-        dose: '',
-        frequency: '',
-        presentation: '',
-      },
-      therapy: {
-        description: '',
-      },
-      procedure: {
-        description: '',
-      },
+      description: editingTreatment ? editingTreatment.description : '',
+      type: editingTreatment ? editingTreatment.type : 'MEDICATION',
+      startDate: editingTreatment ? new Date(editingTreatment.startDate) : new Date(),
+      endDate: editingTreatment ? new Date(editingTreatment.endDate) : new Date(),
+      medication: editingTreatment
+        ? editingTreatment.medication
+        : {
+            name: '',
+            dose: '',
+            frequency: '',
+            presentation: '',
+          },
+      therapy: editingTreatment
+        ? editingTreatment.therapy
+        : {
+            description: '',
+          },
+      procedure: editingTreatment
+        ? editingTreatment.procedure
+        : {
+            description: '',
+          },
     },
   });
   const { createTreatment } = useAddIndications();
@@ -163,7 +200,7 @@ const TreatmentForm = ({ appointmentId, doctorId, patientId, toggle }: FormProps
         doctorId: doctorId,
         patientId: patientId,
         status: TreatmentStatusValues.IN_PROGRESS,
-        id: v4(),
+        id: editingTreatment ? editingTreatment.id : v4(),
       });
       toast.success('Tratamiento guardado');
       toggle();

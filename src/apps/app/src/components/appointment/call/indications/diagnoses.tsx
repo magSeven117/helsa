@@ -1,16 +1,21 @@
 import { usePathologies } from '@/src/hooks/use-pathologies';
-import { useSymptoms } from '@/src/hooks/use-symptoms';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { DiagnosisTypeValues } from '@helsa/engine/diagnostic/domain/diagnosis-type';
 import { Diagnostic } from '@helsa/engine/diagnostic/domain/diagnostic';
 import { Badge } from '@helsa/ui/components/badge';
 import { Button } from '@helsa/ui/components/button';
 import { Combobox } from '@helsa/ui/components/combobox';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@helsa/ui/components/dropdown-menu';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@helsa/ui/components/form';
 import { RadioGroup, RadioGroupItem } from '@helsa/ui/components/radio-group';
 import { Textarea } from '@helsa/ui/components/textarea';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ClipboardMinus, Ellipsis, Loader2, X } from 'lucide-react';
+import { Ellipsis, Loader2, Pencil, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -25,14 +30,25 @@ type Props = {
   diagnoses: Primitives<Diagnostic>[];
 };
 export const Diagnoses = ({ appointmentId, patientId, doctorId, diagnoses }: Props) => {
-  const [editing, setEditing] = useState(false);
-  const toggle = () => setEditing((current) => !current);
+  const [creating, setCreating] = useState(false);
+  const [editingDiagnosis, setEditingDiagnosis] = useState<Primitives<Diagnostic> | undefined>(undefined);
+  const toggle = () => setCreating((current) => !current);
+  const editDiagnosis = (diagnosis: Primitives<Diagnostic>) => {
+    setEditingDiagnosis(diagnosis);
+    setCreating((current) => !current);
+  };
   return (
     <>
-      {editing ? (
-        <DiagnosisForm appointmentId={appointmentId} doctorId={doctorId} patientId={patientId} toggle={toggle} />
+      {creating ? (
+        <DiagnosisForm
+          appointmentId={appointmentId}
+          doctorId={doctorId}
+          patientId={patientId}
+          toggle={toggle}
+          editingDiagnosis={editingDiagnosis}
+        />
       ) : (
-        <DiagnosesList diagnoses={diagnoses} toggle={toggle} />
+        <DiagnosesList diagnoses={diagnoses} toggle={toggle} edit={editDiagnosis} />
       )}
     </>
   );
@@ -48,13 +64,20 @@ const typesDiagnosis = {
 type ListProps = {
   diagnoses: Primitives<Diagnostic>[];
   toggle: VoidFunction;
+  edit: (diagnosis: Primitives<Diagnostic>) => void;
 };
 
-const DiagnosesList = ({ diagnoses, toggle }: ListProps) => {
+const DiagnosesList = ({ diagnoses, toggle, edit }: ListProps) => {
   const { pathologies } = usePathologies();
   return (
-    <div className="flex justify-between flex-col gap-4 flex-1">
-      <div className="flex flex-col gap-3">
+    <div className="flex justify-between flex-1 flex-col gap-4">
+      <div>
+        <Button onClick={toggle} variant={'outline'} className="gap-3">
+          <Plus className="size-4" />
+          Agregar diagnostico
+        </Button>
+      </div>
+      <div className="flex flex-col gap-3 max-h-[650px] overflow-y-scroll no-scroll">
         {diagnoses?.map((diagnosis, index) => (
           <div
             key={`${diagnosis.id}-${index}`}
@@ -62,7 +85,17 @@ const DiagnosesList = ({ diagnoses, toggle }: ListProps) => {
           >
             <div className="flex justify-between items-center w-full">
               <div className="px-2 py-1 bg-color-brand-primary rounded-sm w-fit text-xs">I70.173</div>
-              <Ellipsis className="size-4" />
+              <DropdownMenu>
+                <DropdownMenuTrigger className="p-2 rounded-full hover:bg-color-secondary cursor-pointer">
+                  <Ellipsis className="h-4 w-4" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => edit(diagnosis)} className="flex items-center gap-2">
+                    <Pencil className="size-4" />
+                    Editar
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
             <div className="flex justify-between items-center w-full">
               <p className="text-sm">{pathologies.find((c) => c.id === diagnosis.pathologyId)?.name ?? '-'}</p>
@@ -73,17 +106,12 @@ const DiagnosesList = ({ diagnoses, toggle }: ListProps) => {
           </div>
         ))}
       </div>
-      <Button onClick={toggle}>
-        <ClipboardMinus className="size-4" />
-        Agregar diagnostico
-      </Button>
     </div>
   );
 };
 
 const formSchema = z.object({
   diagnosis: z.string(),
-  symptoms: z.string(),
   notes: z.string(),
   type: z.enum(['ALLERGY', 'DISEASE', 'CHRONIC_DISEASE', 'SYMPTOM']),
 });
@@ -100,24 +128,23 @@ type FormProps = {
   doctorId: string;
   patientId: string;
   toggle: VoidFunction;
+  editingDiagnosis?: Primitives<Diagnostic>;
 };
 
-const DiagnosisForm = ({ toggle, appointmentId, doctorId, patientId }: FormProps) => {
+const DiagnosisForm = ({ toggle, appointmentId, doctorId, patientId, editingDiagnosis }: FormProps) => {
   const { pathologies } = usePathologies();
-  const { symptoms } = useSymptoms();
-  const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([]);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      diagnosis: '',
-      symptoms: '',
-      notes: '',
+      diagnosis: editingDiagnosis ? pathologies.find((c) => c.id === editingDiagnosis.pathologyId)?.name : '',
+      type: editingDiagnosis ? editingDiagnosis.type : 'ALLERGY',
+      notes: editingDiagnosis ? editingDiagnosis.description : '',
     },
   });
   const { createDiagnosis } = useAddIndications();
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const id = v4();
+      const id = editingDiagnosis ? editingDiagnosis.id : v4();
       await createDiagnosis({
         id,
         type: values.type as DiagnosisTypeValues,
@@ -174,30 +201,6 @@ const DiagnosisForm = ({ toggle, appointmentId, doctorId, patientId }: FormProps
               </FormItem>
             )}
           />
-          <Combobox
-            onChange={(v) => {
-              const value = v as string;
-              const symptom = symptoms?.find((s) => s.name == value);
-              if (!symptom) return;
-              setSelectedSymptoms((current) =>
-                current.includes(symptom.name) ? current.filter((s) => s !== symptom.name) : [...current, symptom.name],
-              );
-            }}
-            options={(symptoms || []).map(transformOption)}
-            placeholder="Síntomas presentes relacionados"
-          />
-          <div className="flex items-center gap-2 flex-wrap my-3">
-            {selectedSymptoms.map((symptom, index) => (
-              <Button
-                key={index}
-                className="rounded-full h-8 px-3 bg-secondary hover:bg-secondary font-normal text-[#878787] flex justify-start group "
-                onClick={() => setSelectedSymptoms((current) => current.filter((s) => s !== symptom))}
-              >
-                <X className="scale-0 group-hover:scale-100 transition-all w-0 group-hover:w-4" />
-                <span>{symptom}</span>
-              </Button>
-            ))}
-          </div>
           <FormField
             control={form.control}
             name="diagnosis"
