@@ -1,12 +1,9 @@
-import { getAppointmentTypes } from '@/src/actions/appointment/get-appointment-types';
-import { getSpecialties } from '@/src/actions/doctor/get-specialties';
 import AppointmentSearchInput from '@/src/components/appointment/filter/appointment-search-input';
 import { AppointmentTable } from '@/src/components/appointment/table';
 import AppointmentActions from '@/src/components/appointment/table/actions';
 import { Loading } from '@/src/components/appointment/table/loading';
 import { ColumnVisibility } from '@/src/components/appointment/table/visibility';
 import { ErrorFallback } from '@/src/components/error-fallback';
-import { AppointmentStatusEnum } from '@helsa/engine/appointment/domain/status';
 import { ErrorBoundary } from 'next/dist/client/components/error-boundary';
 import { createSearchParamsCache, parseAsArrayOf, parseAsInteger, parseAsString } from 'nuqs/server';
 import { Suspense } from 'react';
@@ -39,10 +36,6 @@ const Page = async (props: { searchParams: Promise<Record<string, string | strin
     states: selectedStates,
     types: selectedTypes,
   };
-  const [responseSpecialties, responseAppointmentTypes] = await Promise.all([getSpecialties(), getAppointmentTypes()]);
-
-  const specialties = responseSpecialties?.data ?? [];
-  const types = responseAppointmentTypes?.data ?? [];
 
   const sort = (searchParams?.sort as string)?.split(':');
 
@@ -56,24 +49,13 @@ const Page = async (props: { searchParams: Promise<Record<string, string | strin
     <div className="grid grid-cols-1 w-full">
       <div className="flex px-5 py-7 w-full gap-3">
         <ColumnVisibility />
-        <AppointmentSearchInput
-          specialties={specialties}
-          states={[...Object.values(AppointmentStatusEnum)]}
-          types={types}
-        />
+        <AppointmentSearchInput />
         <AppointmentActions />
       </div>
       <div className="flex px-5 w-full">
         <ErrorBoundary errorComponent={ErrorFallback}>
           <Suspense fallback={<Loading />} key={loadingKey}>
-            <AppointmentTable
-              filter={filter}
-              page={page}
-              pageSize={pageSize}
-              sort={sort}
-              specialties={specialties}
-              types={types}
-            />
+            <AppointmentTable filter={filter} page={page} pageSize={pageSize} sort={sort} />
           </Suspense>
         </ErrorBoundary>
       </div>

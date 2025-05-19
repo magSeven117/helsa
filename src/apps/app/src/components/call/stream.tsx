@@ -1,8 +1,6 @@
 'use client';
 import { enterRoom } from '@/src/actions/appointment/enter-room';
 import { useRoom } from '@/src/hooks/appointment/use-room';
-import { DndContext, useDraggable, useDroppable } from '@dnd-kit/core';
-import { CSS } from '@dnd-kit/utilities';
 import { BetterUser } from '@helsa/auth/server';
 import { Button } from '@helsa/ui/components/button';
 import {
@@ -53,7 +51,7 @@ import {
   VideoOff,
   Volume2Icon,
 } from 'lucide-react';
-import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 import { useSession } from '../auth/session-provider';
 import CallCHat from '../call-chat';
@@ -99,18 +97,6 @@ export const VideoCallOld = ({ id, token }: { id: string; token: string }) => {
   );
 };
 
-const DroppableContainer = ({ id, children, className }: { id: string; children?: ReactNode; className?: string }) => {
-  const { setNodeRef } = useDroppable({
-    id,
-  });
-
-  return (
-    <div ref={setNodeRef} className={cn('absolute h-1/2 w-1/2', className)}>
-      {children}
-    </div>
-  );
-};
-
 const calculateParticipantTimeInCall = (joinedAt: Date) => {
   const now = new Date();
   return intervalToDuration({
@@ -121,18 +107,19 @@ const calculateParticipantTimeInCall = (joinedAt: Date) => {
 
 export const MyUILayout = () => {
   const call = useCall();
+  const [otherEntered, setOtherEntered] = useState(false);
 
   const { useLocalParticipant, useParticipantCount, useRemoteParticipants, useCallCallingState } = useCallStateHooks();
   const participantCount = useParticipantCount();
   const callCallingState = useCallCallingState();
   const localParticipant = useLocalParticipant();
   const remoteParticipants = useRemoteParticipants();
-  const [parent, setParent] = useState<any>('drop-1');
   const { enterRoom } = useRoom();
 
   const joinCall = useCallback(async () => {
     if (call) {
       call.join();
+
       await enterRoom(call.id);
     }
   }, [call]);
@@ -151,10 +138,7 @@ export const MyUILayout = () => {
     return (
       <div className="relative w-full flex-1">
         <div className="h-full w-full flex flex-col justify-center items-center gap-3">
-          <p className="text-lg font-semibold">
-            {remoteParticipants.length > 0 ? 'Te están esperando' : 'No hay nadie en la llamada'}{' '}
-            {call?.state.endedAt?.toISOString()}
-          </p>
+          <p className="text-lg font-semibold">Únete a la llamada para poder ver a los demás participantes</p>
           <Button onClick={joinCall} className="rounded-full gap-3" variant={'outline'}>
             <PhoneIncoming className="size-4" />
             Entrar
@@ -163,31 +147,15 @@ export const MyUILayout = () => {
       </div>
     );
   }
-
-  const handleDragEnd = ({ over }: any) => {
-    setParent(over?.id ?? 'drop-1');
-  };
-  const localVideo = <MyFloatingLocalParticipant participant={localParticipant} count={participantCount} />;
   return (
-    <div className="relative w-full flex-1">
+    <div className="relative w-full flex-1 flex">
       {callCallingState == CallingState.JOINED && (
-        <DndContext onDragEnd={handleDragEnd}>
+        <>
+          <MyFloatingLocalParticipant participant={localParticipant} count={participantCount} />
           <MyParticipantList participants={remoteParticipants} />
-          <DroppableContainer className="p-4 top-0 left-0 flex items-start justify-start" id="drop-1">
-            {parent === 'drop-1' && localVideo}
-          </DroppableContainer>
-          <DroppableContainer className="p-4 top-0 right-0 flex items-start justify-end" id="drop-2">
-            {parent === 'drop-2' && localVideo}
-          </DroppableContainer>
-          <DroppableContainer className="p-4 bottom-0 left-0 flex items-end justify-start" id="drop-3">
-            {parent === 'drop-3' && localVideo}
-          </DroppableContainer>
-          <DroppableContainer className="p-4 bottom-0 right-0 flex items-end justify-end" id="drop-4">
-            {parent === 'drop-4' && localVideo}
-          </DroppableContainer>
           <ActionsBar />
           <CallCHat id={call?.id ?? ''} />
-        </DndContext>
+        </>
       )}
     </div>
   );
@@ -197,18 +165,18 @@ export const MyParticipantList = (props: { participants: StreamVideoParticipant[
   const { participants } = props;
   if (participants.length === 0) {
     return (
-      <div className="flex h-full w-full justify-center items-center">
+      <div className="flex h-full w-1/2 justify-center items-center rounded-r-xl overflow-auto" id="participant-list">
         <p className="text-lg font-semibold">Esperando a que alguien se una a la llamada</p>
       </div>
     );
   }
   return (
-    <div style={{ display: 'flex', flexDirection: 'row', gap: '8px', height: '100%' }}>
+    <div className="flex flex-row gap-[8px] w-1/2 h-full rounded-r-xl overflow-auto">
       {participants.map((participant) => (
         <ParticipantView
           participant={participant}
           key={participant.sessionId}
-          className="rounded-none border"
+          className="rounded-r-xl border"
           ParticipantViewUI={ParticipantDetails}
           VideoPlaceholder={CustomVideoPlaceholder}
         />
@@ -219,27 +187,13 @@ export const MyParticipantList = (props: { participants: StreamVideoParticipant[
 
 export const MyFloatingLocalParticipant = (props: { participant?: StreamVideoParticipant; count: number }) => {
   const { participant } = props;
-  const call = useCall();
-  const { useCallCallingState } = useCallStateHooks();
-
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id: 'local-video',
-  });
-  const style = {
-    transform: CSS.Translate.toString(transform),
-    zIndex: 10,
-  };
 
   return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      className="h-[125px] aspect-video bg-background rounded-lg border resize max-h-[200px] max-w-[340px] min-h-[125px] min-w-[200px] overflow-auto no-scroll"
-    >
-      <div {...listeners} {...attributes} className="h-full w-full">
+    <div className="h-full w-1/2 bg-background rounded-l-xl border  overflow-auto no-scroll">
+      <div className="h-full w-full">
         <ParticipantView
           participant={participant!}
-          className="h-full"
+          className="h-full rounded-l-xl"
           mirror={false}
           ParticipantViewUI={ParticipantDetails}
           VideoPlaceholder={CustomVideoPlaceholder}

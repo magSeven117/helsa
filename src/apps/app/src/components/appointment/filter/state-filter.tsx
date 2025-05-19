@@ -10,13 +10,13 @@ type Props = {
 
 const stateLabel: Record<string, string> = {
   SCHEDULED: 'Agendada',
-  RESCHEDULED: 'Reagendada',
   CONFIRMED: 'Confirmada',
-  LATE: 'Tarde',
-  CANCELLED: 'Cancelada',
-  WAITING_DOCTOR: 'Esperando al doctor',
-  WAITING_PATIENT: 'Esperando al paciente',
+  PAYED: 'Pagada',
+  READY: 'Lista',
   STARTED: 'Iniciada',
+  CANCELLED: 'Cancelada',
+  MISSED_BY_PATIENT: 'No asistió doctor',
+  MISSED_BY_DOCTOR: 'No asistió paciente',
   MISSED: 'Perdida',
   FINISHED: 'Finalizada',
 };

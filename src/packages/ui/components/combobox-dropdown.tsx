@@ -52,7 +52,6 @@ export function ComboboxDropdown<T extends ComboboxItem>({
   const [inputValue, setInputValue] = React.useState('');
 
   const selectedItem = incomingSelectedItem ?? internalSelectedItem;
-
   const filteredItems = items.filter((item) => item.label.toLowerCase().includes(inputValue.toLowerCase()));
 
   const showCreate = onCreate && Boolean(inputValue) && !filteredItems.length;

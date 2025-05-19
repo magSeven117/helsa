@@ -1,7 +1,7 @@
 'use client';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { Appointment } from '@helsa/engine/appointment/domain/appointment';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 const defaultInclude = {
   specialty: true,
@@ -14,6 +14,18 @@ const defaultInclude = {
 
 export const useAppointment = (id: string, include: any = defaultInclude) => {
   const { data, isFetching, error } = useQuery({
+    initialData: {
+      id: '',
+      date: new Date(),
+      motive: '',
+      symptoms: [],
+      doctor: { user: { name: '', image: '' } },
+      patient: { user: { name: '', image: '' } },
+      specialty: { name: '' },
+      diagnostics: [],
+      treatments: [],
+      orders: [],
+    },
     queryKey: ['appointment'],
     queryFn: async () => {
       const response = await fetch(`/api/v1/appointment/${id}?include=${JSON.stringify(include)}`);
@@ -23,7 +35,8 @@ export const useAppointment = (id: string, include: any = defaultInclude) => {
       const json = await response.json();
       return json.data;
     },
-    enabled: !!id,
+    enabled: () => !!id,
+    refetchOnWindowFocus: false,
   });
 
   return {
@@ -34,6 +47,7 @@ export const useAppointment = (id: string, include: any = defaultInclude) => {
 };
 
 export const useFinalizeAppointment = (id: string) => {
+  const client = useQueryClient();
   const {
     mutateAsync: finalizeAppointment,
     isPending,
@@ -50,6 +64,14 @@ export const useFinalizeAppointment = (id: string) => {
       if (!response.ok) {
         throw new Error('Failed to finalize appointment');
       }
+    },
+    onSuccess: () => {
+      client.invalidateQueries({
+        queryKey: ['appointments'],
+      });
+      client.invalidateQueries({
+        queryKey: ['appointment'],
+      });
     },
   });
 
@@ -119,7 +141,7 @@ export const useAppointmentList = ({
     order?: string;
   };
 }) => {
-  const { data, isPending, error } = useQuery({
+  const { data, error, isFetching } = useQuery({
     initialData: {
       data: [],
       meta: {
@@ -141,11 +163,12 @@ export const useAppointmentList = ({
       const json = await response.json();
       return json.data;
     },
+    refetchOnWindowFocus: false,
   });
 
   return {
     data,
-    isLoading: isPending,
+    isLoading: isFetching,
     error,
   };
 };

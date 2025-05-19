@@ -10,11 +10,9 @@ type Props = {
   page: number;
   pageSize: number;
   sort: any;
-  specialties: any[];
-  types: any[];
 };
 
-export function AppointmentTable({ filter, pageSize, page, sort, specialties, types }: Props) {
+export function AppointmentTable({ filter, pageSize, page, sort }: Props) {
   const hasFilters = Object.values(filter).some((value) => value !== null);
   const initialColumnVisibility = JSON.parse('[]');
   const {

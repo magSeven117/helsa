@@ -1,6 +1,6 @@
 'use client';
 import { BetterUser } from '@helsa/auth/server';
-import { createContext, useContext } from 'react';
+import React, { createContext } from 'react';
 
 const SessionContext = createContext<{ user: BetterUser } | undefined>(undefined);
 
@@ -8,7 +8,7 @@ export const SessionProvider = ({ children, user }: { children: React.ReactNode;
   return <SessionContext.Provider value={{ user }}>{children}</SessionContext.Provider>;
 };
 export const useSession = () => {
-  const context = useContext(SessionContext);
+  const context = React.useContext(SessionContext);
   if (!context) {
     throw new Error('useSession must be used within a SessionProvider');
   }

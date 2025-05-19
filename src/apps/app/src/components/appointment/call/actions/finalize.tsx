@@ -11,18 +11,15 @@ import {
   DialogTrigger,
 } from '@helsa/ui/components/dialog';
 import { CircleCheck } from 'lucide-react';
-import { useParams } from 'next/navigation';
 import { useCallback } from 'react';
 import { toast } from 'sonner';
 
 const apiKey = process.env.NEXT_PUBLIC_STREAM_CLIENT_KEY!;
 
-const Finalize = () => {
-  const params = useParams();
-  const { finalizeAppointment } = useFinalizeAppointment(params.id as string);
+const Finalize = ({ id }: { id: string }) => {
+  const { finalizeAppointment } = useFinalizeAppointment(id);
   const finalizeCall = useCallback(async () => {
     try {
-      const id = params.id as string;
       await finalizeAppointment();
     } catch (error) {
       console.log(error);

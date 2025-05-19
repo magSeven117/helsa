@@ -1,5 +1,5 @@
-import Header from '@/src/components/appointment/call/header';
-import { CallSkeleton } from '@/src/components/appointment/call/skeletons';
+import Header from '@/src/components/appointment/call/sections/header';
+import { CallSkeleton } from '@/src/components/appointment/call/sections/skeletons';
 import WrapperCall from '@/src/components/call/wrapper';
 import { Suspense } from 'react';
 

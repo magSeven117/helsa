@@ -111,6 +111,7 @@ model AppointmentNote {
   id            String      @id @default(uuid())
   date          DateTime
   description   String
+  isPublic      Boolean     @default(false)
   appointmentId String
   appointment   Appointment @relation(fields: [appointmentId], references: [id])
 }

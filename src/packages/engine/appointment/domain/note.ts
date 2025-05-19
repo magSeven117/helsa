@@ -1,4 +1,4 @@
-import { DateValueObject, StringValueObject } from '@helsa/ddd/core/value-object';
+import { BooleanValueObject, DateValueObject, StringValueObject } from '@helsa/ddd/core/value-object';
 import { Uuid } from '@helsa/ddd/core/value-objects/uuid';
 import { Primitives } from '@helsa/ddd/types/primitives';
 
@@ -7,7 +7,8 @@ export class AppointmentNote {
     public id: Uuid,
     public date: DateValueObject,
     public description: StringValueObject,
-    public appointmentId: Uuid
+    public isPublic: BooleanValueObject,
+    public appointmentId: Uuid,
   ) {}
 
   toPrimitives() {
@@ -15,6 +16,7 @@ export class AppointmentNote {
       id: this.id.toString(),
       date: this.date.value,
       description: this.description.value,
+      isPublic: this.isPublic.value,
       appointmentId: this.appointmentId.toString(),
     };
   }
@@ -24,16 +26,18 @@ export class AppointmentNote {
       new Uuid(data.id),
       new DateValueObject(data.date),
       new StringValueObject(data.description),
-      new Uuid(data.appointmentId)
+      new BooleanValueObject(data.isPublic),
+      new Uuid(data.appointmentId),
     );
   }
 
-  static create(date: Date, description: string, appointmentId: Uuid) {
+  static create(id: string, date: Date, description: string, isPublic: boolean, appointmentId: Uuid) {
     return new AppointmentNote(
-      Uuid.random(),
+      new Uuid(id),
       new DateValueObject(date),
       new StringValueObject(description),
-      appointmentId
+      new BooleanValueObject(isPublic),
+      appointmentId,
     );
   }
 }

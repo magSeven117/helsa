@@ -1,30 +1,16 @@
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { Appointment } from '@helsa/engine/appointment/domain/appointment';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@helsa/ui/components/accordion';
 import { Avatar, AvatarFallback, AvatarImage } from '@helsa/ui/components/avatar';
-import { Badge } from '@helsa/ui/components/badge';
 import { Button } from '@helsa/ui/components/button';
 import { CopyInput } from '@helsa/ui/components/internal/copy-input';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@helsa/ui/components/sheet';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@helsa/ui/components/tabs';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import {
-  Clock,
-  Download,
-  ExternalLink,
-  Loader2,
-  MapPin,
-  Paperclip,
-  Shapes,
-  Stethoscope,
-  StickyNote,
-} from 'lucide-react';
+import { Clock, Download, ExternalLink, Loader2, MapPin, Shapes } from 'lucide-react';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import { useSession } from '../../auth/session-provider';
-import { DocumentsContent } from '../call/details/documents';
-import { NotesContent } from '../call/details/notes';
 import { StateColumn } from '../table/columns';
 import Cancel from './actions/cancel';
 import Confirm from './actions/confirm';
@@ -93,15 +79,8 @@ const AppointmentDetailsSheet = ({ data, isOpen, setOpen }: Props) => {
             <TabsContent value="general">
               <div className="space-y-3 px-1 border-b py-3">
                 <p className="text-sm text-muted-foreground">{data?.motive ?? ''}</p>
-                <div className="flex justify-start items-center gap-2">
-                  {data?.symptoms?.map((symptom) => (
-                    <Badge key={symptom.id} variant={'outline'}>
-                      {symptom.name}
-                    </Badge>
-                  ))}
-                </div>
               </div>
-              <div className="space-y-3 px-1 border-b py-3">
+              <div className="space-y-3 px-1 py-3">
                 <div className="flex justify-between items-center gap">
                   <div className="flex items-center gap-2 text-sm font-light text-muted-foreground">
                     <Shapes className="size-4" />
@@ -119,13 +98,6 @@ const AppointmentDetailsSheet = ({ data, isOpen, setOpen }: Props) => {
                   </div>
                   <span className="">{format(data?.date ?? new Date(), 'p')}</span>
                 </div>
-                <div className="flex justify-between items-center gap">
-                  <div className="flex items-center gap-2 text-sm font-light text-muted-foreground">
-                    <Stethoscope className="size-4" />
-                    Especialidad
-                  </div>
-                  <span className="">{data?.specialty?.name}</span>
-                </div>
                 <CopyInput value={`https://helsa.com/appointments/appointments/${data?.id}`} />
                 <Link href={'https://maps.google.com'} target="_blank" className="w-full">
                   <Button className="h-9 w-full mt-3 gap-2" variant={'outline'}>
@@ -134,28 +106,6 @@ const AppointmentDetailsSheet = ({ data, isOpen, setOpen }: Props) => {
                   </Button>
                 </Link>
               </div>
-              <Accordion type="multiple" defaultValue={['attachments', 'notes']} className="w-full px-1">
-                <AccordionItem value="attachments">
-                  <AccordionTrigger className="hover:no-underline">
-                    <div className="flex justify-start items-center gap-2">
-                      Archivos y adjuntos <Paperclip className="size-4" />
-                    </div>
-                  </AccordionTrigger>
-                  <AccordionContent className="flex flex-col gap-3">
-                    <DocumentsContent data={data!} documents={data?.documents ?? []} />
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="notes">
-                  <AccordionTrigger className="hover:no-underline">
-                    <div className="flex justify-start items-center gap-2">
-                      Notas <StickyNote className="size-4" />
-                    </div>
-                  </AccordionTrigger>
-                  <AccordionContent className="flex flex-col gap-3">
-                    <NotesContent data={data!} notes={data?.notes ?? []} />
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
             </TabsContent>
             <TabsContent value="indications">
               <Suspense

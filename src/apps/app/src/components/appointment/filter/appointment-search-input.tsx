@@ -1,5 +1,7 @@
 'use client';
 import { generateAppointmentFilters } from '@/src/actions/appointment/generate-appointment-filters';
+import { useTypes } from '@/src/hooks/appointment/use-types';
+import { AppointmentStatusEnum } from '@helsa/engine/appointment/domain/status';
 import { Calendar } from '@helsa/ui/components/calendar';
 import {
   DropdownMenu,
@@ -14,11 +16,10 @@ import { Input } from '@helsa/ui/components/input';
 import { cn } from '@helsa/ui/lib/utils';
 import { readStreamableValue } from 'ai/rsc';
 import { formatISO } from 'date-fns';
-import { CalendarDays, ListFilter, Route, Search, SquareStack, Stethoscope } from 'lucide-react';
+import { CalendarDays, ListFilter, Route, Search, SquareStack } from 'lucide-react';
 import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs';
-import { useRef, useState } from 'react';
+import React from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
-import SelectSpecialty from '../../book/filter-specialty-select';
 import AppointmentSearchFilters from './appointment-search-filters';
 import SelectState from './state-filter';
 import SelectType from './type-filter';
@@ -31,18 +32,13 @@ const defaultSearch = {
   states: null,
 };
 
-type Props = {
-  specialties: any[];
-  states: any[];
-  types: any[];
-};
-
-const AppointmentSearchInput = ({ specialties, types, states }: Props) => {
-  const [prompt, setPrompt] = useState('');
-  const [streaming, setStreaming] = useState(false);
+const AppointmentSearchInput = () => {
+  const { types } = useTypes();
+  const states = [...Object.values(AppointmentStatusEnum)];
+  const [prompt, setPrompt] = React.useState('');
+  const [streaming, setStreaming] = React.useState(false);
   const [filters, setFilters] = useQueryStates(
     {
-      specialties: parseAsArrayOf(parseAsString),
       types: parseAsArrayOf(parseAsString),
       start: parseAsString,
       end: parseAsString,
@@ -52,8 +48,8 @@ const AppointmentSearchInput = ({ specialties, types, states }: Props) => {
       shallow: false,
     },
   );
-  const [isOpen, setIsOpen] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [isOpen, setIsOpen] = React.useState(false);
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -72,7 +68,6 @@ const AppointmentSearchInput = ({ specialties, types, states }: Props) => {
       const { object } = await generateAppointmentFilters(
         prompt,
         `
-          specialties: ${specialties.map((s) => s.name).join(', ')}
           types: ${types.map((t) => t.name).join(', ')}
           states: ${states.join(', ')}
         `,
@@ -85,10 +80,6 @@ const AppointmentSearchInput = ({ specialties, types, states }: Props) => {
           finalObject = {
             ...finalObject,
             ...partialObject,
-            specialties:
-              partialObject?.specialties?.map(
-                (name: string) => specialties?.find((specialty) => specialty.name === name)?.name,
-              ) ?? null,
             types: partialObject?.types?.map((name: string) => types?.find((type) => type.name === name)?.name) ?? null,
             states:
               partialObject?.states?.map((name: string) => states?.find((state) => state === name) ?? null) ?? null,
@@ -152,36 +143,11 @@ const AppointmentSearchInput = ({ specialties, types, states }: Props) => {
           filters={filters}
           onRemove={setFilters}
           loading={streaming}
-          specialties={specialties}
           states={states}
           types={types}
         />
       </div>
       <DropdownMenuContent className=" w-[350px]" align="end" sideOffset={19} alignOffset={-11} side="bottom">
-        <DropdownMenuSub>
-          <DropdownMenuSubTrigger className="">
-            <Stethoscope className="size-4 mr-2" />
-            <span>Especialidad</span>
-          </DropdownMenuSubTrigger>
-
-          <DropdownMenuPortal>
-            <DropdownMenuSubContent sideOffset={14} alignOffset={-4} className="p-0 w-[250px] h-[270px] ">
-              <SelectSpecialty
-                headless
-                specialties={specialties}
-                onChange={(selected) => {
-                  setFilters({
-                    specialties: filters?.specialties?.includes(selected.name)
-                      ? filters.specialties.filter((s) => s !== selected.name).length > 0
-                        ? filters.specialties.filter((s) => s !== selected.name)
-                        : null
-                      : [...(filters.specialties ?? []), selected.name],
-                  });
-                }}
-              />
-            </DropdownMenuSubContent>
-          </DropdownMenuPortal>
-        </DropdownMenuSub>
         <DropdownMenuSub>
           <DropdownMenuSubTrigger className="">
             <CalendarDays className="size-4 mr-2" />

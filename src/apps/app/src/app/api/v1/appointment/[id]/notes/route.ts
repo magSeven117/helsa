@@ -1,38 +1,37 @@
 import { database } from '@helsa/database';
 import { CreateAppointmentNote } from '@helsa/engine/appointment/application/create-appointment-note';
-import { GetDocuments } from '@helsa/engine/appointment/application/get-documents';
+import { GetNotes } from '@helsa/engine/appointment/application/get-notes';
 import { PrismaAppointmentRepository } from '@helsa/engine/appointment/infrastructure/persistence/prisma-appointment-repository';
-import { unstable_cache as cache, revalidatePath, revalidateTag } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { withUser } from '../../../withUser';
 
 export const GET = withUser(async ({ user, params }) => {
   const { id } = params;
-  const service = new GetDocuments(new PrismaAppointmentRepository(database));
-  const response = cache(() => service.run(id), ['get-notes', id, user.id], {
-    tags: [`get-notes-${user.id}-${id}`],
-    revalidate: 3600,
-  })();
+  const service = new GetNotes(new PrismaAppointmentRepository(database));
+  const response = await service.run(id);
 
   return NextResponse.json({ data: response, message: 'success' });
 });
 
 const createNote = z.object({
   note: z.string(),
+  id: z.string(),
+  isPublic: z.boolean(),
 });
 
 export const POST = withUser(async ({ user, params, req }) => {
-  const { id } = params;
+  const { id: appointmentId } = params;
   const body = await req.json();
-  const { note } = createNote.parse(body);
+  const { note, id, isPublic } = createNote.parse(body);
 
   const service = new CreateAppointmentNote(new PrismaAppointmentRepository(database));
 
-  await service.run(id, note);
+  await service.run(appointmentId, id, note, isPublic);
 
   revalidatePath(`/appointments`);
-  revalidateTag(`get-appointments-${user.id}`);
+  revalidateTag(`get-notes-${user.id}-${id}`);
 
   return NextResponse.json({ message: 'success' }, { status: 201 });
 });

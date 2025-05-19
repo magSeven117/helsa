@@ -4,7 +4,7 @@ import { Appointment } from '@helsa/engine/appointment/domain/appointment';
 import { UserRoleValue } from '@helsa/engine/user/domain/user-role';
 import { Avatar, AvatarFallback, AvatarImage } from '@helsa/ui/components/avatar';
 import { UserIcon } from 'lucide-react';
-import { useSession } from '../../auth/session-provider';
+import { useSession } from '../../../auth/session-provider';
 
 type Props = {
   appointment: Primitives<Appointment>;

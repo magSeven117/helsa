@@ -3,7 +3,7 @@ import { getAppointment } from '@/src/actions/appointment/get-appointment';
 import { getPathologies } from '@/src/actions/diagnostic/get-pathologies';
 import { getAppointmentOrders } from '@/src/actions/order/get-appointment-orders';
 import { AppointmentStatusEnum } from '@helsa/engine/appointment/domain/status';
-import FinishDetails from '../appointment/call/finish-details';
+import FinishDetails from '../appointment/call/sections/finish-details';
 import { VideoCallOld } from './stream';
 
 const WrapperCall = async ({ id }: { id: string }) => {

@@ -1,23 +1,63 @@
-import { useMutation } from '@tanstack/react-query';
+import { Primitives } from '@helsa/ddd/types/primitives';
+import { AppointmentNote } from '@helsa/engine/appointment/domain/note';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-export const useNotes = () => {
+export const useNotes = (id?: string) => {
+  const {
+    data: notes,
+    isFetching,
+    error,
+  } = useQuery({
+    initialData: [],
+    queryKey: ['notes'],
+    queryFn: async () => {
+      const response = await fetch(`/api/v1/appointment/${id ?? ''}/notes`);
+      if (!response.ok) {
+        throw new Error('Error fetching notes');
+      }
+      const data = await response.json();
+      return data.data as Primitives<AppointmentNote>[];
+    },
+  });
+
+  return {
+    notes,
+    isFetching,
+    error,
+  };
+};
+
+export const useAddNote = () => {
+  const client = useQueryClient();
   const { mutateAsync: createNote } = useMutation({
-    mutationFn: async ({ appointmentId, note }: { appointmentId: string; note: string }) => {
+    mutationFn: async ({
+      appointmentId,
+      note,
+      id,
+      isPublic,
+    }: {
+      appointmentId: string;
+      note: string;
+      id: string;
+      isPublic: boolean;
+    }) => {
       const response = await fetch(`/api/v1/appointment/${appointmentId}/notes`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ note }),
+        body: JSON.stringify({ note, id, isPublic }),
       });
       if (!response.ok) {
         throw new Error('Error creating note');
       }
       return response.json();
     },
+    onSuccess: () => {
+      client.invalidateQueries({
+        queryKey: ['notes'],
+      });
+    },
   });
-
-  return {
-    createNote,
-  };
+  return { createNote };
 };

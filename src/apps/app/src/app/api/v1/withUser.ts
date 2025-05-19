@@ -1,5 +1,6 @@
 import { BetterUser, getSession } from '@helsa/auth/server';
 import { NextRequest, NextResponse } from 'next/server';
+import { errorMapper } from './error-mapper';
 
 export const withUser = (
   handler: (params: {
@@ -21,12 +22,14 @@ export const withUser = (
     try {
       return handler({ req, user, params: urlParams, searchParams });
     } catch (error) {
+      const formattedError = errorMapper(error);
       return NextResponse.json(
         {
-          message: 'Internal Server Error',
-          error: error instanceof Error ? error.message : 'Unknown error',
+          message: formattedError.message,
         },
-        { status: 500 },
+        {
+          status: formattedError.status,
+        },
       );
     }
   };

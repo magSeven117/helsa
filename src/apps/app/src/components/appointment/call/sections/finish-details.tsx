@@ -11,13 +11,7 @@ import { Separator } from '@helsa/ui/components/separator';
 import { addMinutes } from 'date-fns/addMinutes';
 import { format } from 'date-fns/format';
 import { es } from 'date-fns/locale';
-import { Calendar, Clock, MapPin, Printer } from 'lucide-react';
-import { BloodPressure } from './vitals/vitals-types/blood-pressure';
-import { HeartRate } from './vitals/vitals-types/heart-rate';
-import { OxygenSaturation } from './vitals/vitals-types/oxygen-saturation';
-import { RespiratoryRate } from './vitals/vitals-types/respiratory-rate';
-import { Temperature } from './vitals/vitals-types/temperature';
-import { Weight } from './vitals/vitals-types/weight';
+import { Calendar, Clock, Printer } from 'lucide-react';
 
 const orderTypes = {
   TEST: 'Prueba',
@@ -69,17 +63,6 @@ const FinishDetails = ({
             </div>
 
             <div>
-              <h3 className="text-lg  font-medium text-[var(--color-brand-primary)]">Ubicación</h3>
-              <div className="flex items-start mt-1">
-                <MapPin className="h-4 w-4 mr-2 text-primary mt-1" />
-                <div>
-                  <p className="font-medium">Centro Médico San Rafael</p>
-                  <p className="text-sm text-muted-foreground">Av. Libertador 1250, Piso 3, Consultorio 305</p>
-                  <p className="text-sm text-muted-foreground">Ciudad de México, CDMX</p>
-                </div>
-              </div>
-            </div>
-            <div>
               <h3 className="text-lg  font-medium text-[var(--color-brand-primary)]">Motivo de la Consulta</h3>
               <p className="mt-1">{appointment.motive}</p>
             </div>
@@ -124,34 +107,6 @@ const FinishDetails = ({
           </div>
         </div>
         <Separator />
-        <div className="space-y-4">
-          <div>
-            <h3 className="text-lg  font-medium text-[var(--color-brand-primary)]">Signos vitales</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 py-4">
-              <HeartRate
-                appointmentId={appointment.id}
-                value={appointment.telemetry?.heartRate ?? defaultData.heartRate}
-              />
-              <BloodPressure
-                appointmentId={appointment.id}
-                value={appointment.telemetry?.bloodPressure ?? Number(defaultData.bloodPressure.split('/')[0])}
-              />
-              <Temperature
-                appointmentId={appointment.id}
-                value={appointment.telemetry?.temperature ?? defaultData.temperature}
-              />
-              <Weight appointmentId={appointment.id} value={appointment.telemetry?.weight ?? defaultData.weight} />
-              <RespiratoryRate
-                appointmentId={appointment.id}
-                value={appointment.telemetry?.respiratoryRate ?? defaultData.respiratoryRate}
-              />
-              <OxygenSaturation
-                appointmentId={appointment.id}
-                value={appointment.telemetry?.oxygenSaturation ?? defaultData.oxygenSaturation}
-              />
-            </div>
-          </div>
-        </div>
         <div>
           <h3 className="text-sm font-medium text-muted-foreground mb-2">Próxima Cita</h3>
           <div className="flex items-center mt-1">

@@ -1,97 +1,166 @@
 'use client';
-import { useSession } from '@/src/components/auth/session-provider';
-import { useNotes } from '@/src/hooks/appointment/use-notes';
+import { useAddNote, useNotes } from '@/src/hooks/appointment/use-notes';
 import { Primitives } from '@helsa/ddd/types/primitives';
-import { Appointment } from '@helsa/engine/appointment/domain/appointment';
 import { AppointmentNote } from '@helsa/engine/appointment/domain/note';
 import { Button } from '@helsa/ui/components/button';
-import { Form, FormControl, FormField, FormItem, FormMessage } from '@helsa/ui/components/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@helsa/ui/components/form';
+import { ScrollArea } from '@helsa/ui/components/scroll-area';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@helsa/ui/components/sheet';
+import { Switch } from '@helsa/ui/components/switch';
 import { Textarea } from '@helsa/ui/components/textarea';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ClipboardMinus, Loader2, StickyNote } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { format } from 'date-fns';
+import { ArrowLeft, Loader2, NotebookPen, Pencil, Plus, Save } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import { v4 } from 'uuid';
 import { z } from 'zod';
-export const NoteList = ({
+
+export const Notes = ({ id }: { id: string }) => {
+  const { notes, isFetching } = useNotes(id);
+  const [open, setOpen] = useState(false);
+  if (isFetching) {
+    return (
+      <Button variant={'outline'} className="[&_svg]:size-5 gap-2" disabled>
+        <NotebookPen className="" />
+        <span className="hidden md:inline">Notas</span>
+      </Button>
+    );
+  }
+  return (
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger asChild>
+        <Button variant={'outline'} className="[&_svg]:size-5 gap-2">
+          <NotebookPen className="" />
+          <span className="hidden md:inline">Notas</span>
+        </Button>
+      </SheetTrigger>
+      <SheetContent className="sm:w-1/3 sm:max-w-full p-4 bg-transparent border-none focus-visible:outline-none ">
+        <div className="bg-background p-6 border border-sidebar h-full overflow-y-auto no-scroll space-y-5 rounded-xl">
+          <SheetHeader>
+            <SheetTitle>Notas de la sesion</SheetTitle>
+          </SheetHeader>
+          <NotesContent notes={notes} id={id} />
+        </div>
+      </SheetContent>
+    </Sheet>
+  );
+};
+
+const NoteList = ({
   notes,
   toggle,
-  patient,
+  edit,
 }: {
   notes: Primitives<AppointmentNote>[];
   toggle: VoidFunction;
-  patient?: boolean;
+  edit: (note: Primitives<AppointmentNote>) => void;
 }) => {
   return (
-    <>
-      {notes?.map((note) => (
-        <div className="flex justify-start items-center gap-2 text-muted-foreground" key={note.id}>
-          <StickyNote className="size-4" />
-          <span>{note.description}</span>
-        </div>
-      ))}
-      {patient && (
-        <Button onClick={toggle}>
-          <ClipboardMinus className="size-4" />
+    <div className="flex justify-between flex-1 flex-col gap-4">
+      <div>
+        <Button onClick={toggle} variant={'outline'} className="gap-3">
+          <Plus className="size-4" />
           Agregar Nota
         </Button>
-      )}
-    </>
+      </div>
+      <ScrollArea className="h-[700px]">
+        <div className="space-y-4">
+          {notes.map((note, index) => (
+            <div key={index} className="relative rounded-md p-4  border  flex flex-col  pb-4">
+              <div className="flex justify-between items-center">
+                <div className="text-xs font-medium text-muted-foreground mb-1">{format(note.date, 'PPp')}</div>
+                <Pencil className="size-4 cursor-pointer hover:text-violet-500" onClick={() => edit(note)} />
+              </div>
+              <p className="text-sm">{note.description}</p>
+            </div>
+          ))}
+        </div>
+      </ScrollArea>
+    </div>
   );
 };
 
 const formSchema = z.object({
   description: z.string(),
+  isPublic: z.boolean(),
 });
 
-export const NotesForm = ({ data, toggle }: { data: Primitives<Appointment>; toggle: VoidFunction }) => {
+const NotesForm = ({
+  id,
+  toggle,
+  editingNote,
+}: {
+  id: string;
+  toggle: VoidFunction;
+  editingNote?: Primitives<AppointmentNote>;
+}) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: { description: '' },
+    defaultValues: {
+      description: editingNote ? editingNote.description : '',
+      isPublic: editingNote ? editingNote.isPublic : false,
+    },
   });
-  const { createNote } = useNotes();
-  const router = useRouter();
+  const { createNote } = useAddNote();
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await createNote({ appointmentId: data.id, note: values.description });
-      toast.success('Nota agregada correctamente');
-      form.reset();
-      router.refresh();
+      const noteId = editingNote ? editingNote.id : v4();
+      await createNote({ appointmentId: id, note: values.description, id: noteId, isPublic: values.isPublic });
+      toast.success('Nota guardada correctamente');
       toggle();
     } catch (error) {
-      toast.error('Error al agregar la nota');
+      toast.error('Error al guardar la nota');
     }
   };
 
   return (
     <>
       <Form {...form}>
-        <form action="" onSubmit={form.handleSubmit(onSubmit)}>
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem className="my-2">
-                <FormControl>
-                  <Textarea placeholder="Agrega una nota" {...field} className="min-h-[100px]" />
-                </FormControl>
-                <FormMessage></FormMessage>
-              </FormItem>
-            )}
-          />
-          <div className="flex w-full gap-3">
+        <form action="" onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
+          <div>
             <Button
               onClick={(e) => {
                 toggle();
                 form.reset();
               }}
-              className="flex-1"
+              className="[&_svg]:size-4 gap-2"
+              variant={'outline'}
             >
-              Cancelar
+              <ArrowLeft />
+              <span className="hidden md:inline">Volver</span>
             </Button>
-
-            <Button className=" gap-3 flex-1" variant={'secondary'} disabled={!document || form.formState.isSubmitted}>
+          </div>
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem className="my-2 flex flex-col gap-2">
+                <FormLabel className="mb-2">Nota</FormLabel>
+                <FormControl>
+                  <Textarea placeholder="Agrega una nota" {...field} className="min-h-[100px] resize-none" />
+                </FormControl>
+                <FormMessage></FormMessage>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="isPublic"
+            render={({ field }) => (
+              <FormItem className="flex items-center gap-2 resize-none">
+                <FormLabel>Pública</FormLabel>
+                <FormControl>
+                  <Switch checked={field.value} onCheckedChange={field.onChange} />
+                </FormControl>
+                <FormMessage></FormMessage>
+              </FormItem>
+            )}
+          />
+          <div className="flex w-full gap-3 justify-end">
+            <Button className=" gap-3 " variant={'default'} disabled={!document || form.formState.isSubmitted}>
+              <Save />
               {form.formState.isSubmitting ? <Loader2 className="size-4 animate-spin" /> : 'Guardar nota'}
             </Button>
           </div>
@@ -101,22 +170,19 @@ export const NotesForm = ({ data, toggle }: { data: Primitives<Appointment>; tog
   );
 };
 
-export const NotesContent = ({
-  data,
-  notes,
-}: {
-  data: Primitives<Appointment>;
-  notes: Primitives<AppointmentNote>[];
-}) => {
-  const { user } = useSession();
+const NotesContent = ({ id, notes }: { id: string; notes: Primitives<AppointmentNote>[] }) => {
   const [editing, setEditing] = useState(false);
-
-  const isPatient = user?.role === 'PATIENT';
+  const [editingNote, setEditingNote] = useState<Primitives<AppointmentNote> | undefined>(undefined);
+  const toggle = () => setEditing((current) => !current);
+  const toggleNote = (note: Primitives<AppointmentNote>) => {
+    setEditingNote(note);
+    setEditing((current) => !current);
+  };
 
   return (
     <>
-      {!editing && <NoteList notes={notes} toggle={() => setEditing((current) => !current)} patient={isPatient} />}
-      {editing && <NotesForm data={data} toggle={() => setEditing((current) => !current)} />}
+      {!editing && <NoteList notes={notes} toggle={toggle} edit={toggleNote} />}
+      {editing && <NotesForm id={id} toggle={toggle} editingNote={editingNote} />}
     </>
   );
 };
