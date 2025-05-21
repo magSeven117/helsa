@@ -5,7 +5,7 @@ import { CreateTreatment } from '@helsa/engine/treatment/application/create-trea
 import { GetTreatments } from '@helsa/engine/treatment/application/get-treatments';
 import { Treatment } from '@helsa/engine/treatment/domain/treatment';
 import { PrismaTreatmentRepository } from '@helsa/engine/treatment/infrastructure/prisma-treatment-repository';
-import { unstable_cache as cache, revalidatePath, revalidateTag } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { withUser } from '../withUser';
@@ -63,9 +63,10 @@ export const GET = withUser(async ({ user, searchParams }) => {
     ? [{ field: 'patientId', operator: Operator.EQUAL, value: patientId }]
     : [{ field: 'appointmentId', operator: Operator.EQUAL, value: appointmentId }];
 
-  const orders = await cache(() => service.run(criteria), [`get-treatments`, appointmentId || patientId], {
-    tags: [`get-treatments-${user.id}`],
-    revalidate: 3600,
-  })();
+  const orders = await service.run(criteria);
+  // cache(() => , [`get-treatments`, appointmentId || patientId], {
+  //   tags: [`get-treatments-${user.id}`],
+  //   revalidate: 3600,
+  // })();
   return NextResponse.json({ data: orders }, { status: 200 });
 });

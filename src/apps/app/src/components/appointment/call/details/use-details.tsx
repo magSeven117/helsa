@@ -18,6 +18,7 @@ export const useDetails = (id: string) => {
           const json = await response.json();
           return json.data as Primitives<Diagnostic>[];
         },
+        refetchOnWindowFocus: false,
       },
       {
         initialData: [],
@@ -30,6 +31,7 @@ export const useDetails = (id: string) => {
           const json = await response.json();
           return json.data as Primitives<Treatment>[];
         },
+        refetchOnWindowFocus: false,
       },
     ],
     combine: (results) => {

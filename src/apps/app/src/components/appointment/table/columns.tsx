@@ -12,6 +12,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@helsa/ui/components/alert-dialog';
+import { Avatar, AvatarFallback, AvatarImage } from '@helsa/ui/components/avatar';
 import { Button } from '@helsa/ui/components/button';
 import { Checkbox } from '@helsa/ui/components/checkbox';
 import {
@@ -25,6 +26,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { formatDate } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { MoreHorizontal } from 'lucide-react';
+import { useSession } from '../../auth/session-provider';
 import { stateLabel } from '../constants';
 
 export const columns: ColumnDef<Primitives<Appointment>>[] = [
@@ -47,9 +49,24 @@ export const columns: ColumnDef<Primitives<Appointment>>[] = [
     cell: ({ row }) => <StateColumn state={row.original.status} />,
   },
   {
-    accessorKey: 'doctor',
-    header: 'Doctor',
-    cell: ({ row }) => row.original.doctor?.user?.name,
+    accessorKey: 'participant',
+    cell: ({ row }) => {
+      const { user } = useSession();
+      const name = user.role == 'DOCTOR' ? row.original.patient?.user?.name : row.original.doctor?.user?.name;
+      const image = user.role == 'DOCTOR' ? row.original.patient?.user?.image : row.original.doctor?.user?.image;
+
+      return (
+        <div className="flex items-center space-x-2">
+          <Avatar>
+            <AvatarImage src={image}></AvatarImage>
+            <AvatarFallback className="bg-slate-100 text-slate-500" delayMs={600}>
+              {name?.charAt(0).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <span className="text-xs font-semibold px-3 py-1">{name}</span>
+        </div>
+      );
+    },
   },
   {
     accessorKey: 'type',

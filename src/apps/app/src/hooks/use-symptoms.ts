@@ -14,6 +14,7 @@ export const useSymptoms = () => {
       const json = await response.json();
       return json.data as Primitives<Symptom>[];
     },
+    refetchOnWindowFocus: false,
   });
   return {
     symptoms: data,

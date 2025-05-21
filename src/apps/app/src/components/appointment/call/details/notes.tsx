@@ -17,7 +17,7 @@ import { toast } from 'sonner';
 import { v4 } from 'uuid';
 import { z } from 'zod';
 
-export const Notes = ({ id }: { id: string }) => {
+export const Notes = ({ id, headless }: { id: string; headless: boolean }) => {
   const { notes, isFetching } = useNotes(id);
   const [open, setOpen] = useState(false);
   if (isFetching) {
@@ -26,6 +26,13 @@ export const Notes = ({ id }: { id: string }) => {
         <NotebookPen className="" />
         <span className="hidden md:inline">Notas</span>
       </Button>
+    );
+  }
+  if (headless) {
+    return (
+      <div className="flex flex-col gap-2">
+        <NotesContent notes={notes} id={id} />
+      </div>
     );
   }
   return (
@@ -170,7 +177,7 @@ const NotesForm = ({
   );
 };
 
-const NotesContent = ({ id, notes }: { id: string; notes: Primitives<AppointmentNote>[] }) => {
+export const NotesContent = ({ id, notes }: { id: string; notes: Primitives<AppointmentNote>[] }) => {
   const [editing, setEditing] = useState(false);
   const [editingNote, setEditingNote] = useState<Primitives<AppointmentNote> | undefined>(undefined);
   const toggle = () => setEditing((current) => !current);

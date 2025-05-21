@@ -68,7 +68,7 @@ const OrdersList = ({
   edit: (order: Primitives<Order>) => void;
 }) => {
   return (
-    <div className="flex justify-between flex-col gap-4 h-full">
+    <div className="flex flex-col gap-4 h-full">
       <div>
         <Button onClick={toggle} variant={'outline'}>
           <Plus className="size-4" />

@@ -14,6 +14,7 @@ export const usePathologies = () => {
       const json = await response.json();
       return json.data as Primitives<Pathology>[];
     },
+    refetchOnWindowFocus: false,
   });
   return {
     pathologies: data,

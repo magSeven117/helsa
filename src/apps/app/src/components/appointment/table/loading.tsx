@@ -20,20 +20,22 @@ export function Loading({ isEmpty }: { isEmpty?: boolean }) {
                 <Skeleton className={cn('h-3.5 w-[15px]')} />
               </TableCell>
 
-              <TableCell className="w-[100px]">
+              <TableCell className="w-[400px]">
                 <Skeleton className={cn('h-3.5 w-[60%]')} />
               </TableCell>
               <TableCell className="w-[430px]">
                 <Skeleton className={cn('h-3.5 w-[50%]')} />
               </TableCell>
-              <TableCell className="w-[200px]">
+              <TableCell className="w-[300px]">
                 <Skeleton className={cn('h-3.5 w-[50%]')} />
               </TableCell>
 
-              <TableCell className="w-[200px]">
+              <TableCell className="w-[300px]">
                 <Skeleton className={cn('h-3.5 w-[60%]')} />
               </TableCell>
-              <TableCell className="w-60px" />
+              <TableCell className="w-[50px]">
+                <Skeleton className={cn('h-3.5 w-[60%]')} />
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

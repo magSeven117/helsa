@@ -12,5 +12,5 @@ export const GET = async (req: NextRequest) => {
 
   const recordings = await call.listRecordings();
 
-  return NextResponse.json({ success: true, recordings: JSON.parse(JSON.stringify(recordings.recordings)) });
+  return NextResponse.json({ success: true, data: JSON.parse(JSON.stringify(recordings.recordings)) });
 };

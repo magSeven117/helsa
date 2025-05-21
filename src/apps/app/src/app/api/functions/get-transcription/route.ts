@@ -14,6 +14,6 @@ export const GET = async (req: NextRequest) => {
 
   return NextResponse.json({
     success: true,
-    transcriptions: JSON.parse(JSON.stringify(transcriptions.transcriptions)),
+    data: JSON.parse(JSON.stringify(transcriptions.transcriptions)),
   });
 };

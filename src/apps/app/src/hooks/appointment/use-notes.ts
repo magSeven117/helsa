@@ -18,6 +18,7 @@ export const useNotes = (id?: string) => {
       const data = await response.json();
       return data.data as Primitives<AppointmentNote>[];
     },
+    refetchOnWindowFocus: false,
   });
 
   return {

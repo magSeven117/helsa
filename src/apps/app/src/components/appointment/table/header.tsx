@@ -6,6 +6,7 @@ import { TableHead, TableHeader, TableRow } from '@helsa/ui/components/table';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback } from 'react';
+import { useSession } from '../../auth/session-provider';
 
 type Props = {
   table?: any;
@@ -13,6 +14,7 @@ type Props = {
 };
 
 export function AppointmentsTableHeader({ table, loading }: Props) {
+  const { user } = useSession();
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -45,7 +47,7 @@ export function AppointmentsTableHeader({ table, loading }: Props) {
   return (
     <TableHeader className="rounded-lg">
       <TableRow className="h-[45px] hover:bg-transparent rounded-lg border-none">
-        <TableHead className="min-w-[50px] hidden md:table-cell px-3 md:px-4 py-2">
+        <TableHead className="min-w-[50px] hidden md:table-cell px-3 md:px-4 py-2 border-b">
           <Checkbox
             className=""
             checked={table?.getIsAllPageRowsSelected() || (table?.getIsSomePageRowsSelected() && 'indeterminate')}
@@ -78,9 +80,9 @@ export function AppointmentsTableHeader({ table, loading }: Props) {
             </Button>
           </TableHead>
         )}
-        {isVisible('doctor') && (
+        {isVisible('participant') && (
           <TableHead className="border-b">
-            <span>Doctor</span>
+            <span>{user.role === 'DOCTOR' ? 'Paciente' : 'Doctor'}</span>
           </TableHead>
         )}
 
@@ -89,6 +91,7 @@ export function AppointmentsTableHeader({ table, loading }: Props) {
             <span>Tipo de consulta</span>
           </TableHead>
         )}
+        <TableHead className="border-b"></TableHead>
       </TableRow>
     </TableHeader>
   );

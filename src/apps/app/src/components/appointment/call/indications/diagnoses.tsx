@@ -70,7 +70,7 @@ type ListProps = {
 const DiagnosesList = ({ diagnoses, toggle, edit }: ListProps) => {
   const { pathologies } = usePathologies();
   return (
-    <div className="flex justify-between flex-1 flex-col gap-4">
+    <div className="flex 2222222222222222222222222 flex-1 flex-col gap-4">
       <div>
         <Button onClick={toggle} variant={'outline'} className="gap-3">
           <Plus className="size-4" />

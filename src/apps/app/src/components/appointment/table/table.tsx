@@ -31,7 +31,6 @@ export function DataTable<TData, TValue>({
   const [data, setData] = useState(initialData);
   const { setColumns, rowSelection, setRowSelection } = useAppointmentStore();
   const [appointmentId, setAppointmentId] = useQueryState('id');
-  const selectedRows = Object.keys(rowSelection).length;
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(initialColumnVisibility ?? {});
 
   const setOpen = (id: string | boolean) => {

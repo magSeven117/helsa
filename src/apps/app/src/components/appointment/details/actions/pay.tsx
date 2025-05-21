@@ -1,13 +1,12 @@
 'use client';
-import { BetterUser } from '@helsa/auth/server';
+import { useSession } from '@/src/components/auth/session-provider';
 import { Button } from '@helsa/ui/components/button';
 import { Receipt } from 'lucide-react';
 import Link from 'next/link';
-import { useLocalStorage } from 'usehooks-ts';
 
 const Pay = ({ status, id }: { status: string; id: string }) => {
-  const [user] = useLocalStorage<BetterUser | null>('user', null);
-  if (user?.role !== 'PATIENT' || ['CONFIRMED', 'SCHEDULED'].includes(status) === false) {
+  const { user } = useSession();
+  if (!['CONFIRMED', 'SCHEDULED'].includes(status) || user?.role !== 'PATIENT') {
     return null;
   }
   return (

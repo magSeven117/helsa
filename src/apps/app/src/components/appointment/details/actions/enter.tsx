@@ -10,7 +10,7 @@ const Enter = ({ id, status }: { id: string; status: string }) => {
   }
 
   return (
-    <Link href={`/appointments/${id}`}>
+    <Link href={`/appointments/${id}/call`}>
       <Button className="h-9 gap-2" variant={'secondary'}>
         <Video className="size-4" />
         Entrar a llamada
