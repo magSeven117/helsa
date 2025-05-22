@@ -113,6 +113,11 @@ export class Criteria {
     return this;
   }
 
+  include(field: string, criteria?: Criteria): Criteria {
+    this.includes.push({ field, criteria });
+    return this;
+  }
+
   static fromValues(filters: Filter[], order?: Order, pagination?: Pagination, include?: Include[]): Criteria {
     return new Criteria({ filters, type: FilterType.AND }, order, pagination, include);
   }

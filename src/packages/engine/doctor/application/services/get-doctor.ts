@@ -8,14 +8,7 @@ export class GetDoctor {
 
   async run(id: string, field = 'userId'): Promise<Primitives<Doctor> | null> {
     const doctor = await this.doctorRepository.getByCriteria(
-      Criteria.fromValues([{ field, value: id, operator: Operator.EQUAL }], undefined, undefined, [
-        { field: 'consultingRoomAddress' },
-        { field: 'educations' },
-        { field: 'schedule' },
-        { field: 'specialty' },
-        { field: 'prices' },
-        { field: 'user' },
-      ]),
+      Criteria.fromValues([{ field, value: id, operator: Operator.EQUAL }]),
     );
 
     if (!doctor) {

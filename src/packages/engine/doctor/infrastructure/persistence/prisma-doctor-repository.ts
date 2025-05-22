@@ -70,6 +70,8 @@ export class PrismaDoctorRepository implements DoctorRepository {
       where: { doctorId },
       update: {
         days: data.days,
+        appointmentDuration: data.appointmentDuration,
+        maxAppointmentsPerDay: data.maxAppointmentsPerDay,
       },
       create: {
         doctorId,
@@ -152,6 +154,12 @@ export class PrismaDoctorRepository implements DoctorRepository {
   async getPrices(doctorId: string): Promise<Price[]> {
     const prices = await this.client.price.findMany({ where: { doctorId }, include: { type: true } });
     return prices.map((price) => Price.fromPrimitives(price));
+  }
+
+  async getSchedule(doctorId: string): Promise<Schedule | null> {
+    const schedule = await this.client.schedule.findFirst({ where: { doctorId } });
+    if (!schedule) return null;
+    return Schedule.fromPrimitives(schedule as unknown as Primitives<Schedule>);
   }
 
   async removeEducation(doctorId: string, educationId: string): Promise<void> {

@@ -111,8 +111,10 @@ export class Doctor extends Aggregate {
     }
   }
 
-  createSchedule(days: Primitives<Day>[]) {
-    this.schedule = this.schedule ? this.schedule.update(days) : Schedule.create(1, 24, days);
+  saveSchedule(days: Primitives<Day>[], duration?: number, maxAppointmentsPerDay?: number) {
+    this.schedule = this.schedule
+      ? this.schedule.update(days, duration, maxAppointmentsPerDay)
+      : Schedule.create(duration ?? 30, maxAppointmentsPerDay ?? 7, days);
     this.record(new ScheduleRegistered(this.id.value, days));
   }
 

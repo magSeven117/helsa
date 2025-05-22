@@ -1,14 +1,13 @@
-import { getDoctor } from '@/src/actions/doctor/get-doctor';
+import { CalendarView } from '@/src/components/schedule/calendar-view';
 import DoctorScheduleModal from '@/src/components/schedule/create-schedule';
 
 const Page = async () => {
-  const doctor = await getDoctor();
-  if (!doctor) {
-    return null;
-  }
   return (
-    <div className="flex w-full h-full px-5 py-7">
-      <DoctorScheduleModal doctor={JSON.parse(JSON.stringify(doctor))} />
+    <div className="flex w-full h-full px-5 py-7 flex-col gap-5">
+      <div>
+        <DoctorScheduleModal />
+      </div>
+      <CalendarView />
     </div>
   );
 };

@@ -29,6 +29,7 @@ export interface DoctorRepository {
   getByCriteria(criteria: Criteria): Promise<Doctor>;
   getPrices(doctorId: string): Promise<Price[]>;
   getSpecialties(): Promise<Specialty[]>;
+  getSchedule(doctorId: string): Promise<Schedule | null>;
   removeEducation(doctorId: string, educationId: string): Promise<void>;
   removePrice(doctorId: string, priceId: string): Promise<void>;
 }

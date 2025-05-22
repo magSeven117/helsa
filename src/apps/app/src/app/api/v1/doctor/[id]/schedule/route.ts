@@ -1,5 +1,6 @@
 import { database } from '@helsa/database';
 import { CreateSchedule } from '@helsa/engine/doctor/application/services/create-schedule';
+import { GetDoctorSchedule } from '@helsa/engine/doctor/application/services/get-doctor-schedule';
 import { PrismaDoctorRepository } from '@helsa/engine/doctor/infrastructure/persistence/prisma-doctor-repository';
 import { TriggerEventBus } from '@helsa/tasks';
 import { NextResponse } from 'next/server';
@@ -13,14 +14,23 @@ const schema = z.object({
       hours: z.array(z.object({ hour: z.string() })),
     }),
   ),
+  duration: z.number().optional(),
+  maxAppointment: z.number().optional(),
 });
 
 export const POST = withUser(async ({ req, params }) => {
   const parsedInput = schema.parse(await req.json());
   const { id } = params;
-  const { days } = parsedInput;
+  const { days, duration, maxAppointment } = parsedInput;
   const service = new CreateSchedule(new PrismaDoctorRepository(database), new TriggerEventBus());
-  await service.run(id, days);
+  await service.run(id, days, duration, maxAppointment);
 
   return NextResponse.json({ message: 'Schedule saved successfully' }, { status: 200 });
+});
+
+export const GET = withUser(async ({ params }) => {
+  const { id } = params;
+  const service = new GetDoctorSchedule(new PrismaDoctorRepository(database));
+  const schedule = await service.run(id);
+  return NextResponse.json({ message: 'Ok', data: schedule }, { status: 200 });
 });

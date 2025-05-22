@@ -10,11 +10,11 @@ export const getUpcomingAppointment = authActionClient
     actionName: 'get-upcoming-appointment',
   })
   .action(async ({ ctx: { user } }) => {
-    const patient = await getDoctor();
-    if (!patient) {
+    const doctor = await getDoctor();
+    if (!doctor) {
       return [];
     }
     const service = new GetUpcomingAppointment(new PrismaAppointmentRepository(database));
-    const appointments = await service.run(patient.data?.id!);
+    const appointments = await service.run(doctor?.id!);
     return appointments;
   });

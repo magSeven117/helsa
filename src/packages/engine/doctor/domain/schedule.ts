@@ -8,7 +8,7 @@ export class Schedule {
     public id: Uuid,
     public appointmentDuration: NumberValueObject,
     public maxAppointmentsPerDay: NumberValueObject,
-    public days: Day[]
+    public days: Day[],
   ) {}
 
   public static fromPrimitives(data: Primitives<Schedule>) {
@@ -16,7 +16,7 @@ export class Schedule {
       new Uuid(data.id),
       new NumberValueObject(data.appointmentDuration),
       new NumberValueObject(data.maxAppointmentsPerDay),
-      data.days.map(Day.fromPrimitives)
+      data.days.map(Day.fromPrimitives),
     );
   }
 
@@ -25,7 +25,7 @@ export class Schedule {
       Uuid.random(),
       new NumberValueObject(appointmentDuration),
       new NumberValueObject(maxAppointmentsPerDay),
-      days.map((day) => Day.create(day.day, day.hours))
+      days.map((day) => Day.create(day.day, day.hours)),
     );
   }
 
@@ -50,12 +50,12 @@ export class Schedule {
     ]);
   }
 
-  public update(days: Primitives<Day>[]): Schedule {
+  public update(days: Primitives<Day>[], duration?: number, maxAppointment?: number): Schedule {
     return new Schedule(
       this.id,
-      this.appointmentDuration,
-      this.maxAppointmentsPerDay,
-      days.map((day) => Day.create(day.day, day.hours))
+      duration ? new NumberValueObject(duration) : this.appointmentDuration,
+      maxAppointment ? new NumberValueObject(maxAppointment) : this.maxAppointmentsPerDay,
+      days.map((day) => Day.create(day.day, day.hours)),
     );
   }
 }
