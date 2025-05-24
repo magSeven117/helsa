@@ -13,6 +13,8 @@ import {
 } from '../domain/appointment-criteria';
 import { AppointmentRepository } from '../domain/appointment-repository';
 
+export type GetAppointmentErrors = NotFoundError;
+
 export class GetDoctorAppointments {
   constructor(
     private appointmentRepository: AppointmentRepository,

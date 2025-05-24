@@ -5,7 +5,7 @@ import { ConsultingRoomAddress } from '@helsa/engine/doctor/domain/consulting-ro
 import { PrismaDoctorRepository } from '@helsa/engine/doctor/infrastructure/persistence/prisma-doctor-repository';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { withUser } from '../../../withUser';
+import { routeHandler } from '../../../route-handler';
 
 const schema = z.object({
   consultingRoomAddress: z.object({
@@ -14,7 +14,7 @@ const schema = z.object({
   }),
 });
 
-export const POST = withUser(async ({ req, user, params }) => {
+export const POST = routeHandler(async ({ req, user, params }) => {
   const { consultingRoomAddress } = schema.parse(await req.json());
   const doctorId = params.id;
   const service = new SetConsultingRoom(new PrismaDoctorRepository(database));

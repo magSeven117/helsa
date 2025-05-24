@@ -3,9 +3,9 @@ import { Primitives } from '@helsa/ddd/types/primitives';
 import { UpdateDemographic } from '@helsa/engine/patient/application/services/update-demographic';
 import { PatientDemographic } from '@helsa/engine/patient/domain/members/demographic';
 import { PrismaPatientRepository } from '@helsa/engine/patient/infrastructure/prisma-patient-repository';
-import { z } from 'zod';
-import { withUser } from '../../../withUser';
 import { NextResponse } from 'next/server';
+import { z } from 'zod';
+import { routeHandler } from '../../../route-handler';
 const schema = z.object({
   demographic: z.object({
     civilStatus: z.string().optional(),
@@ -13,7 +13,7 @@ const schema = z.object({
     educativeLevel: z.string().optional(),
   }),
 });
-export const PUT = withUser(async ({ req, params }) => {
+export const PUT = routeHandler(async ({ req, params }) => {
   const { demographic } = schema.parse(await req.json());
   const { id: patientId } = params;
   const service = new UpdateDemographic(new PrismaPatientRepository(database));

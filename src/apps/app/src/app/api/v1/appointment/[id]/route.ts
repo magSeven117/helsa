@@ -6,9 +6,9 @@ import { PrismaAppointmentRepository } from '@helsa/engine/appointment/infrastru
 import { StreamClient } from '@stream-io/node-sdk';
 import { revalidatePath } from 'next/cache';
 import { NextResponse } from 'next/server';
-import { withUser } from '../../withUser';
+import { routeHandler } from '../../route-handler';
 
-export const GET = withUser(async ({ req, params }) => {
+export const GET = routeHandler(async ({ req, params }) => {
   const { id } = params;
   const searchParams = req.nextUrl.searchParams;
   const include = searchParams.get('include') ? JSON.parse(searchParams.get('include') as string) : null;
@@ -19,7 +19,7 @@ export const GET = withUser(async ({ req, params }) => {
   return NextResponse.json({ data, message: 'success' });
 });
 
-export const PUT = withUser(async ({ params }) => {
+export const PUT = routeHandler(async ({ params }) => {
   const { id } = params;
   const service = new FinalizeAppointment(new PrismaAppointmentRepository(database));
   await service.run(id);

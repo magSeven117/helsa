@@ -1,4 +1,5 @@
 'use client';
+import { useError } from '@/src/components/error';
 import { useAddNote, useNotes } from '@/src/hooks/appointment/use-notes';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { AppointmentNote } from '@helsa/engine/appointment/domain/note';
@@ -103,6 +104,7 @@ const NotesForm = ({
   toggle: VoidFunction;
   editingNote?: Primitives<AppointmentNote>;
 }) => {
+  const { setError } = useError();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -117,8 +119,19 @@ const NotesForm = ({
       await createNote({ appointmentId: id, note: values.description, id: noteId, isPublic: values.isPublic });
       toast.success('Nota guardada correctamente');
       toggle();
-    } catch (error) {
-      toast.error('Error al guardar la nota');
+    } catch (error: any) {
+      if (error.title) {
+        setError({
+          ...(error as any),
+          action: {
+            label: 'Reintentar',
+            action: () => {
+              form.reset();
+              toggle();
+            },
+          },
+        });
+      }
     }
   };
 

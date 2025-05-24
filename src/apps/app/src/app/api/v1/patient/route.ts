@@ -9,7 +9,7 @@ import { UserRoleValue } from '@helsa/engine/user/domain/user-role';
 import { PrismaUserRepository } from '@helsa/engine/user/infrastructure/prisma-user-repository';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { withUser } from '../withUser';
+import { routeHandler } from '../route-handler';
 
 const schema = z.object({
   patient: z.object({
@@ -27,7 +27,7 @@ const schema = z.object({
   }),
 });
 
-export const POST = withUser(async ({ req }) => {
+export const POST = routeHandler(async ({ req }) => {
   const { patient } = schema.parse(await req.json());
   const service = new CreatePatient(new PrismaPatientRepository(database));
   const updateService = new UpdateRole(new PrismaUserRepository(database));
@@ -36,7 +36,7 @@ export const POST = withUser(async ({ req }) => {
   return NextResponse.json({ message: 'Patient created successfully' }, { status: 201 });
 });
 
-export const GET = withUser(async ({ user }) => {
+export const GET = routeHandler(async ({ user }) => {
   const service = new GetPatient(new PrismaPatientRepository(database));
   const response = await service.run(user.id);
   return NextResponse.json({ data: response }, { status: 200 });

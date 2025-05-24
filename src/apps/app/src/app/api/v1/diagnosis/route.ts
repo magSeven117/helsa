@@ -6,7 +6,7 @@ import { PrismaDiagnosisRepository } from '@helsa/engine/diagnostic/infrastructu
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { withUser } from '../withUser';
+import { routeHandler } from '../route-handler';
 
 const schema = z.object({
   id: z.string(),
@@ -18,7 +18,7 @@ const schema = z.object({
   pathologyId: z.string(),
 });
 
-export const POST = withUser(async ({ req, user }) => {
+export const POST = routeHandler(async ({ req, user }) => {
   const parsedInput = schema.parse(await req.json());
 
   const service = new CreateDiagnosis(new PrismaDiagnosisRepository(database));
@@ -35,7 +35,7 @@ const getSchema = z.object({
   field: z.enum(['patientId', 'doctorId', 'appointmentId']),
 });
 
-export const GET = withUser(async ({ searchParams, user }) => {
+export const GET = routeHandler(async ({ searchParams, user }) => {
   const parsedInput = getSchema.parse(searchParams);
   const criteria = { field: parsedInput.field, operator: Operator.EQUAL, value: parsedInput.id };
   const service = new GetDiagnoses(new PrismaDiagnosisRepository(database));

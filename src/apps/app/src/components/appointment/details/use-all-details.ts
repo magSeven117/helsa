@@ -85,6 +85,7 @@ export const useAllDetails = (id: string) => {
           const data = await response.json();
           return data.data;
         },
+        refetchOnWindowFocus: false,
       },
     ],
     combine: (results) => {

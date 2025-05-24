@@ -10,7 +10,7 @@ import { PrismaUserRepository } from '@helsa/engine/user/infrastructure/prisma-u
 import { unstable_cache as cache } from 'next/cache';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { withUser } from '../withUser';
+import { routeHandler } from '../route-handler';
 
 const schema = z.object({
   hospital: z.object({
@@ -29,7 +29,7 @@ const schema = z.object({
   }),
 });
 
-export const POST = withUser(async ({ req }) => {
+export const POST = routeHandler(async ({ req }) => {
   const { hospital } = schema.parse(await req.json());
 
   const service = new CreateHospital(new PrismaHospitalRepository(database));
@@ -45,7 +45,7 @@ export const POST = withUser(async ({ req }) => {
   );
 });
 
-export const GET = withUser(async ({ user }) => {
+export const GET = routeHandler(async ({ user }) => {
   const service = new GetHospital(new PrismaHospitalRepository(database));
   const response = await cache(() => service.run(user.id), ['get-hospital', user.id], {
     tags: [`get-hospital-${user.id}`],

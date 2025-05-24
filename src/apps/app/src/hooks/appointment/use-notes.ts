@@ -30,7 +30,7 @@ export const useNotes = (id?: string) => {
 
 export const useAddNote = () => {
   const client = useQueryClient();
-  const { mutateAsync: createNote } = useMutation({
+  const { mutateAsync: createNote, error } = useMutation({
     mutationFn: async ({
       appointmentId,
       note,
@@ -50,7 +50,13 @@ export const useAddNote = () => {
         body: JSON.stringify({ note, id, isPublic }),
       });
       if (!response.ok) {
-        throw new Error('Error creating note');
+        const error = await response.json();
+        throw {
+          title: 'Error creating note',
+          message: error.message,
+          status: response.status,
+          type: response.status >= 500 ? 'error' : 'warning',
+        };
       }
       return response.json();
     },
@@ -60,5 +66,5 @@ export const useAddNote = () => {
       });
     },
   });
-  return { createNote };
+  return { createNote, error };
 };

@@ -5,7 +5,7 @@ import { PrismaDoctorRepository } from '@helsa/engine/doctor/infrastructure/pers
 import { TriggerEventBus } from '@helsa/tasks';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { withUser } from '../../../withUser';
+import { routeHandler } from '../../../route-handler';
 
 const schema = z.object({
   days: z.array(
@@ -18,7 +18,7 @@ const schema = z.object({
   maxAppointment: z.number().optional(),
 });
 
-export const POST = withUser(async ({ req, params }) => {
+export const POST = routeHandler(async ({ req, params }) => {
   const parsedInput = schema.parse(await req.json());
   const { id } = params;
   const { days, duration, maxAppointment } = parsedInput;
@@ -28,7 +28,7 @@ export const POST = withUser(async ({ req, params }) => {
   return NextResponse.json({ message: 'Schedule saved successfully' }, { status: 200 });
 });
 
-export const GET = withUser(async ({ params }) => {
+export const GET = routeHandler(async ({ params }) => {
   const { id } = params;
   const service = new GetDoctorSchedule(new PrismaDoctorRepository(database));
   const schedule = await service.run(id);

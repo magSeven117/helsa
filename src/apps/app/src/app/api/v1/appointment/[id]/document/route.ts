@@ -2,10 +2,10 @@ import { database } from '@helsa/database';
 import { GetDocuments } from '@helsa/engine/appointment/application/get-documents';
 import { PrismaAppointmentRepository } from '@helsa/engine/appointment/infrastructure/persistence/prisma-appointment-repository';
 import { unstable_cache as cache } from 'next/cache';
-import { withUser } from '../../../withUser';
 import { NextResponse } from 'next/server';
+import { routeHandler } from '../../../route-handler';
 
-export const GET = withUser(async ({ user, params }) => {
+export const GET = routeHandler(async ({ user, params }) => {
   const { id } = params;
   const service = new GetDocuments(new PrismaAppointmentRepository(database));
 

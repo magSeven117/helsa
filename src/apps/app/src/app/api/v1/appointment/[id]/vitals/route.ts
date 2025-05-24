@@ -5,7 +5,7 @@ import { AppointmentTelemetry } from '@helsa/engine/appointment/domain/telemetry
 import { PrismaAppointmentRepository } from '@helsa/engine/appointment/infrastructure/persistence/prisma-appointment-repository';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { withUser } from '../../../withUser';
+import { routeHandler } from '../../../route-handler';
 
 const schema = z.object({
   weight: z.number().optional(),
@@ -16,7 +16,7 @@ const schema = z.object({
   oxygenSaturation: z.number().optional(),
 });
 
-export const POST = withUser(async ({ params, req }) => {
+export const POST = routeHandler(async ({ params, req }) => {
   const { id } = params;
   const body = await req.json();
   const parsedInput = schema.parse(body);

@@ -7,8 +7,8 @@ import { PrismaDoctorRepository } from '@helsa/engine/doctor/infrastructure/pers
 import { unstable_cache as cache } from 'next/cache';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { withUser } from '../../withUser';
-export const GET = withUser(async ({ user, params, searchParams }) => {
+import { routeHandler } from '../../route-handler';
+export const GET = routeHandler(async ({ user, params, searchParams }) => {
   const { id } = params;
   const { self } = searchParams;
 
@@ -35,7 +35,7 @@ const schema = z.object({
   }),
 });
 
-export const PUT = withUser(async ({ user, params, req }) => {
+export const PUT = routeHandler(async ({ user, params, req }) => {
   const { id } = params;
   const body = await req.json();
   const { doctor } = schema.parse(body);

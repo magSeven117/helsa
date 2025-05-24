@@ -8,7 +8,7 @@ import { PrismaTreatmentRepository } from '@helsa/engine/treatment/infrastructur
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { withUser } from '../withUser';
+import { routeHandler } from '../route-handler';
 
 const schema = z.object({
   id: z.string(),
@@ -40,7 +40,7 @@ const schema = z.object({
     .optional(),
 });
 
-export const POST = withUser(async ({ req, user }) => {
+export const POST = routeHandler(async ({ req, user }) => {
   const parsedInput = schema.parse(await req.json());
   const service = new CreateTreatment(new PrismaTreatmentRepository(database));
 
@@ -51,7 +51,7 @@ export const POST = withUser(async ({ req, user }) => {
   return NextResponse.json({ message: 'Treatment created successfully' }, { status: 201 });
 });
 
-export const GET = withUser(async ({ user, searchParams }) => {
+export const GET = routeHandler(async ({ user, searchParams }) => {
   const { patientId, appointmentId } = searchParams;
 
   if (!patientId && !appointmentId) {

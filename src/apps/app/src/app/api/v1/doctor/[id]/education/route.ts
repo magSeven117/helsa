@@ -5,7 +5,7 @@ import { Education } from '@helsa/engine/doctor/domain/educations';
 import { PrismaDoctorRepository } from '@helsa/engine/doctor/infrastructure/persistence/prisma-doctor-repository';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { withUser } from '../../../withUser';
+import { routeHandler } from '../../../route-handler';
 
 const schema = z.object({
   education: z.object({
@@ -16,7 +16,7 @@ const schema = z.object({
   }),
 });
 
-export const POST = withUser(async ({ params, req }) => {
+export const POST = routeHandler(async ({ params, req }) => {
   const { id } = params;
   const { education } = schema.parse(await req.json());
   const service = new SaveEducation(new PrismaDoctorRepository(database));

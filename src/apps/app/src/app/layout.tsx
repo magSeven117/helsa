@@ -4,6 +4,8 @@ import { Provider as Analytics } from '@helsa/analytics/client';
 import { DesignSystemProvider } from '@helsa/ui';
 import type { Metadata } from 'next';
 import { Nunito } from 'next/font/google';
+import { ErrorProvider } from '../components/error';
+import { ErrorToast } from '../components/error/error-toast';
 import { QueryProvider } from '../components/query-provider';
 
 const nunito = Nunito({ subsets: ['latin'] });
@@ -30,7 +32,10 @@ export default function RootLayout({
       <link rel="icon" href={icon.src} sizes="any" />
       <body className={nunito.className + ' styled-scroll h-screen box-border'} suppressHydrationWarning={true}>
         <DesignSystemProvider>
-          <QueryProvider>{children}</QueryProvider>
+          <ErrorProvider>
+            <ErrorToast />
+            <QueryProvider>{children}</QueryProvider>
+          </ErrorProvider>
         </DesignSystemProvider>
         <Analytics />
       </body>

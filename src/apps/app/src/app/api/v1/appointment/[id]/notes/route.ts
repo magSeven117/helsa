@@ -5,9 +5,9 @@ import { PrismaAppointmentRepository } from '@helsa/engine/appointment/infrastru
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { withUser } from '../../../withUser';
+import { routeHandler } from '../../../route-handler';
 
-export const GET = withUser(async ({ user, params }) => {
+export const GET = routeHandler(async ({ user, params }) => {
   const { id } = params;
   const service = new GetNotes(new PrismaAppointmentRepository(database));
   const response = await service.run(id);
@@ -21,7 +21,7 @@ const createNote = z.object({
   isPublic: z.boolean(),
 });
 
-export const POST = withUser(async ({ user, params, req }) => {
+export const POST = routeHandler(async ({ user, params, req }) => {
   const { id: appointmentId } = params;
   const body = await req.json();
   const { note, id, isPublic } = createNote.parse(body);

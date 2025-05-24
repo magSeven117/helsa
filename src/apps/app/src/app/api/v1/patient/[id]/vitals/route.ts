@@ -6,9 +6,9 @@ import { PatientBiometric } from '@helsa/engine/patient/domain/members/biometric
 import { PrismaPatientRepository } from '@helsa/engine/patient/infrastructure/prisma-patient-repository';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { withUser } from '../../../withUser';
+import { routeHandler } from '../../../route-handler';
 
-export const GET = withUser(async ({ user }) => {
+export const GET = routeHandler(async ({ user }) => {
   const service = new GetAvgTelemetryService(new PrismaPatientRepository(database));
   const avg = await service.run(user.id);
 
@@ -23,7 +23,7 @@ const schema = z.object({
   }),
 });
 
-export const PUT = withUser(async ({ user, req, params }) => {
+export const PUT = routeHandler(async ({ user, req, params }) => {
   const parsedInput = schema.parse(await req.json());
   const { biometric } = parsedInput;
   const { id } = params;

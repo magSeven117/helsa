@@ -8,7 +8,7 @@ import { PrismaOrderRepository } from '@helsa/engine/order/infrastructure/prisma
 import { unstable_cache as cache, revalidatePath, revalidateTag } from 'next/cache';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { withUser } from '../withUser';
+import { routeHandler } from '../route-handler';
 
 const schema = z.object({
   description: z.string(),
@@ -18,7 +18,7 @@ const schema = z.object({
   patientId: z.string(),
 });
 
-export const POST = withUser(async ({ req, user }) => {
+export const POST = routeHandler(async ({ req, user }) => {
   const parsedInput = schema.parse(await req.json());
   const service = new CreateOrder(new PrismaOrderRepository(database));
 
@@ -36,7 +36,7 @@ export const POST = withUser(async ({ req, user }) => {
   return NextResponse.json({ success: true }, { status: 200 });
 });
 
-export const GET = withUser(async ({ req, user, searchParams }) => {
+export const GET = routeHandler(async ({ req, user, searchParams }) => {
   const { patientId, appointmentId } = searchParams;
 
   if (!patientId && !appointmentId) {

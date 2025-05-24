@@ -4,7 +4,7 @@ import { PrismaDocumentRepository } from '@helsa/engine/document/infrastructure/
 import { revalidatePath } from 'next/cache';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { withUser } from '../withUser';
+import { routeHandler } from '../route-handler';
 
 const schema = z.object({
   url: z.string(),
@@ -15,7 +15,7 @@ const schema = z.object({
   filename: z.string(),
 });
 
-export const POST = withUser(async ({ req, user }) => {
+export const POST = routeHandler(async ({ req, user }) => {
   const parsedInput = schema.parse(await req.json());
   const service = new UploadDocument(new PrismaDocumentRepository(database));
   await service.run(parsedInput);

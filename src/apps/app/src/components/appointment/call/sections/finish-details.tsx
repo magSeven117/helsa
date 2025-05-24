@@ -1,5 +1,6 @@
 'use client';
 
+import { useError } from '@/src/components/error';
 import { useAppointment } from '@/src/hooks/appointment/use-appointment';
 import { Badge } from '@helsa/ui/components/badge';
 import { Button } from '@helsa/ui/components/button';
@@ -36,6 +37,7 @@ import { Orders } from '../indications/orders';
 import { Treatments } from '../indications/treatments';
 
 const FinishDetails = ({ id }: { id: string }) => {
+  const { setError } = useError();
   const { appointment, isLoading, error } = useAppointment(id, {
     doctor: { include: { user: true } },
     patient: { include: { user: true } },
@@ -77,7 +79,23 @@ const FinishDetails = ({ id }: { id: string }) => {
                 </Link>
               )}
               {['CANCELED', 'FINISHED'].includes(appointment.status) && (
-                <Button variant="outline">
+                <Button
+                  variant="outline"
+                  onClick={() =>
+                    setError({
+                      message: 'No se puede agendar seguimiento a una cita cancelada o finalizada',
+                      status: 500,
+                      title: 'Error al agendar seguimiento',
+                      type: 'error',
+                      action: {
+                        label: 'Accion',
+                        action: () => alert('Error'),
+                        variant: 'outline',
+                        icon: <Loader2 className="h-4 w-4 animate-spin" />,
+                      },
+                    })
+                  }
+                >
                   <Calendar className="h-4 w-4 mr-2" />
                   Agendar Seguimiento
                 </Button>

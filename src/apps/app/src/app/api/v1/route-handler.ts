@@ -1,14 +1,15 @@
 import { BetterUser, getSession } from '@helsa/auth/server';
+import { DomainError } from '@helsa/ddd/core/domain-error';
 import { NextRequest, NextResponse } from 'next/server';
-import { errorMapper } from './error-mapper';
 
-export const withUser = (
+export const routeHandler = <T extends DomainError, P = unknown>(
   handler: (params: {
     req: NextRequest;
     user: BetterUser;
     params: { [key: string]: any };
     searchParams: { [key: string]: any };
-  }) => Promise<NextResponse | void>,
+  }) => Promise<NextResponse>,
+  onError: (error: T) => NextResponse | void = () => undefined,
 ) => {
   return async (req: NextRequest, { params }: { params: Promise<any> }) => {
     const session = await getSession();
@@ -20,17 +21,15 @@ export const withUser = (
     const searchParams = Object.fromEntries(req.nextUrl.searchParams.entries());
 
     try {
-      return handler({ req, user, params: urlParams, searchParams });
+      return await handler({ req, user, params: urlParams, searchParams });
     } catch (error) {
-      const formattedError = errorMapper(error);
-      return NextResponse.json(
-        {
-          message: formattedError.message,
-        },
-        {
-          status: formattedError.status,
-        },
-      );
+      if (error instanceof DomainError) {
+        const response = onError(error as T);
+        if (response) {
+          return response;
+        }
+      }
+      return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
     }
   };
 };

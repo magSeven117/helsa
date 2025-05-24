@@ -7,9 +7,9 @@ import { GetPatient } from '@helsa/engine/patient/application/services/get-patie
 import { PrismaPatientRepository } from '@helsa/engine/patient/infrastructure/prisma-patient-repository';
 import { unstable_cache as cache } from 'next/cache';
 import { NextResponse } from 'next/server';
-import { withUser } from '../../withUser';
+import { routeHandler } from '../../route-handler';
 
-export const GET = withUser(async ({ user }) => {
+export const GET = routeHandler(async ({ user }) => {
   const { id, role } = user;
 
   let response;

@@ -5,7 +5,7 @@ import { Hospital } from '@helsa/engine/hospital/domain/hospital';
 import { PrismaHospitalRepository } from '@helsa/engine/hospital/infrastructure/prisma-hospital-repository';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { withUser } from '../../withUser';
+import { routeHandler } from '../../route-handler';
 
 const schema = z.object({
   hospital: z.object({
@@ -27,7 +27,7 @@ const schema = z.object({
   }),
 });
 
-export const PUT = withUser(async ({ req, user, params }) => {
+export const PUT = routeHandler(async ({ req, user, params }) => {
   const { hospital } = schema.parse(await req.json());
   const { id } = params;
 

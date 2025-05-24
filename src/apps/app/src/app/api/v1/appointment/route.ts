@@ -1,6 +1,11 @@
 import { database } from '@helsa/database';
+import { FormatError } from '@helsa/ddd/core/errors/format-error';
+import { NotFoundError } from '@helsa/ddd/core/errors/not-found-error';
 import { CreateAppointment } from '@helsa/engine/appointment/application/create-appointment';
-import { GetDoctorAppointments } from '@helsa/engine/appointment/application/get-doctor-appointments';
+import {
+  GetAppointmentErrors,
+  GetDoctorAppointments,
+} from '@helsa/engine/appointment/application/get-doctor-appointments';
 import { GetPatientAppointments } from '@helsa/engine/appointment/application/get-patient-appointments';
 import { PrismaAppointmentRepository } from '@helsa/engine/appointment/infrastructure/persistence/prisma-appointment-repository';
 import { GetDoctor } from '@helsa/engine/doctor/application/services/get-doctor';
@@ -12,7 +17,7 @@ import { TriggerEventBus } from '@helsa/tasks';
 import { unstable_cache as cache } from 'next/cache';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { withUser } from '../withUser';
+import { routeHandler } from '../route-handler';
 const getAppointmentsSchema = z.object({
   filter: z.object({
     start: z.string().optional(),
@@ -31,34 +36,46 @@ const getAppointmentsSchema = z.object({
   }),
 });
 
-export const GET = withUser(async ({ user, searchParams }) => {
-  const parsedInput = getAppointmentsSchema.parse({
-    filter: JSON.parse(searchParams.filter as string),
-    pagination: JSON.parse(searchParams.pagination as string),
-    sort: JSON.parse(searchParams.sort as string),
-  });
-  const repository = new PrismaAppointmentRepository(database);
+export const GET = routeHandler(
+  async ({ user, searchParams }) => {
+    const parsedInput = getAppointmentsSchema.parse({
+      filter: JSON.parse(searchParams.filter as string),
+      pagination: JSON.parse(searchParams.pagination as string),
+      sort: JSON.parse(searchParams.sort as string),
+    });
+    const repository = new PrismaAppointmentRepository(database);
 
-  let service;
+    let service;
 
-  if (user.role === UserRoleValue.DOCTOR) {
-    const doctorGetter = new GetDoctor(new PrismaDoctorRepository(database));
-    service = new GetDoctorAppointments(repository, doctorGetter);
-  } else {
-    const patientGetter = new GetPatient(new PrismaPatientRepository(database));
-    service = new GetPatientAppointments(repository, patientGetter);
-  }
+    if (user.role === UserRoleValue.DOCTOR) {
+      const doctorGetter = new GetDoctor(new PrismaDoctorRepository(database));
+      service = new GetDoctorAppointments(repository, doctorGetter);
+    } else {
+      const patientGetter = new GetPatient(new PrismaPatientRepository(database));
+      service = new GetPatientAppointments(repository, patientGetter);
+    }
 
-  const response = await cache(
-    () => service.run(user.id, parsedInput.filter, parsedInput.pagination, parsedInput.sort, 'userId'),
-    ['get-appointments', user.id, JSON.stringify(parsedInput)],
-    {
-      tags: [`get-appointments-${user.id}`],
-      revalidate: 60 * 60,
-    },
-  )();
-  return NextResponse.json({ data: response, message: 'success' });
-});
+    const response = await cache(
+      () => service.run(user.id, parsedInput.filter, parsedInput.pagination, parsedInput.sort, 'userId'),
+      ['get-appointments', user.id, JSON.stringify(parsedInput)],
+      {
+        tags: [`get-appointments-${user.id}`],
+        revalidate: 60 * 60,
+      },
+    )();
+    return NextResponse.json({ data: response, message: 'success' });
+  },
+  (error: GetAppointmentErrors) => {
+    switch (true) {
+      case error instanceof z.ZodError:
+        return NextResponse.json({ message: 'Invalid input', errors: error.flatten() }, { status: 400 });
+      case error instanceof NotFoundError:
+        return NextResponse.json({ message: error.message }, { status: 404 });
+      default:
+        return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
+    }
+  },
+);
 
 const createAppointmentSchema = z.object({
   id: z.string(),
@@ -71,18 +88,30 @@ const createAppointmentSchema = z.object({
   symptoms: z.array(z.string()),
 });
 
-export const POST = withUser(async ({ req, user, params }) => {
-  const data = await req.json();
-  const parsedInput = createAppointmentSchema.parse(data);
-  const getPatient = new GetPatient(new PrismaPatientRepository(database));
-  const patient = await getPatient.run(user.id);
-  const service = new CreateAppointment(new PrismaAppointmentRepository(database), new TriggerEventBus());
+export const POST = routeHandler(
+  async ({ req, user, params }) => {
+    const data = await req.json();
+    const parsedInput = createAppointmentSchema.parse(data);
+    const getPatient = new GetPatient(new PrismaPatientRepository(database));
+    const patient = await getPatient.run(user.id);
+    const service = new CreateAppointment(new PrismaAppointmentRepository(database), new TriggerEventBus());
 
-  const { id, date, motive, symptoms, doctorId, typeId, specialtyId, priceId } = parsedInput;
-  const patientId = patient.id;
-  if (!patientId) {
-    return NextResponse.json({ message: 'Patient not found' }, { status: 404 });
-  }
-  await service.run(id, date, motive, doctorId, patientId, typeId, specialtyId, priceId, symptoms);
-  return NextResponse.json({ message: 'success' }, { status: 201 });
-});
+    const { id, date, motive, symptoms, doctorId, typeId, specialtyId, priceId } = parsedInput;
+    const patientId = patient.id;
+    if (!patientId) {
+      return NextResponse.json({ message: 'Patient not found' }, { status: 404 });
+    }
+    await service.run(id, date, motive, doctorId, patientId, typeId, specialtyId, priceId, symptoms);
+    return NextResponse.json({ message: 'success' }, { status: 201 });
+  },
+  (error) => {
+    switch (true) {
+      case error instanceof z.ZodError:
+        return NextResponse.json({ message: 'Invalid input', errors: error.flatten() }, { status: 400 });
+      case error instanceof FormatError:
+        return NextResponse.json({ message: error.message }, { status: 404 });
+      default:
+        return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
+    }
+  },
+);
