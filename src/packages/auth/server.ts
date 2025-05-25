@@ -13,6 +13,7 @@ import { keys } from './keys';
 const prisma = new PrismaClient();
 const env = keys();
 export const auth = betterAuth({
+  basePath: '/api/v1/auth',
   database: prismaAdapter(prisma, {
     provider: 'postgresql',
   }),
