@@ -8,7 +8,8 @@ export const useOneChat = (chatId: string | undefined) => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ['chats'],
+    initialData: null,
+    queryKey: ['chat', chatId],
     queryFn: async () => {
       if (!chatId) return null;
       const response = await fetch(`/api/v1/chat/${chatId}`, {
@@ -57,7 +58,11 @@ export const useChats = () => {
       }
       const data = await response.json();
       if (!data.data.length) {
-        return [];
+        return {
+          '1d': [],
+          '7d': [],
+          '30d': [],
+        };
       }
 
       const base: { '1d': Chat[]; '7d': Chat[]; '30d': Chat[] } = {

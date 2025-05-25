@@ -72,7 +72,7 @@ export const auth = betterAuth({
       enabled: true,
       clientId: env.GOOGLE_CLIENT_ID!,
       clientSecret: env.GOOGLE_CLIENT_SECRET!,
-      redirectURI: `${env.NEXT_PUBLIC_BASE_URL}/api/auth/callback/google`,
+      redirectURI: `${env.NEXT_PUBLIC_BASE_URL}/api/v1/auth/callback/google`,
     },
     facebook: {
       enabled: true,

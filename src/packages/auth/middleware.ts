@@ -4,7 +4,7 @@ export async function betterAuthMiddleware(req: NextRequest, publicRoutes: strin
   if (req.nextUrl.pathname.startsWith('/api')) {
     return NextResponse.next();
   }
-  const { data: session } = await betterFetch<any>('/api/auth/get-session', {
+  const { data: session } = await betterFetch<any>('/api/v1/auth/get-session', {
     baseURL: req.nextUrl.origin,
     headers: {
       cookie: req.headers.get('cookie') || '',

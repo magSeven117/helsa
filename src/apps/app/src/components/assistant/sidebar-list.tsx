@@ -27,13 +27,11 @@ export function SidebarList({ isExpanded, chatId, setExpanded, onSelect, onNewCh
       >
         <SidebarItems onSelect={onSelect} chatId={chatId} />
         <Toolbar onNewChat={onNewChat} />
-        <div className="absolute z-10 h-[477px] w-[45px] bg-gradient-to-r from-background/30 dark:from-[#131313]/30 to-background right-0 top-0 pointer-events-none" />
       </div>
 
       <div
         className={cn(
           'duration-200 ease-out transition-all z-10 fixed left-[1px] right-[1px] top-[1px] bottom-[1px] invisible opacity-0 bg-background',
-          isExpanded && 'visible opacity-80',
         )}
       />
     </div>

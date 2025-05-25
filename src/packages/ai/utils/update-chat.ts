@@ -1,11 +1,10 @@
 import { Chat } from '@helsa/engine/chat/domain/chat';
-import { CoreMessage } from 'ai';
 import { saveChat } from './save-chat';
 
-export async function updateChat(chatId: string, userId: string, messages: CoreMessage[], newMessages: CoreMessage[]) {
+export async function updateChat(chatId: string, userId: string, messages: any[], newMessages: any[]) {
   const createdAt = new Date();
 
-  const firstMessageContent = messages?.at(0)?.content ?? '';
+  const firstMessageContent = messages?.at(0)?.content.at(0).text ?? '';
   const title = typeof firstMessageContent === 'string' ? firstMessageContent.substring(0, 100) : '';
   const chat: Chat = {
     id: chatId,

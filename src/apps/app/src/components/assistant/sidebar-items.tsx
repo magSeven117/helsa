@@ -23,8 +23,7 @@ const formatRange = (key: string) => {
 
 export function SidebarItems({ onSelect, chatId }: SidebarItemsProps) {
   const { chats: items, isLoading } = useChats();
-
-  if (isLoading) {
+  if (isLoading || !items) {
     return (
       <div className="flex flex-col justify-center items-center h-full">
         <div className="flex flex-col items-center -mt-12 text-xs space-y-1">
@@ -52,7 +51,7 @@ export function SidebarItems({ onSelect, chatId }: SidebarItemsProps) {
         return (
           <div key={key}>
             {section?.length > 0 && (
-              <div className="sticky top-0 z-20 w-full bg-background dark:bg-[#131313] pb-1">
+              <div className="sticky top-0 z-20 w-full border-b border-border">
                 <span className="font-mono text-xs">{formatRange(key)}</span>
               </div>
             )}

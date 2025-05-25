@@ -5,6 +5,7 @@ export type { User } from 'better-auth';
 
 export const authClient = createAuthClient({
   baseURL: keys().NEXT_PUBLIC_BASE_URL,
+  basePath: '/api/v1/auth',
   plugins: [
     emailOTPClient(),
     inferAdditionalFields({

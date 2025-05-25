@@ -1,6 +1,6 @@
-import { updateChat } from '@/utils/update-chat';
 import { convertToCoreMessages, streamText } from 'ai';
 import { google } from '../../index';
+import { updateChat } from '../../utils/update-chat';
 import { SYSTEM_HELSA_PROMPT } from './prompt';
 import { getUpcomingAppointments } from './tools/get-upcoming-appointments';
 
