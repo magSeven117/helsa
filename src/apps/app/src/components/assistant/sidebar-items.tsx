@@ -1,8 +1,5 @@
-import { getChatsAction } from '@/src/actions/chat/get-chats-action';
-import { useEffect, useState } from 'react';
-
-import { Chat } from '@helsa/engine/chat/domain/chat';
 import { SidebarItem } from './sidebar-item';
+import { useChats } from './use-chats';
 
 interface SidebarItemsProps {
   onSelect: (id: string) => void;
@@ -25,26 +22,18 @@ const formatRange = (key: string) => {
 };
 
 export function SidebarItems({ onSelect, chatId }: SidebarItemsProps) {
-  const [items, setItems] = useState<Chat[]>([]);
-  const [isLoading, setLoading] = useState(false);
+  const { chats: items, isLoading } = useChats();
 
-  useEffect(() => {
-    async function fetchData() {
-      setLoading(true);
-
-      const result = await getChatsAction();
-
-      if (result) {
-        setItems(result as Chat[]);
-      }
-
-      setLoading(false);
-    }
-
-    if (!items.length && !isLoading) {
-      fetchData();
-    }
-  }, [chatId]);
+  if (isLoading) {
+    return (
+      <div className="flex flex-col justify-center items-center h-full">
+        <div className="flex flex-col items-center -mt-12 text-xs space-y-1">
+          <span className="text-[#878787]">History</span>
+          <span>Loading...</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="overflow-auto relative h-screen md:h-[410px] mt-16 scrollbar-hide p-4 pt-0 pb-[50px] flex flex-col space-y-6">
@@ -58,7 +47,7 @@ export function SidebarItems({ onSelect, chatId }: SidebarItemsProps) {
       )}
 
       {Object.keys(items).map((key: any) => {
-        const section: any = items[key];
+        const section: any = items[key as keyof typeof items];
 
         return (
           <div key={key}>

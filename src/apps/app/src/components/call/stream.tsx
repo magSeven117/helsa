@@ -1,5 +1,4 @@
 'use client';
-import { enterRoom } from '@/src/actions/appointment/enter-room';
 import { useRoom } from '@/src/hooks/appointment/use-room';
 import { BetterUser } from '@helsa/auth/server';
 import { Button } from '@helsa/ui/components/button';
@@ -491,31 +490,6 @@ const useSessionTimer = () => {
     return () => clearInterval(handle);
   }, [session]);
   return remainingMs;
-};
-
-const useUserTimer = () => {
-  const call = useCall();
-  const [user] = useLocalStorage<BetterUser | null>('', null);
-  const { useCallSession } = useCallStateHooks();
-  const session = useCallSession();
-  const { joined_at } = session?.participants.find((p) => p.user.id === user?.id) ?? {};
-
-  const [timeInCall, setTimeInCall] = useState(Number.NaN);
-
-  useEffect(() => {
-    if (!joined_at) return;
-    const handle = setInterval(() => {
-      const time = calculateParticipantTimeInCall(new Date(joined_at));
-      setTimeInCall(time.minutes ?? 0);
-    }, 500);
-    return () => clearInterval(handle);
-  }, [session]);
-
-  useEffect(() => {
-    if (timeInCall >= 5) {
-      enterRoom({ appointmentId: call?.id ?? '' });
-    }
-  }, [timeInCall]);
 };
 
 const useSessionTimerAlert = (remainingMs: number, threshold: number, onAlert: VoidFunction) => {

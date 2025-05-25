@@ -1,6 +1,5 @@
 'use client';
 
-import { getChat } from '@/src/actions/chat/get-chat';
 import Chat from '@/src/components/chat';
 import { useChat } from '@ai-sdk/react';
 import { useEffect, useState } from 'react';
@@ -11,6 +10,7 @@ import { convertToUIMessages } from '../chat/utils';
 import { AssistantFeedback } from './feedback';
 import { Header } from './header';
 import { SidebarList } from './sidebar-list';
+import { useOneChat } from './use-chats';
 
 const Assistant = () => {
   const [isExpanded, setExpanded] = useState(false);
@@ -18,6 +18,7 @@ const Assistant = () => {
   const [chatId, setChatId] = useState<string>();
   const { user } = useSession();
   const [initialMessages, setInitialMessages] = useState<any[]>([]);
+  const { chat } = useOneChat(chatId);
 
   const { messages, input, setInput, handleSubmit, setMessages } = useChat({
     initialMessages,
@@ -25,6 +26,7 @@ const Assistant = () => {
       chatId,
       user,
     },
+    api: '/api/v1/chat',
   });
 
   const toggleOpen = () => setExpanded((prev) => !prev);
@@ -47,19 +49,12 @@ const Assistant = () => {
   });
 
   useEffect(() => {
-    async function fetchData() {
-      if (!chatId) return;
-      const result = await getChat(chatId);
-
-      if (result) {
-        const retrivedMessages = convertToUIMessages(result.messages as any[]);
-        setMessages(retrivedMessages);
-        setInitialMessages(retrivedMessages);
-      }
+    if (chat) {
+      const retrivedMessages = convertToUIMessages(chat.messages as any[]);
+      setMessages(retrivedMessages);
+      setInitialMessages(retrivedMessages);
     }
-
-    fetchData();
-  }, [chatId]);
+  }, [chat]);
   return (
     <div className="overflow-hidden p-0 h-full w-full">
       {showFeedback && <AssistantFeedback onClose={() => setShowFeedback(false)} />}

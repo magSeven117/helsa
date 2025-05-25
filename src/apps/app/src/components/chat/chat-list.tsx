@@ -3,7 +3,6 @@
 import { cn } from '@helsa/ui/lib/utils';
 import { UIMessage } from 'ai';
 import { BotMessage, SpinnerMessage, UserMessage } from './messages';
-import AvgVitals from './tools/avg-vitals';
 import { UpcomingAppointments } from './tools/upcoming-appointments';
 
 type Props = {
@@ -31,13 +30,10 @@ export function ChatList({ messages, className }: Props) {
                   return <SpinnerMessage key={toolInvocation.toolCallId} />;
                 }
                 switch (toolInvocation.toolName) {
-                  case 'getUpcomingAppointment': {
+                  case 'getUpcomingAppointments': {
                     return (
                       <UpcomingAppointments data={toolInvocation.result.appointments} key={toolInvocation.toolCallId} />
                     );
-                  }
-                  case 'getAvgVitalsTool': {
-                    return <AvgVitals vitals={toolInvocation.result.vitals} />;
                   }
                   default:
                     return null;

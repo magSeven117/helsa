@@ -1,4 +1,3 @@
-import { sendFeedback } from '@/src/actions/assistant/send-feedback';
 import { Button } from '@helsa/ui/components/button';
 import { Textarea } from '@helsa/ui/components/textarea';
 import { ArrowLeft } from 'lucide-react';
@@ -12,7 +11,7 @@ export function AssistantFeedback({ onClose }: Props) {
   const [value, setValue] = useState('');
 
   const sendFeedbackAction = async () => {
-    await sendFeedback({ feedback: value });
+    console.log('Feedback:', value);
   };
 
   return (
