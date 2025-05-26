@@ -1,6 +1,4 @@
 'use client';
-
-import { removePrice } from '@/src/actions/doctor/remove-price';
 import { Dialog } from '@helsa/ui/components/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@helsa/ui/components/table';
 import { cn } from '@helsa/ui/lib/utils';
@@ -9,21 +7,22 @@ import { useRouter } from 'next/navigation';
 import React from 'react';
 import { toast } from 'sonner';
 import CreatePriceModal from '../forms/create-price-modal';
+import { useDeletePrice } from '../use-prices';
 import { type Prices, columns } from './columns';
 import { Header } from './header';
 
 type Props = {
   data: Prices[];
-  types: any[];
   doctorId: string;
 };
 
-export function DataTable({ data, doctorId, types }: Props) {
+export function DataTable({ data, doctorId }: Props) {
   const [isOpen, onOpenChange] = React.useState(false);
   const router = useRouter();
+  const { deletePrice } = useDeletePrice(doctorId);
 
   const remove = async (id: string) => {
-    await removePrice({ id });
+    await deletePrice(id);
     toast.success('Appointment type removed');
     router.refresh();
   };
@@ -37,7 +36,6 @@ export function DataTable({ data, doctorId, types }: Props) {
     meta: {
       remove,
       doctorId,
-      types,
     },
   });
 
@@ -73,7 +71,7 @@ export function DataTable({ data, doctorId, types }: Props) {
       </Table>
 
       <Dialog open={isOpen} onOpenChange={onOpenChange}>
-        <CreatePriceModal types={types} onOpenChange={onOpenChange} isOpen={isOpen} doctorId={doctorId} />
+        <CreatePriceModal onOpenChange={onOpenChange} isOpen={isOpen} doctorId={doctorId} />
       </Dialog>
     </div>
   );

@@ -1,5 +1,4 @@
 'use client';
-import { createPatient } from '@/src/actions/patient/create-patient';
 import * as successAnimation from '@/src/assets/animations/success_animation.json';
 import {
   AlertDialog,
@@ -24,6 +23,7 @@ import { useForm } from 'react-hook-form';
 import Lottie from 'react-lottie';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { useCreatePatient } from './use-create-role';
 
 const formSchema = z.object({
   demographic: z.object({
@@ -59,17 +59,16 @@ const PatientForm = ({ userId }: { userId: string }) => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const router = useRouter();
+  const { createPatient } = useCreatePatient();
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       await createPatient({
-        patient: {
-          userId: userId,
-          demographic: data.demographic,
-          biometric: {
-            ...data.biometric,
-            height: parseFloat(data.biometric.height),
-          },
+        userId: userId,
+        demographic: data.demographic,
+        biometric: {
+          ...data.biometric,
+          height: parseFloat(data.biometric.height),
         },
       });
       setShowSuccessModal(true);

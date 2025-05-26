@@ -1,5 +1,4 @@
 'use client';
-import { createHospital } from '@/src/actions/hospital/create-hospital';
 import * as successAnimation from '@/src/assets/animations/success_animation.json';
 import {
   AlertDialog,
@@ -22,6 +21,7 @@ import { useForm } from 'react-hook-form';
 import Lottie from 'react-lottie';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { useCreateHospital } from './use-create-role';
 
 const formSchema = z.object({
   name: z.string().min(3, { message: 'El nombre debe tener al menos 3 caracteres' }),
@@ -46,6 +46,7 @@ const HospitalForm = ({ userId }: { userId: string }) => {
   const { isSubmitting } = form.formState;
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const router = useRouter();
+  const { createHospital } = useCreateHospital();
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {

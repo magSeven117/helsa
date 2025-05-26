@@ -8,7 +8,11 @@ export class SaveEducation {
 
   async run(doctorId: string, education: Primitives<Education>): Promise<void> {
     const doctor = await this.doctorRepository.getByCriteria(
-      Criteria.fromValues([{ field: 'id', value: doctorId, operator: Operator.EQUAL }])
+      Criteria.fromValues([{ field: 'id', value: doctorId, operator: Operator.EQUAL }], undefined, undefined, [
+        {
+          field: 'educations',
+        },
+      ]),
     );
 
     doctor.saveEducation(education);

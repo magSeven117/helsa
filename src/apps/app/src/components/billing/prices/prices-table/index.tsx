@@ -1,11 +1,16 @@
-import { getAppointmentTypes } from '@/src/actions/appointment/get-appointment-types';
-import { getDoctorPrices } from '@/src/actions/doctor/get-doctor-prices';
-import { Prices } from './columns';
+'use client';
+import { useSession } from '@/src/components/auth/session-provider';
+import { usePrices } from '../use-prices';
+import { TypesSkeleton } from './skeleton';
 import { DataTable } from './table';
 
-export async function TypesTable({ doctorId }: { doctorId: string }) {
-  const types = await getAppointmentTypes();
-  const prices = await getDoctorPrices({ doctorId });
+export function TypesTable() {
+  const { profile } = useSession();
+  const { prices, isLoading } = usePrices(profile?.id ?? '');
 
-  return <DataTable data={(prices?.data as unknown as Prices[]) ?? []} doctorId={doctorId} types={types?.data ?? []} />;
+  if (isLoading) {
+    return <TypesSkeleton />;
+  }
+
+  return <DataTable data={prices} doctorId={profile.id} />;
 }

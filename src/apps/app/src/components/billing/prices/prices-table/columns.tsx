@@ -28,6 +28,11 @@ export type Prices = {
   currency: string;
   typeId: string;
   name: string;
+  type?: {
+    id: string;
+    name: string;
+    color: string;
+  };
 };
 
 export const columns: ColumnDef<Prices>[] = [
@@ -78,12 +83,11 @@ export const columns: ColumnDef<Prices>[] = [
   {
     header: 'Tipo de consulta',
     accessorKey: 'type',
-    cell: ({ row, table }) => {
-      const type = (table.options.meta as ExtendedTableMeta).types.find((t) => t.id === row.original.typeId);
+    cell: ({ row }) => {
       return (
         <div className="flex justify-start items-center gap-3">
-          <div className="size-4 rounded-full" style={{ backgroundColor: type?.color }}></div>
-          {type?.name}
+          <div className="size-4 rounded-full" style={{ backgroundColor: row.original.type?.color }}></div>
+          {row.original.type?.name}
         </div>
       );
     },

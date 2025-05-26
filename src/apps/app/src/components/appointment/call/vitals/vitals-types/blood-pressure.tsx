@@ -1,18 +1,17 @@
 'use client';
 
-import { saveVitals } from '@/src/actions/appointment/save-vitals';
 import { Button } from '@helsa/ui/components/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@helsa/ui/components/form';
 import { Input } from '@helsa/ui/components/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Activity, Loader2, X } from 'lucide-react';
-import { useOptimisticAction } from 'next-safe-action/hooks';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { VitalSign } from '../info';
+import { useVitals } from '../use-vitals';
 
 type BloodPressureProps = {
   value: number;
@@ -40,12 +39,10 @@ export const BloodPressureForm = ({
   bloodPressure,
   toggle,
   appointmentId,
-  execute,
 }: {
   bloodPressure: number;
   toggle: VoidFunction;
   appointmentId: string;
-  execute: any;
 }) => {
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -55,12 +52,12 @@ export const BloodPressureForm = ({
     },
     mode: 'all',
   });
+  const { saveVital } = useVitals(appointmentId);
 
   const submit = async (data: z.infer<typeof formSchema>) => {
     try {
-      await execute({
-        appointmentId: appointmentId,
-        bloodPressure: Number(data.bloodPressure),
+      await saveVital({
+        bloodPressure: parseFloat(data.bloodPressure),
       });
       toggle();
       toast.success('Signos vitales guardados correctamente');
@@ -112,10 +109,6 @@ export const BloodPressureForm = ({
 
 export const BloodPressure = ({ value, appointmentId }: { value: number; appointmentId: string }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const { optimisticState, execute } = useOptimisticAction(saveVitals, {
-    currentState: { bloodPressure: value },
-    updateFn: (state, newValue) => ({ bloodPressure: newValue.bloodPressure! }),
-  });
 
   if (isEditing) {
     return (
@@ -123,10 +116,9 @@ export const BloodPressure = ({ value, appointmentId }: { value: number; appoint
         bloodPressure={value}
         toggle={() => setIsEditing((current) => !current)}
         appointmentId={appointmentId}
-        execute={execute}
       />
     );
   }
 
-  return <BloodPressureInfo value={optimisticState.bloodPressure} toggle={() => setIsEditing((current) => !current)} />;
+  return <BloodPressureInfo value={value} toggle={() => setIsEditing((current) => !current)} />;
 };

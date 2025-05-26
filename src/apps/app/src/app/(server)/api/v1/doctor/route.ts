@@ -7,7 +7,7 @@ import { PrismaDoctorRepository } from '@helsa/engine/doctor/infrastructure/pers
 import { UpdateRole } from '@helsa/engine/user/application/update-role';
 import { UserRoleValue } from '@helsa/engine/user/domain/user-role';
 import { PrismaUserRepository } from '@helsa/engine/user/infrastructure/prisma-user-repository';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { routeHandler } from '../route-handler';
 
@@ -20,7 +20,7 @@ const schema = z.object({
   }),
 });
 
-export const POST = routeHandler(async ({ req }) => {
+export const POST = async (req: NextRequest) => {
   const { doctor } = schema.parse(await req.json());
   const service = new CreateDoctor(new PrismaDoctorRepository(database));
   const updateService = new UpdateRole(new PrismaUserRepository(database));
@@ -29,7 +29,7 @@ export const POST = routeHandler(async ({ req }) => {
   await updateService.run(UserRoleValue.DOCTOR, doctor.userId);
 
   return NextResponse.json({ success: true, message: 'Doctor created successfully' }, { status: 200 });
-});
+};
 
 const searchSchema = z.object({
   q: z.string().optional(),
@@ -39,8 +39,8 @@ const searchSchema = z.object({
   experience: z.number().optional(),
 });
 
-export const GET = routeHandler(async ({ user, params, searchParams }) => {
-  const parsedInput = searchSchema.parse(searchParams);
+export const GET = routeHandler(async ({ searchParams }) => {
+  const parsedInput = searchSchema.parse(JSON.parse(searchParams.filters || '{}'));
   const service = new GetDoctors(new PrismaDoctorRepository(database));
   const doctors = await service.run(parsedInput);
   return NextResponse.json(

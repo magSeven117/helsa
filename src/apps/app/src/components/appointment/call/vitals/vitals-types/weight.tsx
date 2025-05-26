@@ -1,18 +1,17 @@
 'use client';
 
-import { saveVitals } from '@/src/actions/appointment/save-vitals';
 import { Button } from '@helsa/ui/components/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@helsa/ui/components/form';
 import { Input } from '@helsa/ui/components/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2, Weight as WeightIcon, X } from 'lucide-react';
-import { useOptimisticAction } from 'next-safe-action/hooks';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { VitalSign } from '../info';
+import { useVitals } from '../use-vitals';
 
 type WightProps = {
   value: number;
@@ -40,12 +39,10 @@ const WeightForm = ({
   weight,
   toggle,
   appointmentId,
-  execute,
 }: {
   weight: number;
   toggle: VoidFunction;
   appointmentId: string;
-  execute: any;
 }) => {
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -56,10 +53,11 @@ const WeightForm = ({
     mode: 'all',
   });
 
+  const { saveVital } = useVitals(appointmentId);
+
   const submit = async (data: z.infer<typeof formSchema>) => {
     try {
-      await execute({
-        appointmentId: appointmentId,
+      await saveVital({
         weight: Number(data.weight),
       });
       toggle();
@@ -112,21 +110,12 @@ const WeightForm = ({
 
 export const Weight = ({ value, appointmentId }: { value: number; appointmentId: string }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const { optimisticState, execute } = useOptimisticAction(saveVitals, {
-    currentState: { weight: value },
-    updateFn: (state, newValue) => ({ weight: newValue.weight! }),
-  });
 
   if (isEditing) {
     return (
-      <WeightForm
-        weight={value}
-        toggle={() => setIsEditing((current) => !current)}
-        appointmentId={appointmentId}
-        execute={execute}
-      />
+      <WeightForm weight={value} toggle={() => setIsEditing((current) => !current)} appointmentId={appointmentId} />
     );
   }
 
-  return <WeightInfo value={optimisticState.weight} toggle={() => setIsEditing((current) => !current)} />;
+  return <WeightInfo value={value} toggle={() => setIsEditing((current) => !current)} />;
 };

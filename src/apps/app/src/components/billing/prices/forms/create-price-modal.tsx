@@ -1,5 +1,6 @@
 'use client';
-import { savePrice } from '@/src/actions/doctor/save-price';
+import { Primitives } from '@helsa/ddd/types/primitives';
+import { AppointmentType } from '@helsa/engine/appointment/domain/appointment-type';
 import { Button } from '@helsa/ui/components/button';
 import { DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@helsa/ui/components/dialog';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@helsa/ui/components/form';
@@ -7,19 +8,18 @@ import { Input } from '@helsa/ui/components/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@helsa/ui/components/select';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
-import { useAction } from 'next-safe-action/hooks';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { v4 } from 'uuid';
 import { z } from 'zod';
+import { useCreatePrice, usePriceTypes } from '../use-prices';
 
 type Props = {
   onOpenChange: (isOpen: boolean) => void;
   isOpen: boolean;
   doctorId: string;
-  types: any[];
 };
 
 const formSchema = z.object({
@@ -46,18 +46,10 @@ const currencies = [
   { label: 'JPY', value: 'JPY' },
 ];
 
-const CreatePriceModal = ({ isOpen, onOpenChange, doctorId, types }: Props) => {
+const CreatePriceModal = ({ isOpen, onOpenChange, doctorId }: Props) => {
+  const { types } = usePriceTypes();
+  const { createPrice, isPending } = useCreatePrice(doctorId);
   const router = useRouter();
-  const createType = useAction(savePrice, {
-    onSuccess: () => {
-      onOpenChange(false);
-      toast.success('Tarifa creada');
-      router.refresh();
-    },
-    onError: () => {
-      toast.error('Error al crear la tarifa');
-    },
-  });
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -78,16 +70,23 @@ const CreatePriceModal = ({ isOpen, onOpenChange, doctorId, types }: Props) => {
     });
   }, [isOpen]);
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    createType.execute({
-      name: data.name,
-      amount: parseFloat(data.amount),
-      duration: parseInt(data.duration),
-      typeId: data.typeId,
-      doctorId,
-      currency: data.currency,
-      id: v4(),
-    });
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    try {
+      await createPrice({
+        name: data.name,
+        amount: parseFloat(data.amount),
+        duration: parseInt(data.duration),
+        typeId: data.typeId,
+        doctorId,
+        currency: data.currency,
+        id: v4(),
+      });
+      onOpenChange(false);
+      toast.success('Tarifa creada');
+      router.refresh();
+    } catch (error) {
+      toast.error('Error al crear la tarifa');
+    }
   }
   return (
     <DialogContent className="max-w-[555px] sm:rounded-none">
@@ -173,7 +172,7 @@ const CreatePriceModal = ({ isOpen, onOpenChange, doctorId, types }: Props) => {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent className="rounded-none">
-                            {types.map((type) => (
+                            {types.map((type: Primitives<AppointmentType>) => (
                               <SelectItem key={type.id} value={type.id} className="rounded-none">
                                 <div className="flex justify-start items-center gap-3">
                                   <div className="size-3" style={{ backgroundColor: type.color }}></div>
@@ -224,8 +223,8 @@ const CreatePriceModal = ({ isOpen, onOpenChange, doctorId, types }: Props) => {
                   <span className="text-sm text-destructive">Please complete the fields above.</span>
                 )}
               </div>
-              <Button type="submit" disabled={createType.status === 'executing'}>
-                {createType.status === 'executing' ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Create'}
+              <Button type="submit" disabled={isPending}>
+                {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Create'}
               </Button>
             </DialogFooter>
           </div>

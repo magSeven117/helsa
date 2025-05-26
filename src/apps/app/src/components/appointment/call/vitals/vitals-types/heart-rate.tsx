@@ -1,18 +1,17 @@
 'use client';
 
-import { saveVitals } from '@/src/actions/appointment/save-vitals';
 import { Button } from '@helsa/ui/components/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@helsa/ui/components/form';
 import { Input } from '@helsa/ui/components/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Heart, Loader2, X } from 'lucide-react';
-import { useOptimisticAction } from 'next-safe-action/hooks';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { VitalSign } from '../info';
+import { useVitals } from '../use-vitals';
 
 type HearRateProps = {
   value: number;
@@ -40,12 +39,10 @@ export const HeartRateForm = ({
   heartRate,
   toggle,
   appointmentId,
-  execute,
 }: {
   heartRate: number;
   toggle: VoidFunction;
   appointmentId: string;
-  execute: any;
 }) => {
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -56,9 +53,11 @@ export const HeartRateForm = ({
     mode: 'all',
   });
 
+  const { saveVital } = useVitals(appointmentId);
+
   const submit = async (data: z.infer<typeof formSchema>) => {
     try {
-      await execute({ heartRate: Number(data.heartRate), appointmentId });
+      await saveVital({ heartRate: Number(data.heartRate) });
       toggle();
       toast.success('Signos vitales guardados correctamente');
       router.refresh();
@@ -112,15 +111,10 @@ export const HeartRateForm = ({
 
 export const HeartRate = ({ value, appointmentId }: { value: number; appointmentId: string }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const { optimisticState, execute } = useOptimisticAction(saveVitals, {
-    currentState: { heartRate: value },
-    updateFn: (state, newValue) => ({ heartRate: newValue.heartRate! }),
-  });
 
   if (isEditing) {
     return (
       <HeartRateForm
-        execute={execute}
         heartRate={value}
         toggle={() => setIsEditing((current) => !current)}
         appointmentId={appointmentId}
@@ -128,5 +122,5 @@ export const HeartRate = ({ value, appointmentId }: { value: number; appointment
     );
   }
 
-  return <HeartRateInfo value={optimisticState.heartRate} toggle={() => setIsEditing((current) => !current)} />;
+  return <HeartRateInfo value={value} toggle={() => setIsEditing((current) => !current)} />;
 };

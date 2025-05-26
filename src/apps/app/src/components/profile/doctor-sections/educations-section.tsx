@@ -1,7 +1,5 @@
 'use client';
 
-import { removeEducation } from '@/src/actions/doctor/remove-education';
-import { saveEducation } from '@/src/actions/doctor/save-education';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,11 +21,12 @@ import { cn } from '@helsa/ui/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { CalendarIcon, Loader2, Pencil, Trash2 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import { v4 } from 'uuid';
 import { z } from 'zod';
+import { useRemoveEducation, useSaveEducations } from './use-doctor';
 
 const formSchema = z.object({
   education: z.object({
@@ -49,6 +48,8 @@ export const EducationsSection = ({
   const [isEditing, setIsEditing] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [editingEducationId, setEditingEducationId] = useState<string | null>(null);
+  const { saveEducations } = useSaveEducations(id);
+  const { removeEducation } = useRemoveEducation(id);
   const toggleEdit = () => setIsEditing((current) => !current);
   const toggleCreate = () => setIsCreating((current) => !current);
   const form = useForm({
@@ -62,30 +63,25 @@ export const EducationsSection = ({
     },
   });
   const { isSubmitting, isValid } = form.formState;
-  const router = useRouter();
 
   const setEditData = (education: { title: string; institution: string; graduatedAt: Date; id: string }) => {
     setEditingEducationId(education.id);
     form.setValue('education.title', education.title);
     form.setValue('education.institution', education.institution);
-    form.setValue('education.graduatedAt', education.graduatedAt);
+    form.setValue('education.graduatedAt', new Date(education.graduatedAt));
   };
 
   const onSubmit = async (data: EducationsValue) => {
     try {
-      await saveEducation({
-        doctorId: id,
-        education: {
-          title: data.education.title,
-          institution: data.education.institution,
-          graduatedAt: data.education.graduatedAt,
-          id: editingEducationId ?? undefined,
-        },
+      await saveEducations({
+        title: data.education.title,
+        institution: data.education.institution,
+        graduatedAt: data.education.graduatedAt,
+        id: isCreating ? v4() : (editingEducationId ?? ''),
       });
       toast.success('Education edited successfully.');
       setIsEditing(false);
       form.reset();
-      router.refresh();
     } catch (error) {
       console.log(error);
       toast.error('An error occurred. Please try again.');
@@ -94,10 +90,7 @@ export const EducationsSection = ({
 
   const deleteEducation = async (educationId: string) => {
     try {
-      await removeEducation({
-        doctorId: id,
-        educationId,
-      });
+      await removeEducation(educationId);
       toast.success('Education deleted successfully.');
     } catch (error) {
       console.log(error);

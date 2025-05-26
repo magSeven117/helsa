@@ -1,6 +1,5 @@
 'use client';
 
-import { saveVitals } from '@/src/actions/appointment/save-vitals';
 import { Button } from '@helsa/ui/components/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@helsa/ui/components/form';
 import { Input } from '@helsa/ui/components/input';
@@ -12,6 +11,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { VitalSign } from '../info';
+import { useVitals } from '../use-vitals';
 
 type OxygenSaturationProps = {
   value: number;
@@ -52,11 +52,11 @@ const OxygenSaturationForm = ({
     },
     mode: 'all',
   });
+  const { saveVital } = useVitals(appointmentId);
 
   const submit = async (data: z.infer<typeof formSchema>) => {
     try {
-      await saveVitals({
-        appointmentId: appointmentId,
+      await saveVital({
         oxygenSaturation: Number(data.oxygenSaturation),
       });
       toggle();

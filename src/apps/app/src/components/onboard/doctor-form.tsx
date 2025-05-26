@@ -1,5 +1,4 @@
 'use client';
-import { createDoctor } from '@/src/actions/doctor/create-doctor';
 import * as successAnimation from '@/src/assets/animations/success_animation.json';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { Specialty } from '@helsa/engine/doctor/domain/specialty';
@@ -26,13 +25,16 @@ import Lottie from 'react-lottie';
 import { toast } from 'sonner';
 import { v4 } from 'uuid';
 import { z } from 'zod';
+import { useSpecialties } from '../profile/doctor-sections/use-doctor';
+import { useCreateDoctor } from './use-create-role';
 
 const formSchema = z.object({
   licenseMedicalNumber: z.string().min(3, { message: 'License Medical Number must be at least 3 characters long' }),
   specialtyId: z.string().min(1, { message: 'Specialty is required' }),
 });
 
-const DoctorForm = ({ userId, specialties }: { userId: string; specialties: Primitives<Specialty>[] }) => {
+const DoctorForm = ({ userId }: { userId: string }) => {
+  const { specialties } = useSpecialties();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -44,16 +46,15 @@ const DoctorForm = ({ userId, specialties }: { userId: string; specialties: Prim
   const { isSubmitting } = form.formState;
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const router = useRouter();
+  const { createDoctor } = useCreateDoctor();
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       await createDoctor({
-        doctor: {
-          id: v4(),
-          licenseMedicalNumber: data.licenseMedicalNumber,
-          specialtyId: data.specialtyId,
-          userId: userId,
-        },
+        id: v4(),
+        licenseMedicalNumber: data.licenseMedicalNumber,
+        specialtyId: data.specialtyId,
+        userId: userId,
       });
       setShowSuccessModal(true);
     } catch (error) {

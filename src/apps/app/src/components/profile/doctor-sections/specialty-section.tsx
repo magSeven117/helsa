@@ -1,8 +1,5 @@
 'use client';
 
-import { updateDoctor } from '@/src/actions/doctor/update-doctor';
-import { Primitives } from '@helsa/ddd/types/primitives';
-import { Specialty } from '@helsa/engine/doctor/domain/specialty';
 import { Button } from '@helsa/ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@helsa/ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@helsa/ui/components/form';
@@ -14,6 +11,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { useSpecialties, useUpdateDoctor } from './use-doctor';
 
 const formSchema = z.object({
   specialtyId: z.string(),
@@ -21,11 +19,8 @@ const formSchema = z.object({
 
 type SpecialtyValue = z.infer<typeof formSchema>;
 
-export const SpecialtySection = ({
-  specialtyId,
-  id,
-  specialties,
-}: SpecialtyValue & { id: string; specialties: Primitives<Specialty>[] }) => {
+export const SpecialtySection = ({ specialtyId, id }: SpecialtyValue & { id: string }) => {
+  const { specialties } = useSpecialties();
   const [isEditing, setIsEditing] = useState(false);
   const toggleEdit = () => setIsEditing((current) => !current);
   const form = useForm({
@@ -36,14 +31,12 @@ export const SpecialtySection = ({
   const { isSubmitting, isValid } = form.formState;
 
   const router = useRouter();
+  const { updateDoctor } = useUpdateDoctor(id);
 
   const onSubmit = async (data: SpecialtyValue) => {
     try {
       await updateDoctor({
-        doctorId: id,
-        doctor: {
-          specialtyId: data.specialtyId,
-        },
+        specialtyId: data.specialtyId,
       });
       setIsEditing(false);
       toast.success('Specialty updated successfully');

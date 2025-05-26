@@ -9,7 +9,7 @@ export class UpdateDoctor {
 
   async run(doctorId: string, doctorData: Partial<Primitives<Doctor>>) {
     const doctor = await this.doctorRepository.getByCriteria(
-      Criteria.fromValues([{ field: 'id', value: doctorId, operator: Operator.EQUAL }])
+      Criteria.fromValues([{ field: 'id', value: doctorId, operator: Operator.EQUAL }]),
     );
     if (!doctor) {
       throw new NotFoundError('Doctor not found');

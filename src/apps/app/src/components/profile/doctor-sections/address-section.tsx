@@ -1,6 +1,5 @@
 'use client';
 
-import { saveConsultingRoom } from '@/src/actions/doctor/save-consulting-room';
 import { Button } from '@helsa/ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@helsa/ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@helsa/ui/components/form';
@@ -12,6 +11,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { useAddress } from './use-doctor';
 
 const formSchema = z.object({
   consultingRoom: z.object({
@@ -35,13 +35,11 @@ export const AddressSection = ({ consultingRoom, id }: AddressFormValues & { id:
   });
   const { isSubmitting, isValid } = form.formState;
   const router = useRouter();
+  const { saveConsultingRoomAddress } = useAddress(id);
 
   const onSubmit = async (data: AddressFormValues) => {
     try {
-      await saveConsultingRoom({
-        doctorId: id,
-        consultingRoomAddress: data.consultingRoom,
-      });
+      await saveConsultingRoomAddress(data.consultingRoom);
       setIsEditing(false);
       router.refresh();
     } catch (error) {

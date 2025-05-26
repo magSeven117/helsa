@@ -23,6 +23,7 @@ export const routeHandler = <T extends DomainError, P = unknown>(
     try {
       return await handler({ req, user, params: urlParams, searchParams });
     } catch (error) {
+      console.log(error);
       if (error instanceof DomainError) {
         const response = onError(error as T);
         if (response) {

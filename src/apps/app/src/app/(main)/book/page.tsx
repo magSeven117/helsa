@@ -1,4 +1,3 @@
-import { getSpecialties } from '@/src/actions/doctor/get-specialties';
 import DoctorSkeleton from '@/src/components/book/doctor-list-loading';
 import DoctorListWrapper from '@/src/components/book/doctor-list-wrapper';
 import SearchDoctorInput from '@/src/components/book/search-doctor-input';
@@ -20,8 +19,6 @@ const Page = async (props: { searchParams: Promise<Record<string, string | strin
     availability,
     minRate,
   };
-  const responseSpecialties = await getSpecialties();
-  const specialties = responseSpecialties?.data ?? [];
 
   const loadingKey = JSON.stringify({
     query: q,
@@ -30,18 +27,16 @@ const Page = async (props: { searchParams: Promise<Record<string, string | strin
   return (
     <div className="grid grid-cols-1 w-full">
       <div className="flex px-5 py-7 w-full">
-        <SearchDoctorInput specialties={specialties} />
+        <SearchDoctorInput />
       </div>
-      <Suspense fallback={<DoctorSkeleton />} key={loadingKey}>
-        <DoctorListWrapper
-          filters={{
-            q: q || undefined,
-            availability: availability || undefined,
-            minRate: minRate || undefined,
-            experience: experience || undefined,
-          }}
-        />
-      </Suspense>
+      <DoctorListWrapper
+        filters={{
+          q: q || undefined,
+          availability: availability || undefined,
+          minRate: minRate || undefined,
+          experience: experience || undefined,
+        }}
+      />
     </div>
   );
 };

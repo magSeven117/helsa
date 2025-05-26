@@ -79,7 +79,7 @@ export const GET = routeHandler(
 
 const createAppointmentSchema = z.object({
   id: z.string(),
-  date: z.date(),
+  date: z.string(),
   motive: z.string(),
   doctorId: z.string(),
   typeId: z.string(),
@@ -101,7 +101,7 @@ export const POST = routeHandler(
     if (!patientId) {
       return NextResponse.json({ message: 'Patient not found' }, { status: 404 });
     }
-    await service.run(id, date, motive, doctorId, patientId, typeId, specialtyId, priceId, symptoms);
+    await service.run(id, new Date(date), motive, doctorId, patientId, typeId, specialtyId, priceId, symptoms);
     return NextResponse.json({ message: 'success' }, { status: 201 });
   },
   (error) => {

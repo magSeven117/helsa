@@ -19,6 +19,7 @@ import { Calendar } from '@helsa/ui/components/calendar';
 import { readStreamableValue } from 'ai/rsc';
 import { formatISO } from 'date-fns';
 import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs';
+import { useSpecialties } from '../profile/doctor-sections/use-doctor';
 import ExperienceRange from './filter-experience-range';
 import RateRange from './filter-rate-range';
 import DoctorFilterList from './search-doctor-filters';
@@ -30,11 +31,8 @@ const defaultSearch = {
   experience: null,
 };
 
-type Props = {
-  specialties: any[];
-};
-
-const SearchDoctorInput = ({ specialties }: Props) => {
+const SearchDoctorInput = () => {
+  const { specialties } = useSpecialties();
   const [prompt, setPrompt] = useState('');
   const [streaming, setStreaming] = useState(false);
   const [filters, setFilters] = useQueryStates(

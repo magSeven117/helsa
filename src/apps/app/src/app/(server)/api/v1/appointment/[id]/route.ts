@@ -11,6 +11,7 @@ import { routeHandler } from '../../route-handler';
 export const GET = routeHandler(async ({ req, params }) => {
   const { id } = params;
   const searchParams = req.nextUrl.searchParams;
+
   const include = searchParams.get('include') ? JSON.parse(searchParams.get('include') as string) : null;
 
   const service = new GetAppointment(new PrismaAppointmentRepository(database));
@@ -27,4 +28,5 @@ export const PUT = routeHandler(async ({ params }) => {
   const call = client.video.call('appointment', id);
   await call.end();
   revalidatePath('/appointments');
+  return NextResponse.json({ message: 'Appointment finalized successfully' });
 });

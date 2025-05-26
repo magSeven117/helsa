@@ -12,7 +12,7 @@ const schema = z.object({
     id: z.string().optional(),
     title: z.string(),
     institution: z.string(),
-    graduatedAt: z.date(),
+    graduatedAt: z.string(),
   }),
 });
 

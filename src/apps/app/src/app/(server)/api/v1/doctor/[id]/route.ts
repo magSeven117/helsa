@@ -4,22 +4,18 @@ import { GetDoctor } from '@helsa/engine/doctor/application/services/get-doctor'
 import { UpdateDoctor } from '@helsa/engine/doctor/application/services/update-doctor';
 import { Doctor } from '@helsa/engine/doctor/domain/doctor';
 import { PrismaDoctorRepository } from '@helsa/engine/doctor/infrastructure/persistence/prisma-doctor-repository';
-import { unstable_cache as cache } from 'next/cache';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { routeHandler } from '../../route-handler';
 export const GET = routeHandler(async ({ user, params, searchParams }) => {
   const { id } = params;
   const { self } = searchParams;
-
+  const include = searchParams.include ? JSON.parse(searchParams.include as string) : null;
   const service = new GetDoctor(new PrismaDoctorRepository(database));
 
   const userId = self ? user.id : id;
 
-  const response = await cache(() => service.run(userId, self ? undefined : 'id'), ['doctor', id, user.id], {
-    tags: [`doctor-${id}-${user.id}`],
-    revalidate: 60 * 60,
-  })();
+  const response = await service.run(userId, self ? undefined : 'id', include);
 
   return NextResponse.json({
     message: 'Ok',
@@ -35,7 +31,7 @@ const schema = z.object({
   }),
 });
 
-export const PUT = routeHandler(async ({ user, params, req }) => {
+export const PUT = routeHandler(async ({ params, req, searchParams }) => {
   const { id } = params;
   const body = await req.json();
   const { doctor } = schema.parse(body);

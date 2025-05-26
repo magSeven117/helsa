@@ -1,19 +1,19 @@
 'use client';
 
+import { useSymptoms } from '@/src/hooks/use-symptoms';
 import { Primitives } from '@helsa/ddd/types/primitives';
-import { AppointmentType } from '@helsa/engine/appointment/domain/appointment-type';
-import { Symptom } from '@helsa/engine/appointment/domain/symptom';
 import { Doctor } from '@helsa/engine/doctor/domain/doctor';
 import { useQueryState } from 'nuqs';
+import { usePriceTypes } from '../billing/prices/use-prices';
 import BookSheet from './book-sheet';
 import DoctorCard from './doctor-card';
 
 type Props = {
   doctors: Primitives<Doctor>[];
-  types: Primitives<AppointmentType>[];
-  symptoms: Primitives<Symptom>[];
 };
-const DoctorList = ({ doctors, types, symptoms }: Props) => {
+const DoctorList = ({ doctors }: Props) => {
+  const { types } = usePriceTypes();
+  const { symptoms } = useSymptoms();
   const [doctorId, setDoctorId] = useQueryState('id');
   const setOpen = (id: string | boolean) => {
     if (id) {

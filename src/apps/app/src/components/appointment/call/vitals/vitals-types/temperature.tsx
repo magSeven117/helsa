@@ -1,18 +1,17 @@
 'use client';
 
-import { saveVitals } from '@/src/actions/appointment/save-vitals';
 import { Button } from '@helsa/ui/components/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@helsa/ui/components/form';
 import { Input } from '@helsa/ui/components/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2, Thermometer, X } from 'lucide-react';
-import { useOptimisticAction } from 'next-safe-action/hooks';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { VitalSign } from '../info';
+import { useVitals } from '../use-vitals';
 
 type TemperatureProps = {
   value: number;
@@ -40,12 +39,10 @@ const TemperatureForm = ({
   temperature,
   toggle,
   appointmentId,
-  execute,
 }: {
   temperature: number;
   toggle: VoidFunction;
   appointmentId: string;
-  execute: any;
 }) => {
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -56,9 +53,11 @@ const TemperatureForm = ({
     mode: 'all',
   });
 
+  const { saveVital } = useVitals(appointmentId);
+
   const submit = async (data: z.infer<typeof formSchema>) => {
     try {
-      await execute({
+      await saveVital({
         appointmentId: appointmentId,
         temperature: Number(data.temperature),
       });
@@ -112,20 +111,15 @@ const TemperatureForm = ({
 
 export const Temperature = ({ value, appointmentId }: { value: number; appointmentId: string }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const { optimisticState, execute } = useOptimisticAction(saveVitals, {
-    currentState: { temperature: value },
-    updateFn: (state, newValue) => ({ temperature: newValue.temperature! }),
-  });
   if (isEditing) {
     return (
       <TemperatureForm
         temperature={value}
         toggle={() => setIsEditing((current) => !current)}
         appointmentId={appointmentId}
-        execute={execute}
       />
     );
   }
 
-  return <TemperatureInfo value={optimisticState.temperature} toggle={() => setIsEditing((current) => !current)} />;
+  return <TemperatureInfo value={value} toggle={() => setIsEditing((current) => !current)} />;
 };

@@ -1,6 +1,5 @@
 'use client';
 
-import { updateDoctor } from '@/src/actions/doctor/update-doctor';
 import { Button } from '@helsa/ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@helsa/ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@helsa/ui/components/form';
@@ -12,6 +11,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { useUpdateDoctor } from './use-doctor';
 
 const formSchema = z.object({
   licenseMedicalNumber: z.string().min(2, {
@@ -31,14 +31,12 @@ export const LicenseNumberSection = ({ licenseMedicalNumber, id }: LicenseNumber
   });
   const { isSubmitting, isValid } = form.formState;
   const router = useRouter();
+  const { updateDoctor } = useUpdateDoctor(id);
 
   const onSubmit = async (data: LicenseNumberValue) => {
     try {
       await updateDoctor({
-        doctorId: id,
-        doctor: {
-          licenseMedicalNumber: data.licenseMedicalNumber,
-        },
+        licenseMedicalNumber: data.licenseMedicalNumber,
       });
       setIsEditing(false);
       router.refresh();
