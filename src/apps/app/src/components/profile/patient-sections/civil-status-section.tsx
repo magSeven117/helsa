@@ -1,6 +1,4 @@
 'use client';
-
-import { updateDemographic } from '@/src/actions/patient/update-demographic';
 import { Button } from '@helsa/ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@helsa/ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@helsa/ui/components/form';
@@ -12,6 +10,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { useUpdateDemographic } from './use-patient';
 
 const formSchema = z.object({
   civilStatus: z.enum(['SINGLE', 'MARRIED', 'DIVORCED', 'WIDOWED']),
@@ -29,10 +28,11 @@ export const CivilStatusSection = ({ civilStatus, id }: CivilStatusValue & { id:
   });
   const { isSubmitting, isValid } = form.formState;
   const router = useRouter();
+  const { updateDemographic } = useUpdateDemographic(id);
 
   const onSubmit = async (data: CivilStatusValue) => {
     try {
-      await updateDemographic({ patientId: id, demographic: data });
+      await updateDemographic(data);
       setIsEditing(false);
       toast.success('Estado civil actualizado correctamente');
       router.refresh();

@@ -1,5 +1,6 @@
 import { database } from '@helsa/database';
 import { Primitives } from '@helsa/ddd/types/primitives';
+import { GetHospital } from '@helsa/engine/hospital/application/services/get-hospital';
 import { UpdateHospital } from '@helsa/engine/hospital/application/services/update-hospital';
 import { Hospital } from '@helsa/engine/hospital/domain/hospital';
 import { PrismaHospitalRepository } from '@helsa/engine/hospital/infrastructure/prisma-hospital-repository';
@@ -37,6 +38,17 @@ export const PUT = routeHandler(async ({ req, user, params }) => {
   return NextResponse.json(
     {
       message: 'Hospital updated successfully',
+    },
+    { status: 200 },
+  );
+});
+
+export const GET = routeHandler(async ({ params }) => {
+  const service = new GetHospital(new PrismaHospitalRepository(database));
+  const hospital = await service.run(params.id);
+  return NextResponse.json(
+    {
+      data: hospital,
     },
     { status: 200 },
   );

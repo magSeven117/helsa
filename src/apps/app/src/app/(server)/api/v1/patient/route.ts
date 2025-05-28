@@ -1,7 +1,6 @@
 import { database } from '@helsa/database';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { CreatePatient } from '@helsa/engine/patient/application/services/create-patient';
-import { GetPatient } from '@helsa/engine/patient/application/services/get-patient';
 import { Patient } from '@helsa/engine/patient/domain/patient';
 import { PrismaPatientRepository } from '@helsa/engine/patient/infrastructure/prisma-patient-repository';
 import { UpdateRole } from '@helsa/engine/user/application/update-role';
@@ -34,10 +33,4 @@ export const POST = routeHandler(async ({ req }) => {
   await service.run(patient as unknown as Primitives<Patient>);
   await updateService.run(UserRoleValue.PATIENT, patient.userId);
   return NextResponse.json({ message: 'Patient created successfully' }, { status: 201 });
-});
-
-export const GET = routeHandler(async ({ user }) => {
-  const service = new GetPatient(new PrismaPatientRepository(database));
-  const response = await service.run(user.id);
-  return NextResponse.json({ data: response }, { status: 200 });
 });

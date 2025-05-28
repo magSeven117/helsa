@@ -11,30 +11,41 @@ import {
 import { Input } from '@helsa/ui/components/input';
 import { cn } from '@helsa/ui/lib/utils';
 import { Briefcase, CalendarDays, ListFilter, Search, Star } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 
-import { generateDoctorFilters } from '@/src/actions/doctor/generate-doctor-filters';
+import { experimental_useObject as useObject } from '@ai-sdk/react';
 import { Calendar } from '@helsa/ui/components/calendar';
-import { readStreamableValue } from 'ai/rsc';
-import { formatISO } from 'date-fns';
+import { formatISO, isValid } from 'date-fns';
 import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs';
+import { z } from 'zod';
 import { useSpecialties } from '../profile/doctor-sections/use-doctor';
 import ExperienceRange from './filter-experience-range';
 import RateRange from './filter-rate-range';
 import DoctorFilterList from './search-doctor-filters';
 const defaultSearch = {
   q: null,
-  specialties: null,
   availability: null,
   minRate: null,
   experience: null,
 };
 
+const parseDateSchema = z
+  .date()
+  .transform((value) => new Date(value))
+  .transform((v) => isValid(v))
+  .refine((v) => !!v, { message: 'Invalid date' });
+const filterDoctorSchema = z.object({
+  name: z.string().optional().describe('The name to search for'),
+  availability: parseDateSchema.optional().describe('The date to filter by. Return ISO-8601 format.'),
+  specialties: z.array(z.string()).optional().describe('The medical specialties to filter by'),
+  minRate: z.number().optional().describe('The min score rate to filter by'),
+  experience: z.number().optional().describe('The minimal experience years to filter by'),
+});
+
 const SearchDoctorInput = () => {
   const { specialties } = useSpecialties();
   const [prompt, setPrompt] = useState('');
-  const [streaming, setStreaming] = useState(false);
   const [filters, setFilters] = useQueryStates(
     {
       q: parseAsString,
@@ -58,39 +69,18 @@ const SearchDoctorInput = () => {
     }
   };
 
-  const handleSubmit = async () => {
-    if (prompt.split(' ').length > 1) {
-      setStreaming(true);
+  const { object, submit, isLoading } = useObject({
+    api: '/api/v1/appointment/filters',
+    schema: filterDoctorSchema,
+  });
 
-      const { object } = await generateDoctorFilters(
-        prompt,
-        `
-          specialties: ${specialties.map((s) => s.name).join(', ')}
-        `,
-      );
-      let finalObject = {};
-
-      for await (const partialObject of readStreamableValue(object)) {
-        if (partialObject) {
-          finalObject = {
-            ...finalObject,
-            ...partialObject,
-            q: partialObject?.name ?? null,
-            minRate: partialObject?.minRate ?? null,
-            experience: partialObject?.experience ?? null,
-          };
-        }
-      }
-
-      setFilters({
-        q: null,
-        ...finalObject,
-      });
-      setStreaming(false);
-    } else {
-      setFilters({ q: prompt.length > 0 ? prompt : null });
-    }
-  };
+  useEffect(() => {
+    setFilters((prev) => ({
+      q: (object as any)?.name ?? null,
+      minRate: (object as any)?.minRate ?? null,
+      experience: (object as any)?.experience ?? null,
+    }));
+  }, [object]);
 
   useHotkeys(
     'esc',
@@ -112,7 +102,16 @@ const SearchDoctorInput = () => {
           className="relative w-full lg:w-fit"
           onSubmit={(e) => {
             e.preventDefault();
-            handleSubmit();
+            if (prompt.split(' ').length > 1) {
+              submit({
+                prompt,
+                context: `
+                  specialties: ${specialties.map((s) => s.name).join(', ')}
+                `,
+              });
+            } else {
+              setFilters({ q: prompt.length > 0 ? prompt : null });
+            }
           }}
         >
           <Search className="absolute pointer-events-none left-3 top-[11px] size-4" />
@@ -140,7 +139,7 @@ const SearchDoctorInput = () => {
             </button>
           </DropdownMenuTrigger>
         </form>
-        <DoctorFilterList filters={filters} onRemove={setFilters} loading={streaming} specialties={specialties} />
+        <DoctorFilterList filters={filters} onRemove={setFilters} loading={isLoading} specialties={specialties} />
       </div>
       <DropdownMenuContent className="rounded-md w-[350px]" align="end" sideOffset={19} alignOffset={-11} side="bottom">
         <DropdownMenuSub>

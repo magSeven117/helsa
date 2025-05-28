@@ -1,6 +1,5 @@
 'use client';
 
-import { updateDemographic } from '@/src/actions/patient/update-demographic';
 import { Button } from '@helsa/ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@helsa/ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@helsa/ui/components/form';
@@ -12,6 +11,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { useUpdateDemographic } from './use-patient';
 
 const formSchema = z.object({
   educativeLevel: z.enum(['PRIMARY', 'SECONDARY', 'TECHNICAL', 'UNIVERSITY']),
@@ -29,10 +29,11 @@ export const EducationLevelSection = ({ educativeLevel, id }: EducationLevelValu
   });
   const { isSubmitting, isValid } = form.formState;
   const router = useRouter();
+  const { updateDemographic } = useUpdateDemographic(id);
 
   const onSubmit = async (data: EducationLevelValue) => {
     try {
-      await updateDemographic({ patientId: id, demographic: data });
+      await updateDemographic(data);
       setIsEditing(false);
       toast.success('Nivel educativo actualizado correctamente.');
       router.refresh();

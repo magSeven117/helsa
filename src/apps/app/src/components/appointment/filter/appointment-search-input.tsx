@@ -1,6 +1,6 @@
 'use client';
-import { generateAppointmentFilters } from '@/src/actions/appointment/generate-appointment-filters';
 import { useTypes } from '@/src/hooks/appointment/use-types';
+import { experimental_useObject as useObject } from '@ai-sdk/react';
 import { AppointmentStatusEnum } from '@helsa/engine/appointment/domain/status';
 import { Calendar } from '@helsa/ui/components/calendar';
 import {
@@ -14,15 +14,26 @@ import {
 } from '@helsa/ui/components/dropdown-menu';
 import { Input } from '@helsa/ui/components/input';
 import { cn } from '@helsa/ui/lib/utils';
-import { readStreamableValue } from 'ai/rsc';
-import { formatISO } from 'date-fns';
+import { formatISO, isValid } from 'date-fns';
 import { CalendarDays, ListFilter, Route, Search, SquareStack } from 'lucide-react';
 import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
+import { z } from 'zod';
 import AppointmentSearchFilters from './appointment-search-filters';
 import SelectState from './state-filter';
 import SelectType from './type-filter';
+
+const parseDateSchema = z
+  .date()
+  .transform((value) => new Date(value))
+  .transform((v) => isValid(v))
+  .refine((v) => !!v, { message: 'Invalid date' });
+const filterAppointmentSchema = z.object({
+  date: parseDateSchema.optional().describe('The date to filter by. Return ISO-8601 format.'),
+  types: z.array(z.string()).optional().describe('The appointment types to filter by'),
+  states: z.array(z.string()).optional().describe('The states to filter by'),
+});
 
 const defaultSearch = {
   types: null,
@@ -36,7 +47,6 @@ const AppointmentSearchInput = () => {
   const { types } = useTypes();
   const states = [...Object.values(AppointmentStatusEnum)];
   const [prompt, setPrompt] = React.useState('');
-  const [streaming, setStreaming] = React.useState(false);
   const [filters, setFilters] = useQueryStates(
     {
       types: parseAsArrayOf(parseAsString),
@@ -60,37 +70,17 @@ const AppointmentSearchInput = () => {
       setFilters(defaultSearch);
     }
   };
+  const { object, submit, isLoading } = useObject({
+    api: '/api/v1/appointment/filters',
+    schema: filterAppointmentSchema,
+  });
 
-  const handleSubmit = async () => {
-    if (prompt.split(' ').length > 1) {
-      setStreaming(true);
-
-      const { object } = await generateAppointmentFilters(
-        prompt,
-        `
-          types: ${types.map((t) => t.name).join(', ')}
-          states: ${states.join(', ')}
-        `,
-      );
-      let finalObject = {};
-
-      for await (const partialObject of readStreamableValue(object)) {
-        console.log(partialObject);
-        if (partialObject) {
-          finalObject = {
-            ...finalObject,
-            ...partialObject,
-            types: partialObject?.types?.map((name: string) => types?.find((type) => type.name === name)?.name) ?? null,
-            states:
-              partialObject?.states?.map((name: string) => states?.find((state) => state === name) ?? null) ?? null,
-          };
-        }
-      }
-
-      setFilters(finalObject);
-      setStreaming(false);
-    }
-  };
+  useEffect(() => {
+    setFilters((prev) => ({
+      types: (object as any)?.types?.map((name: string) => types?.find((type) => type.name === name)?.name) ?? null,
+      states: (object as any)?.states?.map((name: string) => states?.find((state) => state === name) ?? null) ?? null,
+    }));
+  }, [object]);
 
   useHotkeys(
     'esc',
@@ -111,7 +101,15 @@ const AppointmentSearchInput = () => {
           className="relative w-full lg:w-fit"
           onSubmit={(e) => {
             e.preventDefault();
-            handleSubmit();
+            if (prompt.split(' ').length > 1) {
+              submit({
+                prompt,
+                context: `
+          types: ${types.map((t) => t.name).join(', ')}
+          states: ${states.join(', ')}
+        `,
+              });
+            }
           }}
         >
           <Search className="absolute pointer-events-none left-3 top-[11px] size-4" />
@@ -142,7 +140,7 @@ const AppointmentSearchInput = () => {
         <AppointmentSearchFilters
           filters={filters}
           onRemove={setFilters}
-          loading={streaming}
+          loading={isLoading}
           states={states}
           types={types}
         />

@@ -1,6 +1,5 @@
 'use client';
 
-import { updateBiometric } from '@/src/actions/patient/update-biometric';
 import { Button } from '@helsa/ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@helsa/ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@helsa/ui/components/form';
@@ -12,6 +11,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { useUpdateBiometric } from './use-patient';
 
 const formSchema = z.object({
   organDonor: z.enum(['Yes', 'No']),
@@ -29,10 +29,11 @@ export const OrganDonorSection = ({ organDonor, id }: OrganDonorValue & { id: st
   });
   const { isSubmitting, isValid } = form.formState;
   const router = useRouter();
+  const { updateBiometric } = useUpdateBiometric(id);
 
   const onSubmit = async (data: OrganDonorValue) => {
     try {
-      await updateBiometric({ patientId: id, biometric: data });
+      await updateBiometric(data);
       setIsEditing(false);
       toast.success('Estado de donador de órganos actualizado correctamente.');
       router.refresh();

@@ -1,0 +1,358 @@
+openapi: 3.1.0
+info:
+  title: Helsa API
+  version: 1.0.0
+  description: API documentation for Helsa v1 endpoints
+servers:
+  - url: /api/v1
+    description: Local development server
+  - url: https://api.helsahealthcare.com/api/v1
+    description: Production server
+
+paths:
+  /appointment:
+    get:
+      tags: [appointment]
+      summary: List appointments
+      parameters:
+        - in: query
+          name: filter
+          schema:
+            type: string
+        - in: query
+          name: pagination
+          schema:
+            type: string
+        - in: query
+          name: sort
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of appointments
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppointmentsResponse'
+    post:
+      tags: [appointment]
+      summary: Create appointment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppointmentInput'
+      responses:
+        '201':
+          description: Appointment created
+  /appointment/{id}:
+    get:
+      tags: [appointment]
+      summary: Get appointment by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Appointment details
+    put:
+      tags: [appointment]
+      summary: Finalize appointment
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Appointment finalized
+  /appointment/{id}/notes:
+    get:
+      tags: [appointment]
+      summary: Get appointment notes
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Notes list
+    post:
+      tags: [appointment]
+      summary: Add note to appointment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppointmentNoteInput'
+      responses:
+        '201':
+          description: Note created
+  /doctor:
+    get:
+      tags: [doctor]
+      summary: List doctors
+      parameters:
+        - in: query
+          name: filters
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of doctors
+    post:
+      tags: [doctor]
+      summary: Create doctor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DoctorInput'
+      responses:
+        '200':
+          description: Doctor created
+  /doctor/{id}:
+    get:
+      tags: [doctor]
+      summary: Get doctor by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Doctor details
+    put:
+      tags: [doctor]
+      summary: Update doctor
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DoctorUpdateInput'
+      responses:
+        '200':
+          description: Doctor updated
+  /patient:
+    get:
+      tags: [patient]
+      summary: Get patient profile
+      responses:
+        '200':
+          description: Patient profile
+    post:
+      tags: [patient]
+      summary: Create patient
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatientInput'
+      responses:
+        '201':
+          description: Patient created
+  /patient/{id}/demographic:
+    put:
+      tags: [patient]
+      summary: Update patient demographic
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatientDemographicInput'
+      responses:
+        '200':
+          description: Demographic updated
+  /treatment:
+    get:
+      tags: [treatment]
+      summary: List treatments
+      parameters:
+        - in: query
+          name: patientId
+          schema:
+            type: string
+        - in: query
+          name: appointmentId
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of treatments
+    post:
+      tags: [treatment]
+      summary: Create treatment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TreatmentInput'
+      responses:
+        '201':
+          description: Treatment created
+components:
+  schemas:
+    AppointmentInput:
+      type: object
+      properties:
+        id:
+          type: string
+        date:
+          type: string
+        motive:
+          type: string
+        doctorId:
+          type: string
+        typeId:
+          type: string
+        priceId:
+          type: string
+        specialtyId:
+          type: string
+        symptoms:
+          type: array
+          items:
+            type: string
+    AppointmentsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AppointmentInput'
+    AppointmentNoteInput:
+      type: object
+      properties:
+        note:
+          type: string
+        id:
+          type: string
+        isPublic:
+          type: boolean
+    DoctorInput:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        licenseMedicalNumber:
+          type: string
+        specialtyId:
+          type: string
+    DoctorUpdateInput:
+      type: object
+      properties:
+        doctor:
+          type: object
+          properties:
+            licenseMedicalNumber:
+              type: string
+            experience:
+              type: number
+            specialtyId:
+              type: string
+    PatientInput:
+      type: object
+      properties:
+        userId:
+          type: string
+        demographic:
+          type: object
+          properties:
+            civilStatus:
+              type: string
+            occupation:
+              type: string
+            educativeLevel:
+              type: string
+        biometric:
+          type: object
+          properties:
+            height:
+              type: number
+            bloodType:
+              type: string
+            organDonor:
+              type: string
+    PatientDemographicInput:
+      type: object
+      properties:
+        demographic:
+          type: object
+          properties:
+            civilStatus:
+              type: string
+            occupation:
+              type: string
+            educativeLevel:
+              type: string
+    TreatmentInput:
+      type: object
+      properties:
+        id:
+          type: string
+        description:
+          type: string
+        type:
+          type: string
+        status:
+          type: string
+        startDate:
+          type: string
+        endDate:
+          type: string
+        patientId:
+          type: string
+        doctorId:
+          type: string
+        appointmentId:
+          type: string
+        medication:
+          type: object
+          properties:
+            name:
+              type: string
+            dose:
+              type: string
+            frequency:
+              type: string
+            presentation:
+              type: string
+        therapy:
+          type: object
+          properties:
+            description:
+              type: string
+        procedure:
+          type: object
+          properties:
+            description:
+              type: string

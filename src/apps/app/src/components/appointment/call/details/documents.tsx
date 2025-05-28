@@ -1,6 +1,6 @@
 'use client';
-import { uploadDocument } from '@/src/actions/medical-document/upload-document';
 import { useSession } from '@/src/components/auth/session-provider';
+import { ErrorFallback } from '@/src/components/error-fallback';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { Appointment } from '@helsa/engine/appointment/domain/appointment';
 import { Document } from '@helsa/engine/document/domain/document';
@@ -12,6 +12,7 @@ import { Input } from '@helsa/ui/components/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@helsa/ui/components/select';
 import { Textarea } from '@helsa/ui/components/textarea';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ClipboardMinus, FileText, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -64,6 +65,7 @@ export const DocumentForm = ({ data, toggle }: { data: Primitives<Appointment>; 
     resolver: zodResolver(formSchema),
     defaultValues: { description: '', documentType: '' },
   });
+  const { addDocument: uploadDocument } = useAddDocument(data.id);
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (document) {
       const supabase = createClient();
@@ -160,17 +162,20 @@ export const DocumentForm = ({ data, toggle }: { data: Primitives<Appointment>; 
   );
 };
 
-export const DocumentsContent = ({
-  data,
-  documents,
-}: {
-  data: Primitives<Appointment>;
-  documents: Primitives<Document>[];
-}) => {
+export const DocumentsContent = ({ data }: { data: Primitives<Appointment> }) => {
+  const { documents, isPending, error } = useDocuments(data.id);
   const [editing, setEditing] = useState(false);
   const { user } = useSession();
 
   const isPatient = user?.role === 'PATIENT';
+
+  if (isPending) {
+    return <Loader2 className="size-6 animate-spin" />;
+  }
+
+  if (error) {
+    return <ErrorFallback />;
+  }
 
   return (
     <>
@@ -180,4 +185,56 @@ export const DocumentsContent = ({
       {editing && <DocumentForm data={data} toggle={() => setEditing((current) => !current)} />}
     </>
   );
+};
+
+const useDocuments = (id: string) => {
+  const { data, isPending, error } = useQuery({
+    initialData: [],
+    queryKey: ['documents', id],
+    queryFn: async () => {
+      const response = await fetch(`/api/v1/appointment/${id}/document`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch documents');
+      }
+      const data = await response.json();
+      return data.data;
+    },
+    refetchOnWindowFocus: false,
+    enabled: () => !!id,
+  });
+  return {
+    documents: data,
+    isPending,
+    error,
+  };
+};
+
+const useAddDocument = (appointmentId: string) => {
+  const queryClient = useQueryClient();
+  const { mutateAsync, isPending, error } = useMutation({
+    mutationKey: ['addDocument', appointmentId],
+    mutationFn: async (data: Record<string, any>) => {
+      const response = await fetch(`/api/v1/medical-document`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to add document');
+      }
+
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['documents', appointmentId] });
+    },
+  });
+  return {
+    addDocument: mutateAsync,
+    isPending,
+    error,
+  };
 };

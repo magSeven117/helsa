@@ -7,9 +7,9 @@ import { HospitalRepository } from '../../domain/hospital-repository';
 export class GetHospital {
   constructor(private hospitalRepository: HospitalRepository) {}
 
-  async run(id: string): Promise<Primitives<Hospital>> {
+  async run(id: string, field = 'id'): Promise<Primitives<Hospital>> {
     const hospital = await this.hospitalRepository.find(
-      Criteria.fromValues([{ field: 'adminId', value: id, operator: Operator.EQUAL }])
+      Criteria.fromValues([{ field, value: id, operator: Operator.EQUAL }]),
     );
 
     if (!hospital) {

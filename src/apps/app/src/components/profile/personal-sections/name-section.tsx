@@ -1,6 +1,4 @@
 'use client';
-
-import { authClient } from '@helsa/auth/client';
 import { Button } from '@helsa/ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@helsa/ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@helsa/ui/components/form';
@@ -13,6 +11,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { useSession } from '../../auth/session-provider';
+import { useUser } from './use-user';
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -33,10 +32,11 @@ export const NameSection = () => {
   const { isSubmitting, isValid } = form.formState;
 
   const router = useRouter();
+  const { updateUser } = useUser();
 
   const onSubmit = async (data: NameFormValues) => {
     try {
-      await authClient.updateUser({
+      await updateUser({
         name: data.name,
       });
       setIsEditing(false);

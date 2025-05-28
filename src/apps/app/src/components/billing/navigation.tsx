@@ -4,14 +4,14 @@ import { cn } from '@helsa/ui/lib/utils';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React from 'react';
+import { useSession } from '../auth/session-provider';
 
-interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
-  role: string;
-}
+interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {}
 
 export function NavigationBilling({ className, role, ...props }: SidebarNavProps) {
+  const { user } = useSession();
   const pathname = usePathname();
-  const items = navItems.filter((item) => item.roles.includes(role));
+  const items = navItems.filter((item) => item.roles.includes(user.role));
   return (
     <Nav
       links={items.map((item) => ({
@@ -60,6 +60,6 @@ const navItems = [
   {
     title: 'Tarifas',
     href: '/billing/prices',
-    roles: ['DOCTOR'],
+    roles: ['DOCTOR', 'HOSPITAL'],
   },
 ];

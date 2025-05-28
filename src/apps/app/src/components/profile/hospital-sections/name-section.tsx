@@ -1,6 +1,5 @@
 'use client';
 
-import { updateHospital } from '@/src/actions/hospital/update-hospital';
 import { Button } from '@helsa/ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@helsa/ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@helsa/ui/components/form';
@@ -12,6 +11,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { useUpdateHospital } from './use-hospital';
 
 const formSchema = z.object({
   name: z.string().min(3, { message: 'El nombre no puede estar vació' }),
@@ -29,10 +29,11 @@ export const NameSection = ({ name, id }: NameSectionValue & { id: string }) => 
   });
   const { isSubmitting, isValid } = form.formState;
   const router = useRouter();
+  const { updateHospital } = useUpdateHospital(id);
 
   const onSubmit = async (data: NameSectionValue) => {
     try {
-      await updateHospital({ hospitalId: id, hospital: data });
+      await updateHospital(data);
       setIsEditing(false);
       toast.success('Nombre actualizado correctamente');
       router.refresh();

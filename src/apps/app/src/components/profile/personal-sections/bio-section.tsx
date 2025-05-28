@@ -1,6 +1,5 @@
 'use client';
 
-import { updateBio } from '@/src/actions/user/update-bio';
 import { Button } from '@helsa/ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@helsa/ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@helsa/ui/components/form';
@@ -13,6 +12,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { useSession } from '../../auth/session-provider';
+import { useUser } from './use-user';
 
 const formSchema = z.object({
   bio: z.string().min(2, {
@@ -32,10 +32,11 @@ export const BioSection = () => {
   });
   const { isSubmitting, isValid } = form.formState;
   const router = useRouter();
+  const { updateUser } = useUser();
 
   const onSubmit = async (data: BioFormValues) => {
     try {
-      await updateBio({
+      await updateUser({
         bio: data.bio,
       });
       setIsEditing(false);

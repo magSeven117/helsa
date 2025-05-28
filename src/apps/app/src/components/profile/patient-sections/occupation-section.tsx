@@ -1,6 +1,5 @@
 'use client';
 
-import { updateDemographic } from '@/src/actions/patient/update-demographic';
 import { Button } from '@helsa/ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@helsa/ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@helsa/ui/components/form';
@@ -12,6 +11,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { useUpdateDemographic } from './use-patient';
 
 const formSchema = z.object({
   occupation: z.string().min(3, { message: 'Occupation must be at least 3 characters long' }),
@@ -29,10 +29,11 @@ export const OccupationSection = ({ occupation, id }: OccupationValue & { id: st
   });
   const { isSubmitting, isValid } = form.formState;
   const router = useRouter();
+  const { updateDemographic } = useUpdateDemographic(id);
 
   const onSubmit = async (data: OccupationValue) => {
     try {
-      await updateDemographic({ patientId: id, demographic: data });
+      await updateDemographic(data);
       setIsEditing(false);
       toast.success('Ocupación actualizada correctamente');
       router.refresh();

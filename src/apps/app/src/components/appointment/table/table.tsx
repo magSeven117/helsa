@@ -1,6 +1,6 @@
 'use client';
 
-import { updateColumnVisibilityAction } from '@/src/actions/appointment/update-column-visibility-action';
+import { updateColumnVisibilityAction } from '@/src/actions/update-column-visibility-action';
 import { useAppointmentStore } from '@/src/store/appointments-store';
 import { Meta } from '@helsa/ddd/core/collection.';
 import { Table, TableBody, TableCell, TableRow } from '@helsa/ui/components/table';

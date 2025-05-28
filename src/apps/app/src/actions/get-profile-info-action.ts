@@ -47,7 +47,7 @@ const getDoctorProfile = async (userId: string) => {
 
 const getPatientProfile = async (userId: string) => {
   const service = new GetPatient(new PrismaPatientRepository(database));
-  const response = await cache(() => service.run(userId), [`patient-${userId}`], {
+  const response = await cache(() => service.run(userId, 'userId'), [`patient-${userId}`], {
     tags: [`patient-${userId}`],
     revalidate: 60 * 60,
   })();
@@ -57,7 +57,7 @@ const getPatientProfile = async (userId: string) => {
 
 const getHospitalProfile = async (userId: string) => {
   const service = new GetHospital(new PrismaHospitalRepository(database));
-  const response = await cache(() => service.run(userId), ['get-hospital', userId], {
+  const response = await cache(() => service.run(userId, 'adminId'), ['get-hospital', userId], {
     tags: [`hospital-${userId}`],
     revalidate: 60 * 60,
   })();

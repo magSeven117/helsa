@@ -1,4 +1,4 @@
-import { getProfile } from '@/src/actions/user/profile';
+import { getProfile } from '@/src/actions/get-profile-info-action';
 import ModalAssistant from '@/src/components/assistant/modal-assistant';
 import { SessionProvider } from '@/src/components/auth/session-provider';
 import SideBar from '@/src/components/side-bar/side-bar';

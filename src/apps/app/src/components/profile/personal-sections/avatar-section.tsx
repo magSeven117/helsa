@@ -1,5 +1,4 @@
 'use client';
-import { authClient } from '@helsa/auth/client';
 import { upload } from '@helsa/storage';
 import { createClient } from '@helsa/supabase/client';
 import { Button } from '@helsa/ui/components/button';
@@ -14,6 +13,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { useSession } from '../../auth/session-provider';
+import { useUser } from './use-user';
 
 const formSchema = z.object({
   image: z.string().optional(),
@@ -29,6 +29,7 @@ const AvatarSection = () => {
   });
   const { isSubmitting, isValid } = form.formState;
   const router = useRouter();
+  const { updateUser } = useUser();
   const onSubmit = async (_values: AvatarSectionValues) => {
     if (avatarFile) {
       const supabase = createClient();
@@ -38,7 +39,7 @@ const AvatarSection = () => {
         bucket: 'profiles',
       });
       if (res) {
-        await authClient.updateUser({ image: res });
+        await updateUser({ image: res });
       }
       toast.success('Avatar actualizado correctamente');
       router.refresh();

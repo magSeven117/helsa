@@ -1,6 +1,5 @@
 'use client';
 
-import { updateHospital } from '@/src/actions/hospital/update-hospital';
 import { Button } from '@helsa/ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@helsa/ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@helsa/ui/components/form';
@@ -12,6 +11,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { useUpdateHospital } from './use-hospital';
 
 const formSchema = z.object({
   address: z.object({
@@ -41,13 +41,11 @@ export const AddressSection = ({ address, id }: AddressFormValues & { id: string
   });
   const { isSubmitting, isValid } = form.formState;
   const router = useRouter();
+  const { updateHospital } = useUpdateHospital(id);
   const onSubmit = async (data: AddressFormValues) => {
     try {
       await updateHospital({
-        hospitalId: id,
-        hospital: {
-          address: data.address,
-        },
+        address: data.address,
       });
       setIsEditing(false);
       form.reset();

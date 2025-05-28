@@ -1,6 +1,4 @@
-import { getCurrentUser } from '@/src/actions/user/get-current-user';
 import { NavigationProfile } from '@/src/components/profile/navigation-profile';
-import { redirect } from 'next/navigation';
 import React from 'react';
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {

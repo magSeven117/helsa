@@ -1,6 +1,5 @@
 import { Meta } from '@helsa/ddd/core/collection.';
 import { Direction } from '@helsa/ddd/core/criteria';
-import { NotFoundError } from '@helsa/ddd/core/errors/not-found-error';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { GetPatient } from '../../patient/application/services/get-patient';
 import { Appointment } from '../domain/appointment';
@@ -24,13 +23,9 @@ export class GetPatientAppointments {
     filters: AppointmentFilter,
     pagination?: AppointmentPagination,
     sort?: AppointmentSort,
+    field = 'userId',
   ): Promise<{ data: Primitives<Appointment>[]; meta: Meta }> {
-    const patient = await this.patientGetter.run(id);
-
-    console.log('PATIENT id: ', patient.id);
-    if (!patient) {
-      throw new NotFoundError(`Patient of user ${id} not found`);
-    }
+    const patient = await this.patientGetter.run(id, field);
 
     const criteria = AppointmentCriteria.searchByPatientId(patient.id);
 

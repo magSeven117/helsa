@@ -51,7 +51,7 @@ export const DeleteAccountSection = () => {
       <CardFooter className="border-t pt-4 flex justify-end items-start gap-2 md:items-center flex-col md:flex-row">
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button className="rounded-none" variant="destructive">
+            <Button className="rounded-none text-foreground" variant="destructive">
               Eliminar
             </Button>
           </AlertDialogTrigger>
