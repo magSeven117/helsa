@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@helsa/actions": "*",
     "@helsa/auth": "*",
     "@helsa/database": "*",
     "@helsa/ddd": "*",
