@@ -1,4 +1,4 @@
-import ComingSoon from '@/src/components/coming-soon';
+import ComingSoon from '@/src/modules/shared/components/coming-soon';
 
 const Page = () => {
   return (

@@ -1,7 +1,7 @@
-import { ManageSubscription } from '@/src/components/profile/billing/manage-subscription';
-import { Plans } from '@/src/components/profile/billing/plans';
-import { UsageSkeleton } from '@/src/components/profile/billing/usage';
-import { UsageServer } from '@/src/components/profile/billing/usage.server';
+import { ManageSubscription } from '@/src/modules/profile/components/billing/manage-subscription';
+import { Plans } from '@/src/modules/profile/components/billing/plans';
+import { UsageSkeleton } from '@/src/modules/profile/components/billing/usage';
+import { UsageServer } from '@/src/modules/profile/components/billing/usage.server';
 import { Suspense } from 'react';
 
 const Page = async ({ searchParams }: { searchParams: Promise<{ plan: 'free' | 'standard' | 'pro' }> }) => {

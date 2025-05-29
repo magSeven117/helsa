@@ -1,4 +1,4 @@
-import { HospitalProfileIndex } from '@/src/components/profile/hospital-sections';
+import { HospitalProfileIndex } from '@/src/modules/profile/components/hospital-sections';
 
 const Page = async () => {
   return (

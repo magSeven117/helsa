@@ -1,8 +1,8 @@
-import { getProfile } from '@/src/actions/get-profile-info-action';
-import ModalAssistant from '@/src/components/assistant/modal-assistant';
-import { SessionProvider } from '@/src/components/auth/session-provider';
-import SideBar from '@/src/components/side-bar/side-bar';
-import TopBar from '@/src/components/top-bar/top-bar';
+import { getProfile } from '@/src/modules/auth/actions/get-profile-info-action';
+import ModalAssistant from '@/src/modules/assistant/components/modal-assistant';
+import { SessionProvider } from '@/src/modules/auth/components/session-provider';
+import SideBar from '@/src/modules/shared/components/side-bar/side-bar';
+import TopBar from '@/src/modules/shared/components/top-bar/top-bar';
 import { SidebarProvider } from '@helsa/ui/components/sidebar';
 import React, { Suspense } from 'react';
 import Loading from './loading';

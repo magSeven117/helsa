@@ -1,8 +1,6 @@
-import DoctorSkeleton from '@/src/components/book/doctor-list-loading';
-import DoctorListWrapper from '@/src/components/book/doctor-list-wrapper';
-import SearchDoctorInput from '@/src/components/book/search-doctor-input';
+import DoctorListWrapper from '@/src/modules/doctors/components/doctor-list-wrapper';
+import SearchDoctorInput from '@/src/modules/doctors/components/search-doctor-input';
 import { createSearchParamsCache, parseAsInteger, parseAsString } from 'nuqs/server';
-import { Suspense } from 'react';
 
 const searchParamsCache = createSearchParamsCache({
   q: parseAsString,

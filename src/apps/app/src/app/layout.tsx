@@ -4,9 +4,9 @@ import { Provider as Analytics } from '@helsa/analytics/client';
 import { DesignSystemProvider } from '@helsa/ui';
 import type { Metadata } from 'next';
 import { Nunito } from 'next/font/google';
-import { ErrorProvider } from '../components/error';
-import { ErrorToast } from '../components/error/error-toast';
-import { QueryProvider } from '../components/query-provider';
+import { ErrorProvider } from '../modules/error/components';
+import { ErrorToast } from '../modules/error/components/error-toast';
+import { QueryProvider } from '../modules/shared/components/query-provider';
 
 const nunito = Nunito({ subsets: ['latin'] });
 

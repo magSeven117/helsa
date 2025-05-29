@@ -1,4 +1,4 @@
-import { NavigationBilling } from '@/src/components/billing/navigation';
+import { NavigationBilling } from '@/src/modules/billing/components/navigation';
 import React from 'react';
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {

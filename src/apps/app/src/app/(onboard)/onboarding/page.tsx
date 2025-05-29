@@ -1,6 +1,6 @@
-import DoctorForm from '@/src/components/onboard/doctor-form';
-import HospitalForm from '@/src/components/onboard/hospital-form';
-import PatientForm from '@/src/components/onboard/patient-form';
+import DoctorForm from '@/src/modules/onboard/components/doctor-form';
+import HospitalForm from '@/src/modules/onboard/components/hospital-form';
+import PatientForm from '@/src/modules/onboard/components/patient-form';
 
 const Page = async (props: { searchParams: Promise<{ role: string; userId: string }> }) => {
   const searchParams = await props.searchParams;

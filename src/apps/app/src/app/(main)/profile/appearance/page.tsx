@@ -1,4 +1,4 @@
-import { AppearanceForm } from '@/src/components/profile/appearance-form';
+import { AppearanceForm } from '@/src/modules/profile/components/appearance-form';
 
 const Page = () => {
   return (

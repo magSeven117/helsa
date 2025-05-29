@@ -1,4 +1,4 @@
-import SelectRoleForm from '@/src/components/onboard/select-role-form';
+import SelectRoleForm from '@/src/modules/onboard/components/select-role-form';
 import { getSession } from '@helsa/auth/server';
 
 const Page = async () => {

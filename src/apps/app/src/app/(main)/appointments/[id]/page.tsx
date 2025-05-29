@@ -1,5 +1,5 @@
-import FinishDetails from '@/src/components/appointment/call/sections/finish-details';
-import { CallSkeleton } from '@/src/components/appointment/call/sections/skeletons';
+import FinishDetails from '@/src/modules/appointment/components/call/sections/finish-details';
+import { CallSkeleton } from '@/src/modules/appointment/components/call/sections/skeletons';
 import { Button } from '@helsa/ui/components/button';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';

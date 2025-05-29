@@ -1,4 +1,4 @@
-import DoctorProfileIndex from '@/src/components/profile/doctor-sections';
+import DoctorProfileIndex from '@/src/modules/profile/components/doctor-sections';
 
 const Page = () => {
   return (

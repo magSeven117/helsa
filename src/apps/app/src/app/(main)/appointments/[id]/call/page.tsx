@@ -1,5 +1,5 @@
-import Appointment from '@/src/components/appointment';
-import Header from '@/src/components/appointment/call/sections/header';
+import Appointment from '@/src/modules/appointment/components/call';
+import Header from '@/src/modules/appointment/components/call/sections/header';
 
 const Page = async (props: { params: Promise<{ id: string }> }) => {
   const params = await props.params;

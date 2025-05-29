@@ -1,4 +1,4 @@
-import PatientProfileIndex from '@/src/components/profile/patient-sections';
+import PatientProfileIndex from '@/src/modules/profile/components/patient-sections';
 
 const Page = () => {
   return (
