@@ -1,5 +1,7 @@
+import { Button } from '@helsa/ui/components/button';
 import { cn } from '@helsa/ui/lib/utils';
 import { useClickAway } from '@uidotdev/usehooks';
+import { Sidebar } from 'lucide-react';
 import { SidebarItems } from './sidebar-items';
 import { Toolbar } from './toolbar';
 
@@ -25,15 +27,14 @@ export function SidebarList({ isExpanded, chatId, setExpanded, onSelect, onNewCh
           isExpanded && 'visible translate-x-full',
         )}
       >
+        <div className="px-4 py-3 flex justify-between items-center border-border border-b-[1px]">
+          <Button variant="outline" size="icon" className="size-8  p-0" onClick={() => setExpanded(false)}>
+            <Sidebar width={18} />
+          </Button>
+        </div>
         <SidebarItems onSelect={onSelect} chatId={chatId} />
         <Toolbar onNewChat={onNewChat} />
       </div>
-
-      <div
-        className={cn(
-          'duration-200 ease-out transition-all z-10 fixed left-[1px] right-[1px] top-[1px] bottom-[1px] invisible opacity-0 bg-background',
-        )}
-      />
     </div>
   );
 }

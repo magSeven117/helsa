@@ -12,7 +12,8 @@ type Props = {
 export const UpcomingAppointments = ({ data }: Props) => {
   return (
     <BotCard className="space-y-4">
-      {data.length > 0 && <p className="text-md">Encontré {data.length} próximas citas medicas agendadas </p>}
+      {data.length === 0 && <p className="text-md">No encontré citas medicas agendadas</p>}
+      {data.length > 0 && <p className="text-md">Encontré estas próximas citas medicas agendadas </p>}
       {data.length > 0 && (
         <Table className="">
           <TableHeader>

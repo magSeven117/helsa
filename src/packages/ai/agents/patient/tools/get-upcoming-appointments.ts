@@ -12,10 +12,12 @@ export const getUpcomingAppointments = (userId: string) => {
     parameters: z.object({}),
     execute: async (props) => {
       const patientGetter = new GetPatient(new PrismaPatientRepository(database));
-      const patient = await patientGetter.run(userId);
+      const patient = await patientGetter.run(userId, 'userId');
       const service = new GetPatientUpcomingAppointments(new PrismaAppointmentRepository(database));
       const appointments = await service.run(patient.id);
-      return appointments;
+      return {
+        appointments,
+      };
     },
   });
 };

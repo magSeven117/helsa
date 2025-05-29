@@ -7,7 +7,6 @@ import { useEffect, useRef } from 'react';
 import { v4 } from 'uuid';
 import { ChatEmpty } from './chat-empty';
 import { ChatExamples } from './chat-examples';
-import { ChatFooter } from './chat-footer';
 import { ChatList } from './chat-list';
 
 const Chat = ({ messages, input, setInput, handleSubmit, onNewChat, setChatId, user, showFeedback, chatId }: any) => {
@@ -70,7 +69,6 @@ const Chat = ({ messages, input, setInput, handleSubmit, onNewChat, setChatId, u
             }}
           />
         </form>
-        <ChatFooter onSubmit={handleSubmit} showFeedback={showFeedback} />
       </div>
     </div>
   );

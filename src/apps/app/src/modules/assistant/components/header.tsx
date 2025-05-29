@@ -14,7 +14,7 @@ export function Header({ toggleSidebar, isExpanded }: Props) {
   return (
     <div className="px-4 py-3 flex justify-between items-center border-border border-b-[1px]">
       <div className="flex items-center space-x-3">
-        <Button variant="outline" size="icon" className="size-8 z-50 p-0" onClick={toggleSidebar}>
+        <Button variant="outline" size="icon" className="size-8  p-0" onClick={toggleSidebar}>
           <Sidebar width={18} />
         </Button>
 

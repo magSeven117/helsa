@@ -17,7 +17,9 @@ export function SidebarItem({ chat, chatId, onSelect }: SidebarItemProps) {
       )}
       onClick={() => onSelect(chat.id)}
     >
-      <span className="text-xs line-clamp-1">{chat.title}</span>
+      <span className="text-xs line-clamp-1">
+        {chat.title !== '' ? chat.title : chat.messages[0].content[0].text.substring(0, 100)}
+      </span>
     </button>
   );
 }
