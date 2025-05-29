@@ -1,6 +1,6 @@
 'use client';
-import { upload } from '@helsa/storage';
 import { createClient } from '@helsa/supabase/client';
+import { upload } from '@helsa/supabase/storage';
 import { Button } from '@helsa/ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@helsa/ui/components/card';
 import { Form, FormControl, FormField, FormItem } from '@helsa/ui/components/form';

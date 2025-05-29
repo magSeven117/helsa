@@ -1,7 +1,7 @@
 import { helsaAssistant } from '@helsa/ai/agents/doctor';
 import { helsaTherapist } from '@helsa/ai/agents/patient';
-import { client } from '@helsa/cache/src';
 import { RedisChatRepository } from '@helsa/engine/chat/infrastructure/redis-chat-repository';
+import { client } from '@helsa/upstash/cache';
 import { NextRequest, NextResponse } from 'next/server';
 import { routeHandler } from '../route-handler';
 

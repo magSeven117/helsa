@@ -1,4 +1,4 @@
-import { Redis } from '@helsa/cache';
+import { Redis } from '@helsa/upstash/cache';
 import { AssistantSettings } from '../domain/assistant';
 import { Chat } from '../domain/chat';
 import { ChatRepository } from '../domain/chat-repository';
@@ -72,7 +72,7 @@ export class RedisChatRepository implements ChatRepository {
   async saveAssistantSettings(
     settings: AssistantSettings,
     userId: string,
-    params: { enabled?: boolean | undefined }
+    params: { enabled?: boolean | undefined },
   ): Promise<void> {
     await this.client.set(`assistant:user:${userId}:settings`, {
       ...settings,

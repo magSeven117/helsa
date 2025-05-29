@@ -11,11 +11,9 @@
   "dependencies": {
     "@helsa/actions": "*",
     "@helsa/auth": "*",
-    "@helsa/cache": "*",
     "@helsa/database": "*",
     "@helsa/ddd": "*",
     "@helsa/email": "*",
-    "@helsa/rate-limit": "*",
     "@helsa/ui": "*",
     "@hookform/resolvers": "^3.10.0",
     "@payloadcms/db-postgres": "^3.30.0",

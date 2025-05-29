@@ -7,7 +7,6 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
-    "@helsa/cache": "*",
     "@helsa/database": "*",
     "@helsa/ddd": "*",
     "@helsa/email": "*",
