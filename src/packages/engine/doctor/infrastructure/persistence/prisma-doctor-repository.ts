@@ -133,7 +133,7 @@ export class PrismaDoctorRepository implements DoctorRepository {
   async findByCriteria(criteria: Criteria): Promise<Doctor[]> {
     const query = this.converter.criteria(criteria);
     const doctors = await this.model.findMany(query);
-    return doctors.map((doctor) => Doctor.fromPrimitives(doctor as unknown as Primitives<Doctor>));
+    return doctors.map((doctor: any) => Doctor.fromPrimitives(doctor as Primitives<Doctor>));
   }
 
   async getByCriteria(criteria: Criteria): Promise<Doctor> {
@@ -148,12 +148,12 @@ export class PrismaDoctorRepository implements DoctorRepository {
 
   async getSpecialties() {
     const specialties = await this.client.specialty.findMany();
-    return specialties.map((specialty) => Specialty.fromPrimitives(specialty));
+    return specialties.map((specialty: Primitives<Specialty>) => Specialty.fromPrimitives(specialty));
   }
 
   async getPrices(doctorId: string): Promise<Price[]> {
     const prices = await this.client.price.findMany({ where: { doctorId }, include: { type: true } });
-    return prices.map((price) => Price.fromPrimitives(price));
+    return prices.map((price: any) => Price.fromPrimitives(price));
   }
 
   async getSchedule(doctorId: string): Promise<Schedule | null> {
@@ -170,13 +170,10 @@ export class PrismaDoctorRepository implements DoctorRepository {
     await this.client.price.delete({ where: { id: priceId, doctorId } });
   }
 
-  async search(filters: {
-    term?: string;
-    availability?: string;
-    minRate?: number;
-    specialties?: string[];
-    experience?: number;
-  }) {
-    return await this.doctorSearcher.search(filters);
+  async search(
+    filters: { term?: string; availability?: string; minRate?: number; experience?: number },
+    limit = 10,
+  ): Promise<Doctor[]> {
+    return await this.doctorSearcher.search(filters, limit);
   }
 }

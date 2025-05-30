@@ -55,19 +55,20 @@ export class PrismaDoctorSearcher implements DoctorSearcher {
       },
     });
   }
-  async search({
-    term,
-    availability,
-    minRate,
-    specialties,
-    experience,
-  }: {
-    term?: string;
-    availability?: string;
-    minRate?: number;
-    specialties?: string[];
-    experience?: number;
-  }) {
+  async search(
+    {
+      term,
+      availability,
+      minRate,
+      experience,
+    }: {
+      term?: string;
+      availability?: string;
+      minRate?: number;
+      experience?: number;
+    },
+    limit = 10,
+  ): Promise<Doctor[]> {
     const doctors = await this.client.searchDoctor.findMany({
       where: {
         AND: [
@@ -82,7 +83,6 @@ export class PrismaDoctorSearcher implements DoctorSearcher {
                 },
               ]
             : []),
-          ...(specialties ? [{ specialty: { in: specialties } }] : []),
           ...(experience ? [{ experience: { gte: experience } }] : []),
           ...(minRate ? [{ score: { gte: minRate } }] : []),
         ],
@@ -99,7 +99,8 @@ export class PrismaDoctorSearcher implements DoctorSearcher {
           },
         },
       },
+      take: limit,
     });
-    return doctors.map((doctor) => Doctor.fromPrimitives(doctor.doctor as unknown as Primitives<Doctor>));
+    return doctors.map((doctor: any) => Doctor.fromPrimitives(doctor.doctor as Primitives<Doctor>));
   }
 }

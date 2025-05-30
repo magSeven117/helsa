@@ -99,9 +99,9 @@ export const ChatFloatingButton = () => {
     return (
       <motion.div
         initial={{ width: 0, opacity: 0, y: 0 }}
-        animate={{ width: '33%', opacity: 1, y: 1 }}
+        animate={{ width: '44%', opacity: 1, y: 1 }}
         ref={scope}
-        className="fixed origin-center bottom-4 left-1/2  z-50 flex items-center justify-center  p-3 bg-background rounded-md border translate-x-[-50%] w-1/3"
+        className="fixed origin-center bottom-4 left-1/2  z-50 flex items-center justify-center  p-3 bg-background rounded-md border translate-x-[-50%] "
       >
         <Button onClick={handleClose} variant={'ghost'} size={'icon'}>
           <X />

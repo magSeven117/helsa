@@ -13,19 +13,22 @@ export interface DoctorRepository {
   saveEducations(doctorId: string, educations: Education[]): Promise<void>;
   savePrices(doctorId: string, prices: Price[]): Promise<void>;
   findByCriteria(criteria: Criteria): Promise<Doctor[]>;
-  search({
-    term,
-    availability,
-    minRate,
-    specialties,
-    experience,
-  }: {
-    term?: string;
-    availability?: string;
-    minRate?: number;
-    specialties?: string[];
-    experience?: number;
-  }): Promise<Doctor[]>;
+  search(
+    {
+      term,
+      availability,
+      minRate,
+      specialties,
+      experience,
+    }: {
+      term?: string;
+      availability?: string;
+      minRate?: number;
+      specialties?: string[];
+      experience?: number;
+    },
+    limit?: number,
+  ): Promise<Doctor[]>;
   getByCriteria(criteria: Criteria): Promise<Doctor>;
   getPrices(doctorId: string): Promise<Price[]>;
   getSpecialties(): Promise<Specialty[]>;

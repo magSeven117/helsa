@@ -3,6 +3,7 @@
 import { cn } from '@helsa/ui/lib/utils';
 import { UIMessage } from 'ai';
 import { BotMessage, SpinnerMessage, UserMessage } from './messages';
+import { ListDoctors } from './tools/doctors';
 import { UpcomingAppointments } from './tools/upcoming-appointments';
 
 type Props = {
@@ -34,6 +35,9 @@ export function ChatList({ messages, className }: Props) {
                     return (
                       <UpcomingAppointments data={toolInvocation.result.appointments} key={toolInvocation.toolCallId} />
                     );
+                  }
+                  case 'getDoctors': {
+                    return <ListDoctors data={toolInvocation.result.doctors} key={toolInvocation.toolCallId} />;
                   }
                   default:
                     return null;
