@@ -5,6 +5,7 @@ import { updateChat } from '../../utils/update-chat';
 import { SYSTEM_HELSA_PROMPT } from './prompt';
 import { getDoctors } from './tools/get-doctors';
 import { getUpcomingAppointments } from './tools/get-upcoming-appointments';
+import { makeAppointment } from './tools/make-appoint';
 
 export const helsaTherapist = (messages: Array<any>, user: { id: string }, chatId: string) => {
   const coreMessages = convertToCoreMessages(messages);
@@ -21,6 +22,7 @@ export const helsaTherapist = (messages: Array<any>, user: { id: string }, chatI
     tools: {
       getUpcomingAppointments: getUpcomingAppointments(user.id),
       getDoctors: getDoctors(),
+      makeAppointment: makeAppointment(user),
     },
     maxSteps: 10,
     onError: async (error) => {
