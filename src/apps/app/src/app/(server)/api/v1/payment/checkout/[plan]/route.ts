@@ -20,7 +20,7 @@ export const GET = async (req: NextRequest, { params }: { params: Promise<{ plan
   const successUrl = new URL('/settings/billing', req.url).toString();
 
   const checkout = await payment.checkouts.create({
-    productId: product.productId,
+    products: [product.productId],
     successUrl: successUrl.toString(),
     customerExternalId: session.user.id,
     customerName: session.user.name,

@@ -18,7 +18,7 @@ const Buttons = ({ appointment }: Props) => {
       <Details data={appointment} user={user} />
       {user.role === UserRoleValue.DOCTOR && (
         <>
-          <Notes id={appointment.id} />
+          <Notes id={appointment.id} headless={false} />
           <Indications appointment={appointment} />
           {appointment.status !== 'FINISHED' && <Finalize id={appointment.id} />}
         </>

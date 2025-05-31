@@ -1,8 +1,9 @@
+import { listeners } from '@/src/app/(server)/handlers/listeners';
 import { database } from '@helsa/database';
 import { CreateSchedule } from '@helsa/engine/doctor/application/services/create-schedule';
 import { GetDoctorSchedule } from '@helsa/engine/doctor/application/services/get-doctor-schedule';
 import { PrismaDoctorRepository } from '@helsa/engine/doctor/infrastructure/persistence/prisma-doctor-repository';
-import { TriggerEventBus } from '@helsa/tasks';
+import { UpstashEventBus } from '@helsa/upstash/queue';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { routeHandler } from '../../../route-handler';
@@ -22,7 +23,7 @@ export const POST = routeHandler(async ({ req, params }) => {
   const parsedInput = schema.parse(await req.json());
   const { id } = params;
   const { days, duration, maxAppointment } = parsedInput;
-  const service = new CreateSchedule(new PrismaDoctorRepository(database), new TriggerEventBus());
+  const service = new CreateSchedule(new PrismaDoctorRepository(database), new UpstashEventBus(listeners));
   await service.run(id, days, duration, maxAppointment);
 
   return NextResponse.json({ message: 'Schedule saved successfully' }, { status: 200 });

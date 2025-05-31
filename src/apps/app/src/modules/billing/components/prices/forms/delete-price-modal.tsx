@@ -1,5 +1,4 @@
 'use client';
-import { removePrice } from '@/src/actions/doctor/remove-price';
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -14,6 +13,7 @@ import { Loader2 } from 'lucide-react';
 import { useAction } from 'next-safe-action/hooks';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import { useDeletePrice } from '../../../hooks/use-prices';
 
 const DeletePriceModal = ({
   isOpen,
@@ -24,14 +24,14 @@ const DeletePriceModal = ({
   setOpen: (open: boolean) => void;
   id: string;
 }) => {
-  const router = useRouter();
-  const deletePrice = useAction(removePrice, {
-    onSuccess: () => {
-      toast.success('Tarifa eliminada');
-      router.refresh();
-      setOpen(false);
-    },
-  });
+  const { deletePrice, isPending } = useDeletePrice(id);
+
+  const removePrice = async ({ id }: { id: string }) => {
+    await deletePrice(id);
+    toast.success('Tarifa eliminada');
+    setOpen(false);
+  };
+
   return (
     <AlertDialog open={isOpen} onOpenChange={setOpen}>
       <AlertDialogContent>
@@ -45,13 +45,13 @@ const DeletePriceModal = ({
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <Button
             onClick={() => {
-              deletePrice.execute({ id });
+              removePrice({ id });
             }}
-            disabled={deletePrice.status === 'executing'}
+            disabled={isPending}
             className=""
             type="submit"
           >
-            {deletePrice.status === 'executing' ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Eliminar'}
+            {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Eliminar'}
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

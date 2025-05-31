@@ -15,7 +15,7 @@ export const GET = async (req: NextRequest) => {
   const successUrl = new URL(`/appointments?id=${appointmentId}`, req.url).toString();
 
   const checkout = await payment.checkouts.create({
-    productId: appointment.productId,
+    products: [appointment.productId],
     successUrl: successUrl.toString(),
     customerExternalId: session.user.id,
     customerName: session.user.name,

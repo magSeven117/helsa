@@ -1,4 +1,4 @@
-import { DoctorCriteria } from 'doctor/domain/doctor-criteria';
+import { DoctorCriteria } from '../../domain/doctor-criteria';
 import { DoctorRepository } from '../../domain/doctor-repository';
 
 export class GetDoctorSchedule {
