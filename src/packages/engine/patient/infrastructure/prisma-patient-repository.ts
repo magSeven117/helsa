@@ -34,14 +34,10 @@ export class PrismaPatientRepository implements PatientRepository {
   }
 
   async find(criteria: Criteria): Promise<Patient | null> {
-    const { where } = this.converter.criteria(criteria);
+    const { where, include } = this.converter.criteria(criteria);
     const patient = await this.model.findFirst({
       where,
-      include: {
-        contacts: true,
-        vaccines: true,
-        surgeries: true,
-      },
+      include,
     });
     if (!patient) return null;
     return Patient.fromPrimitives(patient as unknown as Primitives<Patient>);
@@ -78,7 +74,7 @@ export class PrismaPatientRepository implements PatientRepository {
     const vitals = patient.appointments
       .filter((a) => a.telemetry)
       .map((appointment) =>
-        AppointmentTelemetry.fromPrimitives(appointment.telemetry! as unknown as Primitives<AppointmentTelemetry>)
+        AppointmentTelemetry.fromPrimitives(appointment.telemetry! as unknown as Primitives<AppointmentTelemetry>),
       );
     return vitals;
   }

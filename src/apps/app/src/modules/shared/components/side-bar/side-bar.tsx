@@ -85,7 +85,7 @@ const SideBar = () => {
                     <SidebarMenuButton
                       asChild
                       className={cn('hover:bg-[var(--color-brand-primary)] hover:text-white dark:text-white', {
-                        'bg-[var(--color-brand-primary)] text-white': path == route.url,
+                        'bg-[var(--color-brand-primary)] text-white': path.includes(route.url),
                       })}
                     >
                       <Link href={route.url} prefetch={true}>
@@ -141,7 +141,7 @@ export const sideBarItems = [
       {
         icon: History,
         title: 'Historial medico',
-        url: '/medical-history',
+        url: '/patient/self',
         roles: ['PATIENT'],
       },
       {

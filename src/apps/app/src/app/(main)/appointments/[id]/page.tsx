@@ -8,7 +8,7 @@ import { Suspense } from 'react';
 const Page = async (props: { params: Promise<{ id: string }> }) => {
   const params = await props.params;
   return (
-    <div className="w-full h-full flex flex-col justify-between px-5" defaultValue="chat" suppressHydrationWarning>
+    <div className="w-full h-full flex flex-col justify-between px-5 py-6" defaultValue="chat" suppressHydrationWarning>
       <div>
         <Link href={`/appointments`}>
           <Button className="[&_svg]:size-4 gap-2" variant={'outline'}>

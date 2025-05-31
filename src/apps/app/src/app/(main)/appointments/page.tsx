@@ -46,7 +46,7 @@ const Page = async (props: { searchParams: Promise<Record<string, string | strin
   });
 
   return (
-    <div className="grid grid-cols-1 w-full">
+    <div className="grid grid-cols-1 w-full py-6">
       <div className="flex px-5 py-7 w-full gap-3">
         <ColumnVisibility />
         <AppointmentSearchInput />

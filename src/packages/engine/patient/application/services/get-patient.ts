@@ -7,9 +7,11 @@ import { PatientRepository } from '../../domain/patient-repository';
 export class GetPatient {
   constructor(private readonly patientRepository: PatientRepository) {}
 
-  async run(id: string, field = 'id'): Promise<Primitives<Patient>> {
+  async run(id: string, field = 'id', include = {}): Promise<Primitives<Patient>> {
     const patient = await this.patientRepository.find(
-      Criteria.fromValues([{ field, value: id, operator: Operator.EQUAL }]),
+      Criteria.fromValues([{ field, value: id, operator: Operator.EQUAL }], undefined, undefined, [
+        ...Object.keys(include).map((key) => ({ field: key })),
+      ]),
     );
 
     if (!patient) {
