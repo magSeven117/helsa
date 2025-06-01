@@ -5,8 +5,9 @@ import { Card } from '@helsa/ui/components/card';
 import { Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
+import Prices from './prices';
 
-export function ManageSubscription({ userId }: { userId: string }) {
+export function ManageSubscription({ userId, subscription }: { userId: string; subscription?: any }) {
   const [isLoading, setIsLoading] = useState(false);
 
   return (
@@ -20,15 +21,19 @@ export function ManageSubscription({ userId }: { userId: string }) {
         </div>
 
         <div className="mt-auto">
-          <Link
-            href={`/api/portal?id=${userId}`}
-            className="text-sm text-muted-foreground hover:text-primary"
-            onClick={() => setIsLoading(true)}
-          >
-            <Button variant="secondary" className="h-9 hover:bg-primary hover:text-secondary">
-              {isLoading ? <Loader2 className="animate-spin" /> : 'Manage subscription'}
-            </Button>
-          </Link>
+          {subscription ? (
+            <Link
+              href={`/api/v1/payment/portal`}
+              className="text-sm text-muted-foreground hover:text-primary"
+              onClick={() => setIsLoading(true)}
+            >
+              <Button variant="secondary" className="h-9 hover:bg-primary hover:text-secondary">
+                {isLoading ? <Loader2 className="animate-spin" /> : 'Manage subscription'}
+              </Button>
+            </Link>
+          ) : (
+            <Prices />
+          )}
         </div>
       </Card>
     </div>

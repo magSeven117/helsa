@@ -1,10 +1,12 @@
+import { env } from '@/env';
 import { database } from '@helsa/database';
 import { PayAppointment } from '@helsa/engine/appointment/application/pay-appointment';
 import { PrismaAppointmentRepository } from '@helsa/engine/appointment/infrastructure/persistence/prisma-appointment-repository';
-import { paymentWebhook } from '@helsa/payment/webhook';
+import { Webhooks } from '@helsa/payment';
 import { revalidatePath } from 'next/cache';
 
-export const POST = paymentWebhook({
+export const POST = Webhooks({
+  webhookSecret: env.POLAR_WEBHOOK_SECRET,
   onOrderPaid: async (payload) => {
     if (payload.data.metadata.type !== 'appointment') return;
 
@@ -15,7 +17,7 @@ export const POST = paymentWebhook({
     revalidatePath(`/api/appointments`);
     revalidatePath(`/api/appointments/${payload.data.metadata.appointmentId}`);
   },
-  onSubscriptionActive: async (payload) => {},
-  onSubscriptionCanceled: async (payload) => {},
-  onSubscriptionRevoked: async (payload) => {},
+  onSubscriptionCreated: async (payload) => {
+    console.log('Subscription created:', payload);
+  },
 });

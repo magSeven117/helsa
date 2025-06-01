@@ -12,7 +12,7 @@ export const GET = async (req: NextRequest) => {
   const searchParams = req.nextUrl.searchParams;
   const appointmentId = searchParams.get('appointmentId') ?? '';
 
-  const successUrl = new URL(`/appointments?id=${appointmentId}`, req.url).toString();
+  const successUrl = new URL(`/appointments/${appointmentId}`, req.url).toString();
 
   const checkout = await payment.checkouts.create({
     products: [appointment.productId],
@@ -27,5 +27,5 @@ export const GET = async (req: NextRequest) => {
     },
   });
 
-  return NextResponse.redirect(checkout.url);
+  return NextResponse.json({ url: checkout.url }, { status: 200 });
 };

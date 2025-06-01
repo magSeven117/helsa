@@ -6,7 +6,7 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
     <div className="w-full pt-10">
       <div className="space-y-6 px-9  w-full">
         <NavigationProfile />
-        <div className="flex flex-col space-y-8 lg:flex-row  lg:space-y-0 md:w-1/2">{children}</div>
+        <div className="flex flex-col space-y-8 lg:flex-row  lg:space-y-0 ">{children}</div>
       </div>
     </div>
   );

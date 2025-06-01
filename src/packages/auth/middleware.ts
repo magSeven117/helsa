@@ -1,7 +1,11 @@
 import { betterFetch } from '@better-fetch/fetch';
 import { NextRequest, NextResponse } from 'next/server';
 export async function betterAuthMiddleware(req: NextRequest, publicRoutes: string[]) {
-  if (req.nextUrl.pathname.startsWith('/api')) {
+  if (
+    req.nextUrl.pathname.startsWith('/api') ||
+    req.nextUrl.pathname.startsWith('/handlers') ||
+    req.nextUrl.pathname.startsWith('/cron')
+  ) {
     return NextResponse.next();
   }
   const { data: session } = await betterFetch<any>('/api/v1/auth/get-session', {

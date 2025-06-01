@@ -8,4 +8,5 @@ const client = new Polar({
 
 export default client;
 
+export { Checkout, CustomerPortal, Webhooks } from '@polar-sh/nextjs';
 export { products } from './products';

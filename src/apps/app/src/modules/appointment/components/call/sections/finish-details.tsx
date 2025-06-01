@@ -35,6 +35,7 @@ import { NotesContent } from '../details/notes';
 import { Diagnoses } from '../indications/diagnoses';
 import { Orders } from '../indications/orders';
 import { Treatments } from '../indications/treatments';
+import PayButton from './pay-button';
 
 const FinishDetails = ({ id }: { id: string }) => {
   const { setError } = useError();
@@ -78,6 +79,7 @@ const FinishDetails = ({ id }: { id: string }) => {
                   </Button>
                 </Link>
               )}
+              <PayButton id={id} />
               {['CANCELED', 'FINISHED'].includes(appointment.status) && (
                 <Button
                   variant="outline"

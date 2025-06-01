@@ -17,7 +17,7 @@ export const GET = async (req: NextRequest, { params }: { params: Promise<{ plan
     throw new Error('Invalid plan');
   }
 
-  const successUrl = new URL('/settings/billing', req.url).toString();
+  const successUrl = new URL('/profile/plan', req.url).toString();
 
   const checkout = await payment.checkouts.create({
     products: [product.productId],
@@ -31,5 +31,7 @@ export const GET = async (req: NextRequest, { params }: { params: Promise<{ plan
     },
   });
 
-  return NextResponse.redirect(checkout.url);
+  return NextResponse.json({
+    url: checkout.url,
+  });
 };
