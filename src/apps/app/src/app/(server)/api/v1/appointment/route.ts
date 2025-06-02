@@ -13,11 +13,10 @@ import { PrismaDoctorRepository } from '@helsa/engine/doctor/infrastructure/pers
 import { GetPatient } from '@helsa/engine/patient/application/services/get-patient';
 import { PrismaPatientRepository } from '@helsa/engine/patient/infrastructure/prisma-patient-repository';
 import { UserRoleValue } from '@helsa/engine/user/domain/user-role';
-import { UpstashEventBus } from '@helsa/upstash/queue';
+import { InngestEventBus } from '@helsa/ingest/event-bus';
 import { unstable_cache as cache } from 'next/cache';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { listeners } from '../../../handlers/listeners';
 import { routeHandler } from '../route-handler';
 const getAppointmentsSchema = z.object({
   filter: z.object({
@@ -94,8 +93,8 @@ export const POST = routeHandler(
     const data = await req.json();
     const parsedInput = createAppointmentSchema.parse(data);
     const getPatient = new GetPatient(new PrismaPatientRepository(database));
-    const patient = await getPatient.run(user.id);
-    const service = new CreateAppointment(new PrismaAppointmentRepository(database), new UpstashEventBus(listeners));
+    const patient = await getPatient.run(user.id, 'userId');
+    const service = new CreateAppointment(new PrismaAppointmentRepository(database), new InngestEventBus());
 
     const { id, date, motive, symptoms, doctorId, typeId, specialtyId, priceId } = parsedInput;
     const patientId = patient.id;

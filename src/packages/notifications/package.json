@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@helsa/database": "^0.1.0",
+    "@helsa/ddd": "^0.1.0",
     "@helsa/email": "*",
     "@helsa/engine": "^0.1.0",
     "@novu/api": "^1.2.0",

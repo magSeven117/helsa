@@ -6,7 +6,7 @@ export type UserEnteredAppointmentData = {
 };
 
 export class UserEnteredAppointment extends DomainEvent<UserEnteredAppointmentData> {
-  static EVENT_NAME: string = 'user-entered-appointment';
+  static EVENT_NAME: string = 'appointment/user-entered';
   constructor(data: UserEnteredAppointmentData) {
     super({
       id: undefined,

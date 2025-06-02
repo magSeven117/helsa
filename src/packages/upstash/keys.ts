@@ -6,6 +6,8 @@ export const keys = () =>
     server: {
       UPSTASH_REDIS_REST_TOKEN: z.string(),
       UPSTASH_REDIS_REST_URL: z.string(),
+      UPSTASH_VECTOR_REST_URL: z.string(),
+      UPSTASH_VECTOR_REST_TOKEN: z.string(),
       QSTASH_URL: z.string(),
       QSTASH_TOKEN: z.string(),
       QSTASH_CURRENT_SIGNING_KEY: z.string(),
@@ -17,6 +19,8 @@ export const keys = () =>
     runtimeEnv: {
       UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
       UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL,
+      UPSTASH_VECTOR_REST_URL: process.env.UPSTASH_VECTOR_REST_URL,
+      UPSTASH_VECTOR_REST_TOKEN: process.env.UPSTASH_VECTOR_REST_TOKEN,
       QSTASH_URL: process.env.QSTASH_URL,
       QSTASH_TOKEN: process.env.QSTASH_TOKEN,
       QSTASH_CURRENT_SIGNING_KEY: process.env.QSTASH_CURRENT_SIGNING_KEY,

@@ -3,6 +3,7 @@ import { keys as analytics } from '@helsa/analytics/keys';
 import { keys as auth } from '@helsa/auth/keys';
 import { keys as database } from '@helsa/database/keys';
 import { keys as emails } from '@helsa/email/keys';
+import { keys as inngest } from '@helsa/ingest/keys';
 import { keys as notifications } from '@helsa/notifications/keys';
 import { keys as observability } from '@helsa/observability/keys';
 import { keys as payments } from '@helsa/payment/keys';
@@ -24,6 +25,7 @@ export const env = createEnv({
     video(),
     upstash(),
     notifications(),
+    inngest(),
   ],
   server: {},
   client: {},

@@ -1,5 +1,5 @@
 {
-  "name": "@helsa/ai",
+  "name": "@helsa/ingest",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -7,13 +7,11 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
-    "@ai-sdk/deepseek": "^0.1.12",
-    "@ai-sdk/google": "^1.2.18",
     "@helsa/database": "^0.1.0",
+    "@helsa/ddd": "*",
+    "@helsa/email": "*",
     "@helsa/engine": "^0.1.0",
-    "@helsa/ingest": "^0.1.0",
-    "ai": "^4.1.46",
-    "voyage-ai-provider": "^0.0.1",
+    "inngest": "^3.38.0",
     "zod": "3.24.1"
   },
   "devDependencies": {

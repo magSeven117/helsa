@@ -5,7 +5,7 @@ import { Appointment } from '../appointment';
 export type AppointmentScheduledData = Primitives<Appointment>;
 
 export class AppointmentScheduled extends DomainEvent<AppointmentScheduledData> {
-  static EVENT_NAME: string = 'appointment-scheduled';
+  static EVENT_NAME: string = 'appointment/scheduled';
   constructor(appointment: Primitives<Appointment>) {
     super({
       id: undefined,

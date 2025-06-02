@@ -8,7 +8,7 @@ export type ScheduleRegisteredData = {
 };
 
 export class ScheduleRegistered extends DomainEvent<ScheduleRegisteredData> {
-  static EVENT_NAME: string = 'schedule-registered';
+  static EVENT_NAME: string = 'doctor/schedule.registered';
 
   constructor(doctorId: string, days: Primitives<Day>[]) {
     super({

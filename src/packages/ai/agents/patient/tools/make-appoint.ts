@@ -2,15 +2,14 @@ import { database } from '@helsa/database';
 import { CreateAppointment } from '@helsa/engine/appointment/application/create-appointment';
 import { GetPatient } from '@helsa/engine/patient/application/services/get-patient';
 import { PrismaPatientRepository } from '@helsa/engine/patient/infrastructure/prisma-patient-repository';
-import { UpstashEventBus } from '@helsa/upstash/queue';
 
 import { PrismaAppointmentRepository } from '@helsa/engine/appointment/infrastructure/persistence/prisma-appointment-repository';
 import { GetDoctor } from '@helsa/engine/doctor/application/services/get-doctor';
 import { PrismaDoctorRepository } from '@helsa/engine/doctor/infrastructure/persistence/prisma-doctor-repository';
+import { InngestEventBus } from '@helsa/ingest/event-bus';
 import { tool } from 'ai';
 import { v4 } from 'uuid';
 import { z } from 'zod';
-import { listeners } from '../../../utils/constants';
 
 export const makeAppointment = (user: { id: string }) => {
   return tool({
@@ -29,7 +28,7 @@ export const makeAppointment = (user: { id: string }) => {
         specialty: true,
       });
       const id = v4();
-      await new CreateAppointment(new PrismaAppointmentRepository(database), new UpstashEventBus(listeners)).run(
+      await new CreateAppointment(new PrismaAppointmentRepository(database), new InngestEventBus()).run(
         id,
         new Date(`${date}T${time}`),
         reason,
