@@ -10,6 +10,7 @@ export const useSubscription = () => {
     initialData: {
       customer: null,
       subscription: null,
+      meters: [],
     },
     queryKey: ['subscription'],
     queryFn: async () => {

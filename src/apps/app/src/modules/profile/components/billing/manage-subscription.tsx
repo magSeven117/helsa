@@ -12,12 +12,12 @@ export function ManageSubscription({ userId, subscription }: { userId: string; s
 
   return (
     <div>
-      <h2 className="text-lg font-medium leading-none tracking-tight mb-4">Subscription</h2>
+      <h2 className="text-lg font-medium leading-none tracking-tight mb-4">Suscripción</h2>
 
-      <Card className="flex justify-between p-4 rounded-none">
+      <Card className="flex justify-between p-4">
         <div className="flex flex-col gap-1">
-          <p className="text-sm text-muted-foreground">Current plan</p>
-          <p className="text-lg font-medium">Pro</p>
+          <p className="text-sm text-muted-foreground">Plan actual</p>
+          <p className="text-lg font-medium">{subscription?.product?.name ?? ''}</p>
         </div>
 
         <div className="mt-auto">
@@ -28,7 +28,7 @@ export function ManageSubscription({ userId, subscription }: { userId: string; s
               onClick={() => setIsLoading(true)}
             >
               <Button variant="secondary" className="h-9 hover:bg-primary hover:text-secondary">
-                {isLoading ? <Loader2 className="animate-spin" /> : 'Manage subscription'}
+                {isLoading ? <Loader2 className="animate-spin" /> : 'Administra tu suscripción'}
               </Button>
             </Link>
           ) : (

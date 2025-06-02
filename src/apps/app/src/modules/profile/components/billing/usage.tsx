@@ -1,34 +1,52 @@
 import { Card } from '@helsa/ui/components/card';
 import { Skeleton } from '@helsa/ui/components/skeleton';
 
-export function getPlanLimits(plan: string) {
-  switch (plan) {
-    case 'standard':
-      return {
-        users: 1,
-        bankConnections: 1,
-        storage: 10 * 1024 * 1024 * 1024, // 10GB in bytes
-        inbox: 50,
-        invoices: 10,
-      };
-    case 'free':
-    case 'pro':
-      return {
-        users: 10,
-        bankConnections: 10,
-        storage: 100, // 100GB in bytes
-        inbox: 500,
-        invoices: 30,
-      };
-    default:
-      return {
-        users: 1,
-        bankConnections: 1,
-        storage: 10 * 1024 * 1024 * 1024, // 10GB in bytes
-        inbox: 50,
-        invoices: 10,
-      };
-  }
+export function getPlanData(
+  meters: {
+    consumedUnits: number;
+    creditedUnits: number;
+    meter: {
+      name: string;
+    };
+  }[],
+  plan: string,
+) {
+  const planData: Record<
+    string,
+    {
+      current: number;
+      max: number;
+      unlimited: boolean;
+      disabled: boolean;
+    }
+  > = {
+    ai_usage: {
+      current: meters.find((m) => m.meter.name === 'AI usage')?.consumedUnits || 0,
+      max: meters.find((m) => m.meter.name === 'AI usage')?.creditedUnits || 0, // This will be set based on the plan
+      unlimited: plan === 'pro', // This will be set based on the plan
+      disabled: false, // This will be set based on the plan
+    },
+    monthly_appointments: {
+      current: meters.find((m) => m.meter.name === 'Monthly Appointments')?.consumedUnits || 0,
+      max: meters.find((m) => m.meter.name === 'Monthly Appointments')?.creditedUnits || 0, // This will be set based on the plan
+      unlimited: plan === 'pro' || plan === 'standard', // This will be set based on the plan
+      disabled: false,
+    },
+    monthly_reports: {
+      current: meters.find((m) => m.meter.name === 'Monthly Reports')?.consumedUnits || 0,
+      max: meters.find((m) => m.meter.name === 'Monthly Reports')?.creditedUnits || 0, // This will be set based on the plan
+      unlimited: plan === 'pro' || plan === 'standard',
+      disabled: false,
+    },
+    family_members: {
+      current: meters.find((m) => m.meter.name === 'Family Members')?.consumedUnits || 0,
+      max: meters.find((m) => m.meter.name === 'Family Members')?.creditedUnits || 0, // This will be set based on the plan
+      unlimited: false,
+      disabled: plan === 'free' || plan === 'standard',
+    },
+  };
+
+  return planData;
 }
 interface UsageItemProps {
   label: string;
@@ -37,6 +55,8 @@ interface UsageItemProps {
   unit?: string;
   period?: string;
   percentage?: number;
+  unlimited?: boolean;
+  disabled?: boolean;
 }
 
 function CircularProgress({ value }: { value: number }) {
@@ -61,24 +81,7 @@ function CircularProgress({ value }: { value: number }) {
   );
 }
 
-// Helper function to format file size
-function formatFileSize(bytes: number): { value: number; unit: string } {
-  const KB = 1024;
-  const MB = KB * 1024;
-  const GB = MB * 1024;
-
-  if (bytes >= GB) {
-    return { value: bytes / GB, unit: 'GB' };
-  }
-
-  if (bytes >= MB) {
-    return { value: bytes / MB, unit: 'MB' };
-  }
-
-  return { value: Math.max(bytes / KB, 0.1), unit: 'KB' };
-}
-
-function UsageItem({ label, current, max, unit, period, percentage }: UsageItemProps) {
+function UsageItem({ label, current, max, unit, period, percentage, unlimited, disabled }: UsageItemProps) {
   // Calculate percentage if not explicitly provided
   const calculatedPercentage = percentage !== undefined ? percentage : Math.min((current / max) * 100, 100);
 
@@ -94,65 +97,89 @@ function UsageItem({ label, current, max, unit, period, percentage }: UsageItemP
     // For counts without units, use k formatting for large numbers
     formattedCurrent = current >= 1000 ? `${(current / 1000).toFixed(1)}k` : current.toString();
 
-    formattedMax = max >= 1000 ? `${(max / 1000).toFixed(1)}k` : max.toString();
+    if (max >= 1000000) {
+      // If max is large, format it as well
+      formattedMax = `${(max / 1000000).toFixed(0)}M`;
+    } else if (max >= 1000) {
+      formattedMax = `${(max / 1000).toFixed(0)}k`;
+      // If max is very large, format it as millions
+    } else {
+      formattedMax = max.toString();
+    }
   }
 
   return (
     <div className="flex items-center justify-between py-3 px-4">
       <div className="flex items-center gap-4">
-        <CircularProgress value={calculatedPercentage} />
+        <CircularProgress value={disabled ? 0 : unlimited ? 0 : calculatedPercentage} />
         <span className="text-sm font-medium">{label}</span>
       </div>
-      <div className="text-sm text-muted-foreground">
-        {formattedCurrent}/{formattedMax} {unit} {period && <span>per {period}</span>}
-      </div>
+      {unlimited && !disabled && <span className="text-sm text-muted-foreground">Ilimitados</span>}
+      {!unlimited && !disabled && (
+        <div className="text-sm text-muted-foreground">
+          {formattedCurrent} / {formattedMax} {unit} {period && <span>per {period}</span>}
+        </div>
+      )}
+      {disabled && (
+        <div className="text-sm text-muted-foreground">
+          <span className="line-through">
+            {formattedCurrent} / {formattedMax} {unit}
+          </span>{' '}
+          (Mejora tu plan para desbloquear)
+        </div>
+      )}
     </div>
   );
 }
 
 export function Usage({
-  data,
+  meters,
   plan,
 }: {
   plan: string;
-  data: {
-    total_document_size: number;
-    number_of_users: number;
-    number_of_bank_connections: number;
-    inbox_created_this_month: number;
-    invoices_created_this_month: number;
-  };
+  meters: {
+    consumedUnits: number;
+    creditedUnits: number;
+    meter: {
+      name: string;
+    };
+  }[];
 }) {
-  const GB = 1024 * 1024 * 1024;
-
-  const selectedPlan = getPlanLimits(plan);
-
-  // Always convert to GB regardless of size
-  const storageInGB = data?.total_document_size ?? 0 / GB;
-  const maxStorageInGB = selectedPlan?.storage ?? 0 / GB;
-
+  const data = getPlanData(meters, plan);
   return (
     <div>
-      <h2 className="text-lg font-medium leading-none tracking-tight mb-4">Usage</h2>
-
-      <Card className="divide-y rounded-none">
-        <UsageItem label="Users" current={data.number_of_users ?? 0} max={selectedPlan?.users} />
+      <h2 className="text-lg font-medium leading-none tracking-tight mb-4">Uso</h2>
+      <Card className="divide-y">
         <UsageItem
-          label="Bank connections"
-          current={data?.number_of_bank_connections ?? 0}
-          max={selectedPlan?.bankConnections}
+          label="Tokens de uso de IA"
+          current={data.ai_usage.current}
+          max={data.ai_usage.max}
+          disabled={data.ai_usage.disabled}
+          unlimited={data.ai_usage.unlimited}
+          period="mes"
         />
         <UsageItem
-          label="Inbox"
-          current={data?.inbox_created_this_month ?? 0}
-          max={selectedPlan.inbox}
-          period="month"
+          label="Citas mensuales"
+          current={data.monthly_appointments.current}
+          max={data.monthly_appointments.max}
+          disabled={data.monthly_appointments.disabled}
+          unlimited={data.monthly_appointments.unlimited}
+          period="mes"
         />
         <UsageItem
-          label="Invoices"
-          current={data?.invoices_created_this_month ?? 0}
-          max={selectedPlan.invoices}
-          period="month"
+          label="Reportes emocionales"
+          current={data.monthly_reports.current}
+          max={data.monthly_reports.max}
+          disabled={data.monthly_reports.disabled}
+          unlimited={data.monthly_reports.unlimited}
+          period="mes"
+        />
+        <UsageItem
+          label="Miembros de la familia"
+          current={data.family_members.current}
+          max={data.family_members.max}
+          disabled={data.family_members.disabled}
+          unlimited={data.family_members.unlimited}
         />
       </Card>
     </div>
