@@ -33,6 +33,13 @@ export class NotifyDoctor {
       },
       reason: data.motive,
     };
-    await this.notifier.notify('appointment-scheduled', data.doctor?.user?.id ?? '', payload);
+    await this.notifier.notify(
+      'appointment-scheduled',
+      {
+        id: data.doctor?.user?.id ?? '',
+        email: data.doctor?.user?.email ?? '',
+      },
+      payload,
+    );
   }
 }
