@@ -7,7 +7,7 @@ import { PrismaDoctorRepository } from '@helsa/engine/doctor/infrastructure/pers
 import { PrismaDoctorSearcher } from '@helsa/engine/doctor/infrastructure/persistence/prisma-doctor-searcher';
 import { GetUser } from '@helsa/engine/user/application/get-user';
 import { PrismaUserRepository } from '@helsa/engine/user/infrastructure/prisma-user-repository';
-import { client } from 'index';
+import { client } from '../../index';
 
 export const updateDoctorVector = client.createFunction(
   { id: 'update-doctor-vector', name: 'Update Doctor Vector' },

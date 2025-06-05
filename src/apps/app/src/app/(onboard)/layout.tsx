@@ -1,4 +1,4 @@
-import logo from '@/src/assets/images/Helsa Logo brand white.png';
+import logo from '@/src/assets/images/HELSA NUEVO NEGRO ISOTIPO.png';
 import banner from '@/src/assets/images/banner.png';
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   return (

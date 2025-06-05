@@ -2,7 +2,7 @@ import { database } from '@helsa/database';
 import { NotifyDoctor } from '@helsa/engine/appointment/application/notify-doctor';
 import { PrismaAppointmentRepository } from '@helsa/engine/appointment/infrastructure/persistence/prisma-appointment-repository';
 import { NovuNotifier } from '@helsa/notifications/notifier';
-import { client } from 'index';
+import { client } from '../../index';
 export const notifyDoctor = client.createFunction(
   { id: 'notify-doctor', name: 'Notify doctor' },
   { event: 'appointment/scheduled' },

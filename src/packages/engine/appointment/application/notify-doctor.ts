@@ -1,5 +1,5 @@
 import { Notifier } from '@helsa/ddd/core/notifier';
-import { AppointmentRepository } from 'appointment/domain/appointment-repository';
+import { AppointmentRepository } from '../domain/appointment-repository';
 export class NotifyDoctor {
   constructor(
     private readonly notifier: Notifier,

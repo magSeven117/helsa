@@ -1,7 +1,7 @@
 import { database } from '@helsa/database';
 import { SetReadyAppointments } from '@helsa/engine/appointment/application/set-ready-appointments';
 import { PrismaAppointmentRepository } from '@helsa/engine/appointment/infrastructure/persistence/prisma-appointment-repository';
-import { client } from 'index';
+import { client } from '../index';
 export const setReadyAppointment = client.createFunction(
   { id: 'set-ready-appointment', name: 'Set Ready Appointment' },
   { cron: '* / 30 * * * *' },

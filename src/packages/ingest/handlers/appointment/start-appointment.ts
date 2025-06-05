@@ -1,7 +1,7 @@
 import { database } from '@helsa/database';
 import { StartAppointment } from '@helsa/engine/appointment/application/start-appointment';
 import { PrismaAppointmentRepository } from '@helsa/engine/appointment/infrastructure/persistence/prisma-appointment-repository';
-import { client } from 'index';
+import { client } from '../../index';
 
 export const startAppointment = client.createFunction(
   { name: 'Start appointment', id: 'start-appointment' },
