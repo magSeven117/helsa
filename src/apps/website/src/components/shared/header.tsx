@@ -32,7 +32,7 @@ const Header = () => {
                 <ul className="grid gap-2 min-h-[300px] md:w-[400px] lg:w-[800px]  lg:grid-cols-[1fr_1fr] ">
                   <li className="col-span-2 h-[200px]">
                     <NavigationMenuLink asChild className="rounded-lg hover:bg-brand-primary">
-                      <a className=" flex h-full w-full  overflow-hidden  select-none focus:shadow-md p-2" href="/">
+                      <Link className=" flex h-full w-full  overflow-hidden  select-none focus:shadow-md p-2" href="/">
                         <div className="relative flex h-full p-2 flex-col rounded-md justify-end overflow-hidden ">
                           <div className="mt-4 mb-2 text-lg font-medium z-10">¿Quienes somos?</div>
                           <p className=" text-sm leading-tight z-10">
@@ -41,7 +41,7 @@ const Header = () => {
                           <img src="/images/nav-about-us.jpg" alt="" className="absolute bottom-0 left-0 right-0 " />
                           <div className="absolute  left-0 right-0 top-0 bottom-0 bg-linear-to-b from-white/10 to-white/90"></div>
                         </div>
-                      </a>
+                      </Link>
                     </NavigationMenuLink>
                   </li>
 
@@ -73,7 +73,7 @@ const Header = () => {
                   </ListItem>
                   <li className="row-span-4 col-start-2 row-start-1">
                     <NavigationMenuLink asChild className="rounded-lg hover:bg-brand-primary">
-                      <a className=" flex h-full w-full  overflow-hidden  select-none focus:shadow-md p-2 " href="/">
+                      <Link className=" flex h-full w-full  overflow-hidden  select-none focus:shadow-md p-2 " href="/">
                         <div className="relative flex h-full p-2  flex-col rounded-md justify-end overflow-hidden">
                           <div className="mt-4 mb-2 text-lg font-medium z-10">¿Quieres formar parte?</div>
                           <p className=" text-sm leading-tight z-10">
@@ -86,7 +86,7 @@ const Header = () => {
                           />
                           <div className="rounded-md absolute bottom-0 left-0 right-0 top-0 bg-linear-to-b from-white/10 to-white/90"></div>
                         </div>
-                      </a>
+                      </Link>
                     </NavigationMenuLink>
                   </li>
                 </ul>
@@ -98,7 +98,7 @@ const Header = () => {
                 <ul className="grid gap-2 h-[350px] md:w-[400px] lg:w-[800px]  md:grid-cols-3 ">
                   <li className="row-span-4 h-full">
                     <NavigationMenuLink asChild className="rounded-lg hover:bg-brand-primary">
-                      <a className=" flex h-full w-full  overflow-hidden  select-none focus:shadow-md p-2 " href="/">
+                      <Link className=" flex h-full w-full  overflow-hidden  select-none focus:shadow-md p-2 " href="/">
                         <div className="relative flex h-full p-2  flex-col rounded-md justify-end overflow-hidden">
                           <div className="mt-4 mb-2 text-lg font-medium z-10">Atencion personal</div>
                           <p className=" text-sm leading-tight z-10">
@@ -111,12 +111,12 @@ const Header = () => {
                           />
                           <div className="rounded-md absolute bottom-0 left-0 right-0 top-0 bg-linear-to-b from-white/10 to-white/90"></div>
                         </div>
-                      </a>
+                      </Link>
                     </NavigationMenuLink>
                   </li>
                   <li className="row-span-4 h-full">
                     <NavigationMenuLink asChild className="rounded-lg hover:bg-brand-primary">
-                      <a className=" flex h-full w-full  overflow-hidden  select-none focus:shadow-md p-2 " href="/">
+                      <Link className=" flex h-full w-full  overflow-hidden  select-none focus:shadow-md p-2 " href="/">
                         <div className="relative flex h-full p-2  flex-col rounded-md justify-end overflow-hidden">
                           <div className="mt-4 mb-2 text-lg font-medium z-10">Terapia de parejas</div>
                           <p className=" text-sm leading-tight z-10">
@@ -129,7 +129,7 @@ const Header = () => {
                           />
                           <div className="rounded-md absolute bottom-0 left-0 right-0 top-0 bg-linear-to-b from-white/10 to-white/90"></div>
                         </div>
-                      </a>
+                      </Link>
                     </NavigationMenuLink>
                   </li>
                   <ListItem href="/docs/installation" title="Educación">
