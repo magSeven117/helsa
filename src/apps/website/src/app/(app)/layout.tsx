@@ -1,7 +1,6 @@
 import '@/src/assets/globals.css';
-import icon from '@/src/assets/images/Helsa Logo black - white.png';
-import Header from '@/src/components/atoms/header';
-import Footer from '@/src/components/footer';
+import Footer from '@/src/components/shared/footer';
+import Header from '@/src/components/shared/header';
 import { DesignSystemProvider } from '@helsa/ui';
 import type { Metadata } from 'next';
 import { Nunito } from 'next/font/google';
@@ -22,10 +21,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning={true}>
-      <link rel="icon" href={icon.src} sizes="any" />
       <body className={`${nunito.className} antialiased`} suppressHydrationWarning={true}>
-        <DesignSystemProvider>
-          <div className="min-h-screen bg-background container mx-auto px-4 overflow-hidden md:overflow-visible relative">
+        <DesignSystemProvider defaultTheme="light">
+          <div className="min-h-screen bg-background w-full overflow-hidden md:overflow-visible relative">
             <Header />
             {children}
             <Footer />

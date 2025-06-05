@@ -1,2 +1,10 @@
 @import '@helsa/ui/styles/global.css';
 @import '@helsa/ui/styles/theme.css';
+
+@utility bg-brand-primary {
+  background-color: var(--color-brand-primary);
+}
+
+@utility text-brand-primary {
+  color: var(--color-brand-primary);
+}
