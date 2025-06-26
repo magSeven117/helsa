@@ -39,7 +39,7 @@ export class UpdateIndexStore {
       const [date = ''] = appointment.date.toISOString().split('T');
       const index = groupedAppointments.findIndex((d) => d.date === date);
       const day = format(appointment.date, 'EEEE');
-      const availability = doctor.schedule?.days.find((d) => d.day.value === day);
+      const availability = doctor.schedule?.days.find((d) => d.day.value === day.toLowerCase());
       if (index === -1) {
         groupedAppointments.push({
           date,

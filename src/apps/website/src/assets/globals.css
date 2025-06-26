@@ -5,6 +5,10 @@
   background-color: var(--color-brand-primary);
 }
 
+@utility border-brand-primary {
+  border-color: var(--color-brand-primary);
+}
+
 @utility text-brand-primary {
   color: var(--color-brand-primary);
 }

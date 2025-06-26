@@ -1,13 +1,18 @@
 import { WordAnimation } from '@/src/components/atoms/word-animation';
 import { Button } from '@helsa/ui/components/button';
 import { Separator } from '@helsa/ui/components/separator';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, HandHeartIcon, Stethoscope } from 'lucide-react';
 import Link from 'next/link';
+import DoctorCarousel from './_components/doctor-carousel';
+import PatientInfo from './_components/patient-info';
 
 const Page = () => {
   return (
-    <div className="min-[1700px]:h-[calc(100vh-100px)] h-[calc(100vh-80px)] ">
-      <div id="#hero" className=" h-full overflow-x-hidden flex justify-center">
+    <div className=" ">
+      <div
+        id="#hero"
+        className="overflow-x-hidden flex justify-center min-[1700px]:h-[calc(100vh-100px)] h-[calc(100vh-80px)]"
+      >
         <div className="grid lg:grid-cols-2 h-full w-[80%] min-[1700px]:w-2/3 ">
           <div className="flex flex-col items-center lg:items-start justify-center gap-12">
             <Link
@@ -46,6 +51,40 @@ const Page = () => {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+      <div id="doctors" className="h-[calc(100vh-80px)] flex  justify-center">
+        <div className="min-[1700px]:w-2/3 w-[80%]  flex flex-col justify-center gap-4 mb-8">
+          <p>
+            <span className="text-4xl font-semibold flex items-center gap-2">
+              <Stethoscope />
+              Próximamente
+            </span>
+            <br />
+            <span className="text-2xl w-full flex justify-between items-center">
+              Conoce a los profesionales de la salud mental que se unen a nuestra plataforma.
+            </span>
+          </p>
+          <div className="flex justify-start items-center gap-4">
+            <Button className="" variant={'primary'} size={'lg'}>
+              Encuentra a tu terapeuta
+            </Button>
+          </div>
+          <DoctorCarousel />
+        </div>
+      </div>
+      <div id="patient-info" className="h-[calc(100vh-80px)] flex  justify-center">
+        <div className="min-[1700px]:w-2/3 w-[80%]  flex flex-col justify-center gap-10 mb-8">
+          <HandHeartIcon className="size-10" />
+          <div className="flex items-start justify-between">
+            <p className="text-4xl font-semibold">Una guía durante tu viaje hacia el bienestar mental</p>
+            <div className="flex justify-start items-center gap-4">
+              <Button className="" variant={'primary'} size={'lg'}>
+                Encuentra a tu terapeuta
+              </Button>
+            </div>
+          </div>
+          <PatientInfo />
         </div>
       </div>
     </div>
