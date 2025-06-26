@@ -1,6 +1,6 @@
 import { DomainError } from '../domain-error';
 
-export class AuthorizationError extends DomainError {
+export class Unauthenticated extends DomainError {
   constructor(message: string) {
     super(message);
   }

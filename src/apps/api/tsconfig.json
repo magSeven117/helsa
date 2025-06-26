@@ -1,0 +1,20 @@
+{
+  "extends": "@helsa/typescript-config/next.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "paths": {
+      "@/*": ["./*"],
+      "@helsa/*": ["../../packages/*"]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "next.config.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "../../packages/ui/components/internal/progress.tsx"
+  ]
+}

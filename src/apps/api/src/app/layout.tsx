@@ -1,11 +1,7 @@
-import '@/src/assets/globals.css';
-import icon from '@/src/assets/images/HELSA NUEVO BLANCO ISOTIPO.png';
-import { DesignSystemProvider } from '@helsa/ui';
+import '@/public/globals.css';
+
 import type { Metadata } from 'next';
 import { Nunito } from 'next/font/google';
-import { ErrorProvider } from '../modules/error/components';
-import { ErrorToast } from '../modules/error/components/error-toast';
-import { QueryProvider } from '../modules/shared/components/query-provider';
 
 const nunito = Nunito({ subsets: ['latin'] });
 
@@ -28,14 +24,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning={true}>
-      <link rel="icon" href={icon.src} sizes="any" />
       <body className={nunito.className + ' styled-scroll h-screen box-border'} suppressHydrationWarning={true}>
-        <DesignSystemProvider>
-          <ErrorProvider>
-            <ErrorToast />
-            <QueryProvider>{children}</QueryProvider>
-          </ErrorProvider>
-        </DesignSystemProvider>
+        {children}
       </body>
     </html>
   );
