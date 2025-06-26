@@ -1,12 +1,6 @@
 import '@/env';
-import { withPayload } from '@payloadcms/next/withPayload';
-import type { NextConfig } from 'next';
+import { NextConfig } from 'next';
 
-const nextConfig: NextConfig = {
-  serverExternalPackages: ['@simplewebauthn/server', '@trigger.dev/sdk'],
-  images: {
-    unoptimized: true,
-  },
-};
+const nextConfig: NextConfig = {};
 
-export default withPayload(nextConfig);
+export default nextConfig;

@@ -1,19 +1,31 @@
+'use client';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@helsa/ui/components/accordion';
 import { Calendar, HandCoins, Stethoscope, WebcamIcon } from 'lucide-react';
+import { useState } from 'react';
+const images = [
+  { src: '/images/patient-info.jpg', id: 'patient-info' },
+  { src: '/images/remote.jpg', id: 'remote' },
+  { src: '/images/schedule.jpg', id: 'schedule' },
+  { src: '/images/accesible.jpg', id: 'accesible' },
+];
 const PatientInfo = () => {
+  const [selectedImage, setSelectedImage] = useState('patient-info');
   return (
     <div className="grid grid-cols-2">
       <div className="">
         <div className="size-[500px] rounded-lg bg-brand-primary">
           <div className="size-[500px] rounded-lg flex items-center justify-center overflow-hidden translate-x-[20px] translate-y-[20px]">
-            <img src="/images/patient-info.jpg" alt="" className="object-contain" />
+            <img src={`/images/${selectedImage}.jpg`} alt="" className="object-contain" />
           </div>
         </div>
       </div>
       <div>
         <Accordion type="multiple" className="space-y-2">
           <AccordionItem value="item-1" className="border rounded-md px-2 border-brand-primary">
-            <AccordionTrigger className="text-2xl hover:no-underline cursor-pointer">
+            <AccordionTrigger
+              className="text-2xl hover:no-underline cursor-pointer"
+              onClick={() => setSelectedImage('patient-info')}
+            >
               <div className="flex items-center gap-3 ml-3">
                 <Stethoscope />
                 Encuentra a tu terapeuta adecuado
@@ -28,7 +40,10 @@ const PatientInfo = () => {
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="item-2" className="border rounded-md px-2 border-brand-primary">
-            <AccordionTrigger className="text-2xl hover:no-underline cursor-pointer">
+            <AccordionTrigger
+              className="text-2xl hover:no-underline cursor-pointer"
+              onClick={() => setSelectedImage('remote')}
+            >
               <div className="flex items-center gap-3 ml-3">
                 <WebcamIcon />
                 Virtual o en persona
@@ -43,7 +58,10 @@ const PatientInfo = () => {
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="item-3" className="border rounded-md px-2 border-brand-primary">
-            <AccordionTrigger className="text-2xl hover:no-underline cursor-pointer">
+            <AccordionTrigger
+              className="text-2xl hover:no-underline cursor-pointer"
+              onClick={() => setSelectedImage('schedule')}
+            >
               <div className="flex items-center gap-3 ml-3">
                 <Calendar />
                 Amoldado a tu horario y rutina
@@ -58,7 +76,10 @@ const PatientInfo = () => {
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="item-4" className="border rounded-md px-2 border-brand-primary">
-            <AccordionTrigger className="text-2xl hover:no-underline cursor-pointer">
+            <AccordionTrigger
+              className="text-2xl hover:no-underline cursor-pointer"
+              onClick={() => setSelectedImage('accesible')}
+            >
               <div className="flex items-center gap-3 ml-3">
                 <HandCoins />
                 Accesible y democratizado
