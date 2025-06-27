@@ -24,4 +24,5 @@ export const GET = routeHandler({ name: 'get-chats' }, async ({ user }) => {
 export const DELETE = routeHandler({ name: 'clear-chats' }, async ({ user }) => {
   const repository = new RedisChatRepository(client);
   await repository.clearChats(user.id);
+  return HttpNextResponse.ok();
 });
