@@ -1,3 +1,5 @@
+import { HttpNextResponse } from '@helsa/controller/http-next-response';
+import { routeHandler } from '@helsa/controller/route-handler';
 import { database } from '@helsa/database';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { CreateHospital } from '@helsa/engine/hospital/application/services/create-hospital';
@@ -8,9 +10,7 @@ import { UpdateRole } from '@helsa/engine/user/application/update-role';
 import { UserRoleValue } from '@helsa/engine/user/domain/user-role';
 import { PrismaUserRepository } from '@helsa/engine/user/infrastructure/prisma-user-repository';
 import { unstable_cache as cache } from 'next/cache';
-import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { routeHandler } from '../route-handler';
 
 const schema = z.object({
   hospital: z.object({
@@ -29,27 +29,22 @@ const schema = z.object({
   }),
 });
 
-export const POST = routeHandler(async ({ req }) => {
-  const { hospital } = schema.parse(await req.json());
+export const POST = routeHandler({ name: 'create-hospital', schema }, async ({ body }) => {
+  const { hospital } = body;
 
   const service = new CreateHospital(new PrismaHospitalRepository(database));
   const updateRole = new UpdateRole(new PrismaUserRepository(database));
   await service.run(hospital as unknown as Primitives<Hospital>);
   await updateRole.run(UserRoleValue.HOSPITAL, hospital.adminId);
 
-  return NextResponse.json(
-    {
-      message: 'Hospital created successfully',
-    },
-    { status: 201 },
-  );
+  return HttpNextResponse.created();
 });
 
-export const GET = routeHandler(async ({ user }) => {
+export const GET = routeHandler({ name: 'get-hospital' }, async ({ user }) => {
   const service = new GetHospital(new PrismaHospitalRepository(database));
   const response = await cache(() => service.run(user.id), ['get-hospital', user.id], {
     tags: [`get-hospital-${user.id}`],
     revalidate: 60 * 60,
   })();
-  return NextResponse.json({ data: response });
+  return HttpNextResponse.json({ data: response });
 });

@@ -1,8 +1,8 @@
+import { routeHandler } from '@helsa/controller/route-handler';
 import payment from '@helsa/payment';
 import { NextResponse } from 'next/server';
-import { routeHandler } from '../route-handler';
 
-export const GET = routeHandler(async ({ user }) => {
+export const GET = routeHandler({ name: 'get-customer-info' }, async ({ user }) => {
   try {
     const customer = await payment.customers.getExternal({
       externalId: user.id,
@@ -35,12 +35,12 @@ export const GET = routeHandler(async ({ user }) => {
   }
 });
 
-export const POST = routeHandler(async ({}) => {
+export const POST = routeHandler({ name: 'add-metter' }, async ({ user }) => {
   const result = await payment.events.ingest({
     events: [
       {
         name: 'ai_usage',
-        customerId: '3113b121-ef77-4df3-b1a5-22d54aef2da7',
+        customerId: user.id,
         metadata: {
           promptTokens: 30000,
           completionTokens: 100000,

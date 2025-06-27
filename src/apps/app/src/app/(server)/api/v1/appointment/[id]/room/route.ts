@@ -1,19 +1,31 @@
+import { HttpNextResponse } from '@helsa/controller/http-next-response';
+import { routeHandler } from '@helsa/controller/route-handler';
 import { database } from '@helsa/database';
 import { EnterRoom } from '@helsa/engine/appointment/application/enter-room';
+import { AppointmentNotFoundError } from '@helsa/engine/appointment/domain/errors/appointment-not-found-error';
 import { PrismaAppointmentRepository } from '@helsa/engine/appointment/infrastructure/persistence/prisma-appointment-repository';
 import { InngestEventBus } from '@helsa/ingest/event-bus';
 import { client } from '@helsa/video';
-import { NextResponse } from 'next/server';
-import { routeHandler } from '../../../route-handler';
 
-export const PUT = routeHandler(async ({ params, user }) => {
-  const { id } = params;
-  const service = new EnterRoom(new PrismaAppointmentRepository(database), new InngestEventBus());
-  await service.run(id, user.role as 'PATIENT' | 'DOCTOR');
-  return NextResponse.json({ message: 'Enter Room' }, { status: 200 });
-});
+export const PUT = routeHandler(
+  { name: 'enter-room' },
+  async ({ params, user }) => {
+    const { id } = params;
+    const service = new EnterRoom(new PrismaAppointmentRepository(database), new InngestEventBus());
+    await service.run(id, user.role as 'PATIENT' | 'DOCTOR');
+    return HttpNextResponse.ok();
+  },
+  (error) => {
+    switch (true) {
+      case error instanceof AppointmentNotFoundError:
+        return HttpNextResponse.domainError(error, 404);
+      default:
+        return HttpNextResponse.internalServerError();
+    }
+  },
+);
 
-export const GET = routeHandler(async ({ params, user }) => {
+export const GET = routeHandler({ name: 'get-user-room-token' }, async ({ user }) => {
   await client.upsertUsers([
     {
       id: user.id,
@@ -27,5 +39,5 @@ export const GET = routeHandler(async ({ params, user }) => {
     user_id: user.id,
     validity_in_seconds: 60 * 60 * 24,
   });
-  return NextResponse.json({ token }, { status: 200 });
+  return HttpNextResponse.json({ token });
 });

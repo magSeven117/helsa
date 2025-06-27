@@ -1,10 +1,10 @@
+import { HttpNextResponse } from '@helsa/controller/http-next-response';
+import { routeHandler } from '@helsa/controller/route-handler';
 import { database } from '@helsa/database';
 import { UploadDocument } from '@helsa/engine/document/application/upload-document';
 import { PrismaDocumentRepository } from '@helsa/engine/document/infrastructure/prisma-document-repository';
 import { revalidatePath } from 'next/cache';
-import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { routeHandler } from '../route-handler';
 
 const schema = z.object({
   url: z.string(),
@@ -15,15 +15,10 @@ const schema = z.object({
   filename: z.string(),
 });
 
-export const POST = routeHandler(async ({ req, user }) => {
-  const parsedInput = schema.parse(await req.json());
+export const POST = routeHandler({ name: 'upload-document', schema }, async ({ body }) => {
+  const parsedInput = body;
   const service = new UploadDocument(new PrismaDocumentRepository(database));
   await service.run(parsedInput);
   revalidatePath(`/appointments/${parsedInput.appointmentId}`);
-  return NextResponse.json(
-    {
-      message: 'Document uploaded successfully',
-    },
-    { status: 201 },
-  );
+  return HttpNextResponse.ok();
 });

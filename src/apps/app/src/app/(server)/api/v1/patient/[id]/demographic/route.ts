@@ -1,11 +1,11 @@
+import { HttpNextResponse } from '@helsa/controller/http-next-response';
+import { routeHandler } from '@helsa/controller/route-handler';
 import { database } from '@helsa/database';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { UpdateDemographic } from '@helsa/engine/patient/application/services/update-demographic';
 import { PatientDemographic } from '@helsa/engine/patient/domain/members/demographic';
 import { PrismaPatientRepository } from '@helsa/engine/patient/infrastructure/prisma-patient-repository';
-import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { routeHandler } from '../../../route-handler';
 const schema = z.object({
   demographic: z.object({
     civilStatus: z.string().optional(),
@@ -13,11 +13,11 @@ const schema = z.object({
     educativeLevel: z.string().optional(),
   }),
 });
-export const PUT = routeHandler(async ({ req, params }) => {
-  const { demographic } = schema.parse(await req.json());
+export const PUT = routeHandler({ name: 'update-demographic', schema }, async ({ body, params }) => {
+  const { demographic } = body;
   const { id: patientId } = params;
   const service = new UpdateDemographic(new PrismaPatientRepository(database));
   await service.run(patientId, demographic as unknown as Primitives<PatientDemographic>);
 
-  return NextResponse.json({ success: true, message: 'Demographic updated' });
+  return HttpNextResponse.ok();
 });

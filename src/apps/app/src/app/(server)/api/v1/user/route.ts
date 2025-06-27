@@ -1,14 +1,24 @@
 import { auth } from '@helsa/auth/server';
+import { routeHandler } from '@helsa/controller/route-handler';
 import { headers } from 'next/headers';
 import { NextResponse } from 'next/server';
-import { routeHandler } from '../route-handler';
+import { z } from 'zod';
 
-export const PUT = routeHandler(async ({ req, user }) => {
-  const { id: userId } = user;
-  const data = await req.json();
+export const PUT = routeHandler(
+  {
+    name: 'update-user',
+    schema: z.object({
+      bio: z.string().optional(),
+      name: z.string().optional(),
+      image: z.string().optional(),
+    }),
+  },
+  async ({ body, user }) => {
+    const { id: userId } = user;
 
-  // Assuming you have a service to handle the update logic
-  await auth.api.updateUser({ body: data, headers: await headers(), userId });
+    // Assuming you have a service to handle the update logic
+    await auth.api.updateUser({ body, headers: await headers(), userId });
 
-  return NextResponse.json({ success: true, message: 'Bio updated successfully' });
-});
+    return NextResponse.json({ success: true, message: 'Bio updated successfully' });
+  },
+);

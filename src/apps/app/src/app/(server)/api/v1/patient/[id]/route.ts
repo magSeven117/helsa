@@ -1,11 +1,24 @@
+import { HttpNextResponse } from '@helsa/controller/http-next-response';
+import { routeHandler } from '@helsa/controller/route-handler';
 import { database } from '@helsa/database';
 import { GetPatient } from '@helsa/engine/patient/application/services/get-patient';
+import { PatientNotFoundError } from '@helsa/engine/patient/domain/errors/patient-not-found-error';
 import { PrismaPatientRepository } from '@helsa/engine/patient/infrastructure/prisma-patient-repository';
-import { NextResponse } from 'next/server';
-import { routeHandler } from '../../route-handler';
+import { z } from 'zod';
 
-export const GET = routeHandler(async ({ params, searchParams }) => {
-  const service = new GetPatient(new PrismaPatientRepository(database));
-  const response = await service.run(params.id, 'id', JSON.parse(searchParams.include || '{}'));
-  return NextResponse.json({ data: response }, { status: 200 });
-});
+export const GET = routeHandler(
+  { name: 'get-patient', querySchema: z.object({ include: z.string().optional() }) },
+  async ({ params, searchParams }) => {
+    const service = new GetPatient(new PrismaPatientRepository(database));
+    const response = await service.run(params.id, 'id', JSON.parse(searchParams.include || '{}'));
+    return HttpNextResponse.json({ data: response });
+  },
+  (error) => {
+    switch (true) {
+      case error instanceof PatientNotFoundError:
+        return HttpNextResponse.domainError(error, 400);
+      default:
+        return HttpNextResponse.internalServerError();
+    }
+  },
+);

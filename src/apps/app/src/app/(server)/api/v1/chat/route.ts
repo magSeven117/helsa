@@ -1,9 +1,10 @@
 import { helsaAssistant } from '@helsa/ai/agents/doctor';
 import { helsaTherapist } from '@helsa/ai/agents/patient';
+import { HttpNextResponse } from '@helsa/controller/http-next-response';
+import { routeHandler } from '@helsa/controller/route-handler';
 import { RedisChatRepository } from '@helsa/engine/chat/infrastructure/redis-chat-repository';
 import { client } from '@helsa/upstash/cache';
-import { NextRequest, NextResponse } from 'next/server';
-import { routeHandler } from '../route-handler';
+import { NextRequest } from 'next/server';
 
 export async function POST(request: NextRequest) {
   const { messages, chatId, user } = await request.json();
@@ -14,20 +15,14 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export const GET = routeHandler(async ({ user }) => {
+export const GET = routeHandler({ name: 'get-chats' }, async ({ user }) => {
   const repository = new RedisChatRepository(client);
   const chats = await repository.getChats(user.id);
-  return NextResponse.json({
-    message: 'Ok',
-    data: chats,
-  });
+  return HttpNextResponse.json({ data: chats });
 });
 
-export const DELETE = routeHandler(async ({ user }) => {
+export const DELETE = routeHandler({ name: 'clear-chats' }, async ({ user }) => {
   const repository = new RedisChatRepository(client);
   await repository.clearChats(user.id);
-  return NextResponse.json({
-    message: 'Ok',
-    data: null,
-  });
+  return HttpNextResponse.ok();
 });

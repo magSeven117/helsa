@@ -1,14 +1,16 @@
+import { HttpNextResponse } from '@helsa/controller/http-next-response';
+import { routeHandler } from '@helsa/controller/route-handler';
 import { database } from '@helsa/database';
 import { Operator } from '@helsa/ddd/core/criteria';
+import { FormatError } from '@helsa/ddd/core/errors/format-error';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { CreateTreatment } from '@helsa/engine/treatment/application/create-treatment';
 import { GetTreatments } from '@helsa/engine/treatment/application/get-treatments';
 import { Treatment } from '@helsa/engine/treatment/domain/treatment';
 import { PrismaTreatmentRepository } from '@helsa/engine/treatment/infrastructure/prisma-treatment-repository';
-import { revalidatePath, revalidateTag } from 'next/cache';
+import { unstable_cache as cache, revalidatePath, revalidateTag } from 'next/cache';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { routeHandler } from '../route-handler';
 
 const schema = z.object({
   id: z.string(),
@@ -40,33 +42,50 @@ const schema = z.object({
     .optional(),
 });
 
-export const POST = routeHandler(async ({ req, user }) => {
-  const parsedInput = schema.parse(await req.json());
+export const POST = routeHandler({ name: 'create-treatment', schema }, async ({ body, user }) => {
+  const parsedInput = body;
   const service = new CreateTreatment(new PrismaTreatmentRepository(database));
 
   await service.run(parsedInput as unknown as Primitives<Treatment>);
   revalidateTag(`get-treatments-${user.id}`);
   revalidatePath(`/appointments/${parsedInput.appointmentId}`);
 
-  return NextResponse.json({ message: 'Treatment created successfully' }, { status: 201 });
+  return HttpNextResponse.created();
 });
 
-export const GET = routeHandler(async ({ user, searchParams }) => {
-  const { patientId, appointmentId } = searchParams;
+export const GET = routeHandler(
+  {
+    name: 'get-treatments',
+    querySchema: z.object({
+      patientId: z.string().optional(),
+      appointmentId: z.string().optional(),
+    }),
+  },
+  async ({ searchParams, user }) => {
+    const { patientId, appointmentId } = searchParams;
 
-  if (!patientId && !appointmentId) {
-    return NextResponse.json({ error: 'patientId or appointmentId is required' }, { status: 400 });
-  }
+    if (!patientId && !appointmentId) {
+      throw new FormatError('Either patientId or appointmentId must be provided');
+    }
 
-  const service = new GetTreatments(new PrismaTreatmentRepository(database));
-  const criteria = patientId
-    ? [{ field: 'patientId', operator: Operator.EQUAL, value: patientId }]
-    : [{ field: 'appointmentId', operator: Operator.EQUAL, value: appointmentId }];
+    const service = new GetTreatments(new PrismaTreatmentRepository(database));
+    const criteria = patientId
+      ? [{ field: 'patientId', operator: Operator.EQUAL, value: patientId }]
+      : [{ field: 'appointmentId', operator: Operator.EQUAL, value: appointmentId }];
 
-  const orders = await service.run(criteria);
-  // cache(() => , [`get-treatments`, appointmentId || patientId], {
-  //   tags: [`get-treatments-${user.id}`],
-  //   revalidate: 3600,
-  // })();
-  return NextResponse.json({ data: orders }, { status: 200 });
-});
+    const orders = await cache(() => service.run(criteria), [`get-treatments`, appointmentId ?? patientId!], {
+      tags: [`get-treatments-${user.id}`],
+      revalidate: 3600,
+    })();
+    return NextResponse.json({ data: orders }, { status: 200 });
+  },
+  (error) => {
+    switch (true) {
+      case error instanceof FormatError:
+        return HttpNextResponse.domainError(error, 400);
+
+      default:
+        return HttpNextResponse.internalServerError();
+    }
+  },
+);

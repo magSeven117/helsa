@@ -1,32 +1,53 @@
-import { env } from '@/env';
+import { HttpNextResponse } from '@helsa/controller/http-next-response';
+import { routeHandler } from '@helsa/controller/route-handler';
 import { database } from '@helsa/database';
 import { FinalizeAppointment } from '@helsa/engine/appointment/application/finalize-appointment';
 import { GetAppointment } from '@helsa/engine/appointment/application/get-appointment';
+import { AppointmentNotFoundError } from '@helsa/engine/appointment/domain/errors/appointment-not-found-error';
 import { PrismaAppointmentRepository } from '@helsa/engine/appointment/infrastructure/persistence/prisma-appointment-repository';
-import { StreamClient } from '@stream-io/node-sdk';
+import { client } from '@helsa/video';
 import { revalidatePath } from 'next/cache';
-import { NextResponse } from 'next/server';
-import { routeHandler } from '../../route-handler';
+import { z } from 'zod';
 
-export const GET = routeHandler(async ({ req, params }) => {
-  const { id } = params;
-  const searchParams = req.nextUrl.searchParams;
+export const GET = routeHandler(
+  { name: 'get-appointment', querySchema: z.object({ include: z.string().optional() }) },
+  async ({ req, params, searchParams }) => {
+    const { id } = params;
 
-  const include = searchParams.get('include') ? JSON.parse(searchParams.get('include') as string) : null;
+    const include = searchParams.include ? JSON.parse(searchParams.include) : null;
 
-  const service = new GetAppointment(new PrismaAppointmentRepository(database));
-  const data = await service.run(id, include);
+    const service = new GetAppointment(new PrismaAppointmentRepository(database));
+    const data = await service.run(id, include);
 
-  return NextResponse.json({ data, message: 'success' });
-});
+    return HttpNextResponse.json({ data });
+  },
+  (error) => {
+    switch (true) {
+      case error instanceof AppointmentNotFoundError:
+        return HttpNextResponse.domainError(error, 404);
+      default:
+        return HttpNextResponse.internalServerError();
+    }
+  },
+);
 
-export const PUT = routeHandler(async ({ params }) => {
-  const { id } = params;
-  const service = new FinalizeAppointment(new PrismaAppointmentRepository(database));
-  await service.run(id);
-  const client = new StreamClient(env.NEXT_PUBLIC_STREAM_CLIENT_KEY, env.NEXT_PUBLIC_STREAM_CLIENT_SECRET);
-  const call = client.video.call('appointment', id);
-  await call.end();
-  revalidatePath('/appointments');
-  return NextResponse.json({ message: 'Appointment finalized successfully' });
-});
+export const PUT = routeHandler(
+  { name: 'finalize-appointment' },
+  async ({ params }) => {
+    const { id } = params;
+    const service = new FinalizeAppointment(new PrismaAppointmentRepository(database));
+    await service.run(id);
+    const call = client.video.call('appointment', id);
+    await call.end();
+    revalidatePath('/appointments');
+    return HttpNextResponse.ok();
+  },
+  (error) => {
+    switch (true) {
+      case error instanceof AppointmentNotFoundError:
+        return HttpNextResponse.domainError(error, 404);
+      default:
+        return HttpNextResponse.internalServerError();
+    }
+  },
+);

@@ -1,12 +1,11 @@
+import { HttpNextResponse } from '@helsa/controller/http-next-response';
+import { routeHandler } from '@helsa/controller/route-handler';
 import { database } from '@helsa/database';
 import { Operator } from '@helsa/ddd/core/criteria';
 import { CreateDiagnosis } from '@helsa/engine/diagnostic/application/create-diagnosis';
 import { GetDiagnoses } from '@helsa/engine/diagnostic/application/get-diagnoses';
 import { PrismaDiagnosisRepository } from '@helsa/engine/diagnostic/infrastructure/prisma-diagnosis-repository';
-import { revalidatePath, revalidateTag } from 'next/cache';
-import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { routeHandler } from '../route-handler';
 
 const schema = z.object({
   id: z.string(),
@@ -18,16 +17,11 @@ const schema = z.object({
   pathologyId: z.string(),
 });
 
-export const POST = routeHandler(async ({ req, user }) => {
-  const parsedInput = schema.parse(await req.json());
-
+export const POST = routeHandler({ name: 'create-diagnosis', schema }, async ({ body }) => {
   const service = new CreateDiagnosis(new PrismaDiagnosisRepository(database));
-  await service.run(parsedInput);
-  revalidateTag(`get-diagnoses-patientId-${user.id}`);
-  revalidateTag(`get-diagnoses-appointmentId-${user.id}`);
-  revalidatePath(`/appointments/${parsedInput.appointmentId}`);
+  await service.run(body);
 
-  return NextResponse.json({ message: 'Diagnosis created successfully' }, { status: 201 });
+  return HttpNextResponse.created();
 });
 
 const getSchema = z.object({
@@ -35,15 +29,9 @@ const getSchema = z.object({
   field: z.enum(['patientId', 'doctorId', 'appointmentId']),
 });
 
-export const GET = routeHandler(async ({ searchParams, user }) => {
-  const parsedInput = getSchema.parse(searchParams);
-  const criteria = { field: parsedInput.field, operator: Operator.EQUAL, value: parsedInput.id };
+export const GET = routeHandler({ name: 'get-diagnoses', querySchema: getSchema }, async ({ searchParams }) => {
+  const criteria = { field: searchParams.field, operator: Operator.EQUAL, value: searchParams.id };
   const service = new GetDiagnoses(new PrismaDiagnosisRepository(database));
-
-  // const diagnoses = await cache(() => service.run([criteria]), ['get-diagnoses', parsedInput.field, parsedInput.id], {
-  //   tags: [`get-diagnoses-${parsedInput.field}-${user.id}`],
-  //   revalidate: 3600,
-  // })();
   const diagnoses = await service.run([criteria]);
-  return NextResponse.json({ data: diagnoses }, { status: 200 });
+  return HttpNextResponse.json({ data: diagnoses });
 });

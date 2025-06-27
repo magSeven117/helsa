@@ -1,10 +1,10 @@
+import { routeHandler } from '@helsa/controller/route-handler';
 import { database } from '@helsa/database';
 import { GetAppointmentTypes } from '@helsa/engine/appointment/application/get-appointment-types';
 import { PrismaAppointmentRepository } from '@helsa/engine/appointment/infrastructure/persistence/prisma-appointment-repository';
 import { NextResponse } from 'next/server';
-import { routeHandler } from '../../route-handler';
 
-export const GET = routeHandler(async ({ user }) => {
+export const GET = routeHandler({ name: 'get-appointment-types' }, async ({}) => {
   const service = new GetAppointmentTypes(new PrismaAppointmentRepository(database));
 
   const response = await service.run();

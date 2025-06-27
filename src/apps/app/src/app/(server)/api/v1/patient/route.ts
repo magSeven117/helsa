@@ -1,3 +1,5 @@
+import { HttpNextResponse } from '@helsa/controller/http-next-response';
+import { routeHandler } from '@helsa/controller/route-handler';
 import { database } from '@helsa/database';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { CreatePatient } from '@helsa/engine/patient/application/services/create-patient';
@@ -6,9 +8,7 @@ import { PrismaPatientRepository } from '@helsa/engine/patient/infrastructure/pr
 import { UpdateRole } from '@helsa/engine/user/application/update-role';
 import { UserRoleValue } from '@helsa/engine/user/domain/user-role';
 import { PrismaUserRepository } from '@helsa/engine/user/infrastructure/prisma-user-repository';
-import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { routeHandler } from '../route-handler';
 
 const schema = z.object({
   patient: z.object({
@@ -26,11 +26,11 @@ const schema = z.object({
   }),
 });
 
-export const POST = routeHandler(async ({ req }) => {
-  const { patient } = schema.parse(await req.json());
+export const POST = routeHandler({ name: 'create-patient', schema }, async ({ body }) => {
+  const { patient } = body;
   const service = new CreatePatient(new PrismaPatientRepository(database));
   const updateService = new UpdateRole(new PrismaUserRepository(database));
   await service.run(patient as unknown as Primitives<Patient>);
   await updateService.run(UserRoleValue.PATIENT, patient.userId);
-  return NextResponse.json({ message: 'Patient created successfully' }, { status: 201 });
+  return HttpNextResponse.created();
 });

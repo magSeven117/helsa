@@ -1,11 +1,12 @@
+import { HttpNextResponse } from '@helsa/controller/http-next-response';
+import { routeHandler } from '@helsa/controller/route-handler';
 import { database } from '@helsa/database';
 import { CreateSchedule } from '@helsa/engine/doctor/application/services/create-schedule';
 import { GetDoctorSchedule } from '@helsa/engine/doctor/application/services/get-doctor-schedule';
+import { DoctorNotFoundError } from '@helsa/engine/doctor/domain/errors/doctor-not-found-error';
 import { PrismaDoctorRepository } from '@helsa/engine/doctor/infrastructure/persistence/prisma-doctor-repository';
 import { InngestEventBus } from '@helsa/ingest/event-bus';
-import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { routeHandler } from '../../../route-handler';
 
 const schema = z.object({
   days: z.array(
@@ -18,19 +19,29 @@ const schema = z.object({
   maxAppointment: z.number().optional(),
 });
 
-export const POST = routeHandler(async ({ req, params }) => {
-  const parsedInput = schema.parse(await req.json());
-  const { id } = params;
-  const { days, duration, maxAppointment } = parsedInput;
-  const service = new CreateSchedule(new PrismaDoctorRepository(database), new InngestEventBus());
-  await service.run(id, days, duration, maxAppointment);
+export const POST = routeHandler(
+  { name: 'create-schedule', schema },
+  async ({ params, body }) => {
+    const { id } = params;
+    const { days, duration, maxAppointment } = body;
+    const service = new CreateSchedule(new PrismaDoctorRepository(database), new InngestEventBus());
+    await service.run(id, days, duration, maxAppointment);
 
-  return NextResponse.json({ message: 'Schedule saved successfully' }, { status: 200 });
-});
+    return HttpNextResponse.created();
+  },
+  (error) => {
+    switch (true) {
+      case error instanceof DoctorNotFoundError:
+        return HttpNextResponse.domainError(error, 404);
+      default:
+        return HttpNextResponse.internalServerError();
+    }
+  },
+);
 
-export const GET = routeHandler(async ({ params }) => {
+export const GET = routeHandler({ name: 'get-doctor-schedule' }, async ({ params }) => {
   const { id } = params;
   const service = new GetDoctorSchedule(new PrismaDoctorRepository(database));
   const schedule = await service.run(id);
-  return NextResponse.json({ message: 'Ok', data: schedule }, { status: 200 });
+  return HttpNextResponse.json({ data: schedule });
 });

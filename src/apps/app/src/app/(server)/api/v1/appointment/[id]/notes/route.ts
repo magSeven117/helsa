@@ -1,18 +1,18 @@
+import { HttpNextResponse } from '@helsa/controller/http-next-response';
+import { routeHandler } from '@helsa/controller/route-handler';
 import { database } from '@helsa/database';
 import { CreateAppointmentNote } from '@helsa/engine/appointment/application/create-appointment-note';
 import { GetNotes } from '@helsa/engine/appointment/application/get-notes';
+import { AppointmentNotFoundError } from '@helsa/engine/appointment/domain/errors/appointment-not-found-error';
 import { PrismaAppointmentRepository } from '@helsa/engine/appointment/infrastructure/persistence/prisma-appointment-repository';
-import { revalidatePath, revalidateTag } from 'next/cache';
-import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { routeHandler } from '../../../route-handler';
 
-export const GET = routeHandler(async ({ user, params }) => {
+export const GET = routeHandler({ name: 'get-appointment-notes' }, async ({ user, params }) => {
   const { id } = params;
   const service = new GetNotes(new PrismaAppointmentRepository(database));
   const response = await service.run(id);
 
-  return NextResponse.json({ data: response, message: 'success' });
+  return HttpNextResponse.json({ data: response });
 });
 
 const createNote = z.object({
@@ -21,17 +21,26 @@ const createNote = z.object({
   isPublic: z.boolean(),
 });
 
-export const POST = routeHandler(async ({ user, params, req }) => {
-  const { id: appointmentId } = params;
-  const body = await req.json();
-  const { note, id, isPublic } = createNote.parse(body);
+export const POST = routeHandler(
+  {
+    name: 'save-appointment-note',
+    schema: createNote,
+  },
+  async ({ user, params, body }) => {
+    const { id: appointmentId } = params;
+    const { note, id, isPublic } = body;
 
-  const service = new CreateAppointmentNote(new PrismaAppointmentRepository(database));
+    const service = new CreateAppointmentNote(new PrismaAppointmentRepository(database));
 
-  await service.run(appointmentId, id, note, isPublic);
-
-  revalidatePath(`/appointments`);
-  revalidateTag(`get-notes-${user.id}-${id}`);
-
-  return NextResponse.json({ message: 'success' }, { status: 201 });
-});
+    await service.run(appointmentId, id, note, isPublic);
+    return HttpNextResponse.created();
+  },
+  (error) => {
+    switch (true) {
+      case error instanceof AppointmentNotFoundError:
+        return HttpNextResponse.domainError(error, 404);
+      default:
+        return HttpNextResponse.internalServerError();
+    }
+  },
+);
