@@ -1,6 +1,6 @@
 import { Criteria, Operator } from '@helsa/ddd/core/criteria';
-import { NotFoundError } from '@helsa/ddd/core/errors/not-found-error';
 import { Primitives } from '@helsa/ddd/types/primitives';
+import { PatientNotFoundError } from 'patient/domain/errors/patient-not-found-error';
 import { Patient } from '../../domain/patient';
 import { PatientRepository } from '../../domain/patient-repository';
 
@@ -15,7 +15,7 @@ export class GetPatient {
     );
 
     if (!patient) {
-      throw new NotFoundError('Patient not found');
+      throw new PatientNotFoundError(id);
     }
 
     return patient.toPrimitives();

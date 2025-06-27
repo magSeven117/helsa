@@ -1,9 +1,9 @@
 import { Criteria, Operator } from '@helsa/ddd/core/criteria';
 import { EventBus } from '@helsa/ddd/core/domain-event';
-import { NotFoundError } from '@helsa/ddd/core/errors/not-found-error';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { Day } from '../../domain/day';
 import { DoctorRepository } from '../../domain/doctor-repository';
+import { DoctorNotFoundError } from '../../domain/errors/doctor-not-found-error';
 
 export class CreateSchedule {
   constructor(
@@ -15,7 +15,7 @@ export class CreateSchedule {
     const doctor = await this.doctorRepository.getByCriteria(
       Criteria.fromValues([{ field: 'id', value: doctorId, operator: Operator.EQUAL }]),
     );
-    if (!doctor) throw new NotFoundError('Doctor not found');
+    if (!doctor) throw new DoctorNotFoundError(doctorId);
 
     doctor.saveSchedule(days, duration, maxAppointment);
     await this.doctorRepository.saveSchedule(doctor.id.value, doctor.schedule);

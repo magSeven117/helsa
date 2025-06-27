@@ -1,5 +1,6 @@
 import { EventBus } from '@helsa/ddd/core/domain-event';
 import { AppointmentRepository } from '../domain/appointment-repository';
+import { AppointmentNotFoundError } from '../domain/errors/appointment-not-found-error';
 
 export class EnterRoom {
   constructor(
@@ -10,7 +11,7 @@ export class EnterRoom {
   async run(appointmentId: string, role: 'PATIENT' | 'DOCTOR'): Promise<void> {
     const appointment = await this.repository.get(appointmentId, { room: true });
     if (!appointment) {
-      throw new Error('Room not found');
+      throw new AppointmentNotFoundError(appointmentId);
     }
     if (!appointment.room) {
       appointment.createRoom();

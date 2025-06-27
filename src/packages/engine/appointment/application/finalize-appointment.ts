@@ -1,5 +1,5 @@
-import { NotFoundError } from '@helsa/ddd/core/errors/not-found-error';
 import { AppointmentRepository } from '../domain/appointment-repository';
+import { AppointmentNotFoundError } from '../domain/errors/appointment-not-found-error';
 
 export class FinalizeAppointment {
   constructor(private readonly repository: AppointmentRepository) {}
@@ -7,7 +7,7 @@ export class FinalizeAppointment {
   async run(id: string) {
     const appointment = await this.repository.get(id, { room: true });
     if (!appointment) {
-      throw new NotFoundError(`Appointment ${id} not found`);
+      throw new AppointmentNotFoundError(id);
     }
 
     appointment.finalize();

@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
-import { DomainError } from "../ddd/core/domain-error";
+import { NextResponse } from 'next/server';
+import { DomainError } from '../ddd/core/domain-error';
 
 export class HttpNextResponse {
   static domainError(error: DomainError, statusCode: number): NextResponse {
@@ -14,8 +14,8 @@ export class HttpNextResponse {
   static internalServerError(): NextResponse {
     return NextResponse.json(
       {
-        code: "InternalServerError",
-        message: "Internal server error",
+        code: 'InternalServerError',
+        message: 'Internal server error',
         data: {},
       },
       { status: 500 },
@@ -28,6 +28,10 @@ export class HttpNextResponse {
 
   static error(message: string): NextResponse {
     return new NextResponse(null, { status: 400 });
+  }
+
+  static ok(): NextResponse {
+    return new NextResponse(null, { status: 200 });
   }
 
   static created(): NextResponse {

@@ -1,6 +1,6 @@
 import { Criteria, Operator } from '@helsa/ddd/core/criteria';
-import { NotFoundError } from '@helsa/ddd/core/errors/not-found-error';
 import { Primitives } from '@helsa/ddd/types/primitives';
+import { DoctorNotFoundError } from 'doctor/domain/errors/doctor-not-found-error';
 import { Doctor } from '../../domain/doctor';
 import { DoctorRepository } from '../../domain/doctor-repository';
 
@@ -12,7 +12,7 @@ export class UpdateDoctor {
       Criteria.fromValues([{ field: 'id', value: doctorId, operator: Operator.EQUAL }]),
     );
     if (!doctor) {
-      throw new NotFoundError('Doctor not found');
+      throw new DoctorNotFoundError(doctorId);
     }
 
     const updatedDoctor = doctor.update(doctorData);

@@ -1,3 +1,4 @@
+import { AppointmentNotFoundError } from 'appointment/domain/errors/appointment-not-found-error';
 import { AppointmentRepository } from '../domain/appointment-repository';
 import { AppointmentNote } from '../domain/note';
 
@@ -8,7 +9,7 @@ export class CreateAppointmentNote {
     try {
       const appointment = await this.appointmentRepository.get(appointmentId);
       if (!appointment) {
-        throw new Error('Appointment not found');
+        throw new AppointmentNotFoundError(appointmentId);
       }
 
       const newNote = AppointmentNote.create(id, new Date(), note, isPublic, appointment.id);
