@@ -145,7 +145,7 @@ const Page = () => {
             <div className="flex flex-col justify-center gap-8">
               <div className="flex flex-col gap-6">
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-gray-900">
-                  ¿Por qué elegir MenteSana?
+                  ¿Por qué elegir Helsa?
                 </h2>
                 <p className="max-w-[600px] text-gray-600 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
                   Nuestra plataforma está diseñada para brindarte la mejor experiencia en salud mental digital.
@@ -188,7 +188,7 @@ const Page = () => {
             </div>
             <div className="flex items-center justify-center">
               <div className="w-full max-w-[500px] rounded-lg bg-brand-primary ">
-                <img src="/images/how.jpg" alt="how" className="rounded-lg translate-2" />
+                <img src="/images/how.jpg" alt="how" className="rounded-lg translate-3" />
               </div>
             </div>
           </div>
