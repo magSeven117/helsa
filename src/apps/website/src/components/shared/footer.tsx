@@ -60,7 +60,7 @@ export default function Footer() {
           <Github />
         </Link>
       </div>
-      <div className="flex items-center justify-center w-full py-2 text-lg gap-6 font-semibold text-gray-500 flex-wrap">
+      <div className="flex items-center justify-center w-full py-2 text-lg gap-6 font-semibold text-muted-foreground flex-wrap">
         <Link href={''}>Aviso legal</Link>
         <Link href={''}>Condiciones generales</Link>
         <Link href={''}>Política de privacidad</Link>

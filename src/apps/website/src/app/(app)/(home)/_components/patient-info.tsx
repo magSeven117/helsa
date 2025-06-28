@@ -15,7 +15,7 @@ const PatientInfo = () => {
       <div className="">
         <div className="size-[500px] rounded-lg bg-brand-primary">
           <div className="size-[500px] rounded-lg flex items-center justify-center overflow-hidden translate-x-[20px] translate-y-[20px]">
-            <img src={`/images/${selectedImage}.jpg`} alt="" className="object-contain" />
+            <img src={`/images/patient-info.jpg`} alt="" className="object-contain" />
           </div>
         </div>
       </div>

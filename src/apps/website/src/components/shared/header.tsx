@@ -1,4 +1,5 @@
 'use client';
+import { useTheme } from '@helsa/ui';
 import { Button } from '@helsa/ui/components/button';
 import {
   NavigationMenu,
@@ -7,14 +8,14 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from '@helsa/ui/components/navigation-menu';
+import { Moon, Sun } from 'lucide-react';
 import Link from 'next/link';
-import { useState } from 'react';
 import { HelsaCompleteLogo } from './helsa-icon';
 
 const Header = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const { setTheme } = useTheme();
   return (
-    <header className="sticky top-0 z-50 hidden  md:flex justify-center w-full bg-white h-[80px] min-[1700px]:h-[100px]">
+    <header className="sticky top-0 z-50 hidden  md:flex justify-center w-full bg-background h-[80px] min-[1700px]:h-[100px]">
       <div className="w-[80%] min-[1700px]:w-2/3 flex items-center justify-between gap-10  lg:py-3 container relative  rounded-lg">
         <div className="flex items-center gap-4">
           <Link className="flex items-center gap-2" href="/">
@@ -52,16 +53,22 @@ const Header = () => {
           </NavigationMenuList>
         </NavigationMenu>
         <div className="flex justify-between items-center gap-2  pl-3">
-          <Link href={'https://app.helsa.com/sign-in'}>
-            <Button variant={'outline'} size={'sm'}>
-              Entrar
-            </Button>
+          <Link href={'https://app.helsahealthcare.com/sign-in'}>
+            <Button variant={'outline'}>Entrar</Button>
           </Link>
-          <Link href={'https://app.helsa.com/sign-up'}>
-            <Button size={'sm'} variant={'primary'}>
-              Registrarse
-            </Button>
+          <Link href={'https://app.helsahealthcarte.com/sign-up'}>
+            <Button variant={'primary'}>Registrarse</Button>
           </Link>
+          <Button
+            className=""
+            size={'icon'}
+            onClick={() => {
+              setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+            }}
+          >
+            <Sun className="dark:hidden block" />
+            <Moon className="hidden dark:block" />
+          </Button>
         </div>
       </div>
     </header>

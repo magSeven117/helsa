@@ -1,5 +1,6 @@
 import { WordAnimation } from '@/src/components/atoms/word-animation';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@helsa/ui/components/accordion';
+import { Badge } from '@helsa/ui/components/badge';
 import { Button } from '@helsa/ui/components/button';
 import { Separator } from '@helsa/ui/components/separator';
 import { ArrowUpRight, Calendar, Clock, HandHeartIcon, Heart, Shield, Stethoscope } from 'lucide-react';
@@ -18,7 +19,7 @@ const Page = () => {
           <div className="flex flex-col items-center lg:items-start justify-center gap-12">
             <Link
               href="/blog"
-              className="flex items-center gap-2 text-brand-primary font-semibold text-sm border bg-white py-1 px-4 rounded-lg  group"
+              className="flex items-center gap-2 text-brand-primary font-semibold text-sm border bg-background py-1 px-4 rounded-lg  group"
             >
               <span className="">Aprende sobre salud mental</span>
               <Separator orientation="vertical" />
@@ -88,12 +89,15 @@ const Page = () => {
           <PatientInfo />
         </div>
       </div>
-      <section id="como-funciona" className="w-full py-24 flex items-center  justify-center bg-violet-100">
+      <section
+        id="como-funciona"
+        className="w-full py-24 flex items-center  justify-center bg-violet-100 dark:bg-neutral-900"
+      >
         <div className="container px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
             <div className="space-y-2">
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-gray-900">Cómo Funciona</h2>
-              <p className="max-w-[900px] text-gray-600 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl ">Cómo Funciona</h2>
+              <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
                 Comenzar tu proceso de bienestar mental es simple y seguro.
               </p>
             </div>
@@ -103,8 +107,8 @@ const Page = () => {
               <div className="flex h-16 w-16 items-center justify-center rounded-full bg-brand-primary text-white text-xl font-bold">
                 1
               </div>
-              <h3 className="text-xl font-bold text-gray-900">Regístrate</h3>
-              <p className="text-gray-600">
+              <h3 className="text-xl font-bold ">Regístrate</h3>
+              <p className="text-muted-foreground">
                 Crea tu cuenta de forma segura y completa un breve cuestionario sobre tus necesidades.
               </p>
             </div>
@@ -113,8 +117,8 @@ const Page = () => {
               <div className="flex h-16 w-16 items-center justify-center rounded-full bg-brand-primary text-white text-xl font-bold">
                 2
               </div>
-              <h3 className="text-xl font-bold text-gray-900">Elige tu Profesional</h3>
-              <p className="text-gray-600">
+              <h3 className="text-xl font-bold ">Elige tu Profesional</h3>
+              <p className="text-muted-foreground">
                 Selecciona al psicólogo o psiquiatra que mejor se adapte a tus necesidades específicas.
               </p>
             </div>
@@ -123,16 +127,18 @@ const Page = () => {
               <div className="flex h-16 w-16 items-center justify-center rounded-full bg-brand-primary text-white text-xl font-bold">
                 3
               </div>
-              <h3 className="text-xl font-bold text-gray-900">Agenda tu Cita</h3>
-              <p className="text-gray-600">Programa tu sesión en el horario que mejor te convenga, disponible 24/7.</p>
+              <h3 className="text-xl font-bold ">Agenda tu Cita</h3>
+              <p className="text-muted-foreground">
+                Programa tu sesión en el horario que mejor te convenga, disponible 24/7.
+              </p>
             </div>
 
             <div className="flex flex-col items-center text-center space-y-4">
               <div className="flex h-16 w-16 items-center justify-center rounded-full bg-brand-primary text-white text-xl font-bold">
                 4
               </div>
-              <h3 className="text-xl font-bold text-gray-900">Comienza tu Terapia</h3>
-              <p className="text-gray-600">
+              <h3 className="text-xl font-bold ">Comienza tu Terapia</h3>
+              <p className="text-muted-foreground">
                 Inicia tu proceso de bienestar desde la comodidad y privacidad de tu hogar.
               </p>
             </div>
@@ -144,10 +150,8 @@ const Page = () => {
           <div className="grid gap-6 lg:grid-cols-[1fr_500px] lg:gap-12 xl:grid-cols-[1fr_550px]">
             <div className="flex flex-col justify-center gap-8">
               <div className="flex flex-col gap-6">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-gray-900">
-                  ¿Por qué elegir Helsa?
-                </h2>
-                <p className="max-w-[600px] text-gray-600 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl ">¿Por qué elegir Helsa?</h2>
+                <p className="max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
                   Nuestra plataforma está diseñada para brindarte la mejor experiencia en salud mental digital.
                 </p>
               </div>
@@ -155,8 +159,8 @@ const Page = () => {
                 <div className="flex items-start gap-3">
                   <Shield className="h-6 w-6 text-brand-primary mt-1" />
                   <div>
-                    <h3 className="font-semibold text-gray-900">Seguridad y Privacidad</h3>
-                    <p className="text-gray-600">
+                    <h3 className="font-semibold ">Seguridad y Privacidad</h3>
+                    <p className="text-muted-foreground">
                       Cumplimos con los más altos estándares de seguridad y confidencialidad médica.
                     </p>
                   </div>
@@ -164,22 +168,24 @@ const Page = () => {
                 <div className="flex items-start gap-3">
                   <Clock className="h-6 w-6 text-brand-primary mt-1" />
                   <div>
-                    <h3 className="font-semibold text-gray-900">Disponibilidad 24/7</h3>
-                    <p className="text-gray-600">Accede a apoyo cuando lo necesites, sin restricciones de horario.</p>
+                    <h3 className="font-semibold ">Disponibilidad 24/7</h3>
+                    <p className="text-muted-foreground">
+                      Accede a apoyo cuando lo necesites, sin restricciones de horario.
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <Calendar className="h-6 w-6 text-brand-primary mt-1" />
                   <div>
-                    <h3 className="font-semibold text-gray-900">Flexibilidad Total</h3>
-                    <p className="text-gray-600">Programa y reprograma tus citas según tu disponibilidad.</p>
+                    <h3 className="font-semibold ">Flexibilidad Total</h3>
+                    <p className="text-muted-foreground">Programa y reprograma tus citas según tu disponibilidad.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <Heart className="h-6 w-6 text-brand-primary mt-1" />
                   <div>
-                    <h3 className="font-semibold text-gray-900">Atención Personalizada</h3>
-                    <p className="text-gray-600">
+                    <h3 className="font-semibold ">Atención Personalizada</h3>
+                    <p className="text-muted-foreground">
                       Cada tratamiento se adapta específicamente a tus necesidades únicas.
                     </p>
                   </div>
@@ -194,11 +200,11 @@ const Page = () => {
           </div>
         </div>
       </section>
-      <section id="faq" className="w-full py-24 flex items-center justify-center bg-white">
+      <section id="faq" className="w-full py-24 flex items-center justify-center ">
         <div className="container px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center mb-10">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-gray-900">Preguntas Frecuentes</h2>
-            <p className="max-w-[900px] text-gray-600 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl ">Preguntas Frecuentes</h2>
+            <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
               Resuelve tus dudas sobre nuestra plataforma y servicios.
             </p>
           </div>
@@ -236,6 +242,40 @@ const Page = () => {
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
+          </div>
+        </div>
+      </section>
+      <section className="flex justify-center items-center h-screen">
+        <div className="h-[600px] aspect-video bg-brand-primary rounded-lg relative">
+          <video
+            src="https://tfuwarabgmwgumgearac.supabase.co/storage/v1/object/public/stuff//video%20helsa%201.mp4"
+            className="absolute rounded-lg top-3 left-3"
+            autoPlay
+            loop
+            muted
+          ></video>
+          <div className="-bottom-3 -right-3 absolute top-3 left-3 bg-black/50 rounded-lg"></div>
+
+          <div className="relative h-full flex flex-col z-10 pl-12 justify-center w-2/3 gap-5">
+            <div className="">
+              <Badge variant={'primary'}>Nuestra mision</Badge>
+            </div>
+            <p className=" text-white">
+              <span className="text-4xl font-semibold">Amamos ayudar a las personas a ayudar a otras personas</span>
+            </p>
+            <p className="text-lg  text-white">
+              Nuestra misión es conectar a las personas con profesionales de la salud mental de manera segura y
+              accesible. Creemos que el bienestar mental es fundamental para una vida plena y queremos facilitar el
+              acceso a la atención que mereces.
+            </p>
+            <p className="text-lg  text-white">
+              Trabajamos con un equipo de expertos comprometidos con la excelencia en la atención psicológica y
+              psiquiátrica. Nuestro objetivo es crear un espacio donde puedas sentirte seguro y apoyado en tu camino
+              hacia el bienestar mental.
+            </p>
+            <div>
+              <Button variant={'primary'}>Encuentra a tu terapeuta</Button>
+            </div>
           </div>
         </div>
       </section>
