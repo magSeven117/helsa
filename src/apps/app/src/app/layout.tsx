@@ -1,5 +1,5 @@
 import '@/src/assets/globals.css';
-import icon from '@/src/assets/images/HELSA NUEVO BLANCO ISOTIPO.png';
+
 import { DesignSystemProvider } from '@helsa/ui';
 import type { Metadata } from 'next';
 import { Nunito } from 'next/font/google';
@@ -28,7 +28,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning={true}>
-      <link rel="icon" href={icon.src} sizes="any" />
       <body className={nunito.className + ' styled-scroll h-screen box-border'} suppressHydrationWarning={true}>
         <DesignSystemProvider>
           <ErrorProvider>

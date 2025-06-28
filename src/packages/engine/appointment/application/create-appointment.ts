@@ -1,8 +1,8 @@
 import { EventBus } from '@helsa/ddd/core/domain-event';
-import { HourAlreadyTakenError } from 'appointment/domain/errors/hour-already-taken-error';
 import { Appointment } from '../domain/appointment';
 import { AppointmentCriteria } from '../domain/appointment-criteria';
 import { AppointmentRepository } from '../domain/appointment-repository';
+import { HourAlreadyTakenError } from '../domain/errors/hour-already-taken-error';
 
 export class CreateAppointment {
   constructor(

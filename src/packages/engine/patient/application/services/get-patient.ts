@@ -1,6 +1,6 @@
 import { Criteria, Operator } from '@helsa/ddd/core/criteria';
 import { Primitives } from '@helsa/ddd/types/primitives';
-import { PatientNotFoundError } from 'patient/domain/errors/patient-not-found-error';
+import { PatientNotFoundError } from '../../domain/errors/patient-not-found-error';
 import { Patient } from '../../domain/patient';
 import { PatientRepository } from '../../domain/patient-repository';
 

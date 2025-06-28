@@ -1,5 +1,5 @@
-import { AppointmentNotFoundError } from 'appointment/domain/errors/appointment-not-found-error';
 import { AppointmentRepository } from '../domain/appointment-repository';
+import { AppointmentNotFoundError } from '../domain/errors/appointment-not-found-error';
 import { AppointmentNote } from '../domain/note';
 
 export class CreateAppointmentNote {
