@@ -15,27 +15,42 @@ export default function PricingPage() {
         {
           name: 'Básico',
           price: 'Gratis',
-          features: ['Acceso a perfil básico', 'Búsqueda de doctores', 'Citas en línea'],
+          features: [
+            '20 mensajes de acompañante virtual al mes',
+            'Acceso a contenido educativo',
+            'Recordatorios de medicamentos y exámenes',
+            'Reporte emocional diario',
+          ],
         },
         {
           name: 'Premium',
           price: '$9.99/mes',
-          features: ['Todo lo del plan Básico', 'Chat con doctores', 'Recordatorios de medicamentos'],
+          features: [
+            '200 mensajes de acompañante virtual al mes',
+            '5 Citas medicas gratuitas al mes',
+            'Analisis predictivo con IA del historial y reportes',
+            'Canal de chat con doctores',
+          ],
         },
         {
           name: 'Familiar',
           price: '$19.99/mes',
-          features: ['Todo lo del plan Premium', 'Hasta 5 perfiles familiares', 'Descuentos en medicamentos'],
+          features: [
+            'Mensajes ilimitados de acompañante virtual al mes',
+            'Hasta 5 miembros del núcleo familiar',
+            '10 Citas medicas gratuitas al mes',
+            'Canal de chat con doctores para toda la familia',
+          ],
         },
       ],
       features: [
-        { name: 'Acceso a perfil básico', includedIn: ['Básico', 'Premium', 'Familiar'] },
-        { name: 'Búsqueda de doctores', includedIn: ['Básico', 'Premium', 'Familiar'] },
-        { name: 'Citas en línea', includedIn: ['Básico', 'Premium', 'Familiar'] },
-        { name: 'Chat con doctores', includedIn: ['Premium', 'Familiar'] },
-        { name: 'Recordatorios de medicamentos', includedIn: ['Premium', 'Familiar'] },
-        { name: 'Perfiles familiares', includedIn: ['Familiar'] },
-        { name: 'Descuentos en medicamentos', includedIn: ['Familiar'] },
+        { name: 'Mensajes de acompañante virtual', benefits: ['20', '200', 'Ilimitados'] },
+        { name: 'Citas médicas gratuitas', benefits: ['No incluido', '5', '10'] },
+        { name: 'Canal de chat con doctores', benefits: ['No incluido', 'Incluido', 'Incluido'] },
+        { name: 'Acceso a contenido educativo', benefits: ['Incluido', 'Incluido', 'Incluido'] },
+        { name: 'Recordatorios de medicamentos y exámenes', benefits: ['Incluido', 'Incluido', 'Incluido'] },
+        { name: 'Reporte emocional diario', benefits: ['Incluido', 'Incluido', 'Incluido'] },
+        { name: 'Miembros del núcleo familiar', benefits: ['1', '1', 'Hasta 5'] },
       ],
     },
     {
@@ -44,78 +59,98 @@ export default function PricingPage() {
       plans: [
         {
           name: 'Básico',
-          price: '$29.99/mes',
-          features: ['Perfil profesional', 'Gestión de citas', 'Hasta 50 pacientes'],
+          price: 'Gratis',
+          features: [
+            '20 mensajes de acompañante virtual al mes',
+            '5% de comisión por cita',
+            '30 minutos de video llamada por consulta',
+            'Acceso a contenido educativo',
+            'Reporte y análisis del paciente',
+          ],
         },
         {
           name: 'Profesional',
-          price: '$59.99/mes',
-          features: ['Todo lo del plan Básico', 'Chat con pacientes', 'Hasta 200 pacientes'],
+          price: '$19.99/mes',
+          features: [
+            '200 mensajes de acompañante virtual al mes',
+            '2% de comisión por cita',
+            '60 minutos de video llamada por consulta',
+            'Promocion de perfil profesional',
+            'Herramientas de visualización y expansion profesional',
+          ],
         },
         {
           name: 'Experto',
-          price: '$99.99/mes',
-          features: ['Todo lo del plan Profesional', 'Pacientes ilimitados', 'Integración con EMR'],
+          price: '$29.99/mes',
+          features: [
+            'Mensajes ilimitados de acompañante virtual al mes',
+            '0% de comisión por cita',
+            '90 minutos de video llamada por consulta',
+            'Links públicos para citas externas',
+            'Integración con EMR',
+          ],
         },
       ],
       features: [
-        { name: 'Perfil profesional', includedIn: ['Básico', 'Profesional', 'Experto'] },
-        { name: 'Gestión de citas', includedIn: ['Básico', 'Profesional', 'Experto'] },
-        { name: 'Chat con pacientes', includedIn: ['Profesional', 'Experto'] },
-        { name: 'Hasta 50 pacientes', includedIn: ['Básico'] },
-        { name: 'Hasta 200 pacientes', includedIn: ['Profesional'] },
-        { name: 'Pacientes ilimitados', includedIn: ['Experto'] },
-        { name: 'Integración con EMR', includedIn: ['Experto'] },
+        { name: 'Mensajes de acompañante virtual', benefits: ['20', '200', 'Ilimitados'] },
+        { name: 'Comisión por cita', benefits: ['5%', '2%', '0%'] },
+        { name: 'Duración de video llamada por consulta', benefits: ['30 minutos', '60 minutos', '90 minutos'] },
+        { name: 'Acceso a contenido educativo', benefits: ['Incluido', 'Incluido', 'Incluido'] },
+        { name: 'Reporte y análisis del paciente', benefits: ['Incluido', 'Incluido', 'Incluido'] },
+        { name: 'Promoción de perfil profesional', benefits: ['No incluido', 'Incluido', 'Incluido'] },
+        {
+          name: 'Herramientas de visualización y expansión profesional',
+          benefits: ['No incluido', 'Incluido', 'Incluido'],
+        },
+        { name: 'Links públicos para citas externas', benefits: ['No incluido', 'No incluido', 'Incluido'] },
+        { name: 'Integración con EMR', benefits: ['No incluido', 'No incluido', 'Incluido'] },
       ],
     },
-    {
-      id: 'hospitals',
-      title: 'Hospitales',
-      plans: [
-        {
-          name: 'Estándar',
-          price: '$499/mes',
-          features: ['Gestión de personal', 'Calendario de citas', 'Hasta 50 doctores'],
-        },
-        {
-          name: 'Avanzado',
-          price: '$999/mes',
-          features: ['Todo lo del plan Estándar', 'Integración con laboratorio', 'Hasta 200 doctores'],
-        },
-        {
-          name: 'Empresarial',
-          price: 'Contactar',
-          features: ['Todo lo del plan Avanzado', 'Personalización completa', 'Soporte 24/7'],
-        },
-      ],
-      features: [
-        { name: 'Gestión de personal', includedIn: ['Estándar', 'Avanzado', 'Empresarial'] },
-        { name: 'Calendario de citas', includedIn: ['Estándar', 'Avanzado', 'Empresarial'] },
-        { name: 'Hasta 50 doctores', includedIn: ['Estándar'] },
-        { name: 'Hasta 200 doctores', includedIn: ['Avanzado'] },
-        { name: 'Doctores ilimitados', includedIn: ['Empresarial'] },
-        { name: 'Integración con laboratorio', includedIn: ['Avanzado', 'Empresarial'] },
-        { name: 'Personalización completa', includedIn: ['Empresarial'] },
-        { name: 'Soporte 24/7', includedIn: ['Empresarial'] },
-      ],
-    },
+    // {
+    //   id: 'hospitals',
+    //   title: 'Hospitales',
+    //   plans: [
+    //     {
+    //       name: 'Estándar',
+    //       price: '$499/mes',
+    //       features: ['Gestión de personal', 'Calendario de citas', 'Hasta 50 doctores'],
+    //     },
+    //     {
+    //       name: 'Avanzado',
+    //       price: '$999/mes',
+    //       features: ['Todo lo del plan Estándar', 'Integración con laboratorio', 'Hasta 200 doctores'],
+    //     },
+    //     {
+    //       name: 'Empresarial',
+    //       price: 'Contactar',
+    //       features: ['Todo lo del plan Avanzado', 'Personalización completa', 'Soporte 24/7'],
+    //     },
+    //   ],
+    //   features: [
+    //     { name: 'Mensajes de acompañante virtual', benefits: ['20', '200', 'Ilimitados'] },
+    //     { name: 'Citas médicas gratuitas', benefits: ['0', '5', '10'] },
+    //     { name: 'Canal de chat con doctores', benefits: ['No incluido', 'Incluido', 'Incluido'] },
+    //     { name: 'Acceso a contenido educativo', benefits: ['Incluido', 'Incluido', 'Incluido'] },
+    //     { name: 'Recordatorios de medicamentos y exámenes', benefits: ['Incluido', 'Incluido', 'Incluido'] },
+    //     { name: 'Reporte emocional diario', benefits: ['Incluido', 'Incluido', 'Incluido'] },
+    //     { name: 'Miembros del núcleo familiar', benefits: ['1', '1', 'Hasta 5'] },
+    //   ],
+    // },
   ];
 
   return (
     <div className="container mx-auto px-4 py-16">
       <h1 className="text-4xl font-bold text-center mb-16">Nuestros Planes</h1>
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="w-full flex justify-center items-center gap-3 bg-transparent">
-          {pricingSections.map((section) => (
-            <TabsTrigger
-              className="data-[state=active]:border-b border-primary rounded-none"
-              key={section.id}
-              value={section.id}
-            >
-              {section.title}
-            </TabsTrigger>
-          ))}
-        </TabsList>
+        <div className="w-full flex justify-center">
+          <TabsList className="">
+            {pricingSections.map((section) => (
+              <TabsTrigger className="" key={section.id} value={section.id}>
+                {section.title}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </div>
         {pricingSections.map((section) => (
           <TabsContent key={section.id} value={section.id}>
             <PricingSection title={section.title} plans={section.plans} features={section.features} />

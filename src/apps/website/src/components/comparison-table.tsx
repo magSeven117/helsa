@@ -1,9 +1,8 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@helsa/ui/components/table';
-import { Check, X } from 'lucide-react';
 
 interface Feature {
   name: string;
-  includedIn: string[];
+  benefits: string[];
 }
 
 interface FeatureComparisonTableProps {
@@ -30,13 +29,9 @@ export function FeatureComparisonTable({ plans, features }: FeatureComparisonTab
           {features.map((feature) => (
             <TableRow key={feature.name}>
               <TableCell className="font-medium">{feature.name}</TableCell>
-              {plans.map((plan) => (
-                <TableCell key={plan} className="text-center">
-                  {feature.includedIn.includes(plan) ? (
-                    <Check className="inline-block h-4 w-4 text-green-500" />
-                  ) : (
-                    <X className="inline-block h-4 w-4 text-red-500" />
-                  )}
+              {feature.benefits.map((benefit, index) => (
+                <TableCell key={`${feature.name}-${benefit}-${index}`} className="text-center">
+                  {benefit}
                 </TableCell>
               ))}
             </TableRow>

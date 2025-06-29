@@ -32,8 +32,7 @@ export const plans: Plan[] = [
     description: 'Para personas atentas de su salud',
     features: [
       '5 Terapias al mes',
-      '20 Reportes al mes',
-      '10K tokens de IA al mes',
+      'Reportes emocionales ilimitados al mes',
       'Recordatorios de medicamentos y exámenes',
     ],
   },

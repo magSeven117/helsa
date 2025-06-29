@@ -13,7 +13,7 @@ interface PlanProps {
 interface PricingSectionProps {
   title: string;
   plans: PlanProps[];
-  features: { name: string; includedIn: string[] }[];
+  features: { name: string; benefits: string[] }[];
 }
 
 export function PricingSection({ title, plans, features }: PricingSectionProps) {
@@ -23,8 +23,8 @@ export function PricingSection({ title, plans, features }: PricingSectionProps) 
         {plans.map((plan, index) => (
           <Card
             key={index}
-            className={cn('sm:rounded-none', {
-              'border-primary': index === 1,
+            className={cn('shadow-none', {
+              'border-brand-primary': index === 1,
             })}
           >
             <CardHeader>
@@ -35,14 +35,16 @@ export function PricingSection({ title, plans, features }: PricingSectionProps) 
               <ul className="space-y-2">
                 {plan.features.map((feature, featureIndex) => (
                   <li key={featureIndex} className="flex items-center">
-                    <Check className="mr-2 h-4 w-4 text-primary" />
+                    <Check className="mr-2 h-4 w-4 text-brand-primary" />
                     <span>{feature}</span>
                   </li>
                 ))}
               </ul>
             </CardContent>
             <CardFooter>
-              <Button className="w-full">Elegir Plan</Button>
+              <Button className="w-full" variant={'primary'}>
+                Elegir Plan
+              </Button>
             </CardFooter>
           </Card>
         ))}

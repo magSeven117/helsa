@@ -42,12 +42,12 @@ const Header = () => {
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-                <Link href="/docs">Precios</Link>
+                <Link href="/pricing">Precios</Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-                <Link href="/docs">Como funciona</Link>
+                <Link href="/blog">Blog</Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
           </NavigationMenuList>
