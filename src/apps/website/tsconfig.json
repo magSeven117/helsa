@@ -17,5 +17,5 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "../../packages/ui/components/internal/progress.tsx"
-  ]
+  , "basehub.d.ts", "basehub.config.ts"]
 }

@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack -p 3001",
+    "dev:blog": "basehub dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -18,6 +19,7 @@
     "@payloadcms/db-postgres": "^3.30.0",
     "@payloadcms/next": "^3.30.0",
     "@payloadcms/richtext-lexical": "^3.30.0",
+    "basehub": "^9.0.19",
     "date-fns": "^3.6.0",
     "date-fns-tz": "^3.2.0",
     "graphql": "^16.10.0",
