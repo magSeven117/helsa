@@ -18,6 +18,8 @@ import { AppointmentNote } from './note';
 import { AppointmentRating } from './rating';
 import { AppointmentRecipe } from './recipe';
 import { AppointmentRoom } from './room';
+import { CanFinalize } from './specifications/can-finalize';
+import { CanStart } from './specifications/can-start';
 import { AppointmentStatus, AppointmentStatusEnum } from './status';
 import { Symptom } from './symptom';
 import { AppointmentTelemetry } from './telemetry';
@@ -189,16 +191,13 @@ export class Appointment extends Aggregate {
   }
 
   start(): void {
-    if (this.room?.patientEnter.value == true && this.room?.doctorEnter.value == true) {
+    if (CanStart.check(this)) {
       this.status = AppointmentStatus.started();
     }
   }
 
   finalize() {
-    if (
-      (this.room?.patientEnter.value == false && this.room?.doctorEnter.value == false) ||
-      (this.room?.patientEnter.value == true && this.room?.doctorEnter.value == true)
-    ) {
+    if (CanFinalize.check(this)) {
       this.status = AppointmentStatus.finished();
     } else {
       if (this.room?.patientEnter.value == false) {
