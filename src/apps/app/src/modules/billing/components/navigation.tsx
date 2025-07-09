@@ -11,7 +11,7 @@ interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {}
 export function NavigationBilling({ className, role, ...props }: SidebarNavProps) {
   const { user } = useSession();
   const pathname = usePathname();
-  const items = navItems.filter((item) => item.roles.includes(user.role));
+  const items = navItems.filter((item) => item.roles.includes(user.role.value));
   return (
     <Nav
       links={items.map((item) => ({

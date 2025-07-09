@@ -1,6 +1,4 @@
 'use client';
-import logo from '@/src/assets/images/HELSA NUEVO BLANCO ISOTIPO.png';
-import logo2 from '@/src/assets/images/HELSA NUEVO NEGRO ISOTIPO.png';
 import { User } from '@helsa/database';
 import { Avatar, AvatarFallback, AvatarImage } from '@helsa/ui/components/avatar';
 
@@ -32,7 +30,11 @@ export function ChatAvatar({ role }: Props) {
       return (
         <Avatar className="size-6">
           <AvatarImage
-            src={resolvedTheme === 'dark' ? logo.src : logo2.src}
+            src={
+              resolvedTheme === 'dark'
+                ? '/images/HELSA NUEVO BLANCO ISOTIPO.png'
+                : '/images/HELSA NUEVO NEGRO ISOTIPO.png'
+            }
             alt={user?.name}
             className="object-contain"
           />

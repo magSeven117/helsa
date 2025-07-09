@@ -236,14 +236,10 @@ export default function SignUpForm() {
               <p className="flex items-center gap-x-3 text-sm text-muted-foreground before:h-px before:flex-1 before:bg-border after:h-px after:flex-1 after:bg-border">
                 or
               </p>
-              <div className="grid grid-cols-2 gap-x-4 mt-3">
+              <div className="grid grid-cols-1 gap-x-4 mt-3">
                 <Button size="sm" variant="outline" type="button" className="" onClick={() => onOauthPress('google')}>
                   <Icons.google className="mr-2 size-4" />
                   Google
-                </Button>
-                <Button onClick={() => onOauthPress('facebook')} className="" size="sm" variant="outline" type="button">
-                  <Icons.facebook className="mr-2 size-4" color="white" />
-                  Facebook
                 </Button>
               </div>
             </CardContent>

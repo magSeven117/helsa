@@ -1,14 +1,15 @@
 import { Unauthenticated } from '@helsa/ddd/core/errors/unauthenticated';
 import { Unauthorized } from '@helsa/ddd/core/errors/unauthorized';
+import { User } from '@helsa/engine/user/domain/user';
 import { NextRequest, NextResponse } from 'next/server';
 import { ZodError, ZodSchema } from 'zod';
-import { BetterSession, BetterUser, getSession } from '../auth/server';
+import { getSession } from '../auth/server';
 import { DomainError } from '../ddd/core/domain-error';
 import { HttpNextResponse } from './http-next-response';
 
 type RouteHandlerParams<Q, P> = {
   req: NextRequest;
-  user: BetterUser;
+  user: User | undefined;
   params: { [key: string]: any };
   searchParams: Q;
   body: P;
@@ -21,7 +22,7 @@ type RouteHandlerOptions<Q, P> = {
   schema?: ZodSchema<P>;
   querySchema?: ZodSchema<Q>;
   authenticated?: boolean;
-  permissions?: (user: BetterUser) => boolean;
+  permissions?: (user: User) => boolean;
 };
 
 export const routeHandler = <T extends DomainError, P, Q>(
@@ -36,10 +37,9 @@ export const routeHandler = <T extends DomainError, P, Q>(
   onError?: (error: T) => NextResponse,
 ) => {
   return async (req: NextRequest, { params }: { params: Promise<any> }) => {
-    const session = await authentication(options.authenticated);
-    authorization(session?.user, options.permissions);
+    const user = await authentication(options.authenticated);
+    authorization(user, options.permissions);
 
-    const user = session?.user as BetterUser;
     const urlParams = await params;
     const searchParams = parseSeachParams<Q>(req, options.querySchema);
     const body = parseBody<P>(req, options.schema);
@@ -74,18 +74,18 @@ export const routeHandler = <T extends DomainError, P, Q>(
   };
 };
 
-async function authentication(authenticated?: boolean): Promise<BetterSession | null> {
+async function authentication(authenticated?: boolean): Promise<User | undefined> {
   if (authenticated === false) {
-    return null;
+    return undefined;
   }
   const session = await getSession();
   if (!session || !session.user) {
     throw new Unauthenticated('User is not authenticated');
   }
-  return session;
+  return User.fromPrimitives(session.user as any);
 }
 
-function authorization(user: BetterUser | undefined, permissions?: (user: BetterUser) => boolean): void {
+function authorization(user: User | undefined, permissions?: (user: User) => boolean): void {
   if (!user) {
     return;
   }

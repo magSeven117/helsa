@@ -1,7 +1,7 @@
-import { Appointment } from '@/src/appointment/domain/appointment';
-import { User } from '@/src/user/domain/user';
 import { embed } from 'ai';
 import { voyage } from 'voyage-ai-provider';
+import { Appointment } from '../../../appointment/domain/appointment';
+import { User } from '../../../user/domain/user';
 import { Doctor } from '../../domain/doctor';
 
 export class VoyageEmbeddingDoctor {

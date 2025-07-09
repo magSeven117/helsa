@@ -1,13 +1,12 @@
 import { PrismaClient } from '@helsa/database';
-import { resend } from '@helsa/email';
-import ForgetPassword from '@helsa/email/templates/forget-password';
-import VerifyEmail from '@helsa/email/templates/verify-email';
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { nextCookies } from 'better-auth/next-js';
 import { bearer, emailOTP } from 'better-auth/plugins';
 import { headers } from 'next/headers';
 import { cache } from 'react';
+import { sendForgotPassword } from 'utils/send-forgot-password';
+import { sendVerification } from 'utils/send-verification';
 import { keys } from './keys';
 
 const prisma = new PrismaClient();
@@ -46,20 +45,14 @@ export const auth = betterAuth({
     emailOTP({
       otpLength: 6,
       sendVerificationOTP: async ({ email, otp, type }) => {
-        if (type === 'forget-password') {
-          await resend.emails.send({
-            to: email,
-            from: 'Helsa <contact@helsahealthcare.com>',
-            subject: 'Verify your email',
-            react: ForgetPassword({ verificationCode: otp }),
-          });
-        } else if (type === 'email-verification') {
-          await resend.emails.send({
-            to: email,
-            from: 'Helsa <contact@helsahealthcare.com>',
-            subject: 'Verify your email',
-            react: VerifyEmail({ verificationCode: otp }),
-          });
+        switch (type) {
+          case 'email-verification':
+            await sendVerification(email, otp);
+            break;
+          case 'forget-password':
+            await sendForgotPassword(email, otp);
+          default:
+            break;
         }
       },
       sendVerificationOnSignUp: true,
@@ -73,11 +66,6 @@ export const auth = betterAuth({
       clientId: env.GOOGLE_CLIENT_ID!,
       clientSecret: env.GOOGLE_CLIENT_SECRET!,
       redirectURI: `${env.NEXT_PUBLIC_BASE_URL}/api/v1/auth/callback/google`,
-    },
-    facebook: {
-      enabled: true,
-      clientId: env.FACEBOOK_CLIENT_ID!,
-      clientSecret: env.FACEBOOK_CLIENT_SECRET!,
     },
   },
 });

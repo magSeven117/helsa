@@ -1,9 +1,32 @@
-import { betterAuthMiddleware } from '@helsa/auth/middleware';
-import { NextRequest } from 'next/server';
-const publicRoutes = ['/sign-in', '/sign-up', '/recovery-password', '/call'];
+import { getSession } from '@helsa/auth/server';
+import { NextRequest, NextResponse } from 'next/server';
+const publicRoutes = new Set(['/sign-in', '/sign-up', '/recovery-password']);
 export default async function middleware(req: NextRequest) {
-  return betterAuthMiddleware(req, publicRoutes);
+  const session = await getSession();
+  const isPublicRoute = publicRoutes.has(req.nextUrl.pathname);
+
+  if (!session && !isPublicRoute) {
+    return NextResponse.redirect(new URL('/sign-in', req.url));
+  }
+
+  if (
+    session &&
+    session.user.role === 'UNDEFINED' &&
+    req.nextUrl.pathname !== '/select-role' &&
+    req.nextUrl.pathname !== '/onboarding'
+  ) {
+    return NextResponse.redirect(new URL(`/select-role?userId=${session.user.id}`, req.url));
+  }
+
+  if (session && (isPublicRoute || req.nextUrl.pathname === '/')) {
+    return NextResponse.redirect(new URL('/dashboard', req.url));
+  }
+
+  return NextResponse.next();
 }
 export const config = {
-  matcher: ['/((?!.*\\..*|_next).*)', '/', '/(!api|trpc)(.*)'],
+  runtime: 'nodejs',
+  matcher: [
+    '/((?!api|queue|notifications|payment|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+  ],
 };

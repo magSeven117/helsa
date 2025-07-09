@@ -1,4 +1,4 @@
-import { Redis } from '@helsa/upstash/cache';
+import { Redis } from '@helsa/cache/cache';
 import { AssistantSettings } from '../domain/assistant';
 import { Chat } from '../domain/chat';
 import { ChatRepository } from '../domain/chat-repository';

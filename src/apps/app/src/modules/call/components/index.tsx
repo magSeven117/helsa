@@ -52,8 +52,8 @@ import {
 } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
-import CallCHat from '../../call-chat/components';
 import { useSession } from '../../auth/components/session-provider';
+import CallCHat from '../../call-chat/components';
 
 const apiKey = process.env.NEXT_PUBLIC_STREAM_CLIENT_KEY!;
 
@@ -66,10 +66,10 @@ export const VideoCall = ({ id, token }: { id: string; token: string }) => {
       return;
     }
     const streamUser = {
-      id: user.id,
-      name: user.name,
-      image: user.image ?? '',
-      role: user.role === 'PATIENT' ? 'patient' : 'doctor',
+      id: user.id.value,
+      name: user.name.value,
+      image: user.image.value ?? '',
+      role: user.role.value === 'PATIENT' ? 'patient' : 'doctor',
     };
     const newClient = new StreamVideoClient({
       apiKey,
@@ -94,14 +94,6 @@ export const VideoCall = ({ id, token }: { id: string; token: string }) => {
       </StreamCall>
     </StreamVideo>
   );
-};
-
-const calculateParticipantTimeInCall = (joinedAt: Date) => {
-  const now = new Date();
-  return intervalToDuration({
-    start: joinedAt,
-    end: now,
-  });
 };
 
 export const MyUILayout = () => {

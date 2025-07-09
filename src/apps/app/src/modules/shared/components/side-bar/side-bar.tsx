@@ -48,7 +48,7 @@ const SideBar = () => {
   const { user } = useSession();
   const sections = sideBarItems.map((section) => ({
     title: section.title,
-    routes: section.routes.filter((route) => route.roles.includes(user.role)),
+    routes: section.routes.filter((route) => route.roles.includes(user.role.value)),
   }));
   const path = usePathname();
   const { state } = useSidebar();

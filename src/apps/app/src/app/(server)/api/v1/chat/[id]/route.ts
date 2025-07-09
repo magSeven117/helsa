@@ -1,5 +1,5 @@
+import { client } from '@helsa/cache/cache';
 import { RedisChatRepository } from '@helsa/engine/chat/infrastructure/redis-chat-repository';
-import { client } from '@helsa/upstash/cache';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const GET = async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {

@@ -1,6 +1,4 @@
 'use client';
-import botImageWhite from '@/src/assets/images/bot-white.png';
-import botImage from '@/src/assets/images/bot.png';
 import { useChat } from '@ai-sdk/react';
 import { Button } from '@helsa/ui/components/button';
 import { Input } from '@helsa/ui/components/input';
@@ -176,7 +174,7 @@ export const ChatFloatingButton = () => {
                 {messages.length ? (
                   <ChatList messages={messages} className="p-4 pb-8" />
                 ) : (
-                  <ChatEmpty firstName={user?.name.split(' ').at(0) ?? ''} />
+                  <ChatEmpty firstName={user?.name.value.split(' ').at(0) ?? ''} />
                 )}
                 <div className="w-full h-px" ref={visibilityRef} />
               </div>
@@ -205,8 +203,8 @@ export const ChatFloatingButton = () => {
         setIsHovered(false);
       }}
     >
-      <img src={botImage.src} className="size-6 hidden dark:block" alt="" />
-      <img src={botImageWhite.src} className="size-6 block dark:hidden" alt="" />
+      <img src={'/images/bot.png'} className="size-6 hidden dark:block" alt="" />
+      <img src={'/images/bot-white.png'} className="size-6 block dark:hidden" alt="" />
     </motion.button>
   );
 };

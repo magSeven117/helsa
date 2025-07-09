@@ -4,8 +4,11 @@ import { NextResponse } from 'next/server';
 
 export const GET = routeHandler({ name: 'get-customer-info' }, async ({ user }) => {
   try {
+    if (!user) {
+      return NextResponse.json({ data: { customer: null, subscription: null } });
+    }
     const customer = await payment.customers.getExternal({
-      externalId: user.id,
+      externalId: user.id.value,
     });
     if (!customer) {
       return NextResponse.json({ data: { customer: null, subscription: null } });
@@ -40,7 +43,7 @@ export const POST = routeHandler({ name: 'add-metter' }, async ({ user }) => {
     events: [
       {
         name: 'ai_usage',
-        customerId: user.id,
+        customerId: user?.id.value ?? '',
         metadata: {
           promptTokens: 30000,
           completionTokens: 100000,

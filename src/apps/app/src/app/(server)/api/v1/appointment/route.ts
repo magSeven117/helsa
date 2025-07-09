@@ -45,7 +45,7 @@ export const GET = routeHandler(
 
     let service;
 
-    if (user.role === UserRoleValue.DOCTOR) {
+    if (user?.role.value === UserRoleValue.DOCTOR) {
       const doctorGetter = new GetDoctor(new PrismaDoctorRepository(database));
       service = new GetDoctorAppointments(repository, doctorGetter);
     } else {
@@ -53,7 +53,13 @@ export const GET = routeHandler(
       service = new GetPatientAppointments(repository, patientGetter);
     }
 
-    const response = service.run(user.id, searchParams.filter, searchParams.pagination, searchParams.sort, 'userId');
+    const response = service.run(
+      user?.id.value ?? '',
+      searchParams.filter,
+      searchParams.pagination,
+      searchParams.sort,
+      'userId',
+    );
     return HttpNextResponse.json({ data: response });
   },
   (error: GetAppointmentErrors) => {
@@ -81,7 +87,7 @@ export const POST = routeHandler(
   { name: 'create-appointment', schema: createAppointmentSchema },
   async ({ user, body }) => {
     const getPatient = new GetPatient(new PrismaPatientRepository(database));
-    const patient = await getPatient.run(user.id, 'userId');
+    const patient = await getPatient.run(user?.id.value ?? '', 'userId');
     const service = new CreateAppointment(new PrismaAppointmentRepository(database), new InngestEventBus());
 
     const { id, date, motive, symptoms, doctorId, typeId, specialtyId, priceId } = body;
