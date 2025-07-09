@@ -1,6 +1,6 @@
 'use client';
 
-import { useSession } from '@/src/modules/auth/components/session-provider';
+import { useSession } from '@/src/app/(app)/(main)/_components/session-provider';
 import { Avatar, AvatarFallback, AvatarImage } from '@helsa/ui/components/avatar';
 import { Badge } from '@helsa/ui/components/badge';
 import { Button } from '@helsa/ui/components/button';

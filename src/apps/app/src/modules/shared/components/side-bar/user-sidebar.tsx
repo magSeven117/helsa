@@ -16,7 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@helsa/ui/components/sidebar';
 import { Bell, LogOut, MoreVerticalIcon, Sparkles, SunMoon, User } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useSession } from '../../../auth/components/session-provider';
+import { useSession } from '../../../../app/(app)/(main)/_components/session-provider';
 
 export function NavUser() {
   const { user } = useSession();

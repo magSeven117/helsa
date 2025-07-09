@@ -15,7 +15,7 @@ import { GetPatient } from '@helsa/engine/patient/application/services/get-patie
 import { PatientNotFoundError } from '@helsa/engine/patient/domain/errors/patient-not-found-error';
 import { PrismaPatientRepository } from '@helsa/engine/patient/infrastructure/prisma-patient-repository';
 import { UserRoleValue } from '@helsa/engine/user/domain/user-role';
-import { InngestEventBus } from '@helsa/ingest/event-bus';
+import { InngestEventBus } from '@helsa/events/event-bus';
 import { z } from 'zod';
 const getAppointmentsSchema = z.object({
   filter: z.object({

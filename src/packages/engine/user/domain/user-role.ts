@@ -18,4 +18,8 @@ export class UserRole extends Enum<UserRoleValue> {
   static Doctor(): UserRole {
     return new UserRole(UserRoleValue.DOCTOR);
   }
+
+  is(role: string): boolean {
+    return this.value === role;
+  }
 }

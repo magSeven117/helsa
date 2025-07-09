@@ -11,7 +11,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useOnClickOutside } from 'usehooks-ts';
 import { v4 } from 'uuid';
-import { useSession } from '../../auth/components/session-provider';
+import { useSession } from '../../../app/(app)/(main)/_components/session-provider';
 import { ChatEmpty } from '../../chat/components/chat-empty';
 import { ChatExamples } from '../../chat/components/chat-examples';
 import { ChatList } from '../../chat/components/chat-list';

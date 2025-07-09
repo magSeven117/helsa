@@ -1,6 +1,6 @@
 export const dynamic = 'force-dynamic';
-import SignInForm from '@/src/modules/auth/components/sign-in-form';
 import { Suspense } from 'react';
+import SignInForm from './form';
 
 export default function Page() {
   return (
@@ -9,3 +9,8 @@ export default function Page() {
     </Suspense>
   );
 }
+
+export const metadata = {
+  title: 'Iniciar sesión',
+  description: 'Inicia sesión en tu cuenta de Helsa.',
+};

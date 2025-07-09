@@ -1,6 +1,6 @@
 export const dynamic = 'force-dynamic';
-import RecoveryPasswordForm from '@/src/modules/auth/components/recovery-password-form';
 import { Suspense } from 'react';
+import RecoveryPasswordForm from './form';
 
 export default function Page() {
   return (
@@ -9,3 +9,7 @@ export default function Page() {
     </Suspense>
   );
 }
+export const metadata = {
+  title: 'Recuperar contraseña',
+  description: 'Recupera tu contraseña para acceder a tu cuenta de Helsa.',
+};

@@ -4,7 +4,7 @@ import { Button } from '@helsa/ui/components/button';
 import { DialogTitle } from '@helsa/ui/components/dialog';
 import { Sheet, SheetContent, SheetHeader, SheetTrigger } from '@helsa/ui/components/sheet';
 import { useState } from 'react';
-import { useSession } from '../../auth/components/session-provider';
+import { useSession } from '../../../app/(app)/(main)/_components/session-provider';
 import { useSchedule } from '../hooks/use-schedule';
 import DoctorSchedule from './doctor-schedule';
 

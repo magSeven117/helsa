@@ -27,7 +27,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useSession } from '../../../auth/components/session-provider';
+import { useSession } from '../../../../app/(app)/(main)/_components/session-provider';
 import Icon from './icon';
 import { SidebarTrigger } from './sidabar-trigger';
 import SidebarNotifications from './sidebar-notifications';

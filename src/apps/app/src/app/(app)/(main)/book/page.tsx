@@ -1,5 +1,5 @@
-import DoctorListWrapper from '@/src/modules/doctors/components/doctor-list-wrapper';
-import SearchDoctorInput from '@/src/modules/doctors/components/search-doctor-input';
+import DoctorListWrapper from '@/src/app/(app)/(main)/book/_components/doctor-list-wrapper';
+import SearchDoctorInput from '@/src/app/(app)/(main)/book/_components/search-doctor-input';
 import { createSearchParamsCache, parseAsInteger, parseAsString } from 'nuqs/server';
 
 const searchParamsCache = createSearchParamsCache({

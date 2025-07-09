@@ -1,8 +1,8 @@
-import AppointmentSearchInput from '@/src/modules/appointment/components/filter/appointment-search-input';
-import { AppointmentTable } from '@/src/modules/appointment/components/table';
-import AppointmentActions from '@/src/modules/appointment/components/table/actions';
-import { Loading } from '@/src/modules/appointment/components/table/loading';
-import { ColumnVisibility } from '@/src/modules/appointment/components/table/visibility';
+import AppointmentSearchInput from '@/src/app/(app)/(main)/appointments/_components/filter/appointment-search-input';
+import { AppointmentTable } from '@/src/app/(app)/(main)/appointments/_components/table';
+import AppointmentActions from '@/src/app/(app)/(main)/appointments/_components/table/actions';
+import { Loading } from '@/src/app/(app)/(main)/appointments/_components/table/loading';
+import { ColumnVisibility } from '@/src/app/(app)/(main)/appointments/_components/table/visibility';
 import { ErrorFallback } from '@/src/modules/shared/components/error-fallback';
 import { ErrorBoundary } from 'next/dist/client/components/error-boundary';
 import { createSearchParamsCache, parseAsArrayOf, parseAsInteger, parseAsString } from 'nuqs/server';

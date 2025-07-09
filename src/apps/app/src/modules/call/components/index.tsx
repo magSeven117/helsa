@@ -1,6 +1,6 @@
 'use client';
-import { useRoom } from '@/src/modules/appointment/hooks/use-room';
 import { BetterUser } from '@helsa/auth/server';
+import { enterAppointmentRoom } from '@helsa/engine/appointment/infrastructure/api/http-appointment-api';
 import { Button } from '@helsa/ui/components/button';
 import {
   DropdownMenu,
@@ -33,6 +33,7 @@ import {
   VideoPlaceholderProps,
 } from '@stream-io/video-react-sdk';
 import '@stream-io/video-react-sdk/dist/css/styles.css';
+import { useMutation } from '@tanstack/react-query';
 import { intervalToDuration } from 'date-fns';
 import { motion } from 'framer-motion';
 import {
@@ -52,7 +53,7 @@ import {
 } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
-import { useSession } from '../../auth/components/session-provider';
+import { useSession } from '../../../app/(app)/(main)/_components/session-provider';
 import CallCHat from '../../call-chat/components';
 
 const apiKey = process.env.NEXT_PUBLIC_STREAM_CLIENT_KEY!;
@@ -105,7 +106,9 @@ export const MyUILayout = () => {
   const callCallingState = useCallCallingState();
   const localParticipant = useLocalParticipant();
   const remoteParticipants = useRemoteParticipants();
-  const { enterRoom } = useRoom();
+  const { mutateAsync: enterRoom } = useMutation({
+    mutationFn: async (id: string) => enterAppointmentRoom(id),
+  });
 
   const joinCall = useCallback(async () => {
     if (call) {

@@ -5,7 +5,7 @@ import { useChat } from '@ai-sdk/react';
 import { useEffect, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { v4 } from 'uuid';
-import { useSession } from '../../auth/components/session-provider';
+import { useSession } from '../../../app/(app)/(main)/_components/session-provider';
 import { convertToUIMessages } from '../../chat/components/utils';
 import { useOneChat } from '../hooks/use-chats';
 import { AssistantFeedback } from './feedback';
