@@ -1,77 +1,91 @@
 'use client';
 
+import { updateDoctor } from '@helsa/engine/doctor/infrastructure/http/http-doctor-api';
 import { Button } from '@helsa/ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@helsa/ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@helsa/ui/components/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@helsa/ui/components/select';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import { useUpdateBiometric } from '../../hooks/use-patient';
+import { useSpecialties } from '../../../hooks/use-specialties';
 
 const formSchema = z.object({
-  bloodType: z.enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']),
+  specialtyId: z.string(),
 });
 
-type BloodTypeLevel = z.infer<typeof formSchema>;
+type SpecialtyValue = z.infer<typeof formSchema>;
 
-export const BloodTypeSection = ({ bloodType, id }: BloodTypeLevel & { id: string }) => {
+export const SpecialtySection = ({ specialtyId, id }: SpecialtyValue & { id: string }) => {
+  const { specialties } = useSpecialties();
   const [isEditing, setIsEditing] = useState(false);
   const toggleEdit = () => setIsEditing((current) => !current);
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: { bloodType },
+    defaultValues: { specialtyId },
     mode: 'all',
   });
-  const { isSubmitting, isValid } = form.formState;
+  const { isValid } = form.formState;
+
   const router = useRouter();
-  const { updateBiometric } = useUpdateBiometric(id);
 
-  const onSubmit = async (data: BloodTypeLevel) => {
-    try {
-      await updateBiometric(data);
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (data: SpecialtyValue) => updateDoctor(id, data),
+    onSuccess: () => {
+      toast.success('Specialty updated successfully');
       setIsEditing(false);
-      toast.success('Tipo de sangre actualizado correctamente.');
       router.refresh();
-    } catch (error) {
-      console.log(error);
-      toast.error('An error occurred. Please try again.');
-    }
-  };
+    },
+    onError: (error) => {
+      console.error(error);
+      toast.error('An error occurred while updating Specialty');
+    },
+  });
 
-  const bloodTypeSelected = bloodTypeOptions.find((option) => option.id === form.getValues('bloodType'));
+  const selectedSpecialty = specialties.find(
+    (specialty: { id: string; name: string }) => specialty.id === form.getValues('specialtyId'),
+  );
 
   return (
     <Card className="rounded-none bg-transparent">
       <Form {...form}>
-        <form action="" onSubmit={form.handleSubmit(onSubmit)}>
+        <form
+          action=""
+          onSubmit={form.handleSubmit(
+            (data) => mutate(data),
+            (error) => console.error(error),
+          )}
+        >
           <CardHeader className="">
             <div>
-              <CardTitle>Tipo de sangre</CardTitle>
+              <CardTitle>Especialidad medica</CardTitle>
               <p className="text-muted-foreground text-sm mt-5">
-                {isEditing ? 'Selecciona tu tipo de sangre.' : 'Tu tipo de sangre es importante para nosotros'}
+                {isEditing
+                  ? 'Selecciona la especialidad médica en la que te especializas.'
+                  : 'Esta información es importante para los pacientes.'}
               </p>
               {!isEditing ? (
-                <p className="text-primary font-bold mt-3">{bloodTypeSelected?.name}</p>
+                <p className="text-primary font-bold mt-3">{selectedSpecialty?.name}</p>
               ) : (
                 <FormField
                   control={form.control}
-                  name="bloodType"
+                  name="specialtyId"
                   render={({ field }) => (
                     <FormItem className="flex-1 mt-5">
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
-                          <SelectTrigger className="rounded-none">
+                          <SelectTrigger>
                             <SelectValue placeholder="Select a verified email to display" />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent className="rounded-none">
-                          {bloodTypeOptions.map((specialty) => (
-                            <SelectItem key={specialty.id} value={specialty.id} className="rounded-none">
+                        <SelectContent>
+                          {specialties.map((specialty: { id: string; name: string }) => (
+                            <SelectItem key={specialty.id} value={specialty.id}>
                               <span className="flex w-full justify-between items-center gap-3">{specialty.name}</span>
                             </SelectItem>
                           ))}
@@ -86,7 +100,7 @@ export const BloodTypeSection = ({ bloodType, id }: BloodTypeLevel & { id: strin
           </CardHeader>
           <CardFooter className="border-t pt-4 flex justify-between items-start gap-2 md:items-center flex-col md:flex-row">
             <p className="text-muted-foreground text-xs">
-              Esta información es importante para nosotros, por favor mantenla actualizada.
+              Sin una especialidad no se puede empezar a atender pacientes.
             </p>
             {isEditing ? (
               <div className="flex justify-end items-center gap-3">
@@ -99,8 +113,8 @@ export const BloodTypeSection = ({ bloodType, id }: BloodTypeLevel & { id: strin
                 >
                   Cancelar
                 </Button>
-                <Button disabled={!isValid || isSubmitting} type="submit" className="rounded-none">
-                  {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Guardar'}
+                <Button disabled={!isValid || isPending} type="submit" className="rounded-none">
+                  {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Save'}
                 </Button>
               </div>
             ) : (
@@ -114,38 +128,3 @@ export const BloodTypeSection = ({ bloodType, id }: BloodTypeLevel & { id: strin
     </Card>
   );
 };
-
-const bloodTypeOptions = [
-  {
-    id: 'A+',
-    name: 'A+',
-  },
-  {
-    id: 'A-',
-    name: 'A-',
-  },
-  {
-    id: 'B+',
-    name: 'B+',
-  },
-  {
-    id: 'B-',
-    name: 'B-',
-  },
-  {
-    id: 'AB+',
-    name: 'AB+',
-  },
-  {
-    id: 'AB-',
-    name: 'AB-',
-  },
-  {
-    id: 'O+',
-    name: 'O+',
-  },
-  {
-    id: 'O-',
-    name: 'O-',
-  },
-];

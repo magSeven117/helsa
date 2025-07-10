@@ -15,7 +15,7 @@ import { Label } from '@helsa/ui/components/label';
 import { RadioGroup, RadioGroupItem } from '@helsa/ui/components/radio-group';
 import { Check, CreditCard, Loader2 } from 'lucide-react';
 import { useState } from 'react';
-import { getCheckoutSession } from '../../api/subscription';
+import { getCheckoutSession } from '../../../modules/profile/api/subscription';
 
 export interface Plan {
   id: string;

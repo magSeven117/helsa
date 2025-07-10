@@ -11,7 +11,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import { useUpdateHospital } from '../../hooks/use-hospital';
+import { useUpdateHospital } from '../../../modules/profile/hooks/use-hospital';
 
 const formSchema = z.object({
   address: z.object({

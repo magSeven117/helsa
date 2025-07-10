@@ -27,7 +27,7 @@ import Lottie from 'react-lottie';
 import { toast } from 'sonner';
 import { v4 } from 'uuid';
 import { z } from 'zod';
-import { useSpecialties } from '../../modules/profile/hooks/use-doctor';
+import { useSpecialties } from '../../hooks/use-specialties';
 
 const formSchema = z.object({
   licenseMedicalNumber: z.string().min(3, { message: 'License Medical Number must be at least 3 characters long' }),

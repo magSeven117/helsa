@@ -1,6 +1,6 @@
 'use client';
 
-import { useSubscription } from '../../hooks/use-subcription';
+import { useSubscription } from '../../../modules/profile/hooks/use-subcription';
 import { ManageSubscription } from './manage-subscription';
 import { Usage, UsageSkeleton } from './usage';
 

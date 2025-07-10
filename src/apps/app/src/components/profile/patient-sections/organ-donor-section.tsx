@@ -11,31 +11,31 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import { useUpdateDemographic } from '../../hooks/use-patient';
+import { useUpdateBiometric } from '../../../modules/profile/hooks/use-patient';
 
 const formSchema = z.object({
-  educativeLevel: z.enum(['PRIMARY', 'SECONDARY', 'TECHNICAL', 'UNIVERSITY']),
+  organDonor: z.enum(['Yes', 'No']),
 });
 
-type EducationLevelValue = z.infer<typeof formSchema>;
+type OrganDonorValue = z.infer<typeof formSchema>;
 
-export const EducationLevelSection = ({ educativeLevel, id }: EducationLevelValue & { id: string }) => {
+export const OrganDonorSection = ({ organDonor, id }: OrganDonorValue & { id: string }) => {
   const [isEditing, setIsEditing] = useState(false);
   const toggleEdit = () => setIsEditing((current) => !current);
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: { educativeLevel },
+    defaultValues: { organDonor },
     mode: 'all',
   });
   const { isSubmitting, isValid } = form.formState;
   const router = useRouter();
-  const { updateDemographic } = useUpdateDemographic(id);
+  const { updateBiometric } = useUpdateBiometric(id);
 
-  const onSubmit = async (data: EducationLevelValue) => {
+  const onSubmit = async (data: OrganDonorValue) => {
     try {
-      await updateDemographic(data);
+      await updateBiometric(data);
       setIsEditing(false);
-      toast.success('Nivel educativo actualizado correctamente.');
+      toast.success('Estado de donador de órganos actualizado correctamente.');
       router.refresh();
     } catch (error) {
       console.log(error);
@@ -43,7 +43,7 @@ export const EducationLevelSection = ({ educativeLevel, id }: EducationLevelValu
     }
   };
 
-  const selectedCivilStatus = educationLevels.find((option) => option.id === form.getValues('educativeLevel'));
+  const organDonorValueSelected = organDonorOptions.find((option) => option.id === form.getValues('organDonor'));
 
   return (
     <Card className="rounded-none bg-transparent">
@@ -51,16 +51,18 @@ export const EducationLevelSection = ({ educativeLevel, id }: EducationLevelValu
         <form action="" onSubmit={form.handleSubmit(onSubmit)}>
           <CardHeader className="">
             <div>
-              <CardTitle>Nivel educativo</CardTitle>
+              <CardTitle>Donador de órganos</CardTitle>
               <p className="text-muted-foreground text-sm mt-5">
-                {isEditing ? 'Selecciona tu nivel educativo.' : 'Tu nivel educativo es importante para nosotros'}
+                {isEditing
+                  ? 'Selecciona si eres donador de órganos.'
+                  : 'Tu donación de órganos es importante para nosotros'}
               </p>
               {!isEditing ? (
-                <p className="text-primary font-bold mt-3">{selectedCivilStatus?.name}</p>
+                <p className="text-primary font-bold mt-3">{organDonorValueSelected?.name}</p>
               ) : (
                 <FormField
                   control={form.control}
-                  name="educativeLevel"
+                  name="organDonor"
                   render={({ field }) => (
                     <FormItem className="flex-1 mt-5">
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -70,7 +72,7 @@ export const EducationLevelSection = ({ educativeLevel, id }: EducationLevelValu
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent className="rounded-none">
-                          {educationLevels.map((specialty) => (
+                          {organDonorOptions.map((specialty) => (
                             <SelectItem key={specialty.id} value={specialty.id} className="rounded-none">
                               <span className="flex w-full justify-between items-center gap-3">{specialty.name}</span>
                             </SelectItem>
@@ -85,7 +87,9 @@ export const EducationLevelSection = ({ educativeLevel, id }: EducationLevelValu
             </div>
           </CardHeader>
           <CardFooter className="border-t pt-4 flex justify-between items-start gap-2 md:items-center flex-col md:flex-row">
-            <p className="text-muted-foreground text-xs">Esto es solo para fines estadísticos.</p>
+            <p className="text-muted-foreground text-xs">
+              Esta información es importante para nosotros, si tienes alguna duda puedes contactarnos.
+            </p>
             {isEditing ? (
               <div className="flex justify-end items-center gap-3">
                 <Button
@@ -98,7 +102,7 @@ export const EducationLevelSection = ({ educativeLevel, id }: EducationLevelValu
                   Cancelar
                 </Button>
                 <Button disabled={!isValid || isSubmitting} type="submit" className="rounded-none">
-                  {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Save'}
+                  {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Guardar'}
                 </Button>
               </div>
             ) : (
@@ -113,21 +117,13 @@ export const EducationLevelSection = ({ educativeLevel, id }: EducationLevelValu
   );
 };
 
-const educationLevels = [
+const organDonorOptions = [
   {
-    id: 'PRIMARY',
-    name: 'Primaria',
+    id: 'Yes',
+    name: 'Sí',
   },
   {
-    id: 'SECONDARY',
-    name: 'Secundaria',
-  },
-  {
-    id: 'TECHNICAL',
-    name: 'Técnico',
-  },
-  {
-    id: 'UNIVERSITY',
-    name: 'Universitario',
+    id: 'No',
+    name: 'No',
   },
 ];

@@ -11,31 +11,32 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import { useUpdateDemographic } from '../../hooks/use-patient';
+import { useUpdateBiometric } from '../../../modules/profile/hooks/use-patient';
 
 const formSchema = z.object({
-  occupation: z.string().min(3, { message: 'Occupation must be at least 3 characters long' }),
+  height: z.string(),
 });
 
-type OccupationValue = z.infer<typeof formSchema>;
+type HeightValue = z.infer<typeof formSchema>;
 
-export const OccupationSection = ({ occupation, id }: OccupationValue & { id: string }) => {
+export const HeightSection = ({ height, id }: HeightValue & { id: string }) => {
   const [isEditing, setIsEditing] = useState(false);
   const toggleEdit = () => setIsEditing((current) => !current);
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: { occupation },
+    defaultValues: { height },
     mode: 'all',
   });
   const { isSubmitting, isValid } = form.formState;
   const router = useRouter();
-  const { updateDemographic } = useUpdateDemographic(id);
-
-  const onSubmit = async (data: OccupationValue) => {
+  const { updateBiometric } = useUpdateBiometric(id);
+  const onSubmit = async (data: HeightValue) => {
     try {
-      await updateDemographic(data);
+      await updateBiometric({
+        height: parseFloat(data.height),
+      });
       setIsEditing(false);
-      toast.success('Ocupación actualizada correctamente');
+      toast.success('Altura actualizada correctamente');
       router.refresh();
     } catch (error) {
       console.log(error);
@@ -49,20 +50,20 @@ export const OccupationSection = ({ occupation, id }: OccupationValue & { id: st
         <form action="" onSubmit={form.handleSubmit(onSubmit)}>
           <CardHeader className="">
             <div>
-              <CardTitle>Ocupación</CardTitle>
+              <CardTitle>Altura</CardTitle>
               <p className="text-muted-foreground text-sm mt-5">
-                {isEditing ? 'Ingresa tu ocupación. Este dato es público.' : 'Tu ocupación es pública.'}
+                {isEditing ? 'Ingresa tu altura. Este número es público.' : 'Tu altura es pública'}
               </p>
               {!isEditing ? (
-                <p className="text-primary font-bold mt-3">{form.getValues('occupation')}</p>
+                <p className="text-primary font-bold mt-3">{form.getValues('height')} mts</p>
               ) : (
                 <FormField
                   control={form.control}
-                  name="occupation"
+                  name="height"
                   render={({ field }) => (
                     <FormItem className="flex-1 mt-5">
                       <FormControl>
-                        <Input {...field} className="rounded-none"></Input>
+                        <Input {...field} className="rounded-none" type="number"></Input>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -73,7 +74,7 @@ export const OccupationSection = ({ occupation, id }: OccupationValue & { id: st
           </CardHeader>
           <CardFooter className="border-t pt-4 flex justify-between items-start gap-2 md:items-center flex-col md:flex-row">
             <p className="text-muted-foreground text-xs">
-              Esta información ayuda a proporcionar una mejor atención médica.
+              Este dato es para que los doctores puedan tener una mejor referencia de tu salud.
             </p>
             {isEditing ? (
               <div className="flex justify-end items-center gap-3">
@@ -101,22 +102,3 @@ export const OccupationSection = ({ occupation, id }: OccupationValue & { id: st
     </Card>
   );
 };
-
-const civilStatusOptions = [
-  {
-    id: 'SINGLE',
-    name: 'Soltero/a',
-  },
-  {
-    id: 'MARRIED',
-    name: 'Casado/a',
-  },
-  {
-    id: 'DIVORCED',
-    name: 'Divorciado/a',
-  },
-  {
-    id: 'WIDOWED',
-    name: 'Viudo/a',
-  },
-];

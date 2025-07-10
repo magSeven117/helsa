@@ -1,4 +1,4 @@
-import Billing from '@/src/modules/profile/components/billing';
+import Billing from '@/src/components/profile/billing';
 
 const Page = () => {
   return (

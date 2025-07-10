@@ -11,31 +11,31 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import { useUpdateHospital } from '../../hooks/use-hospital';
+import { useUpdateDemographic } from '../../../modules/profile/hooks/use-patient';
 
 const formSchema = z.object({
-  name: z.string().min(3, { message: 'El nombre no puede estar vació' }),
+  occupation: z.string().min(3, { message: 'Occupation must be at least 3 characters long' }),
 });
 
-type NameSectionValue = z.infer<typeof formSchema>;
+type OccupationValue = z.infer<typeof formSchema>;
 
-export const NameSection = ({ name, id }: NameSectionValue & { id: string }) => {
+export const OccupationSection = ({ occupation, id }: OccupationValue & { id: string }) => {
   const [isEditing, setIsEditing] = useState(false);
   const toggleEdit = () => setIsEditing((current) => !current);
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: { name },
+    defaultValues: { occupation },
     mode: 'all',
   });
   const { isSubmitting, isValid } = form.formState;
   const router = useRouter();
-  const { updateHospital } = useUpdateHospital(id);
+  const { updateDemographic } = useUpdateDemographic(id);
 
-  const onSubmit = async (data: NameSectionValue) => {
+  const onSubmit = async (data: OccupationValue) => {
     try {
-      await updateHospital(data);
+      await updateDemographic(data);
       setIsEditing(false);
-      toast.success('Nombre actualizado correctamente');
+      toast.success('Ocupación actualizada correctamente');
       router.refresh();
     } catch (error) {
       console.log(error);
@@ -49,16 +49,16 @@ export const NameSection = ({ name, id }: NameSectionValue & { id: string }) => 
         <form action="" onSubmit={form.handleSubmit(onSubmit)}>
           <CardHeader className="">
             <div>
-              <CardTitle>Nombre</CardTitle>
+              <CardTitle>Ocupación</CardTitle>
               <p className="text-muted-foreground text-sm mt-5">
-                Este es el nombre que se mostrará en el perfil del hospital.
+                {isEditing ? 'Ingresa tu ocupación. Este dato es público.' : 'Tu ocupación es pública.'}
               </p>
               {!isEditing ? (
-                <p className="text-primary font-bold mt-3">{form.getValues('name')}</p>
+                <p className="text-primary font-bold mt-3">{form.getValues('occupation')}</p>
               ) : (
                 <FormField
                   control={form.control}
-                  name="name"
+                  name="occupation"
                   render={({ field }) => (
                     <FormItem className="flex-1 mt-5">
                       <FormControl>
@@ -72,7 +72,9 @@ export const NameSection = ({ name, id }: NameSectionValue & { id: string }) => 
             </div>
           </CardHeader>
           <CardFooter className="border-t pt-4 flex justify-between items-start gap-2 md:items-center flex-col md:flex-row">
-            <p className="text-muted-foreground text-xs">El nombre es obligatorio y público.</p>
+            <p className="text-muted-foreground text-xs">
+              Esta información ayuda a proporcionar una mejor atención médica.
+            </p>
             {isEditing ? (
               <div className="flex justify-end items-center gap-3">
                 <Button
@@ -85,7 +87,7 @@ export const NameSection = ({ name, id }: NameSectionValue & { id: string }) => 
                   Cancelar
                 </Button>
                 <Button disabled={!isValid || isSubmitting} type="submit" className="rounded-none">
-                  {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Guardar'}
+                  {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Save'}
                 </Button>
               </div>
             ) : (

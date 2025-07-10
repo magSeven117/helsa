@@ -10,7 +10,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import { useUpdateDemographic } from '../../hooks/use-patient';
+import { useUpdateDemographic } from '../../../modules/profile/hooks/use-patient';
 
 const formSchema = z.object({
   civilStatus: z.enum(['SINGLE', 'MARRIED', 'DIVORCED', 'WIDOWED']),

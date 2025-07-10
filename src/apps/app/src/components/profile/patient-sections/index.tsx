@@ -1,8 +1,8 @@
 'use client';
 
 import { Loader2 } from 'lucide-react';
-import { useSession } from '../../../../components/auth/session-provider';
-import { usePatient } from '../../hooks/use-patient';
+import { usePatient } from '../../../modules/profile/hooks/use-patient';
+import { useSession } from '../../auth/session-provider';
 import { BloodTypeSection } from './blood-type-section';
 import { CivilStatusSection } from './civil-status-section';
 import { EducationLevelSection } from './education-level-section';

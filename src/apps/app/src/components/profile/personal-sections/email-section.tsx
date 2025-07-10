@@ -1,7 +1,7 @@
 'use client';
 
 import { Card, CardHeader, CardTitle } from '@helsa/ui/components/card';
-import { useSession } from '../../../../components/auth/session-provider';
+import { useSession } from '../../auth/session-provider';
 
 export const EmailSection = () => {
   const { user } = useSession();

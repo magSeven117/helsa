@@ -3,7 +3,7 @@
 import { Button } from '@helsa/ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@helsa/ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@helsa/ui/components/form';
-import { Input } from '@helsa/ui/components/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@helsa/ui/components/select';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -11,31 +11,31 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import { useUpdateDoctor } from '../../hooks/use-doctor';
+import { useUpdateBiometric } from '../../../modules/profile/hooks/use-patient';
 
 const formSchema = z.object({
-  experience: z.string().optional(),
+  bloodType: z.enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']),
 });
 
-type ExperienceValue = z.infer<typeof formSchema>;
+type BloodTypeLevel = z.infer<typeof formSchema>;
 
-export const ExperienceSection = ({ experience, id }: ExperienceValue & { id: string }) => {
+export const BloodTypeSection = ({ bloodType, id }: BloodTypeLevel & { id: string }) => {
   const [isEditing, setIsEditing] = useState(false);
   const toggleEdit = () => setIsEditing((current) => !current);
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: { experience },
+    defaultValues: { bloodType },
+    mode: 'all',
   });
   const { isSubmitting, isValid } = form.formState;
   const router = useRouter();
-  const { updateDoctor } = useUpdateDoctor(id);
+  const { updateBiometric } = useUpdateBiometric(id);
 
-  const onSubmit = async (data: ExperienceValue) => {
+  const onSubmit = async (data: BloodTypeLevel) => {
     try {
-      await updateDoctor({
-        experience: Number(data.experience),
-      });
+      await updateBiometric(data);
       setIsEditing(false);
+      toast.success('Tipo de sangre actualizado correctamente.');
       router.refresh();
     } catch (error) {
       console.log(error);
@@ -43,27 +43,40 @@ export const ExperienceSection = ({ experience, id }: ExperienceValue & { id: st
     }
   };
 
+  const bloodTypeSelected = bloodTypeOptions.find((option) => option.id === form.getValues('bloodType'));
+
   return (
     <Card className="rounded-none bg-transparent">
       <Form {...form}>
         <form action="" onSubmit={form.handleSubmit(onSubmit)}>
           <CardHeader className="">
             <div>
-              <CardTitle>Tiempo de experiencia</CardTitle>
+              <CardTitle>Tipo de sangre</CardTitle>
               <p className="text-muted-foreground text-sm mt-5">
-                Este es el tiempo que llevas trabajando en tu profesión.
+                {isEditing ? 'Selecciona tu tipo de sangre.' : 'Tu tipo de sangre es importante para nosotros'}
               </p>
               {!isEditing ? (
-                <p className="text-primary font-bold mt-3">{form.getValues('experience')}</p>
+                <p className="text-primary font-bold mt-3">{bloodTypeSelected?.name}</p>
               ) : (
                 <FormField
                   control={form.control}
-                  name="experience"
+                  name="bloodType"
                   render={({ field }) => (
                     <FormItem className="flex-1 mt-5">
-                      <FormControl>
-                        <Input {...field} className="rounded-none"></Input>
-                      </FormControl>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger className="rounded-none">
+                            <SelectValue placeholder="Select a verified email to display" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent className="rounded-none">
+                          {bloodTypeOptions.map((specialty) => (
+                            <SelectItem key={specialty.id} value={specialty.id} className="rounded-none">
+                              <span className="flex w-full justify-between items-center gap-3">{specialty.name}</span>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -72,7 +85,9 @@ export const ExperienceSection = ({ experience, id }: ExperienceValue & { id: st
             </div>
           </CardHeader>
           <CardFooter className="border-t pt-4 flex justify-between items-start gap-2 md:items-center flex-col md:flex-row">
-            <p className="text-muted-foreground text-xs">La medida en años de tu experiencia.</p>
+            <p className="text-muted-foreground text-xs">
+              Esta información es importante para nosotros, por favor mantenla actualizada.
+            </p>
             {isEditing ? (
               <div className="flex justify-end items-center gap-3">
                 <Button
@@ -85,7 +100,7 @@ export const ExperienceSection = ({ experience, id }: ExperienceValue & { id: st
                   Cancelar
                 </Button>
                 <Button disabled={!isValid || isSubmitting} type="submit" className="rounded-none">
-                  {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Save'}
+                  {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Guardar'}
                 </Button>
               </div>
             ) : (
@@ -99,3 +114,38 @@ export const ExperienceSection = ({ experience, id }: ExperienceValue & { id: st
     </Card>
   );
 };
+
+const bloodTypeOptions = [
+  {
+    id: 'A+',
+    name: 'A+',
+  },
+  {
+    id: 'A-',
+    name: 'A-',
+  },
+  {
+    id: 'B+',
+    name: 'B+',
+  },
+  {
+    id: 'B-',
+    name: 'B-',
+  },
+  {
+    id: 'AB+',
+    name: 'AB+',
+  },
+  {
+    id: 'AB-',
+    name: 'AB-',
+  },
+  {
+    id: 'O+',
+    name: 'O+',
+  },
+  {
+    id: 'O-',
+    name: 'O-',
+  },
+];

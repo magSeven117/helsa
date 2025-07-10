@@ -1,4 +1,4 @@
-import { NavigationProfile } from '@/src/modules/profile/components/navigation-profile';
+import { NavigationProfile } from '@/src/components/profile/navigation-profile';
 import React from 'react';
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {

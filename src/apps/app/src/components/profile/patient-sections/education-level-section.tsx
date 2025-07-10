@@ -3,7 +3,7 @@
 import { Button } from '@helsa/ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@helsa/ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@helsa/ui/components/form';
-import { Input } from '@helsa/ui/components/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@helsa/ui/components/select';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -11,32 +11,31 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import { useUpdateBiometric } from '../../hooks/use-patient';
+import { useUpdateDemographic } from '../../../modules/profile/hooks/use-patient';
 
 const formSchema = z.object({
-  height: z.string(),
+  educativeLevel: z.enum(['PRIMARY', 'SECONDARY', 'TECHNICAL', 'UNIVERSITY']),
 });
 
-type HeightValue = z.infer<typeof formSchema>;
+type EducationLevelValue = z.infer<typeof formSchema>;
 
-export const HeightSection = ({ height, id }: HeightValue & { id: string }) => {
+export const EducationLevelSection = ({ educativeLevel, id }: EducationLevelValue & { id: string }) => {
   const [isEditing, setIsEditing] = useState(false);
   const toggleEdit = () => setIsEditing((current) => !current);
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: { height },
+    defaultValues: { educativeLevel },
     mode: 'all',
   });
   const { isSubmitting, isValid } = form.formState;
   const router = useRouter();
-  const { updateBiometric } = useUpdateBiometric(id);
-  const onSubmit = async (data: HeightValue) => {
+  const { updateDemographic } = useUpdateDemographic(id);
+
+  const onSubmit = async (data: EducationLevelValue) => {
     try {
-      await updateBiometric({
-        height: parseFloat(data.height),
-      });
+      await updateDemographic(data);
       setIsEditing(false);
-      toast.success('Altura actualizada correctamente');
+      toast.success('Nivel educativo actualizado correctamente.');
       router.refresh();
     } catch (error) {
       console.log(error);
@@ -44,27 +43,40 @@ export const HeightSection = ({ height, id }: HeightValue & { id: string }) => {
     }
   };
 
+  const selectedCivilStatus = educationLevels.find((option) => option.id === form.getValues('educativeLevel'));
+
   return (
     <Card className="rounded-none bg-transparent">
       <Form {...form}>
         <form action="" onSubmit={form.handleSubmit(onSubmit)}>
           <CardHeader className="">
             <div>
-              <CardTitle>Altura</CardTitle>
+              <CardTitle>Nivel educativo</CardTitle>
               <p className="text-muted-foreground text-sm mt-5">
-                {isEditing ? 'Ingresa tu altura. Este número es público.' : 'Tu altura es pública'}
+                {isEditing ? 'Selecciona tu nivel educativo.' : 'Tu nivel educativo es importante para nosotros'}
               </p>
               {!isEditing ? (
-                <p className="text-primary font-bold mt-3">{form.getValues('height')} mts</p>
+                <p className="text-primary font-bold mt-3">{selectedCivilStatus?.name}</p>
               ) : (
                 <FormField
                   control={form.control}
-                  name="height"
+                  name="educativeLevel"
                   render={({ field }) => (
                     <FormItem className="flex-1 mt-5">
-                      <FormControl>
-                        <Input {...field} className="rounded-none" type="number"></Input>
-                      </FormControl>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger className="rounded-none">
+                            <SelectValue placeholder="Select a verified email to display" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent className="rounded-none">
+                          {educationLevels.map((specialty) => (
+                            <SelectItem key={specialty.id} value={specialty.id} className="rounded-none">
+                              <span className="flex w-full justify-between items-center gap-3">{specialty.name}</span>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -73,9 +85,7 @@ export const HeightSection = ({ height, id }: HeightValue & { id: string }) => {
             </div>
           </CardHeader>
           <CardFooter className="border-t pt-4 flex justify-between items-start gap-2 md:items-center flex-col md:flex-row">
-            <p className="text-muted-foreground text-xs">
-              Este dato es para que los doctores puedan tener una mejor referencia de tu salud.
-            </p>
+            <p className="text-muted-foreground text-xs">Esto es solo para fines estadísticos.</p>
             {isEditing ? (
               <div className="flex justify-end items-center gap-3">
                 <Button
@@ -102,3 +112,22 @@ export const HeightSection = ({ height, id }: HeightValue & { id: string }) => {
     </Card>
   );
 };
+
+const educationLevels = [
+  {
+    id: 'PRIMARY',
+    name: 'Primaria',
+  },
+  {
+    id: 'SECONDARY',
+    name: 'Secundaria',
+  },
+  {
+    id: 'TECHNICAL',
+    name: 'Técnico',
+  },
+  {
+    id: 'UNIVERSITY',
+    name: 'Universitario',
+  },
+];

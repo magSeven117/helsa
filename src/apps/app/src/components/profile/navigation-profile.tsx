@@ -3,7 +3,7 @@
 import { cn } from '@helsa/ui/lib/utils';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useSession } from '../../../components/auth/session-provider';
+import { useSession } from '../auth/session-provider';
 
 interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {}
 

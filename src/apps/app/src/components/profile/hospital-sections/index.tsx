@@ -1,8 +1,8 @@
 'use client';
 
 import { Loader2 } from 'lucide-react';
-import { useSession } from '../../../../components/auth/session-provider';
-import { useHospital } from '../../hooks/use-hospital';
+import { useHospital } from '../../../modules/profile/hooks/use-hospital';
+import { useSession } from '../../auth/session-provider';
 import { AddressSection } from './address-section';
 import { NameSection } from './name-section';
 

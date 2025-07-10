@@ -19,7 +19,7 @@ import { Calendar } from '@helsa/ui/components/calendar';
 import { formatISO, isValid } from 'date-fns';
 import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs';
 import { z } from 'zod';
-import { useSpecialties } from '../../modules/profile/hooks/use-doctor';
+import { useSpecialties } from '../../hooks/use-specialties';
 import ExperienceRange from './filter-experience-range';
 import RateRange from './filter-rate-range';
 import DoctorFilterList from './search-doctor-filters';

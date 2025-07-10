@@ -1,5 +1,6 @@
 'use client';
 
+import { removeDoctorEducation, saveDoctorEducation } from '@helsa/engine/doctor/infrastructure/http/http-doctor-api';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,14 +20,13 @@ import { Input } from '@helsa/ui/components/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@helsa/ui/components/popover';
 import { cn } from '@helsa/ui/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { CalendarIcon, Loader2, Pencil, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { v4 } from 'uuid';
 import { z } from 'zod';
-import { useRemoveEducation, useSaveEducations } from '../../hooks/use-doctor';
 
 const formSchema = z.object({
   education: z.object({
@@ -48,8 +48,7 @@ export const EducationsSection = ({
   const [isEditing, setIsEditing] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [editingEducationId, setEditingEducationId] = useState<string | null>(null);
-  const { saveEducations } = useSaveEducations(id);
-  const { removeEducation } = useRemoveEducation(id);
+
   const toggleEdit = () => setIsEditing((current) => !current);
   const toggleCreate = () => setIsCreating((current) => !current);
   const form = useForm({
@@ -62,7 +61,7 @@ export const EducationsSection = ({
       },
     },
   });
-  const { isSubmitting, isValid } = form.formState;
+  const { isValid } = form.formState;
 
   const setEditData = (education: { title: string; institution: string; graduatedAt: Date; id: string }) => {
     setEditingEducationId(education.id);
@@ -71,37 +70,41 @@ export const EducationsSection = ({
     form.setValue('education.graduatedAt', new Date(education.graduatedAt));
   };
 
-  const onSubmit = async (data: EducationsValue) => {
-    try {
-      await saveEducations({
-        title: data.education.title,
-        institution: data.education.institution,
-        graduatedAt: data.education.graduatedAt,
-        id: isCreating ? v4() : (editingEducationId ?? ''),
-      });
-      toast.success('Education edited successfully.');
+  const { mutate: save, isPending } = useMutation({
+    mutationFn: async (data: EducationsValue) => saveDoctorEducation(id, data.education),
+    onSuccess: () => {
+      toast.success('Education saved successfully.');
       setIsEditing(false);
       form.reset();
-    } catch (error) {
-      console.log(error);
-      toast.error('An error occurred. Please try again.');
-    }
-  };
+    },
+    onError: (error) => {
+      console.error(error);
+      toast.error('An error occurred while saving education.');
+    },
+  });
 
-  const deleteEducation = async (educationId: string) => {
-    try {
-      await removeEducation(educationId);
-      toast.success('Education deleted successfully.');
-    } catch (error) {
-      console.log(error);
-      toast.error('An error occurred. Please try again.');
-    }
-  };
+  const { mutate: remove } = useMutation({
+    mutationFn: async (educationId: string) => removeDoctorEducation(id, educationId),
+    onSuccess: () => {
+      toast.success('Education removed successfully.');
+      setEditingEducationId(null);
+    },
+    onError: (error) => {
+      console.error(error);
+      toast.error('An error occurred while removing education.');
+    },
+  });
 
   return (
     <Card className="rounded-none bg-transparent">
       <Form {...form}>
-        <form action="" onSubmit={form.handleSubmit(onSubmit)}>
+        <form
+          action=""
+          onSubmit={form.handleSubmit(
+            (data) => save(data),
+            (error) => console.error(error),
+          )}
+        >
           <CardHeader className="">
             <div>
               <CardTitle>Estudios</CardTitle>
@@ -146,7 +149,7 @@ export const EducationsSection = ({
                               <Button
                                 variant="destructive"
                                 className="rounded-none max-sm:w-full"
-                                onClick={() => deleteEducation(education.id)}
+                                onClick={() => remove(education.id)}
                               >
                                 Eliminar
                               </Button>
@@ -243,8 +246,8 @@ export const EducationsSection = ({
                 >
                   Cancelar
                 </Button>
-                <Button disabled={!isValid || isSubmitting} type="submit" className="rounded-none">
-                  {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Guardar'}
+                <Button disabled={!isValid || isPending} type="submit" className="rounded-none">
+                  {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Guardar'}
                 </Button>
               </div>
             ) : (

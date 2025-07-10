@@ -1,6 +1,7 @@
 'use client';
 import { useSession } from '@/src/components/auth/session-provider';
-import { useDoctor } from '../../hooks/use-doctor';
+import { getDoctor } from '@helsa/engine/doctor/infrastructure/http/http-doctor-api';
+import { useQuery } from '@tanstack/react-query';
 import { AddressSection } from './address-section';
 import { EducationsSection } from './educations-section';
 import { ExperienceSection } from './experience-section';
@@ -9,7 +10,11 @@ import { SpecialtySection } from './specialty-section';
 
 const DoctorProfileIndex = () => {
   const { profile } = useSession();
-  const { doctor } = useDoctor(profile?.id || '');
+  const { data: doctor } = useQuery({
+    queryKey: ['doctor'],
+    queryFn: async () => getDoctor(profile?.id || ''),
+    refetchOnWindowFocus: false,
+  });
   if (!doctor) {
     return (
       <div>
@@ -24,7 +29,7 @@ const DoctorProfileIndex = () => {
       <LicenseNumberSection licenseMedicalNumber={doctor.licenseMedicalNumber} id={doctor.id} />
       <SpecialtySection specialtyId={doctor.specialtyId} id={doctor.id} />
       <AddressSection consultingRoom={doctor.consultingRoomAddress || { city: '', address: '' }} id={doctor.id} />
-      <ExperienceSection experience={doctor.experience.toString()} id={doctor.id} />
+      <ExperienceSection experience={doctor.experience} id={doctor.id} />
       <EducationsSection educations={doctor.educations || []} id={doctor.id} />
     </>
   );

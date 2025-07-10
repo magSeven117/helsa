@@ -1,9 +1,8 @@
 'use client';
-
 import { Button } from '@helsa/ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@helsa/ui/components/card';
-import { Form, FormControl, FormField, FormItem, FormMessage } from '@helsa/ui/components/form';
-import { Textarea } from '@helsa/ui/components/textarea';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@helsa/ui/components/form';
+import { Input } from '@helsa/ui/components/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -11,33 +10,34 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import { useSession } from '../../../../components/auth/session-provider';
-import { useUser } from '../../hooks/use-user';
+import { useUser } from '../../../modules/profile/hooks/use-user';
+import { useSession } from '../../auth/session-provider';
 
 const formSchema = z.object({
-  bio: z.string().min(2, {
+  name: z.string().min(2, {
     message: 'First name must be at least 2 characters.',
   }),
 });
 
-type BioFormValues = z.infer<typeof formSchema>;
+type NameFormValues = z.infer<typeof formSchema>;
 
-export const BioSection = () => {
+export const NameSection = () => {
   const { user } = useSession();
   const [isEditing, setIsEditing] = useState(false);
   const toggleEdit = () => setIsEditing((current) => !current);
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: { bio: user.bio },
+    defaultValues: { name: user.name },
   });
   const { isSubmitting, isValid } = form.formState;
+
   const router = useRouter();
   const { updateUser } = useUser();
 
-  const onSubmit = async (data: BioFormValues) => {
+  const onSubmit = async (data: NameFormValues) => {
     try {
       await updateUser({
-        bio: data.bio,
+        name: data.name,
       });
       setIsEditing(false);
       router.refresh();
@@ -53,20 +53,21 @@ export const BioSection = () => {
         <form action="" onSubmit={form.handleSubmit(onSubmit)}>
           <CardHeader className="">
             <div>
-              <CardTitle>Biografía</CardTitle>
+              <CardTitle>Nombre</CardTitle>
               <p className="text-muted-foreground text-sm mt-5">
-                {isEditing ? 'Escribe una breve descripción sobre ti.' : 'Esto es lo que otros verán sobre ti.'}
+                Este es el nombre que se mostrara en tu perfil. Puedes cambiarlo
               </p>
               {!isEditing ? (
-                <p className="text-primary font-bold mt-3">{user.bio}</p>
+                <p className="text-primary font-bold mt-3">{form.getValues('name')}</p>
               ) : (
                 <FormField
                   control={form.control}
-                  name="bio"
+                  name="name"
                   render={({ field }) => (
-                    <FormItem className="flex-1 mt-5">
+                    <FormItem className="flex-1">
+                      <FormLabel>Nombre</FormLabel>
                       <FormControl>
-                        <Textarea {...field} className="rounded-none"></Textarea>
+                        <Input {...field} className="rounded-none"></Input>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -77,7 +78,7 @@ export const BioSection = () => {
           </CardHeader>
           <CardFooter className="border-t pt-4 flex justify-between items-start gap-2 md:items-center flex-col md:flex-row">
             <p className="text-muted-foreground text-xs">
-              {isEditing ? 'Puedes editar tu biografía en cualquier momento.' : 'Tu biografía es pública.'}
+              Por favor ingresa tu nombre completo, o un nombre para mostrar con el que te sientas cómodo.
             </p>
             {isEditing ? (
               <div className="flex justify-end items-center gap-3">
