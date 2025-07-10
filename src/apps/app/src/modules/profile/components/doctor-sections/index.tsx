@@ -1,5 +1,5 @@
 'use client';
-import { useSession } from '../../../../components/auth/session-provider';
+import { useSession } from '@/src/components/auth/session-provider';
 import { useDoctor } from '../../hooks/use-doctor';
 import { AddressSection } from './address-section';
 import { EducationsSection } from './educations-section';
