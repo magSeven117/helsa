@@ -1,7 +1,7 @@
-import { AppointmentTypes } from '@/src/modules/dashboard/components/doctor/appointment-types';
-import { AppointmentsCalendar } from '@/src/modules/dashboard/components/doctor/appointments-calendar';
-import { PatientsList } from '@/src/modules/dashboard/components/doctor/patient-list';
-import { Revenue } from '@/src/modules/dashboard/components/doctor/revenue';
+import { AppointmentTypes } from '@/src/components/dashboard/doctor/appointment-types';
+import { AppointmentsCalendar } from '@/src/components/dashboard/doctor/appointments-calendar';
+import { PatientsList } from '@/src/components/dashboard/doctor/patient-list';
+import { Revenue } from '@/src/components/dashboard/doctor/revenue';
 import { Button } from '@helsa/ui/components/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@helsa/ui/components/card';
 import { Calendar, Clock, TrendingUp, Users, Video } from 'lucide-react';

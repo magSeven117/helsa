@@ -1,6 +1,6 @@
 export const dynamic = 'force-dynamic';
+import SignUpForm from '@/src/components/auth/sign-up-form';
 import { Suspense } from 'react';
-import SignUpForm from './form';
 
 export default function Page() {
   return (

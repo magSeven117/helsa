@@ -1,5 +1,5 @@
-import { TypesTable } from '@/src/app/(app)/(main)/billing/_components/prices/prices-table';
-import { TypesSkeleton } from '@/src/app/(app)/(main)/billing/_components/prices/prices-table/skeleton';
+import { TypesTable } from '@/src/components/billing/prices/prices-table';
+import { TypesSkeleton } from '@/src/components/billing/prices/prices-table/skeleton';
 import { Suspense } from 'react';
 
 const Page = () => {

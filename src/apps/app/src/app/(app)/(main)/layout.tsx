@@ -1,10 +1,10 @@
-import { SessionProvider } from '@/src/app/(app)/(main)/_components/session-provider';
-import { getProfile } from '@/src/app/(server)/actions/get-profile-info-action';
-import { ChatFloatingButton } from '@/src/modules/assistant/components/floting-button';
-import ModalAssistant from '@/src/modules/assistant/components/modal-assistant';
-import { AnimateProvider } from '@/src/modules/chat/components/animate';
-import SideBar from '@/src/modules/shared/components/side-bar/side-bar';
-import TopBar from '@/src/modules/shared/components/top-bar/top-bar';
+import { getProfile } from '@/src/actions/get-profile-info-action';
+import { ChatFloatingButton } from '@/src/components/assistant/floating-button';
+import ModalAssistant from '@/src/components/assistant/modal-assistant';
+import { SessionProvider } from '@/src/components/auth/session-provider';
+import { AnimateProvider } from '@/src/components/chat/animate';
+import SideBar from '@/src/components/shared/side-bar/side-bar';
+import TopBar from '@/src/components/shared/top-bar/top-bar';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { User } from '@helsa/engine/user/domain/user';
 import { SidebarProvider } from '@helsa/ui/components/sidebar';

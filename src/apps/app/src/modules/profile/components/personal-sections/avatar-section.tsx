@@ -12,7 +12,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import { useSession } from '../../../../app/(app)/(main)/_components/session-provider';
+import { useSession } from '../../../../components/auth/session-provider';
 import { useUser } from '../../hooks/use-user';
 
 const formSchema = z.object({
