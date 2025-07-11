@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 const Pay = ({ status, id }: { status: string; id: string }) => {
   const { user } = useSession();
-  if (!['CONFIRMED', 'SCHEDULED'].includes(status) || user?.role !== 'PATIENT') {
+  if (!['CONFIRMED', 'SCHEDULED'].includes(status) || user?.role.value !== 'PATIENT') {
     return null;
   }
   return (

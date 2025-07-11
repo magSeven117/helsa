@@ -1,5 +1,5 @@
-import { HttpNextResponse } from '@helsa/controller/http-next-response';
-import { routeHandler } from '@helsa/controller/route-handler';
+import { HttpNextResponse } from '@helsa/api/http-next-response';
+import { routeHandler } from '@helsa/api/route-handler';
 import { database } from '@helsa/database';
 import { UploadDocument } from '@helsa/engine/document/application/upload-document';
 import { PrismaDocumentRepository } from '@helsa/engine/document/infrastructure/prisma-document-repository';

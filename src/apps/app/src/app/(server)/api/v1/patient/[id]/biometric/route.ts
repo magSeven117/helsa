@@ -1,4 +1,4 @@
-import { routeHandler } from '@helsa/controller/route-handler';
+import { routeHandler } from '@helsa/api/route-handler';
 import { database } from '@helsa/database';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { UpdateBiometric } from '@helsa/engine/patient/application/services/update-biometric';

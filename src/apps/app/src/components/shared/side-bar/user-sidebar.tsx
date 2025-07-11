@@ -1,5 +1,6 @@
 'use client';
 
+import { useSession } from '@/src/components/auth/session-provider';
 import { authClient } from '@helsa/auth/client';
 import { useTheme } from '@helsa/ui';
 import { Avatar, AvatarFallback, AvatarImage } from '@helsa/ui/components/avatar';
@@ -16,10 +17,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@helsa/ui/components/sidebar';
 import { Bell, LogOut, MoreVerticalIcon, Sparkles, SunMoon, User } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useSession } from '../../../../components/auth/session-provider';
 
 export function NavUser() {
-  const { user } = useSession();
+  const { serializedUser: user } = useSession();
   const router = useRouter();
   const onClick = async () => {
     await authClient.signOut({

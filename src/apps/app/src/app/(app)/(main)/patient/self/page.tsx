@@ -1,5 +1,5 @@
-import HeaderPatient from '@/src/modules/patient/components/details/header';
-import PatientDetailsTabs from '@/src/modules/patient/components/details/tabs';
+import HeaderPatient from '@/src/components/patient/details/header';
+import PatientDetailsTabs from '@/src/components/patient/details/tabs';
 
 const Page = async () => {
   return (

@@ -1,5 +1,5 @@
-import { HttpNextResponse } from '@helsa/controller/http-next-response';
-import { routeHandler } from '@helsa/controller/route-handler';
+import { HttpNextResponse } from '@helsa/api/http-next-response';
+import { routeHandler } from '@helsa/api/route-handler';
 import { database } from '@helsa/database';
 import { FormatError } from '@helsa/ddd/core/errors/format-error';
 import { GetDoctor } from '@helsa/engine/doctor/application/services/get-doctor';
@@ -8,6 +8,7 @@ import { GetHospital } from '@helsa/engine/hospital/application/services/get-hos
 import { PrismaHospitalRepository } from '@helsa/engine/hospital/infrastructure/prisma-hospital-repository';
 import { GetPatient } from '@helsa/engine/patient/application/services/get-patient';
 import { PrismaPatientRepository } from '@helsa/engine/patient/infrastructure/prisma-patient-repository';
+import { UserRoleValue } from '@helsa/engine/user/domain/user-role';
 import { unstable_cache as cache } from 'next/cache';
 import { NextResponse } from 'next/server';
 
@@ -18,15 +19,15 @@ export const GET = routeHandler(
 
     let response;
 
-    switch (role) {
-      case 'doctor':
-        response = await getDoctorProfile(id);
+    switch (role.value) {
+      case UserRoleValue.DOCTOR:
+        response = await getDoctorProfile(id.value);
         break;
-      case 'patient':
-        response = await getPatientProfile(id);
+      case UserRoleValue.PATIENT:
+        response = await getPatientProfile(id.value);
         break;
-      case 'hospital':
-        response = await getHospitalProfile(id);
+      case UserRoleValue.HOSPITAL:
+        response = await getHospitalProfile(id.value);
         break;
       default:
         throw new FormatError('Invalid role');

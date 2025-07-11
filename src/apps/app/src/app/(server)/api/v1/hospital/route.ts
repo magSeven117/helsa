@@ -1,5 +1,5 @@
-import { HttpNextResponse } from '@helsa/controller/http-next-response';
-import { routeHandler } from '@helsa/controller/route-handler';
+import { HttpNextResponse } from '@helsa/api/http-next-response';
+import { routeHandler } from '@helsa/api/route-handler';
 import { database } from '@helsa/database';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { CreateHospital } from '@helsa/engine/hospital/application/services/create-hospital';
@@ -42,8 +42,8 @@ export const POST = routeHandler({ name: 'create-hospital', schema }, async ({ b
 
 export const GET = routeHandler({ name: 'get-hospital' }, async ({ user }) => {
   const service = new GetHospital(new PrismaHospitalRepository(database));
-  const response = await cache(() => service.run(user.id), ['get-hospital', user.id], {
-    tags: [`get-hospital-${user.id}`],
+  const response = await cache(() => service.run(user?.id.value ?? ''), ['get-hospital', user?.id.value ?? ''], {
+    tags: [`get-hospital-${user?.id.value}`],
     revalidate: 60 * 60,
   })();
   return HttpNextResponse.json({ data: response });

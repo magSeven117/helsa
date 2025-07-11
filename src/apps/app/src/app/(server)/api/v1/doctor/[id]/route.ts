@@ -1,5 +1,5 @@
-import { HttpNextResponse } from '@helsa/controller/http-next-response';
-import { routeHandler } from '@helsa/controller/route-handler';
+import { HttpNextResponse } from '@helsa/api/http-next-response';
+import { routeHandler } from '@helsa/api/route-handler';
 import { database } from '@helsa/database';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { GetDoctor } from '@helsa/engine/doctor/application/services/get-doctor';
@@ -16,7 +16,7 @@ export const GET = routeHandler(
     const include = searchParams.include ? JSON.parse(searchParams.include as string) : null;
     const service = new GetDoctor(new PrismaDoctorRepository(database));
 
-    const userId = self ? user.id : id;
+    const userId = self ? user?.id.value : id;
 
     const response = await service.run(userId, self ? undefined : 'id', include);
 

@@ -1,4 +1,3 @@
-import { cn } from '@/src/components/chat/utils';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { Treatment } from '@helsa/engine/treatment/domain/treatment';
 import { TreatmentStatusValues } from '@helsa/engine/treatment/domain/treatment-status';
@@ -17,6 +16,7 @@ import { Input } from '@helsa/ui/components/input';
 import { InputSelect } from '@helsa/ui/components/internal/input-select';
 import { RadioGroup, RadioGroupItem } from '@helsa/ui/components/radio-group';
 import { Textarea } from '@helsa/ui/components/textarea';
+import { cn } from '@helsa/ui/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { Ellipsis, Loader2, Pencil, Plus } from 'lucide-react';

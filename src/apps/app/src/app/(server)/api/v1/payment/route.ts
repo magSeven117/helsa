@@ -1,4 +1,4 @@
-import { routeHandler } from '@helsa/controller/route-handler';
+import { routeHandler } from '@helsa/api/route-handler';
 import payment from '@helsa/payment';
 import { NextResponse } from 'next/server';
 

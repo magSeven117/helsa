@@ -1,4 +1,6 @@
 'use client';
+import { useSession } from '@/src/components/auth/session-provider';
+import CallCHat from '@/src/components/call-chat';
 import { BetterUser } from '@helsa/auth/server';
 import { enterAppointmentRoom } from '@helsa/engine/appointment/infrastructure/api/http-appointment-api';
 import { Button } from '@helsa/ui/components/button';
@@ -53,8 +55,6 @@ import {
 } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
-import { useSession } from '../../../components/auth/session-provider';
-import CallCHat from '../../call-chat/components';
 
 const apiKey = process.env.NEXT_PUBLIC_STREAM_CLIENT_KEY!;
 

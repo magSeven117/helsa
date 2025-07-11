@@ -1,5 +1,5 @@
-import { HttpNextResponse } from '@helsa/controller/http-next-response';
-import { routeHandler } from '@helsa/controller/route-handler';
+import { HttpNextResponse } from '@helsa/api/http-next-response';
+import { routeHandler } from '@helsa/api/route-handler';
 import { database } from '@helsa/database';
 import { FinalizeAppointment } from '@helsa/engine/appointment/application/finalize-appointment';
 import { GetAppointment } from '@helsa/engine/appointment/application/get-appointment';
@@ -28,7 +28,7 @@ export const GET = routeHandler(
       default:
         return HttpNextResponse.internalServerError();
     }
-  },
+  }
 );
 
 export const PUT = routeHandler(
@@ -49,5 +49,5 @@ export const PUT = routeHandler(
       default:
         return HttpNextResponse.internalServerError();
     }
-  },
+  }
 );

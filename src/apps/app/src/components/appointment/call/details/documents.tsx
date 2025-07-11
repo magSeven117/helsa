@@ -167,7 +167,7 @@ export const DocumentsContent = ({ data }: { data: Primitives<Appointment> }) =>
   const [editing, setEditing] = useState(false);
   const { user } = useSession();
 
-  const isPatient = user?.role === 'PATIENT';
+  const isPatient = user?.role.value === 'PATIENT';
 
   if (isPending) {
     return <Loader2 className="size-6 animate-spin" />;

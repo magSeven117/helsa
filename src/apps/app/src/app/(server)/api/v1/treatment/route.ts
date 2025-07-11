@@ -1,5 +1,5 @@
-import { HttpNextResponse } from '@helsa/controller/http-next-response';
-import { routeHandler } from '@helsa/controller/route-handler';
+import { HttpNextResponse } from '@helsa/api/http-next-response';
+import { routeHandler } from '@helsa/api/route-handler';
 import { database } from '@helsa/database';
 import { Operator } from '@helsa/ddd/core/criteria';
 import { FormatError } from '@helsa/ddd/core/errors/format-error';
@@ -47,7 +47,7 @@ export const POST = routeHandler({ name: 'create-treatment', schema }, async ({ 
   const service = new CreateTreatment(new PrismaTreatmentRepository(database));
 
   await service.run(parsedInput as unknown as Primitives<Treatment>);
-  revalidateTag(`get-treatments-${user.id}`);
+  revalidateTag(`get-treatments-${user.id.value}`);
   revalidatePath(`/appointments/${parsedInput.appointmentId}`);
 
   return HttpNextResponse.created();
@@ -74,7 +74,7 @@ export const GET = routeHandler(
       : [{ field: 'appointmentId', operator: Operator.EQUAL, value: appointmentId }];
 
     const orders = await cache(() => service.run(criteria), [`get-treatments`, appointmentId ?? patientId!], {
-      tags: [`get-treatments-${user.id}`],
+      tags: [`get-treatments-${user.id.value}`],
       revalidate: 3600,
     })();
     return NextResponse.json({ data: orders }, { status: 200 });

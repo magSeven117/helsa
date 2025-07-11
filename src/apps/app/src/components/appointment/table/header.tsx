@@ -82,7 +82,7 @@ export function AppointmentsTableHeader({ table, loading }: Props) {
         )}
         {isVisible('participant') && (
           <TableHead className="border-b">
-            <span>{user.role === 'DOCTOR' ? 'Paciente' : 'Doctor'}</span>
+            <span>{user.role.value === 'DOCTOR' ? 'Paciente' : 'Doctor'}</span>
           </TableHead>
         )}
 

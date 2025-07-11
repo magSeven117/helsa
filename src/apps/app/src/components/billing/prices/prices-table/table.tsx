@@ -1,12 +1,13 @@
 'use client';
+import { deleteDoctorPrice } from '@helsa/engine/doctor/infrastructure/http/http-doctor-api';
 import { Dialog } from '@helsa/ui/components/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@helsa/ui/components/table';
 import { cn } from '@helsa/ui/lib/utils';
+import { useMutation } from '@tanstack/react-query';
 import { flexRender, getCoreRowModel, getFilteredRowModel, useReactTable } from '@tanstack/react-table';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { toast } from 'sonner';
-import { useDeletePrice } from '../../../../../../../modules/billing/hooks/use-prices';
 import CreatePriceModal from '../forms/create-price-modal';
 import { type Prices, columns } from './columns';
 import { Header } from './header';
@@ -19,13 +20,17 @@ type Props = {
 export function DataTable({ data, doctorId }: Props) {
   const [isOpen, onOpenChange] = React.useState(false);
   const router = useRouter();
-  const { deletePrice } = useDeletePrice(doctorId);
 
-  const remove = async (id: string) => {
-    await deletePrice(id);
-    toast.success('Appointment type removed');
-    router.refresh();
-  };
+  const { mutate } = useMutation({
+    mutationFn: async (id: string) => deleteDoctorPrice(doctorId, id),
+    onSuccess: () => {
+      toast.success('Price removed successfully');
+      router.refresh();
+    },
+    onError: (error: Error) => {
+      toast.error(`Failed to remove price: ${error.message}`);
+    },
+  });
 
   const table = useReactTable({
     data,
@@ -34,7 +39,7 @@ export function DataTable({ data, doctorId }: Props) {
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     meta: {
-      remove,
+      remove: mutate,
       doctorId,
     },
   });

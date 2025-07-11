@@ -1,8 +1,8 @@
-import { getSession } from '@helsa/auth/server';
+import { getMiddlewareSession } from '@helsa/auth/utils/get-middleware-session';
 import { NextRequest, NextResponse } from 'next/server';
 const publicRoutes = new Set(['/sign-in', '/sign-up', '/recovery-password']);
 export default async function middleware(req: NextRequest) {
-  const session = await getSession();
+  const session = await getMiddlewareSession(req);
   const isPublicRoute = publicRoutes.has(req.nextUrl.pathname);
 
   if (!session && !isPublicRoute) {
@@ -25,7 +25,6 @@ export default async function middleware(req: NextRequest) {
   return NextResponse.next();
 }
 export const config = {
-  runtime: 'nodejs',
   matcher: [
     '/((?!api|queue|notifications|payment|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],

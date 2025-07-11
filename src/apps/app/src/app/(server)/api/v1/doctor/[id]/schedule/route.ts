@@ -1,11 +1,11 @@
-import { HttpNextResponse } from '@helsa/controller/http-next-response';
-import { routeHandler } from '@helsa/controller/route-handler';
+import { HttpNextResponse } from '@helsa/api/http-next-response';
+import { routeHandler } from '@helsa/api/route-handler';
 import { database } from '@helsa/database';
 import { CreateSchedule } from '@helsa/engine/doctor/application/services/create-schedule';
 import { GetDoctorSchedule } from '@helsa/engine/doctor/application/services/get-doctor-schedule';
 import { DoctorNotFoundError } from '@helsa/engine/doctor/domain/errors/doctor-not-found-error';
 import { PrismaDoctorRepository } from '@helsa/engine/doctor/infrastructure/persistence/prisma-doctor-repository';
-import { InngestEventBus } from '@helsa/ingest/event-bus';
+import { InngestEventBus } from '@helsa/events/event-bus';
 import { z } from 'zod';
 
 const schema = z.object({

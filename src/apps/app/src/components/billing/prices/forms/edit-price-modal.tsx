@@ -1,15 +1,16 @@
+import { createDoctorPrice } from '@helsa/engine/doctor/infrastructure/http/http-doctor-api';
 import { Button } from '@helsa/ui/components/button';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@helsa/ui/components/dialog';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@helsa/ui/components/form';
 import { Input } from '@helsa/ui/components/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@helsa/ui/components/select';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import { useCreatePrice } from '../../../../../../../modules/billing/hooks/use-prices';
 
 type Props = {
   id: string;
@@ -51,7 +52,6 @@ const currencies = [
 
 export const EditPriceModal = ({ defaultValue, id, isOpen, onOpenChange, doctorId, types }: Props) => {
   const router = useRouter();
-  const { createPrice, isPending } = useCreatePrice(doctorId);
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -62,9 +62,9 @@ export const EditPriceModal = ({ defaultValue, id, isOpen, onOpenChange, doctorI
       name: defaultValue.name,
     },
   });
-  async function onSubmit(data: z.infer<typeof formSchema>) {
-    try {
-      await createPrice({
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (data: z.infer<typeof formSchema>) =>
+      createDoctorPrice(doctorId, {
         id,
         amount: parseInt(data.amount),
         duration: parseInt(data.duration),
@@ -72,14 +72,16 @@ export const EditPriceModal = ({ defaultValue, id, isOpen, onOpenChange, doctorI
         currency: data.currency,
         doctorId: doctorId,
         name: data.name,
-      });
+      }),
+    onSuccess: () => {
       onOpenChange(false);
       toast.success('Tarifa actualizada');
       router.refresh();
-    } catch (error) {
-      toast.error('Error al actualizar la tarifa');
-    }
-  }
+    },
+    onError: (error: Error) => {
+      toast.error(`Error al actualizar la tarifa: ${error.message}`);
+    },
+  });
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-[455px] sm:rounded-none">
@@ -89,7 +91,13 @@ export const EditPriceModal = ({ defaultValue, id, isOpen, onOpenChange, doctorI
           </DialogHeader>
 
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="mt-6 mb-6">
+            <form
+              onSubmit={form.handleSubmit(
+                (data) => mutate(data),
+                (error) => console.error(error),
+              )}
+              className="mt-6 mb-6"
+            >
               <div className="flex flex-col space-y-2">
                 <div className="grid grid-cols-2 gap-x-2 gap-y-4">
                   <FormField

@@ -52,8 +52,8 @@ export const columns: ColumnDef<Primitives<Appointment>>[] = [
     accessorKey: 'participant',
     cell: ({ row }) => {
       const { user } = useSession();
-      const name = user.role == 'DOCTOR' ? row.original.patient?.user?.name : row.original.doctor?.user?.name;
-      const image = user.role == 'DOCTOR' ? row.original.patient?.user?.image : row.original.doctor?.user?.image;
+      const name = user.role.is('DOCTOR') ? row.original.patient?.user?.name : row.original.doctor?.user?.name;
+      const image = user.role.is('DOCTOR') ? row.original.patient?.user?.image : row.original.doctor?.user?.image;
 
       return (
         <div className="flex items-center space-x-2">

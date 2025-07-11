@@ -1,8 +1,8 @@
 'use client';
+import { useAssistantStore } from '@/src/store/assistant-store';
 import { Dialog, DialogContent, DialogTitle } from '@helsa/ui/components/dialog';
 import { useHotkeys } from 'react-hotkeys-hook';
 import Assistant from '.';
-import { useAssistantStore } from '../store/assistant-store';
 const ModalAssistant = () => {
   const { isOpen, setOpen } = useAssistantStore();
   useHotkeys('ctrl+i', (evt) => {

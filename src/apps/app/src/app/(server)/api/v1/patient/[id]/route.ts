@@ -1,5 +1,5 @@
-import { HttpNextResponse } from '@helsa/controller/http-next-response';
-import { routeHandler } from '@helsa/controller/route-handler';
+import { HttpNextResponse } from '@helsa/api/http-next-response';
+import { routeHandler } from '@helsa/api/route-handler';
 import { database } from '@helsa/database';
 import { GetPatient } from '@helsa/engine/patient/application/services/get-patient';
 import { PatientNotFoundError } from '@helsa/engine/patient/domain/errors/patient-not-found-error';
@@ -20,5 +20,5 @@ export const GET = routeHandler(
       default:
         return HttpNextResponse.internalServerError();
     }
-  },
+  }
 );

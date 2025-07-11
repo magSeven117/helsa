@@ -5,9 +5,9 @@ import { nextCookies } from 'better-auth/next-js';
 import { bearer, emailOTP } from 'better-auth/plugins';
 import { headers } from 'next/headers';
 import { cache } from 'react';
-import { sendForgotPassword } from 'utils/send-forgot-password';
-import { sendVerification } from 'utils/send-verification';
 import { keys } from './keys';
+import { sendForgotPassword } from './utils/send-forgot-password';
+import { sendVerification } from './utils/send-verification';
 
 const prisma = new PrismaClient();
 const env = keys();

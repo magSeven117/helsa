@@ -1,7 +1,7 @@
+import { useAssistantStore } from '@/src/store/assistant-store';
 import { Button } from '@helsa/ui/components/button';
 import { cn } from '@helsa/ui/lib/utils';
 import { Sidebar, X } from 'lucide-react';
-import { useAssistantStore } from '../store/assistant-store';
 
 type Props = {
   isExpanded: boolean;

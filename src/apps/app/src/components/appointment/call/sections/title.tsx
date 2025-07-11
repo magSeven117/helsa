@@ -1,10 +1,10 @@
 'use client';
+import { useSession } from '@/src/components/auth/session-provider';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { Appointment } from '@helsa/engine/appointment/domain/appointment';
 import { UserRoleValue } from '@helsa/engine/user/domain/user-role';
 import { Avatar, AvatarFallback, AvatarImage } from '@helsa/ui/components/avatar';
 import { UserIcon } from 'lucide-react';
-import { useSession } from '../../../../../app/(app)/(main)/_components/session-provider';
 
 type Props = {
   appointment: Primitives<Appointment>;
@@ -18,9 +18,9 @@ const Title = ({ appointment }: Props) => {
         <Avatar className="h-8 w-8 rounded-full">
           <AvatarImage
             src={
-              user?.role === UserRoleValue.PATIENT ? appointment.doctor?.user?.image : appointment.patient?.user?.image
+              user?.role.is(UserRoleValue.PATIENT) ? appointment.doctor?.user?.image : appointment.patient?.user?.image
             }
-            alt={user.name}
+            alt={user.name.value}
             className="object-contain"
           />
           <AvatarFallback className="rounded-lg">
@@ -28,7 +28,7 @@ const Title = ({ appointment }: Props) => {
           </AvatarFallback>
         </Avatar>
         <p className="text-lg capitalize">
-          {user?.role === UserRoleValue.PATIENT
+          {user?.role.is(UserRoleValue.PATIENT)
             ? `Dr. ${appointment.doctor?.user?.name}`
             : appointment.patient?.user?.name!}
         </p>

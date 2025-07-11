@@ -1,22 +1,23 @@
 'use client';
+import { useSession } from '@/src/components/auth/session-provider';
+import { ChatEmpty } from '@/src/components/chat/chat-empty';
+import { ChatExamples } from '@/src/components/chat/chat-examples';
+import { ChatList } from '@/src/components/chat/chat-list';
 import { useChat } from '@ai-sdk/react';
+import { getChat } from '@helsa/engine/chat/infrastructure/http-chat-api';
 import { Button } from '@helsa/ui/components/button';
 import { Input } from '@helsa/ui/components/input';
 import { ScrollArea } from '@helsa/ui/components/scroll-area';
 import { useEnterSubmit } from '@helsa/ui/hooks/use-enter-submit';
 import { useScrollAnchor } from '@helsa/ui/hooks/use-scroll-anchor';
+import { convertToUIMessages } from '@/src/components/chat/utils';
+import { useQuery } from '@tanstack/react-query';
 import { Send, X } from 'lucide-react';
 import { motion, useAnimate } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useOnClickOutside } from 'usehooks-ts';
 import { v4 } from 'uuid';
-import { useSession } from '../../../components/auth/session-provider';
-import { ChatEmpty } from '../../chat/components/chat-empty';
-import { ChatExamples } from '../../chat/components/chat-examples';
-import { ChatList } from '../../chat/components/chat-list';
-import { convertToUIMessages } from '../../chat/components/utils';
-import { useOneChat } from '../hooks/use-chats';
 import { Header } from './header';
 import { SidebarList } from './sidebar-list';
 export const ChatFloatingButton = () => {
@@ -27,7 +28,11 @@ export const ChatFloatingButton = () => {
   const [chatId, setChatId] = useState<string>();
   const { user } = useSession();
   const [initialMessages, setInitialMessages] = useState<any[]>([]);
-  const { chat } = useOneChat(chatId);
+  const { data: chat } = useQuery({
+    queryKey: ['chat', chatId],
+    queryFn: async () => getChat(chatId),
+    enabled: !!chatId,
+  });
   const [isHovered, setIsHovered] = useState(false);
   const { messagesRef, scrollRef, visibilityRef, scrollToBottom } = useScrollAnchor();
   const toggleOpen = () => setExpanded((prev) => !prev);

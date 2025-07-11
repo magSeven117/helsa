@@ -1,14 +1,14 @@
 import { Meta } from '@helsa/ddd/core/collection.';
 import { Primitives } from '@helsa/ddd/types/primitives';
-import { AppointmentStatusEnum } from 'appointment/domain/status';
-import { AppointmentTelemetry } from 'appointment/domain/telemetry';
 import { Doctor } from '../../../doctor/domain/doctor';
 import { Specialty } from '../../../doctor/domain/specialty';
 import { Patient } from '../../../patient/domain/patient';
 import { Appointment } from '../../domain/appointment';
 import { AppointmentType } from '../../domain/appointment-type';
 import { AppointmentNote } from '../../domain/note';
+import { AppointmentStatusEnum } from '../../domain/status';
 import { Symptom } from '../../domain/symptom';
+import { AppointmentTelemetry } from '../../domain/telemetry';
 
 export async function listAppointments({
   filter,

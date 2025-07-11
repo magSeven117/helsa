@@ -1,4 +1,4 @@
-import HeaderPatient from '@/src/modules/patient/components/details/header';
+import HeaderPatient from '@/src/components/patient/details/header';
 
 const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;

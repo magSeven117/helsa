@@ -1,12 +1,12 @@
 'use client';
 
+import { useSession } from '@/src/components/auth/session-provider';
 import { getDoctorSchedule } from '@helsa/engine/doctor/infrastructure/http/http-doctor-api';
 import { Button } from '@helsa/ui/components/button';
 import { DialogTitle } from '@helsa/ui/components/dialog';
 import { Sheet, SheetContent, SheetHeader, SheetTrigger } from '@helsa/ui/components/sheet';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { useSession } from '../../../components/auth/session-provider';
 import DoctorSchedule from './doctor-schedule';
 
 export default function DoctorScheduleModal() {

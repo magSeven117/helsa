@@ -7,15 +7,15 @@ import { getSession } from '../auth/server';
 import { DomainError } from '../ddd/core/domain-error';
 import { HttpNextResponse } from './http-next-response';
 
-type RouteHandlerParams<Q, P> = {
+type RouteHandlerParams<Q, P, auth = true> = {
   req: NextRequest;
-  user: User | undefined;
+  user: User;
   params: { [key: string]: any };
   searchParams: Q;
   body: P;
 };
 
-type RouteHandler<Q, P> = (params: RouteHandlerParams<Q, P>) => Promise<NextResponse>;
+type RouteHandler<Q, P, auth = true> = (params: RouteHandlerParams<Q, P>) => Promise<NextResponse>;
 
 type RouteHandlerOptions<Q, P> = {
   name: string;
@@ -74,9 +74,9 @@ export const routeHandler = <T extends DomainError, P, Q>(
   };
 };
 
-async function authentication(authenticated?: boolean): Promise<User | undefined> {
+async function authentication(authenticated?: boolean): Promise<User> {
   if (authenticated === false) {
-    return undefined;
+    return {} as User;
   }
   const session = await getSession();
   if (!session || !session.user) {

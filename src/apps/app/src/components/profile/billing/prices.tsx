@@ -1,6 +1,6 @@
 'use client';
 
-import { useTheme } from '@helsa/ui';
+import { getCheckoutSession } from '@helsa/engine/subscription/infrastructure/http-subscription-api';
 import { Button } from '@helsa/ui/components/button';
 import {
   Dialog,
@@ -15,7 +15,6 @@ import { Label } from '@helsa/ui/components/label';
 import { RadioGroup, RadioGroupItem } from '@helsa/ui/components/radio-group';
 import { Check, CreditCard, Loader2 } from 'lucide-react';
 import { useState } from 'react';
-import { getCheckoutSession } from '../../../modules/profile/api/subscription';
 
 export interface Plan {
   id: string;
@@ -62,7 +61,6 @@ const Prices = () => {
   const [selectedPlan, setSelectedPlan] = useState<string | null>('free');
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
-  const { resolvedTheme } = useTheme();
   const handleSubscribe = async () => {
     if (!selectedPlan) return;
     setLoading(true);

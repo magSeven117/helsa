@@ -1,4 +1,4 @@
-import { routeHandler } from '@helsa/controller/route-handler';
+import { routeHandler } from '@helsa/api/route-handler';
 import { database } from '@helsa/database';
 import { GetAppointmentTypes } from '@helsa/engine/appointment/application/get-appointment-types';
 import { PrismaAppointmentRepository } from '@helsa/engine/appointment/infrastructure/persistence/prisma-appointment-repository';

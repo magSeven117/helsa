@@ -1,5 +1,5 @@
+import { routeHandler } from '@helsa/api/route-handler';
 import { auth } from '@helsa/auth/server';
-import { routeHandler } from '@helsa/controller/route-handler';
 import { headers } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
@@ -20,5 +20,5 @@ export const PUT = routeHandler(
     await auth.api.updateUser({ body, headers: await headers(), userId });
 
     return NextResponse.json({ success: true, message: 'Bio updated successfully' });
-  },
+  }
 );

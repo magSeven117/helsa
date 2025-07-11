@@ -1,5 +1,5 @@
-import { HttpNextResponse } from '@helsa/controller/http-next-response';
-import { routeHandler } from '@helsa/controller/route-handler';
+import { HttpNextResponse } from '@helsa/api/http-next-response';
+import { routeHandler } from '@helsa/api/route-handler';
 import { database } from '@helsa/database';
 import { CreateAppointment } from '@helsa/engine/appointment/application/create-appointment';
 import {
@@ -58,7 +58,7 @@ export const GET = routeHandler(
       searchParams.filter,
       searchParams.pagination,
       searchParams.sort,
-      'userId',
+      'userId'
     );
     return HttpNextResponse.json({ data: response });
   },
@@ -69,7 +69,7 @@ export const GET = routeHandler(
       default:
         return HttpNextResponse.internalServerError();
     }
-  },
+  }
 );
 
 const createAppointmentSchema = z.object({
@@ -104,5 +104,5 @@ export const POST = routeHandler(
       default:
         return HttpNextResponse.internalServerError();
     }
-  },
+  }
 );

@@ -1,4 +1,5 @@
 'use client';
+import { useSession } from '@/src/components/auth/session-provider';
 import {
   Sidebar,
   SidebarContent,
@@ -27,7 +28,6 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useSession } from '../../../../components/auth/session-provider';
 import Icon from './icon';
 import { SidebarTrigger } from './sidabar-trigger';
 import SidebarNotifications from './sidebar-notifications';

@@ -1,5 +1,5 @@
-import { CalendarView } from '@/src/modules/schedule/components/calendar-view';
-import DoctorScheduleModal from '@/src/modules/schedule/components/create-schedule';
+import { CalendarView } from '@/src/components/schedule/calendar-view';
+import DoctorScheduleModal from '@/src/components/schedule/create-schedule';
 
 const Page = async () => {
   return (

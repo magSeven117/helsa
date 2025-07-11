@@ -1,5 +1,5 @@
-import { HttpNextResponse } from '@helsa/controller/http-next-response';
-import { routeHandler } from '@helsa/controller/route-handler';
+import { HttpNextResponse } from '@helsa/api/http-next-response';
+import { routeHandler } from '@helsa/api/route-handler';
 import { database } from '@helsa/database';
 import { Operator } from '@helsa/ddd/core/criteria';
 import { CreateDiagnosis } from '@helsa/engine/diagnostic/application/create-diagnosis';

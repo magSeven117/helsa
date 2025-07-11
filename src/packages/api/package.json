@@ -1,5 +1,5 @@
 {
-  "name": "@helsa/controller",
+  "name": "@helsa/api",
   "version": "0.1.0",
   "private": true,
   "scripts": {

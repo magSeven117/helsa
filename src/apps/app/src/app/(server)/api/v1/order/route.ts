@@ -1,5 +1,5 @@
-import { HttpNextResponse } from '@helsa/controller/http-next-response';
-import { routeHandler } from '@helsa/controller/route-handler';
+import { HttpNextResponse } from '@helsa/api/http-next-response';
+import { routeHandler } from '@helsa/api/route-handler';
 import { database } from '@helsa/database';
 import { Operator } from '@helsa/ddd/core/criteria';
 import { FormatError } from '@helsa/ddd/core/errors/format-error';
@@ -32,7 +32,7 @@ export const POST = routeHandler({ name: 'create-order', schema }, async ({ body
     patientId: parsedInput.patientId,
   } as Primitives<Order>);
 
-  revalidateTag(`get-appointment-orders-${user.id}`);
+  revalidateTag(`get-appointment-orders-${user?.id.value}`);
   revalidatePath(`/appointments/${parsedInput.appointmentId}`);
 
   return HttpNextResponse.created();
@@ -59,7 +59,7 @@ export const GET = routeHandler(
       : [{ field: 'appointmentId', operator: Operator.EQUAL, value: appointmentId }];
 
     const orders = await cache(() => service.run(criteria), [`get-appointment-orders`, appointmentId || patientId], {
-      tags: [`get-appointment-orders-${user.id}`],
+      tags: [`get-appointment-orders-${user?.id.value}`],
       revalidate: 3600,
     })();
     return NextResponse.json({ data: orders }, { status: 200 });

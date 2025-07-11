@@ -9,7 +9,7 @@ interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {}
 
 export function NavigationProfile({ className, ...props }: SidebarNavProps) {
   const { user } = useSession();
-  const role = user?.role ?? 'PATIENT';
+  const role = user?.role.value ?? 'PATIENT';
   const pathname = usePathname();
   const items = navItems.filter((item) => item.roles.includes(role));
   return (

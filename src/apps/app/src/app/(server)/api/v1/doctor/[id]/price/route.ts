@@ -1,5 +1,5 @@
-import { HttpNextResponse } from '@helsa/controller/http-next-response';
-import { routeHandler } from '@helsa/controller/route-handler';
+import { HttpNextResponse } from '@helsa/api/http-next-response';
+import { routeHandler } from '@helsa/api/route-handler';
 import { database } from '@helsa/database';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { AddPrice } from '@helsa/engine/doctor/application/services/add-price';
@@ -44,5 +44,5 @@ export const POST = routeHandler(
       default:
         return HttpNextResponse.internalServerError();
     }
-  },
+  }
 );
