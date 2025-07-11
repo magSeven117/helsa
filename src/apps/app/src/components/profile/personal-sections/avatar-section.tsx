@@ -1,4 +1,5 @@
 'use client';
+import { updateUser } from '@helsa/engine/user/infrastructure/http-user-api';
 import { createClient } from '@helsa/supabase/client';
 import { upload } from '@helsa/supabase/storage';
 import { Button } from '@helsa/ui/components/button';
@@ -6,13 +7,13 @@ import { Card, CardFooter, CardHeader, CardTitle } from '@helsa/ui/components/ca
 import { Form, FormControl, FormField, FormItem } from '@helsa/ui/components/form';
 import AvatarInput from '@helsa/ui/components/internal/avatar-input';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import { useUser } from '../../../modules/profile/hooks/use-user';
 import { useSession } from '../../auth/session-provider';
 
 const formSchema = z.object({
@@ -25,30 +26,43 @@ const AvatarSection = () => {
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: { image: user.image ?? '' },
+    defaultValues: { image: user.image.value ?? '' },
   });
-  const { isSubmitting, isValid } = form.formState;
+  const { isValid } = form.formState;
   const router = useRouter();
-  const { updateUser } = useUser();
-  const onSubmit = async (_values: AvatarSectionValues) => {
-    if (avatarFile) {
-      const supabase = createClient();
-      const res = await upload(supabase, {
-        file: avatarFile,
-        path: ['avatars', avatarFile.name],
-        bucket: 'profiles',
-      });
-      if (res) {
-        await updateUser({ image: res });
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (_data: AvatarSectionValues) => {
+      if (avatarFile) {
+        const supabase = createClient();
+        const res = await upload(supabase, {
+          file: avatarFile,
+          path: ['avatars', avatarFile.name],
+          bucket: 'profiles',
+        });
+        if (res) {
+          await updateUser({ image: res });
+        }
       }
+    },
+    onSuccess: () => {
       toast.success('Avatar actualizado correctamente');
       router.refresh();
-    }
-  };
+    },
+    onError: (error: Error) => {
+      console.error(error);
+      toast.error('An error occurred while updating the avatar. Please try again.');
+    },
+  });
   return (
     <Card className="rounded-none bg-transparent">
       <Form {...form}>
-        <form action="" onSubmit={form.handleSubmit(onSubmit)}>
+        <form
+          action=""
+          onSubmit={form.handleSubmit(
+            (data) => mutate(data),
+            (error) => console.error(error),
+          )}
+        >
           <CardHeader className="flex flex-row justify-between items-center">
             <div>
               <CardTitle>Avatar</CardTitle>
@@ -76,8 +90,8 @@ const AvatarSection = () => {
           </CardHeader>
           <CardFooter className="border-t pt-4 flex justify-between items-start gap-2 md:items-center flex-col md:flex-row">
             <p className="text-muted-foreground text-xs">Un avatar es opcional pero extremadamente recomendado.</p>
-            <Button disabled={!isValid || isSubmitting} type="submit" className="rounded-none">
-              {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Save'}
+            <Button disabled={!isValid || isPending} type="submit" className="rounded-none">
+              {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Save'}
             </Button>
           </CardFooter>
         </form>

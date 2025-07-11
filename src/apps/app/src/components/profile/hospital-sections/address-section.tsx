@@ -1,17 +1,18 @@
 'use client';
 
+import { updateHospital } from '@helsa/engine/hospital/infrastructure/http-hospital-api';
 import { Button } from '@helsa/ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@helsa/ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@helsa/ui/components/form';
 import { Input } from '@helsa/ui/components/input';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Loader2, MapPin } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import { useUpdateHospital } from '../../../modules/profile/hooks/use-hospital';
 
 const formSchema = z.object({
   address: z.object({
@@ -39,27 +40,35 @@ export const AddressSection = ({ address, id }: AddressFormValues & { id: string
     resolver: zodResolver(formSchema),
     defaultValues: { address },
   });
-  const { isSubmitting, isValid } = form.formState;
+  const { isValid } = form.formState;
   const router = useRouter();
-  const { updateHospital } = useUpdateHospital(id);
-  const onSubmit = async (data: AddressFormValues) => {
-    try {
-      await updateHospital({
-        address: data.address,
-      });
+  const client = useQueryClient();
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (data: AddressFormValues) => updateHospital(id, data),
+    onSuccess: () => {
       setIsEditing(false);
       form.reset();
       router.refresh();
-    } catch (error) {
-      console.log(error);
-      toast.error('Error updating consulting room');
-    }
-  };
+      client.invalidateQueries({
+        queryKey: ['hospital', id],
+      });
+    },
+    onError: (error) => {
+      console.error(error);
+      toast.error('Error updating hospital address');
+    },
+  });
 
   return (
     <Card className="rounded-none bg-transparent">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mt-4">
+        <form
+          onSubmit={form.handleSubmit(
+            (data) => mutate(data),
+            (error) => console.error(error),
+          )}
+          className="space-y-8 mt-4"
+        >
           <CardHeader>
             <div>
               <CardTitle>Dirección</CardTitle>
@@ -156,8 +165,8 @@ export const AddressSection = ({ address, id }: AddressFormValues & { id: string
                 >
                   Cancelar
                 </Button>
-                <Button disabled={!isValid || isSubmitting} type="submit" className="rounded-none">
-                  {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Save'}
+                <Button disabled={!isValid || isPending} type="submit" className="rounded-none">
+                  {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Save'}
                 </Button>
               </div>
             ) : (

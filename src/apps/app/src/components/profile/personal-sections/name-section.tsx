@@ -1,17 +1,18 @@
 'use client';
+import { useSession } from '@/src/components/auth/session-provider';
+import { updateUser } from '@helsa/engine/user/infrastructure/http-user-api';
 import { Button } from '@helsa/ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@helsa/ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@helsa/ui/components/form';
 import { Input } from '@helsa/ui/components/input';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import { useUser } from '../../../modules/profile/hooks/use-user';
-import { useSession } from '../../auth/session-provider';
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -27,30 +28,32 @@ export const NameSection = () => {
   const toggleEdit = () => setIsEditing((current) => !current);
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: { name: user.name },
+    defaultValues: { name: user.name.value },
   });
-  const { isSubmitting, isValid } = form.formState;
-
+  const { isValid } = form.formState;
   const router = useRouter();
-  const { updateUser } = useUser();
-
-  const onSubmit = async (data: NameFormValues) => {
-    try {
-      await updateUser({
-        name: data.name,
-      });
-      setIsEditing(false);
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (data: NameFormValues) => updateUser(data),
+    onSuccess: () => {
+      toast.success('Avatar actualizado correctamente');
       router.refresh();
-    } catch (error) {
-      console.log(error);
-      toast.error('An error occurred. Please try again.');
-    }
-  };
+    },
+    onError: (error: Error) => {
+      console.error(error);
+      toast.error('An error occurred while updating the avatar. Please try again.');
+    },
+  });
 
   return (
     <Card className="rounded-none bg-transparent">
       <Form {...form}>
-        <form action="" onSubmit={form.handleSubmit(onSubmit)}>
+        <form
+          action=""
+          onSubmit={form.handleSubmit(
+            (data) => mutate(data),
+            (error) => console.error(error),
+          )}
+        >
           <CardHeader className="">
             <div>
               <CardTitle>Nombre</CardTitle>
@@ -85,8 +88,8 @@ export const NameSection = () => {
                 <Button onClick={toggleEdit} className="rounded-none">
                   Cancelar
                 </Button>
-                <Button disabled={!isValid || isSubmitting} type="submit" className="rounded-none">
-                  {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Save'}
+                <Button disabled={!isValid || isPending} type="submit" className="rounded-none">
+                  {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Save'}
                 </Button>
               </div>
             ) : (

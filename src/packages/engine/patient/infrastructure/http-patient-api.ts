@@ -38,10 +38,43 @@ export const getPatient = async (id: string, include = {}) => {
   });
 
   if (!response.ok) {
-    throw new Error(`Failed to fetch patient with ID ${id}: ${response.statusText}`);
+    const error: { message: string } = await response.json();
+    throw new Error(error.message);
   }
 
   const data = await response.json();
   console.log(data);
   return data.data as Primitives<Patient>;
 };
+
+export async function updatePatientDemographic(id: string, demographic: Record<string, any>) {
+  const response = await fetch(`/api/v1/patient/${id}/demographic`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ demographic }),
+  });
+
+  if (!response.ok) {
+    const error: { message: string } = await response.json();
+    throw new Error(error.message);
+  }
+
+  return response.json();
+}
+
+export async function updatePatientBiometric(id: string, biometric: Record<string, any>) {
+  const response = await fetch(`/api/v1/patient/${id}/biometric`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ biometric }),
+  });
+
+  if (!response.ok) {
+    const error: { message: string } = await response.json();
+    throw new Error(error.message);
+  }
+}

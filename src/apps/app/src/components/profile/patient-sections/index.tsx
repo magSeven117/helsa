@@ -1,7 +1,8 @@
 'use client';
 
+import { getPatient } from '@helsa/engine/patient/infrastructure/http-patient-api';
+import { useQuery } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
-import { usePatient } from '../../../modules/profile/hooks/use-patient';
 import { useSession } from '../../auth/session-provider';
 import { BloodTypeSection } from './blood-type-section';
 import { CivilStatusSection } from './civil-status-section';
@@ -12,8 +13,13 @@ import { OrganDonorSection } from './organ-donor-section';
 
 const PatientProfileIndex = () => {
   const { profile } = useSession();
-  const { patient, isFetching } = usePatient(profile?.id ?? '');
-  if (isFetching) {
+  const { data: patient, isFetching } = useQuery({
+    queryKey: ['patient', profile.id],
+    queryFn: async () => getPatient(profile.id),
+    enabled: !!profile?.id,
+    refetchOnWindowFocus: false,
+  });
+  if (isFetching || !patient) {
     return (
       <div className="flex justify-center items-center h-full">
         <Loader2 className="size-8 animate-spin" />

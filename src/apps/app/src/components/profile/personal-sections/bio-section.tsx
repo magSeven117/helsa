@@ -1,17 +1,18 @@
 'use client';
 
+import { updateUser } from '@helsa/engine/user/infrastructure/http-user-api';
 import { Button } from '@helsa/ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@helsa/ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@helsa/ui/components/form';
 import { Textarea } from '@helsa/ui/components/textarea';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import { useUser } from '../../../modules/profile/hooks/use-user';
 import { useSession } from '../../auth/session-provider';
 
 const formSchema = z.object({
@@ -28,29 +29,32 @@ export const BioSection = () => {
   const toggleEdit = () => setIsEditing((current) => !current);
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: { bio: user.bio },
+    defaultValues: { bio: user.bio.value ?? '' },
   });
-  const { isSubmitting, isValid } = form.formState;
+  const { isValid } = form.formState;
   const router = useRouter();
-  const { updateUser } = useUser();
-
-  const onSubmit = async (data: BioFormValues) => {
-    try {
-      await updateUser({
-        bio: data.bio,
-      });
-      setIsEditing(false);
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (data: BioFormValues) => updateUser(data),
+    onSuccess: () => {
+      toast.success('Avatar actualizado correctamente');
       router.refresh();
-    } catch (error) {
-      console.log(error);
-      toast.error('An error occurred. Please try again.');
-    }
-  };
+    },
+    onError: (error: Error) => {
+      console.error(error);
+      toast.error('An error occurred while updating the avatar. Please try again.');
+    },
+  });
 
   return (
     <Card className="rounded-none bg-transparent">
       <Form {...form}>
-        <form action="" onSubmit={form.handleSubmit(onSubmit)}>
+        <form
+          action=""
+          onSubmit={form.handleSubmit(
+            (data) => mutate(data),
+            (error) => console.error(error),
+          )}
+        >
           <CardHeader className="">
             <div>
               <CardTitle>Biografía</CardTitle>
@@ -58,7 +62,7 @@ export const BioSection = () => {
                 {isEditing ? 'Escribe una breve descripción sobre ti.' : 'Esto es lo que otros verán sobre ti.'}
               </p>
               {!isEditing ? (
-                <p className="text-primary font-bold mt-3">{user.bio}</p>
+                <p className="text-primary font-bold mt-3">{user.bio.value}</p>
               ) : (
                 <FormField
                   control={form.control}
@@ -84,8 +88,8 @@ export const BioSection = () => {
                 <Button onClick={toggleEdit} className="rounded-none">
                   Cancelar
                 </Button>
-                <Button disabled={!isValid || isSubmitting} type="submit" className="rounded-none">
-                  {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Save'}
+                <Button disabled={!isValid || isPending} type="submit" className="rounded-none">
+                  {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Save'}
                 </Button>
               </div>
             ) : (

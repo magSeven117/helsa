@@ -26,5 +26,9 @@ export const useSession = () => {
   if (!context) {
     throw new Error('useSession must be used within a SessionProvider');
   }
-  return context;
+  return {
+    user: context.user,
+    profile: context.profile,
+    serializedUser: context.user.toPrimitives(),
+  };
 };

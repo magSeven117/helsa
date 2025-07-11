@@ -1,17 +1,18 @@
 'use client';
 
+import { updatePatientDemographic } from '@helsa/engine/patient/infrastructure/http-patient-api';
 import { Button } from '@helsa/ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@helsa/ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@helsa/ui/components/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@helsa/ui/components/select';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import { useUpdateDemographic } from '../../../modules/profile/hooks/use-patient';
 
 const formSchema = z.object({
   educativeLevel: z.enum(['PRIMARY', 'SECONDARY', 'TECHNICAL', 'UNIVERSITY']),
@@ -27,28 +28,33 @@ export const EducationLevelSection = ({ educativeLevel, id }: EducationLevelValu
     defaultValues: { educativeLevel },
     mode: 'all',
   });
-  const { isSubmitting, isValid } = form.formState;
+  const { isValid } = form.formState;
   const router = useRouter();
-  const { updateDemographic } = useUpdateDemographic(id);
-
-  const onSubmit = async (data: EducationLevelValue) => {
-    try {
-      await updateDemographic(data);
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (data: EducationLevelValue) => updatePatientDemographic(id, data),
+    onSuccess: () => {
       setIsEditing(false);
-      toast.success('Nivel educativo actualizado correctamente.');
+      toast.success('Nivel educativo actualizado correctamente');
       router.refresh();
-    } catch (error) {
-      console.log(error);
+    },
+    onError: (error) => {
+      console.error(error);
       toast.error('An error occurred. Please try again.');
-    }
-  };
+    },
+  });
 
   const selectedCivilStatus = educationLevels.find((option) => option.id === form.getValues('educativeLevel'));
 
   return (
     <Card className="rounded-none bg-transparent">
       <Form {...form}>
-        <form action="" onSubmit={form.handleSubmit(onSubmit)}>
+        <form
+          action=""
+          onSubmit={form.handleSubmit(
+            (data) => mutate(data),
+            (error) => console.error(error),
+          )}
+        >
           <CardHeader className="">
             <div>
               <CardTitle>Nivel educativo</CardTitle>
@@ -97,8 +103,8 @@ export const EducationLevelSection = ({ educativeLevel, id }: EducationLevelValu
                 >
                   Cancelar
                 </Button>
-                <Button disabled={!isValid || isSubmitting} type="submit" className="rounded-none">
-                  {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Save'}
+                <Button disabled={!isValid || isPending} type="submit" className="rounded-none">
+                  {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Save'}
                 </Button>
               </div>
             ) : (

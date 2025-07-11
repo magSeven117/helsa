@@ -1,17 +1,18 @@
 'use client';
 
+import { updatePatientBiometric } from '@helsa/engine/patient/infrastructure/http-patient-api';
 import { Button } from '@helsa/ui/components/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@helsa/ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@helsa/ui/components/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@helsa/ui/components/select';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import { useUpdateBiometric } from '../../../modules/profile/hooks/use-patient';
 
 const formSchema = z.object({
   bloodType: z.enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']),
@@ -27,28 +28,33 @@ export const BloodTypeSection = ({ bloodType, id }: BloodTypeLevel & { id: strin
     defaultValues: { bloodType },
     mode: 'all',
   });
-  const { isSubmitting, isValid } = form.formState;
+  const { isValid } = form.formState;
   const router = useRouter();
-  const { updateBiometric } = useUpdateBiometric(id);
-
-  const onSubmit = async (data: BloodTypeLevel) => {
-    try {
-      await updateBiometric(data);
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (data: BloodTypeLevel) => updatePatientBiometric(id, data),
+    onSuccess: () => {
       setIsEditing(false);
-      toast.success('Tipo de sangre actualizado correctamente.');
+      toast.success('Estado civil actualizado correctamente');
       router.refresh();
-    } catch (error) {
-      console.log(error);
+    },
+    onError: (error) => {
+      console.error(error);
       toast.error('An error occurred. Please try again.');
-    }
-  };
+    },
+  });
 
   const bloodTypeSelected = bloodTypeOptions.find((option) => option.id === form.getValues('bloodType'));
 
   return (
     <Card className="rounded-none bg-transparent">
       <Form {...form}>
-        <form action="" onSubmit={form.handleSubmit(onSubmit)}>
+        <form
+          action=""
+          onSubmit={form.handleSubmit(
+            (data) => mutate(data),
+            (error) => console.error(error),
+          )}
+        >
           <CardHeader className="">
             <div>
               <CardTitle>Tipo de sangre</CardTitle>
@@ -99,8 +105,8 @@ export const BloodTypeSection = ({ bloodType, id }: BloodTypeLevel & { id: strin
                 >
                   Cancelar
                 </Button>
-                <Button disabled={!isValid || isSubmitting} type="submit" className="rounded-none">
-                  {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Guardar'}
+                <Button disabled={!isValid || isPending} type="submit" className="rounded-none">
+                  {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Guardar'}
                 </Button>
               </div>
             ) : (
