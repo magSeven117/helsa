@@ -18,7 +18,7 @@ export default buildConfig({
     user: Users.slug,
     importMap: {
       baseDir: path.resolve(dirname, 'src'),
-      importMapFile: path.resolve(dirname, 'src', 'app', '(payload)', 'importMap.js'),
+      importMapFile: path.resolve(dirname, 'src', 'app', '(payload)', 'admin', 'importMap.ts'),
     },
   },
   editor: lexicalEditor(),
