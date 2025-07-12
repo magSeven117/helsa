@@ -1,12 +1,28 @@
-import { cn } from '@helsa/ui/lib/utils';
-import { Pump } from 'basehub/react-pump';
+import { User } from '@/payload-types';
+import { Badge } from '@helsa/ui/components/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@helsa/ui/components/card';
+import config from '@payload-config';
+import { CalendarDays, Clock, UserIcon } from 'lucide-react';
 import { Metadata } from 'next';
 import Link from 'next/link';
+import { getPayload } from 'payload';
+
 export const metadata: Metadata = {
   title: 'Blog',
   description: 'Thoughts, stories and ideas.',
 };
-const Page = () => {
+const Page = async () => {
+  const payload = await getPayload({ config });
+  const { docs } = await payload.find({
+    collection: 'post',
+    where: {
+      status: {
+        equals: 'published',
+      },
+    },
+    limit: 20,
+    sort: '-createdAt',
+  });
   return (
     <div className="w-full py-20 lg:py-40">
       <div className="container mx-auto flex flex-col gap-14 max-w-7xl">
@@ -14,63 +30,50 @@ const Page = () => {
           <h4 className="max-w-xl font-regular text-3xl tracking-tighter md:text-5xl">Blog</h4>
         </div>
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-          <Pump
-            queries={[
-              {
-                blog: {
-                  posts: {
-                    items: {
-                      _title: true,
-                      _slug: true,
-                      date: true,
-                      image: {
-                        url: true,
-                      },
-                    },
-                  },
-                },
-              },
-            ]}
-          >
-            {async ([data]) => {
-              'use server';
-
-              if (!(data as any).blog.posts.items.length) {
-                return null;
-              }
-
-              return (data as any).blog.posts.items.map((post: any, index: number) => (
+          {docs.map((post) => (
+            <Card key={post.id} className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
+              <div className="aspect-video bg-gray-200 relative overflow-hidden">
+                <img
+                  src={(post.featuredImage as any)?.url || '/placeholder.svg'}
+                  alt={post.title}
+                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                />
+                <Badge className="absolute top-4 left-4" variant="default">
+                  {post.status}
+                </Badge>
+              </div>
+              <CardHeader>
+                <CardTitle className="line-clamp-2 hover:text-brand-primary transition-colors">
+                  <Link href={`/blog/${post.slug}`}>{post.title}</Link>
+                </CardTitle>
+                <CardDescription className="line-clamp-3">{post.summary}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-between text-sm text-gray-500">
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-1">
+                      <UserIcon className="w-4 h-4" />
+                      <span>{(post.author as User).name}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Clock className="w-4 h-4" />
+                      <span>{post.readTime}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <CalendarDays className="w-4 h-4" />
+                    <span>{new Date(post.createdAt).toLocaleDateString('es-ES')}</span>
+                  </div>
+                </div>
                 <Link
-                  href={`/blog/${post._slug}`}
-                  className={cn(
-                    'flex cursor-pointer flex-col gap-4 hover:opacity-75 ',
-                    !index && 'md:col-span-2 border-b border-brand-primary',
-                  )}
-                  key={post._slug}
+                  href={`/blog/${post.slug}`}
+                  className="inline-block mt-4  hover:text-brand-primary font-medium transition-colors"
                 >
-                  <img
-                    src={post.image.url}
-                    alt={post.image.alt ?? ''}
-                    width={post.image.width}
-                    height={post.image.height}
-                  />
-                  <div className="flex flex-row items-center gap-4">
-                    <p className="text-muted-foreground text-sm">
-                      {new Date(post.date).toLocaleDateString('en-US', {
-                        month: 'long',
-                        day: 'numeric',
-                        year: 'numeric',
-                      })}
-                    </p>
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <h3 className="max-w-3xl text-4xl tracking-tight">{post._title}</h3>
-                    <p className="max-w-3xl text-base text-muted-foreground">{post.description}</p>
-                  </div>
+                  Leer más →
                 </Link>
-              ));
-            }}
-          </Pump>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </div>
     </div>

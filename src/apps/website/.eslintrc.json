@@ -6,6 +6,7 @@
     "react-hooks/exhaustive-deps": "off",
     "react/display-name": "off",
     "@typescript-eslint/consistent-type-definitions": "off",
-    "@typescript-eslint/require-await": "off"
+    "@typescript-eslint/require-await": "off",
+    "@typescript-eslint/no-explicit-any": "off"
   }
 }

@@ -2,20 +2,29 @@
   "extends": "@helsa/typescript-config/next.json",
   "compilerOptions": {
     "baseUrl": ".",
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
     "module": "esnext",
+    "skipLibCheck": true,
     "moduleResolution": "bundler",
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "incremental": true,
     "paths": {
       "@/*": ["./*"],
       "@helsa/*": ["../../packages/*"],
-      "@payload-config": ["./src/payload.config.ts"]
+      "@payload-config": ["./payload.config.ts"]
     }
   },
   "include": [
     "next-env.d.ts",
     "next.config.ts",
+    "./payload.config.ts",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
     "../../packages/ui/components/internal/progress.tsx"
-  , "basehub.d.ts", "basehub.config.ts"]
+  ],
+  "exclude": ["node_modules"]
 }

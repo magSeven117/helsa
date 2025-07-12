@@ -12,3 +12,27 @@
 @utility text-brand-primary {
   color: var(--color-brand-primary);
 }
+
+.prose {
+  @apply text-muted-foreground text-lg;
+}
+
+.prose h2 {
+  @apply text-foreground text-3xl font-bold mt-12 mb-6;
+}
+
+.prose h3 {
+  @apply text-foreground text-2xl font-bold mt-12 mb-6;
+}
+
+.prose p {
+  @apply mb-6 leading-relaxed;
+}
+
+.prose ul {
+  @apply my-6 list-disc list-inside space-y-2;
+}
+
+.prose a {
+  @apply text-brand-primary underline;
+}
