@@ -7,6 +7,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { getPayload } from 'payload';
 
+export const dynamic = 'force-dynamic'; // This page should always be revalidated on each request
 export const metadata: Metadata = {
   title: 'Blog',
   description: 'Thoughts, stories and ideas.',
