@@ -29,5 +29,6 @@ export const helsaTherapist = (messages: Array<any>, user: { id: string }, chatI
       console.error('Error in helsaTherapist:', error);
     },
   });
+  console.log(result);
   return result.toDataStreamResponse();
 };

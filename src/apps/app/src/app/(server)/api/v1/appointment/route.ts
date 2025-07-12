@@ -18,30 +18,47 @@ import { UserRoleValue } from '@helsa/engine/user/domain/user-role';
 import { InngestEventBus } from '@helsa/events/event-bus';
 import { z } from 'zod';
 const getAppointmentsSchema = z.object({
-  filter: z.object({
-    start: z.string().optional(),
-    end: z.string().optional(),
-    states: z.array(z.string()).optional(),
-    specialties: z.array(z.string()).optional(),
-    types: z.array(z.string()).optional(),
-  }),
-  pagination: z.object({
-    page: z.number().optional(),
-    pageSize: z.number().optional(),
-  }),
-  sort: z.object({
-    sortBy: z.string().optional(),
-    order: z.string().optional(),
-  }),
+  filter: z
+    .object({
+      start: z.string().optional(),
+      end: z.string().optional(),
+      states: z.array(z.string()).optional(),
+      specialties: z.array(z.string()).optional(),
+      types: z.array(z.string()).optional(),
+    })
+    .optional(),
+  pagination: z
+    .object({
+      page: z.number().optional(),
+      pageSize: z.number().optional(),
+    })
+    .optional(),
+  sort: z
+    .object({
+      sortBy: z.string().optional(),
+      order: z.string().optional(),
+    })
+    .optional(),
+});
+
+const queryParamsSchema = z.object({
+  filter: z.string().optional(),
+  pagination: z.string().optional(),
+  sort: z.string().optional(),
 });
 
 export const GET = routeHandler(
   {
     name: 'get-appointments',
-    querySchema: getAppointmentsSchema,
+    querySchema: queryParamsSchema,
   },
   async ({ user, searchParams }) => {
     const repository = new PrismaAppointmentRepository(database);
+    const parsedSearchParams = getAppointmentsSchema.parse({
+      filter: JSON.parse(searchParams.filter || '{}'),
+      pagination: JSON.parse(searchParams.pagination || '{}'),
+      sort: JSON.parse(searchParams.sort || '{}'),
+    });
 
     let service;
 
@@ -53,12 +70,12 @@ export const GET = routeHandler(
       service = new GetPatientAppointments(repository, patientGetter);
     }
 
-    const response = service.run(
+    const response = await service.run(
       user?.id.value ?? '',
-      searchParams.filter,
-      searchParams.pagination,
-      searchParams.sort,
-      'userId'
+      parsedSearchParams.filter ?? {},
+      parsedSearchParams.pagination,
+      parsedSearchParams.sort,
+      'userId',
     );
     return HttpNextResponse.json({ data: response });
   },
@@ -69,7 +86,7 @@ export const GET = routeHandler(
       default:
         return HttpNextResponse.internalServerError();
     }
-  }
+  },
 );
 
 const createAppointmentSchema = z.object({
@@ -104,5 +121,5 @@ export const POST = routeHandler(
       default:
         return HttpNextResponse.internalServerError();
     }
-  }
+  },
 );

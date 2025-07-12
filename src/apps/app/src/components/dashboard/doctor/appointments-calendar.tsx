@@ -49,30 +49,30 @@ export function AppointmentsCalendar() {
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
-        <div className="p-4 rounded-lg bg-[#8167ec]/20 border border-[#8167ec]">
+        <div className="p-4 rounded-lg bg-brand-primary">
           <div className="flex justify-between items-center mb-4">
             <div>
               <h3 className="font-medium">Actual</h3>
-              <p className="text-xs text-muted-foreground">En progreso</p>
+              <p className="text-xs ">En progreso</p>
             </div>
-            <Badge className="bg-[#8167ec] text-white border-none">11:45 AM</Badge>
+            <Badge className="  border-none">11:45 AM</Badge>
           </div>
 
           <div className="flex items-center gap-3">
             <Avatar>
               <AvatarImage src="/images/placeholder.svg?height=48&width=48" />
-              <AvatarFallback className="bg-[#8167ec]/20 text-[#8167ec]">
+              <AvatarFallback className="">
                 <User className="size-8" />
               </AvatarFallback>
             </Avatar>
             <div>
               <div className="font-medium">James Brown</div>
-              <div className="text-xs text-muted-foreground">Terapia individual • 45 min</div>
+              <div className="text-xs ">Terapia individual • 45 min</div>
             </div>
           </div>
         </div>
 
-        <div className="p-4 rounded-lg backdrop-blur-xl bg-white/10 border border-white/20">
+        <div className="p-4 rounded-lg backdrop-blur-xl bg-sidebar">
           <div className="flex justify-between items-center mb-4">
             <div>
               <h3 className="font-medium">Proxima</h3>

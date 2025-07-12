@@ -10,14 +10,43 @@ import { QueryProvider } from '../components/shared/query-provider';
 const nunito = Nunito({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Helsa',
-  description: 'A platform for managing your health',
+  metadataBase: new URL('https://app.helsahealthcare.com'),
+  title: 'Helsa | Therapy and Health Management',
+  description: 'Enhance your health with Helsa, a platform for therapy and health management.',
+  twitter: {
+    title: 'Helsa | Therapy and Health Management',
+    description: 'Enhance your health with Helsa, a platform for therapy and health management',
+    card: 'summary_large_image',
+    images: [
+      {
+        url: 'https://tfuwarabgmwgumgearac.supabase.co/storage/v1/object/public/stuff//open-graph-image.png',
+        width: 800,
+        height: 600,
+      },
+      {
+        url: 'https://tfuwarabgmwgumgearac.supabase.co/storage/v1/object/public/stuff//open-graph-image.png',
+        width: 1800,
+        height: 1600,
+      },
+    ],
+  },
   openGraph: {
-    title: 'Helsa',
-    description: 'A platform for managing your health',
-    url: 'https://helsahealthcare.com',
+    title: 'Helsa | Therapy and Health Management',
+    description: 'Enhance your health with Helsa, a platform for therapy and health management.',
+    url: 'https://app.helsahealthcare.com',
     siteName: 'Helsa',
-    images: [{ url: 'https://example.com/og.png' }],
+    images: [
+      {
+        url: 'https://tfuwarabgmwgumgearac.supabase.co/storage/v1/object/public/stuff//open-graph-image.png',
+        width: 800,
+        height: 600,
+      },
+      {
+        url: 'https://tfuwarabgmwgumgearac.supabase.co/storage/v1/object/public/stuff//open-graph-image.png',
+        width: 1800,
+        height: 1600,
+      },
+    ],
   },
 };
 

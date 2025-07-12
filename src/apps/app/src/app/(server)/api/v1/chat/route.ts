@@ -8,10 +8,10 @@ import { NextRequest } from 'next/server';
 
 export async function POST(request: NextRequest) {
   const { messages, chatId, user } = await request.json();
-  if (user.role === 'PATIENT') {
-    return helsaTherapist(messages, user, chatId);
-  } else if (user.role === 'DOCTOR') {
-    return helsaAssistant(messages, user, chatId);
+  if (user.role.value === 'PATIENT') {
+    return helsaTherapist(messages, { id: user.id.value }, chatId);
+  } else if (user.role.value === 'DOCTOR') {
+    return helsaAssistant(messages, { id: user.id.value }, chatId);
   }
 }
 
@@ -21,6 +21,7 @@ export const GET = routeHandler({ name: 'get-chats' }, async ({ user }) => {
   }
   const repository = new RedisChatRepository(client);
   const chats = await repository.getChats(user.id.value);
+  console.log(chats);
   return HttpNextResponse.json({ data: chats });
 });
 

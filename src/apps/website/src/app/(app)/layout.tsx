@@ -10,8 +10,44 @@ const nunito = Nunito({
 });
 
 export const metadata: Metadata = {
-  title: 'Helsa',
-  description: 'Healthcare for everyone',
+  metadataBase: new URL('https://helsahealthcare.com'),
+  title: 'Helsa | Therapy and Health Management',
+  description: 'Enhance your health with Helsa, a platform for therapy and health management.',
+  twitter: {
+    title: 'Helsa | Therapy and Health Management',
+    description: 'Enhance your health with Helsa, a platform for therapy and health management',
+    card: 'summary_large_image',
+    images: [
+      {
+        url: 'https://tfuwarabgmwgumgearac.supabase.co/storage/v1/object/public/stuff//open-graph-image.png',
+        width: 800,
+        height: 600,
+      },
+      {
+        url: 'https://tfuwarabgmwgumgearac.supabase.co/storage/v1/object/public/stuff//open-graph-image.png',
+        width: 1800,
+        height: 1600,
+      },
+    ],
+  },
+  openGraph: {
+    title: 'Helsa | Therapy and Health Management',
+    description: 'Enhance your health with Helsa, a platform for therapy and health management.',
+    url: 'https://helsahealthcare.com',
+    siteName: 'Helsa',
+    images: [
+      {
+        url: 'https://tfuwarabgmwgumgearac.supabase.co/storage/v1/object/public/stuff//open-graph-image.png',
+        width: 800,
+        height: 600,
+      },
+      {
+        url: 'https://tfuwarabgmwgumgearac.supabase.co/storage/v1/object/public/stuff//open-graph-image.png',
+        width: 1800,
+        height: 1600,
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
