@@ -16,10 +16,12 @@ export const SessionProvider = ({
   profile,
 }: {
   children: React.ReactNode;
-  user: User;
+  user: Primitives<User>;
   profile: Primitives<Doctor> | Primitives<Patient> | Primitives<Hospital>;
 }) => {
-  return <SessionContext.Provider value={{ user, profile }}>{children}</SessionContext.Provider>;
+  return (
+    <SessionContext.Provider value={{ user: User.fromPrimitives(user), profile }}>{children}</SessionContext.Provider>
+  );
 };
 export const useSession = () => {
   const context = React.useContext(SessionContext);

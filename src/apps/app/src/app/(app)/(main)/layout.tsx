@@ -11,12 +11,16 @@ import { SidebarProvider } from '@helsa/ui/components/sidebar';
 import React, { Suspense } from 'react';
 import Loading from './loading';
 
+export const metadata = {
+  title: 'Helsa',
+};
+
 const Layout = async ({ children }: { children: React.ReactNode }) => {
   const { profile, user } = await getProfile();
 
   return (
     <div className="flex justify-start items-start h-full w-full styled-scroll">
-      <SessionProvider user={User.fromPrimitives(user as Primitives<User>)} profile={profile}>
+      <SessionProvider user={user as Primitives<User>} profile={profile}>
         <SidebarProvider>
           <SideBar />
           <div className="flex flex-col items-start w-full styled-scroll  overflow-y-scroll pb-8  bg-background relative">
