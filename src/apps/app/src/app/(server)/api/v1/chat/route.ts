@@ -21,7 +21,6 @@ export const GET = routeHandler({ name: 'get-chats' }, async ({ user }) => {
   }
   const repository = new RedisChatRepository(client);
   const chats = await repository.getChats(user.id.value);
-  console.log(chats);
   return HttpNextResponse.json({ data: chats });
 });
 
