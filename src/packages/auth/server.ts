@@ -1,3 +1,4 @@
+import { expo } from '@better-auth/expo';
 import { PrismaClient } from '@helsa/database';
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
@@ -18,6 +19,15 @@ export const auth = betterAuth({
   }),
   advanced: {
     generateId: false,
+    cookies: {
+      session_token: {
+        name: 'helsa_session',
+      },
+    },
+    crossSubDomainCookies: {
+      enabled: true,
+      domain: '.helsahealthcare.com',
+    },
   },
   user: {
     additionalFields: {
@@ -35,7 +45,20 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
-  trustedOrigins: ['https://app.helsahealthcare.com'],
+  socialProviders: {
+    google: {
+      enabled: true,
+      clientId: env.GOOGLE_CLIENT_ID!,
+      clientSecret: env.GOOGLE_CLIENT_SECRET!,
+      redirectURI: `${env.NEXT_PUBLIC_BASE_URL}/api/v1/auth/callback/google`,
+    },
+  },
+  trustedOrigins: [
+    'http://localhost:3000',
+    'https://helsahealthcare.com',
+    'https://app.helsahealthcare.com',
+    'helsa-mobile://',
+  ],
   plugins: [
     emailOTP({
       otpLength: 6,
@@ -56,15 +79,8 @@ export const auth = betterAuth({
     nextCookies(),
     bearer(),
     openAPI(),
+    expo(),
   ],
-  socialProviders: {
-    google: {
-      enabled: true,
-      clientId: env.GOOGLE_CLIENT_ID!,
-      clientSecret: env.GOOGLE_CLIENT_SECRET!,
-      redirectURI: `${env.NEXT_PUBLIC_BASE_URL}/api/v1/auth/callback/google`,
-    },
-  },
 });
 
 export type BetterSession = typeof auth.$Infer.Session;

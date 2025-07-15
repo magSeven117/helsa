@@ -7,12 +7,14 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
+    "@better-auth/expo": "^1.2.12",
     "@better-fetch/fetch": "^1.1.18",
     "@helsa/database": "*",
     "@helsa/email": "*",
     "@helsa/typescript-config": "*",
     "@upstash/redis": "^1.34.3",
-    "better-auth": "1.2.4",
+    "better-auth": "^1.2.12",
+    "expo-secure-store": "^14.2.3",
     "next": "15.2.2",
     "react": "^19.0.0",
     "server-only": "^0.0.1"

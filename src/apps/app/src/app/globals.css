@@ -11,3 +11,7 @@
 @utility text-brand-primary {
   color: var(--color-brand-primary);
 }
+
+.UTIL {
+  color: #6459fd;
+}
