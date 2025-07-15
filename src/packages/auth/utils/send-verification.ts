@@ -1,6 +1,8 @@
+import { keys } from '../keys';
+const env = keys().NEXT_PUBLIC_BASE_URL;
 export const sendVerification = async (email: string, code: string) => {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/notifications/verificaton`, {
+    const response = await fetch(`${env}/api/v1/notifications/verification`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

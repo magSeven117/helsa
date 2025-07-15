@@ -2,7 +2,7 @@ import { PrismaClient } from '@helsa/database';
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { nextCookies } from 'better-auth/next-js';
-import { bearer, emailOTP } from 'better-auth/plugins';
+import { bearer, emailOTP, openAPI } from 'better-auth/plugins';
 import { headers } from 'next/headers';
 import { cache } from 'react';
 import { keys } from './keys';
@@ -30,11 +30,6 @@ export const auth = betterAuth({
         defaultValue: '',
         input: true,
       },
-      plan: {
-        type: 'string',
-        defaultValue: 'free',
-        input: true,
-      },
     },
   },
   emailAndPassword: {
@@ -45,6 +40,7 @@ export const auth = betterAuth({
     emailOTP({
       otpLength: 6,
       sendVerificationOTP: async ({ email, otp, type }) => {
+        console.log(`Sending ${type} OTP to ${email}: ${otp}`);
         switch (type) {
           case 'email-verification':
             await sendVerification(email, otp);
@@ -59,6 +55,7 @@ export const auth = betterAuth({
     }),
     nextCookies(),
     bearer(),
+    openAPI(),
   ],
   socialProviders: {
     google: {
