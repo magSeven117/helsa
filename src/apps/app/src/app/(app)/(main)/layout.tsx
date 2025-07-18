@@ -11,10 +11,6 @@ import { SidebarProvider } from '@helsa/ui/components/sidebar';
 import React, { Suspense } from 'react';
 import Loading from './loading';
 
-export const metadata = {
-  title: 'Helsa',
-};
-
 const Layout = async ({ children }: { children: React.ReactNode }) => {
   const { profile, user } = await getProfile();
 
