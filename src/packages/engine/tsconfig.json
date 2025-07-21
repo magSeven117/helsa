@@ -3,7 +3,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./src/*"]
+      "@helsa/*": ["../*"],
+      "@helsa/engine/*": ["./*"]
     }
   },
   "include": ["**/*.ts"],
