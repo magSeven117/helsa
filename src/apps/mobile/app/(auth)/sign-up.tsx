@@ -44,11 +44,11 @@ const SignUp = () => {
             flexDirection: 'row',
           }}
           onPress={() => {
-            router.replace('/(auth)/welcome');
+            router.push('/(auth)/welcome');
           }}
         >
           <ChevronLeft color={'#fff'} />
-          <Text style={{ color: '#fff', fontSize: 16, fontWeight: 'bold' }}>Skip</Text>
+          <Text style={{ color: '#fff', fontSize: 16, fontWeight: 'bold' }}>Volver</Text>
         </TouchableOpacity>
         <View style={{ height: 100, width: '100%', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
           <Image source={logo} style={{ height: 70 }} resizeMode="contain" />
@@ -140,7 +140,7 @@ const SignUp = () => {
               }}
             >
               <View style={{ flex: 1, height: 1, backgroundColor: '#000' }} />
-              <Text style={{ fontSize: 18 }}>Or</Text>
+              <Text style={{ fontSize: 18 }}>O</Text>
               <View style={{ flex: 1, height: 1, backgroundColor: '#000' }} />
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 20, marginBottom: 20 }}>
@@ -152,8 +152,8 @@ const SignUp = () => {
               href={'/(auth)/sign-in'}
               style={{ fontSize: 16, fontFamily: 'NunitoMedium', textAlign: 'center', color: '#EOEOEO', marginTop: 20 }}
             >
-              <Text style={{ fontFamily: 'NunitoMedium', color: '#0E0E0E' }}>Already have an account?</Text>
-              <Text style={{ fontFamily: 'NunitoBold', color: '#8167ec' }}> Log In</Text>
+              <Text style={{ fontFamily: 'NunitoMedium', color: '#0E0E0E' }}>¿Ya tienes una cuenta?</Text>
+              <Text style={{ fontFamily: 'NunitoBold', color: '#8167ec' }}> Inicia sesion</Text>
             </Link>
           </View>
         </View>

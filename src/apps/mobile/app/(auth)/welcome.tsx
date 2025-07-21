@@ -77,10 +77,10 @@ const Welcome = () => {
         />
       </View>
       <View style={{ width: '100%', paddingHorizontal: 20 }}>
-        <TouchableOpacity style={styles.main_button} onPress={() => router.replace('/(auth)/sign-up')}>
+        <TouchableOpacity style={styles.main_button} onPress={() => router.push('/(auth)/sign-up')}>
           <Text style={{ color: '#fff', fontFamily: 'NunitoBold' }}>Crear cuenta</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.second_button} onPress={() => router.replace('/(auth)/sign-in')}>
+        <TouchableOpacity style={styles.second_button} onPress={() => router.push('/(auth)/sign-in')}>
           <Text style={{ color: '#fff', fontFamily: 'NunitoBold' }}>Iniciar Sesion</Text>
         </TouchableOpacity>
       </View>
@@ -96,6 +96,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#8167EC',
     paddingVertical: 20,
+    flex: 1,
   },
   skip_button: {
     width: '100%',

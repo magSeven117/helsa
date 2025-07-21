@@ -1,13 +1,12 @@
 {
   "extends": "@helsa/typescript-config/library.json",
   "compilerOptions": {
-    "baseUrl": "."
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "@helsa/*": ["../../packages/*"]
+    }
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
 }
