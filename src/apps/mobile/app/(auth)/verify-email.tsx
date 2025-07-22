@@ -1,48 +1,37 @@
 import logo from '@/assets/images/icon-brand.png';
-import { AppleOauth, FacebookOauth, GoogleOauth } from '@/components/auth/oauth';
 import Loader from '@/components/shared/loader';
 import Input from '@/components/ui/input';
 import { useAuthState } from '@/hooks/use-auth';
 import { authClient } from '@helsa/auth/mobile';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link, router } from 'expo-router';
+import { router } from 'expo-router';
 import { ChevronLeft } from 'lucide-react-native';
 import { Controller, useForm } from 'react-hook-form';
 import { Dimensions, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import z from 'zod';
+import { z } from 'zod';
 
-const formSchema = z.object({
-  name: z.string().min(2, { message: 'First name is too short' }),
-  email: z.string().email().min(1, { message: 'Email is required' }),
-  password: z.string().min(6, { message: 'Password is too short' }),
+const schema = z.object({
+  code: z.string().min(1, 'El código OTP es requerido').regex(/^\d+$/, 'El código debe ser numérico'),
 });
 
-const SignUp = () => {
-  const { setCurrentEmail } = useAuthState();
-  const { control, handleSubmit, formState } = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: '',
-      email: '',
-      password: '',
-    },
+type FormData = z.infer<typeof schema>;
+
+export default function VerifyEmailScreen() {
+  const { currentEmail } = useAuthState();
+  const form = useForm<FormData>({
+    resolver: zodResolver(schema),
   });
-  const submit = async (data: z.infer<typeof formSchema>) => {
-    try {
-      console.log('Sign Up Data:', data);
-      await authClient.signUp.email({
-        name: data.name,
-        email: data.email,
-        password: data.password,
-        role: 'PATIENT',
-      });
-      setCurrentEmail(data.email);
-      router.push('/(auth)/verify-email');
-    } catch (error) {
-      console.log(error);
-    }
+  const { handleSubmit, control, formState } = form;
+
+  const submit = async (data: FormData) => {
+    await authClient.emailOtp.verifyEmail({
+      email: currentEmail!,
+      otp: data.code,
+    });
+    router.push('/(auth)/registered');
   };
+
   return (
     <ScrollView
       style={{
@@ -63,7 +52,7 @@ const SignUp = () => {
             flexDirection: 'row',
           }}
           onPress={() => {
-            router.push('/(auth)/welcome');
+            router.push('/(auth)/sign-up');
           }}
         >
           <ChevronLeft color={'#fff'} />
@@ -84,7 +73,7 @@ const SignUp = () => {
                   textAlign: 'center',
                 }}
               >
-                Crea tu cuenta
+                Verifica tu correo electrónico
               </Text>
               <Text
                 style={{
@@ -95,39 +84,17 @@ const SignUp = () => {
                   textAlign: 'center',
                 }}
               >
-                Estamos aquí para ayudarte a alcanzar tus metas de bienestar.
+                Hemos enviado un código de verificación a tu correo electrónico. Por favor, ingrésalo a continuación.
               </Text>
             </View>
             <View style={{ width: '100%', gap: 5, marginBottom: 5 }}>
-              <Text style={{ fontSize: 14, fontFamily: 'NunitoSemibold', paddingLeft: 4 }}>Nombre</Text>
+              <Text style={{ fontSize: 14, fontFamily: 'NunitoSemibold', paddingLeft: 4 }}>Código</Text>
               <Controller
-                name="name"
+                name="code"
                 rules={{ required: true }}
                 control={control}
                 render={({ field: { onChange, value, onBlur } }) => (
                   <Input onChangeText={onChange} value={value} onBlur={onBlur} />
-                )}
-              />
-            </View>
-            <View style={{ width: '100%', gap: 5, marginBottom: 5 }}>
-              <Text style={{ fontSize: 14, fontFamily: 'NunitoSemibold', paddingLeft: 4 }}>Correo electrónico</Text>
-              <Controller
-                name="email"
-                rules={{ required: true }}
-                control={control}
-                render={({ field: { onChange, value, onBlur } }) => (
-                  <Input onChangeText={onChange} value={value} onBlur={onBlur} />
-                )}
-              />
-            </View>
-            <View style={{ width: '100%', gap: 5, marginBottom: 5 }}>
-              <Text style={{ fontSize: 14, fontFamily: 'NunitoSemibold', paddingLeft: 4 }}>Contraseña</Text>
-              <Controller
-                name="password"
-                rules={{ required: true }}
-                control={control}
-                render={({ field: { onChange, value, onBlur } }) => (
-                  <Input onChangeText={onChange} value={value} onBlur={onBlur} secureTextEntry />
                 )}
               />
             </View>
@@ -144,45 +111,46 @@ const SignUp = () => {
                 borderWidth: 2,
                 borderColor: '#FFF',
               }}
-              onPress={handleSubmit(submit, console.log)}
+              onPress={handleSubmit(() => console.log('Hola'), console.log)}
             >
               {formState.isSubmitting ? (
                 <Loader />
               ) : (
-                <Text style={{ color: '#fff', fontFamily: 'NunitoBold' }}>Registrarse</Text>
+                <Text style={{ color: '#fff', fontFamily: 'NunitoBold' }}>Verificar</Text>
               )}
             </TouchableOpacity>
             <View
               style={{
-                marginVertical: 5,
-                marginHorizontal: 20,
+                width: '100%',
+                flexDirection: 'row',
                 alignItems: 'center',
                 justifyContent: 'center',
-                flexDirection: 'row',
-                gap: 20,
+                marginTop: 20,
+                gap: 3,
               }}
             >
-              <View style={{ flex: 1, height: 1, backgroundColor: '#000' }} />
-              <Text style={{ fontSize: 18 }}>O</Text>
-              <View style={{ flex: 1, height: 1, backgroundColor: '#000' }} />
+              <Text
+                style={{
+                  fontFamily: 'NunitoMedium',
+                  fontSize: 16,
+                  textAlign: 'center',
+                  color: '#EOEOEO',
+                  marginTop: 20,
+                }}
+                onPress={() => {}}
+              >
+                ¿No recibiste el código?
+              </Text>
+              <Text
+                style={{ fontFamily: 'NunitoBold', color: '#8167ec', fontSize: 16, textAlign: 'center', marginTop: 20 }}
+              >
+                {' '}
+                Reenviar código
+              </Text>
             </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 20, marginBottom: 20 }}>
-              <FacebookOauth />
-              <GoogleOauth />
-              <AppleOauth />
-            </View>
-            <Link
-              href={'/(auth)/verify-email'}
-              style={{ fontSize: 16, fontFamily: 'NunitoMedium', textAlign: 'center', color: '#EOEOEO', marginTop: 20 }}
-            >
-              <Text style={{ fontFamily: 'NunitoMedium', color: '#0E0E0E' }}>¿Ya tienes una cuenta?</Text>
-              <Text style={{ fontFamily: 'NunitoBold', color: '#8167ec' }}> Inicia sesion</Text>
-            </Link>
           </View>
         </View>
       </SafeAreaView>
     </ScrollView>
   );
-};
-
-export default SignUp;
+}
