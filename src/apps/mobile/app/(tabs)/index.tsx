@@ -4,8 +4,29 @@ import { router } from 'expo-router';
 import LottieView from 'lottie-react-native';
 import { Angry, Bell, BookMarked, Brain, ChevronRight, Frown, Laugh, Meh, Smile } from 'lucide-react-native';
 import React, { useRef } from 'react';
-import { FlatList, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
+const mockAppointments = [
+  {
+    id: '1',
+    title: 'Cita con el Dr. Smith',
+    date: '2023-10-01',
+    time: '10:00 AM',
+  },
+  {
+    id: '2',
+    title: 'Cita con la Dra. Johnson',
+    date: '2023-10-02',
+    time: '11:00 AM',
+  },
+  {
+    id: '3',
+    title: 'Cita con el Dr. Brown',
+    date: '2023-10-03',
+    time: '12:00 PM',
+  },
+];
 
 export default function HomeScreen() {
   const { data } = authClient.useSession();
@@ -19,7 +40,8 @@ export default function HomeScreen() {
       >
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
-            <View
+            <TouchableOpacity
+              onPress={() => router.push('/(profile)')}
               style={{
                 width: 50,
                 height: 50,
@@ -31,14 +53,14 @@ export default function HomeScreen() {
               }}
             >
               <Image src={data?.user.image ?? ''} style={{ height: 50, width: 50 }} resizeMode="contain" />
-            </View>
+            </TouchableOpacity>
             <View>
               <Text style={{ fontSize: 16, fontFamily: 'NunitoSemiBold', fontWeight: 800 }}>Hola</Text>
               <Text style={{ fontSize: 16, fontFamily: 'NunitoSemiBold', fontWeight: 600 }}>{data?.user.name}</Text>
             </View>
           </View>
           <TouchableOpacity
-            onPress={() => router.push('/(tabs)')}
+            onPress={() => router.push('/(profile)/notifications')}
             style={{
               justifyContent: 'center',
               alignItems: 'center',
@@ -270,49 +292,29 @@ export default function HomeScreen() {
           <Text style={{ fontSize: 16, fontFamily: 'NunitoSemiBold', fontWeight: 600, marginBottom: 8 }}>
             Próximas citas
           </Text>
-          <FlatList
-            data={[
-              {
-                id: '1',
-                title: 'Cita con el Dr. Smith',
-                date: '2023-10-01',
-                time: '10:00 AM',
-              },
-              {
-                id: '2',
-                title: 'Cita con la Dra. Johnson',
-                date: '2023-10-02',
-                time: '11:00 AM',
-              },
-              {
-                id: '3',
-                title: 'Cita con el Dr. Brown',
-                date: '2023-10-03',
-                time: '12:00 PM',
-              },
-            ]}
-            style={{ gap: 8 }}
-            renderItem={(item) => (
-              <View style={{ borderRadius: 20, backgroundColor: '#fff', padding: 16, marginVertical: 8 }}>
-                <Text style={{ fontSize: 16, fontFamily: 'NunitoSemiBold', fontWeight: 600 }}>{item.item.title}</Text>
-                <Text style={{ fontSize: 14, color: '#666' }}>
-                  {item.item.date} - {item.item.time}
-                </Text>
-                <TouchableOpacity
-                  onPress={() => router.push('/(tabs)')}
-                  style={{
-                    marginTop: 8,
-                    backgroundColor: '#8167ec',
-                    padding: 8,
-                    borderRadius: 10,
-                    alignItems: 'center',
-                  }}
-                >
-                  <Text style={{ color: '#fff', fontSize: 14 }}>Ver detalles</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-          />
+          {mockAppointments.map((appointment) => (
+            <View
+              key={appointment.id}
+              style={{ borderRadius: 20, backgroundColor: '#fff', padding: 16, marginVertical: 8 }}
+            >
+              <Text style={{ fontSize: 16, fontFamily: 'NunitoSemiBold', fontWeight: 600 }}>{appointment.title}</Text>
+              <Text style={{ fontSize: 14, color: '#666' }}>
+                {appointment.date} - {appointment.time}
+              </Text>
+              <TouchableOpacity
+                onPress={() => router.push('/(tabs)')}
+                style={{
+                  marginTop: 8,
+                  backgroundColor: '#8167ec',
+                  padding: 8,
+                  borderRadius: 10,
+                  alignItems: 'center',
+                }}
+              >
+                <Text style={{ color: '#fff', fontSize: 14 }}>Ver detalles</Text>
+              </TouchableOpacity>
+            </View>
+          ))}
         </View>
 
         {/* <TouchableOpacity

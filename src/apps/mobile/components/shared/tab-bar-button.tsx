@@ -1,4 +1,4 @@
-import { Calendar, ChartBar, HeartPlus, Home } from 'lucide-react-native';
+import { Calendar, HeartPlus, Home, Stethoscope } from 'lucide-react-native';
 import { useEffect } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import Animated, { interpolate, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
@@ -37,7 +37,7 @@ const TabBarButton = ({
     index: (props: any) => <Home size={24} color={'#222'} {...props} />,
     appointments: (props: any) => <Calendar size={24} color={'#222'} {...props} />,
     health: (props: any) => <HeartPlus size={24} color={'#222'} {...props} />,
-    explore: (props: any) => <ChartBar size={24} color={'#222'} {...props} />,
+    explore: (props: any) => <Stethoscope size={24} color={'#222'} {...props} />,
   };
 
   const label =
