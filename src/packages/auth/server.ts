@@ -7,8 +7,6 @@ import { bearer, emailOTP, openAPI } from 'better-auth/plugins';
 import { headers } from 'next/headers';
 import { cache } from 'react';
 import { keys } from './keys';
-import { sendForgotPassword } from './utils/send-forgot-password';
-import { sendVerification } from './utils/send-verification';
 
 const prisma = new PrismaClient();
 const env = keys();
@@ -64,15 +62,15 @@ export const auth = betterAuth({
       otpLength: 6,
       sendVerificationOTP: async ({ email, otp, type }) => {
         console.log(`Sending ${type} OTP to ${email}: ${otp}`);
-        switch (type) {
-          case 'email-verification':
-            await sendVerification(email, otp);
-            break;
-          case 'forget-password':
-            await sendForgotPassword(email, otp);
-          default:
-            break;
-        }
+        // switch (type) {
+        //   case 'email-verification':
+        //     await sendVerification(email, otp);
+        //     break;
+        //   case 'forget-password':
+        //     await sendForgotPassword(email, otp);
+        //   default:
+        //     break;
+        // }
       },
       sendVerificationOnSignUp: true,
     }),

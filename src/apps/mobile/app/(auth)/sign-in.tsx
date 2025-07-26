@@ -31,7 +31,7 @@ const SignIn = () => {
         password: data.password,
       });
       reset();
-      router.push('/(tabs)/explore');
+      router.push('/(tabs)');
     } catch (error) {
       console.log(error);
     }

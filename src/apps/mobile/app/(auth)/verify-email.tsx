@@ -111,7 +111,7 @@ export default function VerifyEmailScreen() {
                 borderWidth: 2,
                 borderColor: '#FFF',
               }}
-              onPress={handleSubmit(() => console.log('Hola'), console.log)}
+              onPress={handleSubmit(submit, console.log)}
             >
               {formState.isSubmitting ? (
                 <Loader />

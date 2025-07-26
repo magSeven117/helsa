@@ -30,7 +30,6 @@ const SignUp = () => {
   });
   const submit = async (data: z.infer<typeof formSchema>) => {
     try {
-      console.log('Sign Up Data:', data);
       await authClient.signUp.email({
         name: data.name,
         email: data.email,
