@@ -1,27 +1,27 @@
 @import './tokens.css';
 :root {
-  --color-brand-primary: #8167ec;
-  --color-brand-secondary: #dfcbfa;
+  --color-brand-primary: #00B4D8;
+  --color-brand-secondary: #03045E;
   --color-background-primary: #ffffff;
-  --color-background-secondary: #e1e7ef;
-  --color-foreground-primary: #0e0f13;
-  --color-foreground-secondary: #22242e;
+  --color-background-secondary: #ADB5BD;
+  --color-foreground-primary: #03045E;
+  --color-foreground-secondary: #ADB5BD;
   --color-complementary-danger: #ea3a3d;
-  --color-complementary-success: #22a094;
+  --color-complementary-success: #90BE6D;
   --color-complementary-warning: #f1b603;
 }
 
 .dark {
   :root {
-    --color-brand-primary: #8167ec;
-    --color-brand-secondary: #dfcbfa;
-    --color-background-primary: #0e0f13;
-    --color-background-secondary: #22242e;
+    --color-brand-primary: #00B4D8;
+    --color-brand-secondary: #03045E;
+    --color-background-primary: #03045E;
+    --color-background-secondary: #ADB5BD;
     --color-foreground-primary: #ffffff;
-    --color-foreground-secondary: #e1e7ef;
+    --color-foreground-secondary: #ADB5BD;
     --color-complementary-danger: #ea3a3d;
-    --color-complementary-success: #22a094;
+    --color-complementary-success: #90BE6D;
     --color-complementary-warning: #f7cb45;
-    color: #4b3eff;
+    color: #00B4D8;
   }
 }

@@ -17,26 +17,26 @@ const values = [
     icon: <Heart className="h-8 w-8" />,
     title: 'Cuidado Compasivo',
     description: 'Tratamos a cada paciente con empatía, respeto y dignidad, asegurando su comodidad y bienestar.',
-    color: 'text-violet-500 bg-violet-100',
+    color: 'text-[#90BE6D] bg-[#90BE6D]/10',
   },
   {
     icon: <Award className="h-8 w-8" />,
     title: 'Excelencia',
     description:
       'Buscamos los más altos estándares en atención médica, mejorando continuamente nuestros servicios y resultados.',
-    color: 'text-violet-500 bg-violet-100',
+    color: 'text-[#90BE6D] bg-[#90BE6D]/10',
   },
   {
     icon: <Users className="h-8 w-8" />,
     title: 'Colaboración',
     description: 'Trabajamos juntos como equipo, fomentando alianzas con pacientes, familias y la comunidad.',
-    color: 'text-violet-500 bg-violet-100',
+    color: 'text-[#90BE6D] bg-[#90BE6D]/10',
   },
   {
     icon: <Lightbulb className="h-8 w-8" />,
     title: 'Innovación',
     description: 'Adoptamos nuevas tecnologías y métodos para ofrecer soluciones de salud de vanguardia.',
-    color: 'text-violet-500 bg-violet-100',
+    color: 'text-[#90BE6D] bg-[#90BE6D]/10',
   },
 ];
 
@@ -151,12 +151,10 @@ function Page() {
           <div className="grid md:grid-cols-2  gap-10">
             <div className=" rounded-xl bg-brand-primary  ">
               <div className="-translate-3 rounded-xl overflow-hidden border border-brand-primary">
-                <div className="aspect-square overflow-hidden">
-                  <img
-                    src={'https://tfuwarabgmwgumgearac.supabase.co/storage/v1/object/public/stuff//IMG_0457.jpg'}
-                    alt={'CEO'}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-200"
-                  />
+                <div className="aspect-square overflow-hidden bg-gray-200 flex items-center justify-center">
+                  <div className="w-24 h-24 bg-brand-primary rounded-full flex items-center justify-center">
+                    <span className="text-white text-2xl font-bold">JV</span>
+                  </div>
                 </div>
                 <div className="p-6 bg-background">
                   <h3 className="text-xl font-semibold  mb-1">Jose Véliz</h3>
@@ -166,12 +164,10 @@ function Page() {
             </div>
             <div className=" rounded-xl bg-brand-primary">
               <div className="-translate-3 rounded-xl overflow-hidden border border-brand-primary flex flex-col">
-                <div className="aspect-square overflow-hidden bg-background">
-                  <img
-                    src={'https://tfuwarabgmwgumgearac.supabase.co/storage/v1/object/public/stuff//IMG_0457.jpg'}
-                    alt={'CEO'}
-                    className="w-full  object-cover hover:scale-105 transition-transform duration-200"
-                  />
+                <div className="aspect-square overflow-hidden bg-gray-200 flex items-center justify-center">
+                  <div className="w-24 h-24 bg-brand-primary rounded-full flex items-center justify-center">
+                    <span className="text-white text-2xl font-bold">EF</span>
+                  </div>
                 </div>
                 <div className="p-6 bg-background h-full">
                   <h3 className="text-xl font-semibold  mb-1">Elyana Figueroa</h3>
