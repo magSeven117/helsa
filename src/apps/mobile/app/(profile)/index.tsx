@@ -158,6 +158,21 @@ const Index = () => {
               <ChevronRight />
             </View>
           </View>
+          <TouchableOpacity
+            style={{
+              backgroundColor: '#EC3A55',
+              padding: 15,
+              borderRadius: 10,
+              marginTop: 20,
+              alignItems: 'center',
+            }}
+            onPress={async () => {
+              await authClient.signOut();
+              router.push('/(auth)/sign-in');
+            }}
+          >
+            <Text style={{ color: '#fff', fontSize: 18, fontWeight: 'bold' }}>Cerrar sesión</Text>
+          </TouchableOpacity>
         </View>
       </SafeAreaView>
     </ScrollView>

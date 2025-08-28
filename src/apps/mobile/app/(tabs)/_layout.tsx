@@ -3,15 +3,12 @@ import React from 'react';
 
 import { AnimationScreen } from '@/components/shared/animated-screen';
 import TabBar from '@/components/shared/tab-bar';
-import { useColorScheme } from '@/hooks/useColorScheme';
 import { authClient } from '@helsa/auth/mobile';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   const { isPending, data } = authClient.useSession();
 
-  if (isPending) {
+  if (isPending && !data) {
     return <AnimationScreen appReady={!isPending} finish={() => console.log('Cancelled')} />;
   }
 

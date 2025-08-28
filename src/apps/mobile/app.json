@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Helsa",
-    "slug": "helsa-mobile",
+    "slug": "helsa",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -35,6 +35,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "81003321-7b8e-46ac-a6ed-b82af6e01f72"
+      }
+    },
+    "owner": "ducen29"
   }
 }
