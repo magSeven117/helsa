@@ -28,9 +28,12 @@ const schema = z.object({
 
 export const POST = routeHandler({ name: 'create-patient', schema }, async ({ body }) => {
   const { patient } = body;
+  
   const service = new CreatePatient(new PrismaPatientRepository(database));
   const updateService = new UpdateRole(new PrismaUserRepository(database));
+  
   await service.run(patient as unknown as Primitives<Patient>);
   await updateService.run(UserRoleValue.PATIENT, patient.userId);
+  
   return HttpNextResponse.created();
 });

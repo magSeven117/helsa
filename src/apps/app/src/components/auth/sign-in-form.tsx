@@ -60,7 +60,7 @@ export default function SignInForm() {
             <CardHeader>
               <CardTitle>Hola de nuevo!! :D</CardTitle>
               <CardDescription>
-                Helsa es una plataforma que te ayuda a mantener un seguimiento de tu salud. Comienza creando una cuenta.
+                TopMédicosIntegrales es una plataforma que te ayuda a mantener un seguimiento de tu salud. Comienza creando una cuenta.
               </CardDescription>
             </CardHeader>
             <CardContent className="">

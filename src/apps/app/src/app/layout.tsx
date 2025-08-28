@@ -11,11 +11,11 @@ const nunito = Nunito({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://app.helsahealthcare.com'),
-  title: 'Helsa | Therapy and Health Management',
+  title: 'TopMédicosIntegrales | Therapy and Health Management',
   description: 'Enhance your health with Helsa, a platform for therapy and health management.',
   twitter: {
-    title: 'Helsa | Therapy and Health Management',
-    description: 'Enhance your health with Helsa, a platform for therapy and health management',
+    title: 'TopMédicosIntegrales | Therapy and Health Management',
+    description: 'Enhance your health with TopMédicosIntegrales, a platform for therapy and health management',
     card: 'summary_large_image',
     images: [
       {
@@ -31,8 +31,8 @@ export const metadata: Metadata = {
     ],
   },
   openGraph: {
-    title: 'Helsa | Therapy and Health Management',
-    description: 'Enhance your health with Helsa, a platform for therapy and health management.',
+    title: 'TopMédicosIntegrales | Therapy and Health Management',
+    description: 'Enhance your health with TopMédicosIntegrales, a platform for therapy and health management.',
     url: 'https://app.helsahealthcare.com',
     siteName: 'Helsa',
     images: [

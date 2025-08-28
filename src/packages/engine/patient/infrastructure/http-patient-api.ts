@@ -23,9 +23,31 @@ export async function createPatient(data: {
       patient: data,
     }),
   });
+
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message);
+    let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+    
+    try {
+      const errorData = await response.json();
+      errorMessage = errorData.message || errorData.error || errorMessage;
+    } catch {
+      try {
+        const textError = await response.text();
+        if (textError) {
+          errorMessage = textError;
+        }
+      } catch {
+        // Fallback to default error message
+      }
+    }
+    
+    throw new Error(errorMessage);
+  }
+
+  try {
+    return await response.json();
+  } catch {
+    return { success: true };
   }
 }
 

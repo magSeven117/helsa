@@ -10,12 +10,12 @@ const nunito = Nunito({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://helsahealthcare.com'),
-  title: 'Helsa | Therapy and Health Management',
-  description: 'Enhance your health with Helsa, a platform for therapy and health management.',
+  metadataBase: new URL('https://topmedicosintegrales.com'),
+  title: 'TopMédicosIntegrales | Terapia y Gestión de Salud Integral',
+  description: 'Mejora tu salud con TopMédicosIntegrales, una plataforma integral para terapia y gestión de salud.',
   twitter: {
-    title: 'Helsa | Therapy and Health Management',
-    description: 'Enhance your health with Helsa, a platform for therapy and health management',
+    title: 'TopMédicosIntegrales | Terapia y Gestión de Salud Integral',
+    description: 'Mejora tu salud con TopMédicosIntegrales, una plataforma integral para terapia y gestión de salud',
     card: 'summary_large_image',
     images: [
       {
@@ -31,10 +31,10 @@ export const metadata: Metadata = {
     ],
   },
   openGraph: {
-    title: 'Helsa | Therapy and Health Management',
-    description: 'Enhance your health with Helsa, a platform for therapy and health management.',
-    url: 'https://helsahealthcare.com',
-    siteName: 'Helsa',
+    title: 'TopMédicosIntegrales | Terapia y Gestión de Salud Integral',
+    description: 'Mejora tu salud con TopMédicosIntegrales, una plataforma integral para terapia y gestión de salud.',
+    url: 'https://topmedicosintegrales.com',
+    siteName: 'TopMédicosIntegrales',
     images: [
       {
         url: 'https://tfuwarabgmwgumgearac.supabase.co/storage/v1/object/public/stuff//open-graph-image.png',

@@ -84,10 +84,10 @@ const Header = () => {
           </NavigationMenuList>
         </NavigationMenu>
         <div className="flex justify-between items-center gap-2  pl-3">
-          <Link href={'https://app.helsahealthcare.com/sign-in'}>
+          <Link href={'http://localhost:3000/sign-in'}>
             <Button variant={'outline'}>Entrar</Button>
           </Link>
-          <Link href={'https://app.helsahealthcarte.com/sign-up'}>
+          <Link href={'http://localhost:3000/sign-up'}>
             <Button variant={'primary'} className="text-white">
               Registrarse
             </Button>

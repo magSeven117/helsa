@@ -27,15 +27,24 @@ export class HttpNextResponse {
   }
 
   static error(message: string): NextResponse {
-    return new NextResponse(null, { status: 400 });
+    return NextResponse.json(
+      { message: message },
+      { status: 400 }
+    );
   }
 
   static ok(): NextResponse {
-    return new NextResponse(null, { status: 200 });
+    return NextResponse.json(
+      { message: 'OK' },
+      { status: 200 }
+    );
   }
 
   static created(): NextResponse {
-    return new NextResponse(null, { status: 201 });
+    return NextResponse.json(
+      { message: 'Created successfully' },
+      { status: 201 }
+    );
   }
 
   static json<JsonBody>(data: JsonBody): NextResponse {

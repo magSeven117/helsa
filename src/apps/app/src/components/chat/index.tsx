@@ -62,7 +62,7 @@ const Chat = ({ messages, input, setInput, handleSubmit, onNewChat, setChatId, u
             autoCorrect="off"
             value={input}
             className="h-12 min-h-12 pt-3 resize-none border-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
-            placeholder="Ask Helsa a question..."
+            placeholder="Ask TopMédicosIntegrales a question..."
             onKeyDown={onKeyDown}
             onChange={(evt) => {
               setInput(evt.target.value);

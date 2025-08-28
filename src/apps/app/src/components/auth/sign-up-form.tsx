@@ -161,7 +161,7 @@ export default function SignUpForm() {
         <form action="" className="w-full" onSubmit={form.handleSubmit(onSubmit)}>
           <Card className="border-none shadow-none w-full">
             <CardHeader>
-              <CardTitle>Regístrate en Helsa</CardTitle>
+              <CardTitle>Regístrate en TopMédicosIntegrales</CardTitle>
             </CardHeader>
             <CardContent className="">
               <div className="flex justify-between gap-5">

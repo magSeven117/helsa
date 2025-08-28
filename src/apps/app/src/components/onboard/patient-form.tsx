@@ -1,5 +1,5 @@
 'use client';
-import * as successAnimation from '@/public/animations/success_animation.json';
+// import * as successAnimation from '@/public/animations/success_animation.json';
 import { createPatient } from '@helsa/engine/patient/infrastructure/http-patient-api';
 import {
   AlertDialog,
@@ -18,11 +18,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Label } from '@radix-ui/react-dropdown-menu';
 import { useMutation } from '@tanstack/react-query';
-import { Loader2 } from 'lucide-react';
+import { Loader2, CheckCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import Lottie from 'react-lottie';
+// import Lottie from 'react-lottie';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -67,8 +67,17 @@ const PatientForm = ({ userId }: { userId: string }) => {
       biometric: { organDonor: string; bloodType: string; height: number };
     }) => createPatient({ userId: userId, demographic: data.demographic, biometric: data.biometric }),
     onError: (error: any) => {
-      console.error(JSON.stringify(error, null, 2));
-      toast.error('An error occurred. Please try again later.');
+      let errorMessage = 'An error occurred. Please try again later.';
+      
+      if (error?.message) {
+        errorMessage = error.message;
+      } else if (typeof error === 'string') {
+        errorMessage = error;
+      } else if (error && typeof error === 'object') {
+        errorMessage = JSON.stringify(error);
+      }
+      
+      toast.error(errorMessage);
     },
     onSuccess: () => {
       setShowSuccessModal(true);
@@ -228,7 +237,8 @@ const PatientForm = ({ userId }: { userId: string }) => {
       </Form>
       <AlertDialog open={showSuccessModal}>
         <AlertDialogContent className="sm:rounded-none">
-          <Lottie
+          {/* TODO: Revisar animación Lottie en futuras versiones */}
+          {/* <Lottie
             options={{
               autoplay: true,
               loop: false,
@@ -238,9 +248,14 @@ const PatientForm = ({ userId }: { userId: string }) => {
               },
             }}
             style={{ width: 300, height: 300 }}
-          ></Lottie>
+          ></Lottie> */}
+          
+          <div className="flex justify-center my-8">
+            <CheckCircle className="h-32 w-32 text-green-500" />
+          </div>
+          
           <AlertDialogHeader className="my-0">
-            <AlertDialogTitle className="text-center text-2xl">Verificado!</AlertDialogTitle>
+            <AlertDialogTitle className="text-center text-2xl">¡Verificado!</AlertDialogTitle>
             <AlertDialogDescription className="text-center text-lg">
               Has completado el proceso de registro exitosamente
             </AlertDialogDescription>

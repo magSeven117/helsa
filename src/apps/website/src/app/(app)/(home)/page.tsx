@@ -150,7 +150,7 @@ const Page = () => {
           <div className="grid gap-6 lg:grid-cols-[1fr_500px] lg:gap-12 xl:grid-cols-[1fr_550px]">
             <div className="flex flex-col justify-center gap-8">
               <div className="flex flex-col gap-6">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl ">¿Por qué elegir Helsa?</h2>
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl ">¿Por qué elegir TopMédicosIntegrales?</h2>
                 <p className="max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
                   Nuestra plataforma está diseñada para brindarte la mejor experiencia en salud mental digital.
                 </p>

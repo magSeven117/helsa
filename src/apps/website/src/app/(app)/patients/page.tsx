@@ -258,7 +258,7 @@ export default function Page() {
                 <div className="w-20 h-20 bg-brand-primary rounded-full flex items-center justify-center mx-auto mb-6">
                   <Smartphone className="h-10 w-10 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold  mb-6">App Móvil Helsa</h3>
+                <h3 className="text-2xl font-bold  mb-6">App Móvil TopMédicosIntegrales</h3>
                 <div className="space-y-4 mb-8">
                   <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
                     <span className="text-muted-foreground">Seguimiento emocional</span>

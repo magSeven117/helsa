@@ -7,12 +7,21 @@ import { PatientRepository } from '../../domain/patient-repository';
 
 export class CreatePatient {
   constructor(private patientRepository: PatientRepository) {}
+  
   async run(data: Primitives<Patient>) {
     const exist = await this.patientRepository.find(PatientCriteria.getByUserId(data.userId));
+    
     if (exist) {
       throw new FormatError('Patient already exists');
     }
-    const patient = Patient.create(Uuid.random().value, data.userId, data.demographic, data.biometric);
+    
+    const patient = Patient.create(
+      Uuid.random().value, 
+      data.userId, 
+      data.demographic, 
+      data.biometric
+    );
+    
     await this.patientRepository.save(patient);
   }
 }

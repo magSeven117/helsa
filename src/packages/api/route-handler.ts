@@ -37,14 +37,14 @@ export const routeHandler = <T extends DomainError, P, Q>(
   onError?: (error: T) => NextResponse,
 ) => {
   return async (req: NextRequest, { params }: { params: Promise<any> }) => {
-    const user = await authentication(options.authenticated);
-    authorization(user, options.permissions);
-
-    const urlParams = await params;
-    const searchParams = parseSeachParams<Q>(req, options.querySchema);
-    const body = parseBody<P>(req, options.schema);
-
     try {
+      const user = await authentication(options.authenticated);
+      authorization(user, options.permissions);
+
+      const urlParams = await params;
+      const searchParams = parseSeachParams<Q>(req, options.querySchema);
+      const body = await parseBody<P>(req, options.schema);
+
       return handler({
         req,
         user,
@@ -52,8 +52,8 @@ export const routeHandler = <T extends DomainError, P, Q>(
         searchParams,
         body,
       });
+      
     } catch (error) {
-      console.error(error);
       switch (true) {
         case error instanceof Unauthenticated:
           return HttpNextResponse.domainError(error, 401);
@@ -101,12 +101,18 @@ function parseSeachParams<Q>(req: NextRequest, schema?: ZodSchema<Q>): Q {
   return schema.parse(Object.fromEntries(req.nextUrl.searchParams.entries()));
 }
 
-function parseBody<P>(req: NextRequest, schema?: ZodSchema<P>): P {
+async function parseBody<P>(req: NextRequest, schema?: ZodSchema<P>): Promise<P> {
   if (req.method === 'GET' || req.method === 'HEAD') {
     return {} as P; // No body for GET or HEAD requests
   }
+  
+  // Parsear el JSON una sola vez
+  const jsonData = await req.json();
+  
   if (!schema) {
-    return req.json() as P;
+    return jsonData as P;
   }
-  return schema.parse(req.json());
+  
+  // Validar con el schema usando los datos ya parseados
+  return schema.parse(jsonData);
 }

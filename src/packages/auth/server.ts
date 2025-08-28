@@ -23,8 +23,8 @@ export const auth = betterAuth({
       },
     },
     crossSubDomainCookies: {
-      enabled: true,
-      domain: '.helsahealthcare.com',
+      enabled: false,
+      // domain: '.helsahealthcare.com',
     },
   },
   user: {

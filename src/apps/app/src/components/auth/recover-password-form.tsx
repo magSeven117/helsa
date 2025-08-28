@@ -99,9 +99,9 @@ const RecoveryPasswordForm = () => {
         <form action="" className="w-full" onSubmit={form.handleSubmit(resetPassword)}>
           <Card className="border-none shadow-none w-full">
             <CardHeader>
-              <CardTitle>Bienvenido a Helsa</CardTitle>
+              <CardTitle>Bienvenido a TopMédicosIntegrales</CardTitle>
               <CardDescription>
-                Helsa es una plataforma que te ayuda a mantener un seguimiento de tu salud. Comienza creando una cuenta.
+                TopMédicosIntegrales es una plataforma que te ayuda a mantener un seguimiento de tu salud. Comienza creando una cuenta.
               </CardDescription>
             </CardHeader>
             <CardContent className="">
