@@ -156,7 +156,7 @@ export async function getDoctorSchedule(doctorId: string) {
 }
 
 export async function getDoctorSpecialties() {
-  const response = await fetch('/api/v1/doctor/specialty', {
+  const response = await fetch('/api/v1/doctor/specialties', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

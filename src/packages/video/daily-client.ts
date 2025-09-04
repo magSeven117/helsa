@@ -5,9 +5,11 @@ const env = keys();
 export class DailyClient {
   private apiKey: string;
   private baseUrl = 'https://api.daily.co/v1';
+  private domain: string;
 
   constructor() {
     this.apiKey = env.DAILY_API_KEY;
+    this.domain = env.NEXT_PUBLIC_DAILY_DOMAIN || 'tu-dominio';
   }
 
   private async makeRequest(endpoint: string, options: RequestInit = {}) {
@@ -117,5 +119,9 @@ export class DailyClient {
     return await this.makeRequest(`/rooms/${roomName}`, {
       method: 'DELETE',
     });
+  }
+
+  getRoomUrl(roomName: string): string {
+    return `https://${this.domain}.daily.co/${roomName}`;
   }
 }

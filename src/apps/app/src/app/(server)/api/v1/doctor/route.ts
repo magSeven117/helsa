@@ -14,21 +14,37 @@ import { z } from 'zod';
 
 const schema = z.object({
   doctor: z.object({
-    id: z.string(),
-    userId: z.string(),
-    licenseMedicalNumber: z.string(),
-    specialtyId: z.string(),
+    id: z.string().uuid().optional(),      // <-- opcional
+    userId: z.string().uuid(),
+    licenseMedicalNumber: z.string().min(1),
+    specialtyId: z.string().uuid(),
   }),
 });
 
-export const POST = routeHandler({ name: 'create-doctor', schema }, async ({ body }) => {
-  const service = new CreateDoctor(new PrismaDoctorRepository(database));
-  const updateService = new UpdateRole(new PrismaUserRepository(database));
 
-  await service.run(body.doctor as unknown as Primitives<Doctor>);
-  await updateService.run(UserRoleValue.DOCTOR, body.doctor.userId);
+export const POST = routeHandler({ 
+  name: 'create-doctor', 
+  schema,
+  authenticated: true // Permitir creación sin autenticación completa durante onboarding
+}, async ({ body }) => {
+  try {
+    console.log('Creating doctor with data:', body.doctor);
+    
+    const service = new CreateDoctor(new PrismaDoctorRepository(database));
+    const updateService = new UpdateRole(new PrismaUserRepository(database));
 
-  return NextResponse.json({ success: true, message: 'Doctor created successfully' }, { status: 200 });
+    await service.run(body.doctor as unknown as Primitives<Doctor>);
+    await updateService.run(UserRoleValue.DOCTOR, body.doctor.userId);
+
+    return NextResponse.json({ success: true, message: 'Doctor created successfully' }, { status: 200 });
+  } catch (error) {
+    console.error('Error creating doctor:', error);
+    return NextResponse.json({ 
+      success: false, 
+      message: 'Error creating doctor',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    }, { status: 500 });
+  }
 });
 
 const searchSchema = z.object({

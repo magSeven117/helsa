@@ -1,5 +1,5 @@
 'use client';
-import * as successAnimation from '@/public/animations/success_animation.json';
+// import * as successAnimation from '@/public/animations/success_animation.json';
 import { Primitives } from '@helsa/ddd/types/primitives';
 import { Specialty } from '@helsa/engine/doctor/domain/specialty';
 import { createDoctor } from '@helsa/engine/doctor/infrastructure/http/http-doctor-api';
@@ -19,11 +19,11 @@ import { Input } from '@helsa/ui/components/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@helsa/ui/components/select';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { Loader2 } from 'lucide-react';
+import { CheckCircle, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import Lottie from 'react-lottie';
+// import Lottie from 'react-lottie';
 import { toast } from 'sonner';
 import { v4 } from 'uuid';
 import { z } from 'zod';
@@ -121,17 +121,9 @@ const DoctorForm = ({ userId }: { userId: string }) => {
       </Form>
       <AlertDialog open={showSuccessModal}>
         <AlertDialogContent className="sm:rounded-none">
-          <Lottie
-            options={{
-              autoplay: true,
-              loop: false,
-              animationData: successAnimation,
-              rendererSettings: {
-                preserveAspectRatio: 'xMidYMid slice',
-              },
-            }}
-            style={{ width: 300, height: 300 }}
-          ></Lottie>
+          <div className="flex justify-center items-center mb-4">
+            <CheckCircle className="h-24 w-24 text-green-500" />
+          </div>
           <AlertDialogHeader className="my-0">
             <AlertDialogTitle className="text-center text-2xl">Verificado!</AlertDialogTitle>
             <AlertDialogDescription className="text-center text-lg">

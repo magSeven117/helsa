@@ -147,7 +147,10 @@ export async function getAppointmentRoom(appointmentId: string) {
     throw new Error(error.message);
   }
   const json = await response.json();
-  return json.token as string;
+  return {
+    token: json.token as string,
+    roomUrl: json.roomUrl as string
+  };
 }
 
 export async function getAppointmentTypes() {

@@ -5,7 +5,7 @@ import { EnterRoom } from '@helsa/engine/appointment/application/enter-room';
 import { AppointmentNotFoundError } from '@helsa/engine/appointment/domain/errors/appointment-not-found-error';
 import { PrismaAppointmentRepository } from '@helsa/engine/appointment/infrastructure/persistence/prisma-appointment-repository';
 import { InngestEventBus } from '@helsa/events/event-bus';
-import { client } from '@helsa/video';
+import { dailyClient } from '@helsa/video';
 
 export const PUT = routeHandler(
   { name: 'enter-room' },
@@ -25,19 +25,18 @@ export const PUT = routeHandler(
   },
 );
 
-export const GET = routeHandler({ name: 'get-user-room-token' }, async ({ user }) => {
-  await client.upsertUsers([
-    {
-      id: user?.id.value ?? '',
-      name: user?.name.value,
-      image: user?.image.value ?? '',
-      role: user?.role.value === 'PATIENT' ? 'patient' : 'doctor',
-    },
-  ]);
-
-  const token = client.generateUserToken({
-    user_id: user?.id.value ?? '',
-    validity_in_seconds: 60 * 60 * 24,
+export const GET = routeHandler({ name: 'get-user-room-token' }, async ({ user, params }) => {
+  const { id } = params;
+  const roomName = `appointment-${id}`;
+  
+  // Generar token de Daily.co con permisos de transcripción
+  const tokenData = await dailyClient.createToken(roomName, user?.id.value ?? '', {
+    exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24), // 24 horas
+    isOwner: user?.role.value === 'DOCTOR', // Doctor es owner, paciente no
   });
-  return HttpNextResponse.json({ token });
+
+  return HttpNextResponse.json({ 
+    token: tokenData.token,
+    roomUrl: dailyClient.getRoomUrl(roomName)
+  });
 });
