@@ -7,7 +7,10 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
-    "@stream-io/node-sdk": "^0.4.19"
+    "@daily-co/daily-js": "^0.83.1",
+    "@daily-co/daily-react": "^0.23.2",
+    "@stream-io/node-sdk": "^0.4.19",
+    "jotai": "^2.13.1"
   },
   "devDependencies": {
     "@types/node": "^20",
