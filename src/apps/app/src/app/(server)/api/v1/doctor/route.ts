@@ -48,17 +48,22 @@ export const POST = routeHandler({
 });
 
 const searchSchema = z.object({
-  filters: z.object({
-    q: z.string().optional(),
-    specialties: z.array(z.string()).optional(),
-    availability: z.string().optional(),
-    minRate: z.number().optional(),
-    experience: z.number().optional(),
-  }),
+  filters: z.string().optional(),
 });
 
 export const GET = routeHandler({ name: 'get-doctors', querySchema: searchSchema }, async ({ searchParams }) => {
   const service = new GetDoctors(new PrismaDoctorRepository(database));
-  const doctors = await service.run(searchParams.filters);
+  
+  // Parsear los filtros si vienen como string JSON
+  let filters = {};
+  if (searchParams.filters) {
+    try {
+      filters = JSON.parse(searchParams.filters);
+    } catch (error) {
+      filters = {};
+    }
+  }
+  
+  const doctors = await service.run(filters);
   return HttpNextResponse.json({ data: doctors });
 });

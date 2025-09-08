@@ -29,14 +29,30 @@ import {
   VisibilityState,
 } from '@tanstack/react-table';
 import { AlertCircle, EyeIcon, MoreHorizontal, PencilIcon } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSession } from '@/src/components/auth/session-provider';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 type Patient = {
   id: string;
+  userId: string;
   name: string;
-  type: string;
-  age: number;
-  lastVisit: string;
+  email: string;
+  age?: number;
+  lastVisit?: string;
+  totalAppointments: number;
+  lastAppointmentStatus?: string;
+  demographic: {
+    civilStatus: string;
+    occupation: string;
+    educativeLevel: string;
+  };
+  biometric: {
+    height: number;
+    bloodType: string;
+    organDonor: string;
+  };
 };
 const patientsColumns: ColumnDef<Patient>[] = [
   {
@@ -59,21 +75,37 @@ const patientsColumns: ColumnDef<Patient>[] = [
     enableHiding: true,
   },
   {
-    accessorKey: 'type',
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Tipo" />,
+    accessorKey: 'totalAppointments',
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Total Citas" />,
     enableSorting: true,
     enableHiding: true,
   },
   {
     accessorKey: 'lastVisit',
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Ultima Visita" />,
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Última Visita" />,
     enableSorting: true,
     enableHiding: true,
+    cell: ({ row }) => {
+      const lastVisit = row.getValue('lastVisit') as string;
+      if (!lastVisit) return 'N/A';
+      return format(new Date(lastVisit), 'dd/MM/yyyy', { locale: es });
+    },
+  },
+  {
+    accessorKey: 'lastAppointmentStatus',
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Estado" />,
+    enableSorting: true,
+    enableHiding: true,
+    cell: ({ row }) => {
+      const status = row.getValue('lastAppointmentStatus') as string;
+      if (!status) return 'N/A';
+      return getStatusBadge(status);
+    },
   },
   {
     id: 'actions',
     cell: ({ row }) => {
-      const payment = row.original;
+      const patient = row.original;
 
       return (
         <DropdownMenu>
@@ -84,12 +116,12 @@ const patientsColumns: ColumnDef<Patient>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="rounded-none">
-            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(payment.id)}>
-              Ver historial medico
+            <DropdownMenuItem onClick={() => window.open(`/patient/${patient.id}`, '_blank')}>
+              Ver historial médico
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Agendar cita</DropdownMenuItem>
-            <DropdownMenuItem>Solicitar pago</DropdownMenuItem>
+            <DropdownMenuItem>Ver detalles</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -97,69 +129,65 @@ const patientsColumns: ColumnDef<Patient>[] = [
   },
 ];
 
-export const statuses = [
-  {
-    value: 'Consulta',
-    label: 'Consulta',
-    icon: PencilIcon,
-  },
-  {
-    value: 'Revision',
-    label: 'Revision',
-    icon: EyeIcon,
-  },
-  {
-    value: 'Emergencia',
-    label: 'Emergencia',
-    icon: AlertCircle,
-  },
-];
+// Función para obtener el badge de estado
+const getStatusBadge = (status: string) => {
+  const statusConfig = {
+    SCHEDULED: { label: 'Programada', className: 'bg-blue-100 text-blue-800' },
+    CONFIRMED: { label: 'Confirmada', className: 'bg-green-100 text-green-800' },
+    PAYED: { label: 'Pagada', className: 'bg-purple-100 text-purple-800' },
+    READY: { label: 'Lista', className: 'bg-yellow-100 text-yellow-800' },
+    STARTED: { label: 'En curso', className: 'bg-orange-100 text-orange-800' },
+    FINISHED: { label: 'Finalizada', className: 'bg-gray-100 text-gray-800' },
+    CANCELLED: { label: 'Cancelada', className: 'bg-red-100 text-red-800' },
+    MISSED_BY_PATIENT: { label: 'Perdida (Paciente)', className: 'bg-red-100 text-red-800' },
+    MISSED_BY_DOCTOR: { label: 'Perdida (Doctor)', className: 'bg-red-100 text-red-800' },
+  };
 
-const data = [
-  {
-    id: '1',
-    name: 'Juan Perez',
-    age: 23,
-    lastVisit: '2022-01-01',
-    type: 'Revision',
-  },
-  {
-    id: '2',
-    name: 'Maria Perez',
-    age: 30,
-    lastVisit: '2022-01-01',
-    type: 'Consulta',
-  },
-  {
-    id: '3',
-    name: 'Jose Perez',
-    age: 45,
-    lastVisit: '2022-01-01',
-    type: 'Revision',
-  },
-  {
-    id: '4',
-    name: 'Luis Perez',
-    age: 60,
-    lastVisit: '2022-01-01',
-    type: 'Consulta',
-  },
-  {
-    id: '5',
-    name: 'Ana Perez',
-    age: 70,
-    lastVisit: '2022-01-01',
-    type: 'Revision',
-  },
-];
+  const config = statusConfig[status as keyof typeof statusConfig] || { 
+    label: status, 
+    className: 'bg-gray-100 text-gray-800' 
+  };
+
+  return (
+    <span className={`px-2 py-1 rounded-full text-xs font-medium ${config.className}`}>
+      {config.label}
+    </span>
+  );
+};
 
 const PatientsTable = () => {
+  const { serializedUser: user } = useSession();
+  const [patients, setPatients] = useState<Patient[]>([]);
+  const [loading, setLoading] = useState(true);
   const [rowSelection, setRowSelection] = useState({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [sorting, setSorting] = useState<SortingState>([]);
+
+  // Función para obtener pacientes del doctor
+  const fetchPatients = async () => {
+    if (!user?.id) return;
+    
+    try {
+      setLoading(true);
+      const response = await fetch(`/api/v1/doctor/${user.id}/patients`);
+      if (response.ok) {
+        const result = await response.json();
+        setPatients(result.data.data || []);
+      }
+    } catch (error) {
+      console.error('Error fetching patients:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPatients();
+  }, [user?.id]);
+
   const table = useReactTable({
-    data,
+    data: patients,
     columns: patientsColumns,
     state: {
       sorting,
@@ -179,11 +207,27 @@ const PatientsTable = () => {
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
+  if (loading) {
+    return (
+      <div className="space-y-4 border bg-background rounded-md p-4">
+        <div className="flex flex-col gap-1 mb-4">
+          <p className="text-lg font-semibold">Pacientes</p>
+          <p className="text-sm text-muted-foreground">Cargando pacientes...</p>
+        </div>
+        <div className="flex items-center justify-center h-32">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4 border bg-background rounded-md p-4">
       <div className="flex flex-col gap-1 mb-4">
         <p className="text-lg font-semibold">Pacientes</p>
-        <p className="text-sm text-muted-foreground">Aquí puedes ver el historial de citas de tus pacientes</p>
+        <p className="text-sm text-muted-foreground">
+          Aquí puedes ver el historial de citas de tus pacientes ({patients.length} pacientes)
+        </p>
       </div>
       <div className="flex justify-between items-center">
         <div className="flex flex-1 items-center space-x-2">

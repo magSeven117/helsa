@@ -1,9 +1,9 @@
-import ComingSoon from '@/src/components/shared/coming-soon';
+import PatientsTable from '@/src/components/dashboard/doctor/patients-table';
 
 const Page = () => {
   return (
-    <div className="flex w-full h-full">
-      <ComingSoon />
+    <div className="flex w-full h-full p-6">
+      <PatientsTable />
     </div>
   );
 };

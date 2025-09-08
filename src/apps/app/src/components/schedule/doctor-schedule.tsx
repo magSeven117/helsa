@@ -93,7 +93,7 @@ export default function DoctorSchedule({ doctorId, schedule }: DoctorSchedulePro
 
   const { mutate, isPending } = useMutation({
     mutationFn: async () => {
-      saveSchedule({
+      await saveSchedule({
         doctorId: doctorId,
         days: Object.entries(selectedHours).map(([day, hours]) => ({
           day,

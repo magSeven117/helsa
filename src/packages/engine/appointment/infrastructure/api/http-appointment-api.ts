@@ -85,6 +85,7 @@ export async function createAppointment(data: {
     const error: { message: string } = await response.json();
     throw new Error(error.message);
   }
+  return response;
 }
 
 export async function finalizeAppointment(id: string) {

@@ -69,7 +69,8 @@ export class PrismaDoctorSearcher implements DoctorSearcher {
     },
     limit = 10,
   ): Promise<Doctor[]> {
-    const doctors = await this.client.searchDoctor.findMany({
+    // Primero intentar buscar en la tabla de índice optimizado
+    const searchDoctors = await this.client.searchDoctor.findMany({
       where: {
         AND: [
           ...(term ? [{ name: { search: term } }] : []),
@@ -101,6 +102,32 @@ export class PrismaDoctorSearcher implements DoctorSearcher {
       },
       take: limit,
     });
-    return doctors.map((doctor: any) => Doctor.fromPrimitives(doctor.doctor as Primitives<Doctor>));
+
+    // Si encontramos resultados en el índice, los devolvemos
+    if (searchDoctors.length > 0) {
+      return searchDoctors.map((doctor: any) => Doctor.fromPrimitives(doctor.doctor as Primitives<Doctor>));
+    }
+
+    // Si no hay resultados en el índice, buscar directamente en la tabla doctor
+    const doctors = await this.client.doctor.findMany({
+      where: {
+        AND: [
+          ...(term ? [{ user: { name: { contains: term, mode: 'insensitive' } } }] : []),
+          ...(experience ? [{ experience: { gte: experience } }] : []),
+          ...(minRate ? [{ score: { gte: minRate } }] : []),
+        ],
+      },
+      include: {
+        appointments: true,
+        schedule: true,
+        user: true,
+        specialty: true,
+        prices: true,
+        educations: true,
+      },
+      take: limit,
+    });
+
+    return doctors.map((doctor: any) => Doctor.fromPrimitives(doctor as Primitives<Doctor>));
   }
 }

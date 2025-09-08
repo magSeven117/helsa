@@ -184,3 +184,6 @@ La migración se ha completado exitosamente manteniendo:
 - ✅ **Escalabilidad** mantenida
 
 El sistema ahora usa Daily.co como proveedor de videollamadas, ofreciendo una experiencia más robusta y moderna para las consultas médicas.
+
+
+
