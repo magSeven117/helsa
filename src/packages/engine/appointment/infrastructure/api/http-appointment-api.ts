@@ -85,7 +85,10 @@ export async function createAppointment(data: {
     const error: { message: string } = await response.json();
     throw new Error(error.message);
   }
-  return response;
+  
+  // 👉 Parsear la respuesta JSON correctamente
+  const result = await response.json();
+  return result;
 }
 
 export async function finalizeAppointment(id: string) {

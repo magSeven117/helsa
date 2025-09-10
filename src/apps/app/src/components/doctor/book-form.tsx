@@ -115,16 +115,23 @@ export default function DoctorAppointment({
       return;
     }
 
+    // Encontrar el precio seleccionado para obtener su typeId
+    const selectedPrice = doctor.prices?.find(price => price.id === data.priceId);
+    if (!selectedPrice) {
+      toast.error('No se pudo encontrar el precio seleccionado');
+      return;
+    }
+
     const appointmentId = v4();
     const appointmentData = {
       date: data.date,
       motive: data.motive,
       symptoms: symptoms.map((s) => s.id),
       doctorId: doctor.id,
-      typeId: data.priceId,
+      typeId: selectedPrice.typeId, // 👉 Usar el typeId del precio seleccionado
       id: appointmentId,
       specialtyId: doctor.specialtyId,
-      priceId: data.priceId,
+      priceId: data.priceId, // 👉 Este está correcto
     };
 
     await mutateAsync(appointmentData);

@@ -109,8 +109,13 @@ export const POST = routeHandler(
 
     const { id, date, motive, symptoms, doctorId, typeId, specialtyId, priceId } = body;
     const patientId = patient.id;
-    await service.run(id, new Date(date), motive, doctorId, patientId, typeId, specialtyId, priceId, symptoms);
-    return HttpNextResponse.created();
+    const createdAppointment = await service.run(id, new Date(date), motive, doctorId, patientId, typeId, specialtyId, priceId, symptoms);
+    
+    // 👉 Retornar la cita creada con status 201
+    return HttpNextResponse.json({ 
+      success: true, 
+      appointment: createdAppointment 
+    }, { status: 201 });
   },
   (error) => {
     switch (true) {

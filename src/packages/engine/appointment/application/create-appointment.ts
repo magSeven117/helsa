@@ -30,5 +30,8 @@ export class CreateAppointment {
 
     await this.appointmentRepository.save(newAppointment, symptoms);
     await this.eventBus.publish(newAppointment.pullDomainEvents());
+
+    // 👉 Retornar la cita creada
+    return newAppointment.toPrimitives();
   }
 }
