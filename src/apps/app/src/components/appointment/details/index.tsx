@@ -70,7 +70,7 @@ const AppointmentDetailsSheet = ({ data, isOpen, setOpen }: Props) => {
             {data?.status !== 'CANCELLED' && (
               <>
                 <ReSchedule status={data?.status ?? ''} />
-                <Confirm status={data?.status ?? ''} />
+                <Confirm status={data?.status ?? ''} id={data?.id ?? ''} />
                 <Pay id={data?.id ?? ''} status={data?.status ?? ''} />
                 <Cancel status={data?.status ?? ''} />
               </>

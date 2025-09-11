@@ -182,6 +182,12 @@ export class Appointment extends Aggregate {
     this.status = AppointmentStatus.payed();
   }
 
+  confirm(): void {
+    if (this.status.value === AppointmentStatusEnum.SCHEDULED) {
+      this.status = AppointmentStatus.confirmed();
+    }
+  }
+
   markAsReady(): void {
     this.status = AppointmentStatus.ready();
   }
