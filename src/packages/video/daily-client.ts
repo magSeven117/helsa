@@ -65,10 +65,17 @@ export class DailyClient {
     return await this.makeRequest('/meeting-tokens', {
       method: 'POST',
       body: JSON.stringify({
-        room: roomName,
-        user_id: userId,
-        exp: options.exp || Math.floor(Date.now() / 1000) + 3600, // 1 hora por defecto
-        is_owner: options.isOwner || false,
+        properties: {  // ✅ CORREGIDO: Todo va dentro de "properties" como en mdc_app
+          room_name: roomName,
+          user_name: userId,
+          exp: options.exp || Math.floor(Date.now() / 1000) + 3600, // 1 hora por defecto
+          is_owner: options.isOwner || false,
+          auto_start_transcription: false, // ✅ Agregado como en mdc_app
+          permissions: {
+            canAdmin: options.isOwner ? ['transcription'] : [], // ✅ Solo transcription como en mdc_app
+            canSend: ['video', 'audio', 'screenVideo', 'screenAudio'],
+          },
+        },
       }),
     });
   }
