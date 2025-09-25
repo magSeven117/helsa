@@ -15,4 +15,5 @@ export const keys = () =>
       GOOGLE_GENERATIVE_AI_API_KEY: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
       OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     },
+    skipValidation: !!process.env.SKIP_ENV_VALIDATION  // TEMPORAL
   });
