@@ -158,7 +158,7 @@ const FinishDetails = ({ id }: { id: string }) => {
               {appointment?.status !== 'CANCELLED' && (
                 <>
                   <ReSchedule status={appointment.status ?? ''} />
-                  <Confirm status={appointment.status ?? ''} />
+                  <Confirm status={appointment.status ?? ''} id={appointment.id ?? id} />
                   <Pay id={appointment.id ?? ''} status={appointment.status ?? ''} />
                   <Cancel status={appointment.status ?? ''} />
                 </>

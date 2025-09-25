@@ -11,13 +11,30 @@ export const getUpcomingAppointments = (userId: string) => {
     description: 'Get the next upcoming appointment',
     parameters: z.object({}),
     execute: async (props) => {
-      const patientGetter = new GetPatient(new PrismaPatientRepository(database));
-      const patient = await patientGetter.run(userId, 'userId');
-      const service = new GetPatientUpcomingAppointments(new PrismaAppointmentRepository(database));
-      const appointments = await service.run(patient.id);
-      return {
-        appointments,
-      };
+      try {
+        const patientGetter = new GetPatient(new PrismaPatientRepository(database));
+        const patient = await patientGetter.run(userId, 'userId');
+        
+        if (!patient) {
+          return {
+            appointments: [],
+            error: 'Paciente no encontrado'
+          };
+        }
+
+        const service = new GetPatientUpcomingAppointments(new PrismaAppointmentRepository(database));
+        const appointments = await service.run(patient.id);
+        
+        return {
+          appointments: appointments || [],
+        };
+      } catch (error) {
+        console.error('Error getting upcoming appointments:', error);
+        return {
+          appointments: [],
+          error: 'Error al obtener las citas'
+        };
+      }
     },
   });
 };

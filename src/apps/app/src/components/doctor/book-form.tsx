@@ -190,6 +190,7 @@ export default function DoctorAppointment({
                     onClick={(e) => {
                       e.preventDefault();
                       setSelectedSlot(slot.id);
+                      form.setValue('time', slot.time);
                     }}
                     type="button"
                   >

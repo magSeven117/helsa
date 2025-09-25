@@ -3,10 +3,10 @@ import { database } from '@helsa/database';
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
-    const { id } = params;
     
     // Actualizar el estado de la cita directamente en la base de datos
     const updatedAppointment = await database.appointment.update({
@@ -34,7 +34,7 @@ export async function PUT(
         error: error instanceof Error ? error.name : 'Unknown',
         stack: error instanceof Error ? error.stack : undefined,
         details: {
-          id: params?.id,
+          id,
           timestamp: new Date().toISOString()
         }
       },

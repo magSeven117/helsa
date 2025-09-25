@@ -35,6 +35,7 @@ model Appointment {
   documents   MedicalDocument[]
   treatments  Treatment[]
   orders      Order[]
+  transcription Transcription?
 }
 
 enum AppointmentStatus {

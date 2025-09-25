@@ -33,15 +33,16 @@ export function ChatList({ messages, className }: Props) {
                 }
                 switch (toolInvocation.toolName) {
                   case 'getUpcomingAppointments': {
+                    const appointments = toolInvocation.result?.appointments || [];
                     return (
-                      <UpcomingAppointments data={toolInvocation.result.appointments} key={toolInvocation.toolCallId} />
+                      <UpcomingAppointments data={appointments} key={toolInvocation.toolCallId} />
                     );
                   }
                   case 'getDoctors': {
-                    return <ListDoctors data={toolInvocation.result.doctors} key={toolInvocation.toolCallId} />;
+                    return <ListDoctors data={toolInvocation.result?.doctors || []} key={toolInvocation.toolCallId} />;
                   }
                   case 'makeAppointment': {
-                    return <AppointmentCreated data={toolInvocation.result.data} key={toolInvocation.toolCallId} />;
+                    return <AppointmentCreated data={toolInvocation.result?.data || {}} key={toolInvocation.toolCallId} />;
                   }
                   default:
                     return null;

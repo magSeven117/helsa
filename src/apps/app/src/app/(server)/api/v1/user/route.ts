@@ -14,10 +14,8 @@ export const PUT = routeHandler(
     }),
   },
   async ({ body, user }) => {
-    const { id: userId } = user;
-
     // Assuming you have a service to handle the update logic
-    await auth.api.updateUser({ body, headers: await headers(), userId });
+    await auth.api.updateUser({ body, headers: await headers() });
 
     return NextResponse.json({ success: true, message: 'Bio updated successfully' });
   }

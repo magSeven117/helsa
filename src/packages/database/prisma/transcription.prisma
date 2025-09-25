@@ -1,0 +1,41 @@
+model Transcription {
+  id            String              @id @default(uuid())
+  appointmentId String              @unique
+  appointment   Appointment         @relation(fields: [appointmentId], references: [id])
+  
+  // Datos de la transcripción
+  rawText       String              // Transcripción completa
+  language      String              @default("es")
+  duration      Int?                // Duración en segundos
+  wordCount     Int?                // Número de palabras
+  
+  // Información extraída automáticamente con IA
+  extractedData Json?               // Datos estructurados extraídos
+  
+  // Metadatos de procesamiento
+  aiProvider    String?             // "openai"
+  aiModel       String?             // "gpt-4"
+  processingTime Int?               // Tiempo de procesamiento en ms
+  confidence    Float?              // Confianza general (0-1)
+  
+  // Estados
+  status        TranscriptionStatus @default(PENDING)
+  errorMessage  String?             // Mensaje de error si falla
+  
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  processedAt   DateTime?           // Cuándo se procesó la IA
+  
+  @@index([appointmentId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+enum TranscriptionStatus {
+  PENDING       // Esperando transcripción
+  TRANSCRIBING  // Transcribiendo con Daily.co
+  PROCESSING    // Procesando con IA
+  COMPLETED     // Completado
+  FAILED        // Error
+  REVIEWED      // Revisado por médico
+}

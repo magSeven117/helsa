@@ -43,13 +43,13 @@ export default function DoctorSchedule({ doctorId, schedule }: DoctorSchedulePro
   });
 
   const [enabledDays, setEnabledDays] = React.useState<{ [key: string]: boolean }>({
-    monday: schedule.days.find((day) => day.day === 'monday')!.hours.length > 0,
-    tuesday: schedule.days.find((day) => day.day === 'tuesday')!.hours.length > 0,
-    wednesday: schedule.days.find((day) => day.day === 'wednesday')!.hours.length > 0,
-    thursday: schedule.days.find((day) => day.day === 'thursday')!.hours.length > 0,
-    friday: schedule.days.find((day) => day.day === 'friday')!.hours.length > 0,
-    saturday: schedule.days.find((day) => day.day === 'saturday')!.hours.length > 0,
-    sunday: schedule.days.find((day) => day.day === 'sunday')!.hours.length > 0,
+    monday: (schedule.days.find((day) => day.day === 'monday')?.hours.length ?? 0) > 0,
+    tuesday: (schedule.days.find((day) => day.day === 'tuesday')?.hours.length ?? 0) > 0,
+    wednesday: (schedule.days.find((day) => day.day === 'wednesday')?.hours.length ?? 0) > 0,
+    thursday: (schedule.days.find((day) => day.day === 'thursday')?.hours.length ?? 0) > 0,
+    friday: (schedule.days.find((day) => day.day === 'friday')?.hours.length ?? 0) > 0,
+    saturday: (schedule.days.find((day) => day.day === 'saturday')?.hours.length ?? 0) > 0,
+    sunday: (schedule.days.find((day) => day.day === 'sunday')?.hours.length ?? 0) > 0,
   });
 
   const hours = Array.from({ length: 15 }, (_, i) => {

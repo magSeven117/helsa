@@ -3,9 +3,9 @@ import { NextRequest, NextResponse } from 'next/server';
 const DAILY_API_KEY = process.env.DAILY_API_KEY;
 const DAILY_API_URL = 'https://api.daily.co/v1';
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   try {
-    const { id } = params;
     const roomName = `appointment-${id}`;
     
     if (!DAILY_API_KEY) {
@@ -149,9 +149,9 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
   }
 }
 
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   try {
-    const { id } = params;
     console.log('🔧 Usuario entrando a la sala:', id);
     
     // Por ahora solo logueamos la entrada, podrías agregar lógica adicional aquí

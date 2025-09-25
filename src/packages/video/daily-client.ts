@@ -3,7 +3,7 @@ import { keys } from './keys';
 const env = keys();
 
 export class DailyClient {
-  private apiKey: string;
+  private apiKey: string | undefined;
   private baseUrl = 'https://api.daily.co/v1';
   private domain: string;
 
@@ -16,7 +16,7 @@ export class DailyClient {
     const response = await fetch(`${this.baseUrl}${endpoint}`, {
       ...options,
       headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
+        ...(this.apiKey ? { 'Authorization': `Bearer ${this.apiKey}` } : {}),
         'Content-Type': 'application/json',
         ...options.headers,
       },

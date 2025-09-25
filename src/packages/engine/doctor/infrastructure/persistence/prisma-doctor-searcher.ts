@@ -112,7 +112,20 @@ export class PrismaDoctorSearcher implements DoctorSearcher {
     const doctors = await this.client.doctor.findMany({
       where: {
         AND: [
-          ...(term ? [{ user: { name: { contains: term, mode: 'insensitive' } } }] : []),
+          ...(term
+            ? [
+                {
+                  user: {
+                    is: {
+                      name: {
+                        contains: term,
+                        mode: 'insensitive' as const,
+                      },
+                    },
+                  },
+                },
+              ]
+            : []),
           ...(experience ? [{ experience: { gte: experience } }] : []),
           ...(minRate ? [{ score: { gte: minRate } }] : []),
         ],

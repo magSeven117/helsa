@@ -7,14 +7,23 @@ import { format } from 'date-fns';
 import { BotCard } from '../messages';
 
 type Props = {
-  data: Primitives<Appointment>[];
+  data: Primitives<Appointment>[] | undefined;
 };
 
 export const UpcomingAppointments = ({ data }: Props) => {
+  // Verificar que data existe y es un array
+  if (!data || !Array.isArray(data)) {
+    return (
+      <BotCard className="space-y-4">
+        <p className="text-md">No encontré citas médicas agendadas</p>
+      </BotCard>
+    );
+  }
+
   return (
     <BotCard className="space-y-4">
-      {data.length === 0 && <p className="text-md">No encontré citas medicas agendadas</p>}
-      {data.length > 0 && <p className="text-md">Encontré estas próximas citas medicas agendadas </p>}
+      {data.length === 0 && <p className="text-md">No encontré citas médicas agendadas</p>}
+      {data.length > 0 && <p className="text-md">Encontré estas próximas citas médicas agendadas</p>}
       {data.length > 0 && (
         <Table className="">
           <TableHeader>
@@ -26,7 +35,7 @@ export const UpcomingAppointments = ({ data }: Props) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data?.map((appointment: Primitives<Appointment>) => {
+            {data.map((appointment: Primitives<Appointment>) => {
               return (
                 <TableRow key={appointment.id} className="h-[34px]">
                   <TableCell className="flex justify-start items-center gap-3">
