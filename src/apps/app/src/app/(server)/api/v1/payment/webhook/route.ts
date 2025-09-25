@@ -6,7 +6,7 @@ import { Webhooks } from '@helsa/payment';
 import { revalidatePath } from 'next/cache';
 
 export const POST = Webhooks({
-  webhookSecret: env.POLAR_WEBHOOK_SECRET,
+  webhookSecret: env.POLAR_WEBHOOK_SECRET || '',
   onOrderPaid: async (payload) => {
     if (payload.data.metadata.type !== 'appointment') return;
 

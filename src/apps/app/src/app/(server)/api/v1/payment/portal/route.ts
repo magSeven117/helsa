@@ -4,7 +4,7 @@ import payment, { CustomerPortal } from '@helsa/payment';
 import { NextRequest } from 'next/server';
 
 export const GET = CustomerPortal({
-  accessToken: env.POLAR_SECRET_KEY,
+  accessToken: env.POLAR_SECRET_KEY || '',
   getCustomerId: async (req: NextRequest) => {
     const session = await getSession();
     if (!session) {
