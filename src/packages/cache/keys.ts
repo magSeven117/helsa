@@ -4,17 +4,17 @@ import { z } from 'zod';
 export const keys = () =>
   createEnv({
     server: {
-      UPSTASH_REDIS_REST_TOKEN: z.string(),
-      UPSTASH_REDIS_REST_URL: z.string(),
-      UPSTASH_VECTOR_REST_URL: z.string(),
-      UPSTASH_VECTOR_REST_TOKEN: z.string(),
-      QSTASH_URL: z.string(),
-      QSTASH_TOKEN: z.string(),
-      QSTASH_CURRENT_SIGNING_KEY: z.string(),
-      QSTASH_NEXT_SIGNING_KEY: z.string(),
+      UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
+      UPSTASH_REDIS_REST_URL: z.string().optional(),
+      UPSTASH_VECTOR_REST_URL: z.string().optional(),
+      UPSTASH_VECTOR_REST_TOKEN: z.string().optional(),
+      QSTASH_URL: z.string().optional(),
+      QSTASH_TOKEN: z.string().optional(),
+      QSTASH_CURRENT_SIGNING_KEY: z.string().optional(),
+      QSTASH_NEXT_SIGNING_KEY: z.string().optional(),
     },
     client: {
-      NEXT_PUBLIC_BASE_URL: z.string(),
+      NEXT_PUBLIC_BASE_URL: z.string().optional(),
     },
     runtimeEnv: {
       UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,

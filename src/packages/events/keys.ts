@@ -4,7 +4,7 @@ import { z } from 'zod';
 export const keys = () =>
   createEnv({
     server: {
-      INNGEST_SIGNING_KEY: z.string(),
+      INNGEST_SIGNING_KEY: z.string().optional(),
     },
     runtimeEnv: {
       INNGEST_SIGNING_KEY: process.env.INNGEST_SIGNING_KEY,

@@ -4,8 +4,8 @@ import { z } from 'zod';
 export const keys = () =>
   createEnv({
     server: {
-      POLAR_SECRET_KEY: z.string(),
-      POLAR_WEBHOOK_SECRET: z.string(),
+      POLAR_SECRET_KEY: z.string().optional(),
+      POLAR_WEBHOOK_SECRET: z.string().optional(),
     },
     runtimeEnv: {
       POLAR_SECRET_KEY: process.env.POLAR_SECRET_KEY,
