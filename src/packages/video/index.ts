@@ -6,7 +6,10 @@ import { DailyCallService } from './daily-call-service';
 const env = keys();
 
 // Cliente Stream.io (implementación actual)
-export const streamClient = new StreamClient(env.NEXT_PUBLIC_STREAM_CLIENT_KEY, env.NEXT_PUBLIC_STREAM_CLIENT_SECRET);
+export const streamClient = new StreamClient(
+  env.NEXT_PUBLIC_STREAM_CLIENT_KEY || '', 
+  env.NEXT_PUBLIC_STREAM_CLIENT_SECRET || ''
+);
 
 // Cliente Daily.co (nueva implementación)
 export const dailyClient = new DailyClient();
