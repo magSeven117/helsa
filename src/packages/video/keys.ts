@@ -4,8 +4,8 @@ import { z } from 'zod';
 export const keys = () =>
   createEnv({
     client: {
-      NEXT_PUBLIC_STREAM_CLIENT_SECRET: z.string(),
-      NEXT_PUBLIC_STREAM_CLIENT_KEY: z.string(),
+      NEXT_PUBLIC_STREAM_CLIENT_SECRET: z.string().optional(),
+      NEXT_PUBLIC_STREAM_CLIENT_KEY: z.string().optional(),
       NEXT_PUBLIC_DAILY_API_KEY: z.string().optional(),
       NEXT_PUBLIC_DAILY_DOMAIN: z.string().optional(),
     },

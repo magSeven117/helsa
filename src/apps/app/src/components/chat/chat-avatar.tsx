@@ -1,9 +1,13 @@
 'use client';
-import { User } from '@helsa/database';
 import { Avatar, AvatarFallback, AvatarImage } from '@helsa/ui/components/avatar';
 
 import { useTheme } from 'next-themes';
 import { useLocalStorage } from 'usehooks-ts';
+
+type User = {
+  name: string;
+  image?: string;
+};
 
 type Props = {
   role: 'assistant' | 'user';
