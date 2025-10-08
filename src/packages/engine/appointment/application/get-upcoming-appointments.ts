@@ -5,16 +5,16 @@ import { AppointmentStatusEnum } from '../domain/status';
 export class GetUpcomingAppointment {
   constructor(private readonly repository: AppointmentRepository) {}
 
-  async run(patientId: string) {
+  async run(doctorId: string) {
+    // Buscar todas las citas del doctor (sin filtro de fecha)
     const appointments = await this.repository.search(
       Criteria.fromValues(
         [
-          { field: 'doctorId', value: patientId, operator: Operator.EQUAL },
-          { field: 'date', value: new Date().toISOString(), operator: Operator.GT },
-          { field: 'status', value: AppointmentStatusEnum.SCHEDULED, operator: Operator.EQUAL },
+          { field: 'doctorId', value: doctorId, operator: Operator.EQUAL },
+          { field: 'status', value: [AppointmentStatusEnum.SCHEDULED, AppointmentStatusEnum.CONFIRMED, AppointmentStatusEnum.PAYED, AppointmentStatusEnum.READY], operator: Operator.IN },
         ],
         { field: 'date', order: Direction.DESC },
-        { limit: 5, offset: 0 }
+        { limit: 20, offset: 0 }
       )
     );
 
