@@ -1,6 +1,6 @@
 'use client';
 
-import { authClient } from '@helsa/auth/client';
+import { authClient, useSession } from '@helsa/auth/client';
 import { Button } from '@helsa/ui/components/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@helsa/ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@helsa/ui/components/form';
@@ -29,6 +29,7 @@ export default function SignInForm() {
   });
   const { isSubmitting } = form.formState;
   const router = useRouter();
+  const { refetch } = useSession();
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       const signInAttempt = await authClient.signIn.email({
@@ -36,13 +37,26 @@ export default function SignInForm() {
         password: data.password,
       });
 
-      if (signInAttempt.data) {
-        router.push('/dashboard');
+      // Verificar si el sign-in fue exitoso basado en la estructura de respuesta
+      const isSuccess = signInAttempt?.data?.user || signInAttempt?.data?.token;
+
+      if (isSuccess) {
+        toast.success('¡Inicio de sesión exitoso!');
+        
+        // Actualizar la sesión y redirigir
+        try {
+          await refetch();
+          router.push('/dashboard');
+        } catch (sessionError) {
+          router.push('/dashboard');
+        }
       } else {
-        toast.error('Invalid email or password');
+        const errorMessage = signInAttempt?.error?.message || 'Credenciales inválidas';
+        toast.error(errorMessage);
       }
     } catch (err: any) {
-      toast.error(err.message);
+      const errorMessage = err?.message || err?.error?.message || 'Error al iniciar sesión';
+      toast.error(errorMessage);
     }
   };
   const onOauthPress = async (strategy: 'google' | 'facebook') => {

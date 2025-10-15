@@ -16,15 +16,17 @@ export const auth = betterAuth({
     provider: 'postgresql',
   }),
   advanced: {
-    generateId: false,
+    database: {
+      generateId: false,
+    },
     cookies: {
       session_token: {
         name: 'helsa_session',
       },
     },
     crossSubDomainCookies: {
-      enabled: true,
-      domain: '.helsahealthcare.com',
+      enabled: false,
+      // domain: '.helsahealthcare.com',
     },
   },
   user: {
@@ -55,6 +57,7 @@ export const auth = betterAuth({
     'http://localhost:3000',
     'https://helsahealthcare.com',
     'https://app.helsahealthcare.com',
+    'https://helsa-app.vercel.app',
     'helsa-mobile://',
   ],
   plugins: [
