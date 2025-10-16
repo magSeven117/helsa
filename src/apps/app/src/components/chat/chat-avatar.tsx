@@ -29,7 +29,7 @@ export function ChatAvatar({ role }: Props) {
     default:
       return (
         <Avatar className="size-6">
-          <AvatarImage
+          {/* <AvatarImage
             src={
               resolvedTheme === 'dark'
                 ? '/images/HELSA NUEVO BLANCO ISOTIPO.png'
@@ -37,7 +37,7 @@ export function ChatAvatar({ role }: Props) {
             }
             alt={user?.name}
             className="object-contain"
-          />
+          /> */}
           <AvatarFallback>H</AvatarFallback>
         </Avatar>
       );

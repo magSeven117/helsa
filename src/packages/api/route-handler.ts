@@ -41,10 +41,9 @@ export const routeHandler = <T extends DomainError, P, Q>(
     authorization(user, options.permissions);
 
     const urlParams = await params;
-    const searchParams = parseSeachParams<Q>(req, options.querySchema);
-    const body = parseBody<P>(req, options.schema);
-
     try {
+      const searchParams = parseSeachParams<Q>(req, options.querySchema);
+      const body = await parseBody<P>(req, options.schema);
       return handler({
         req,
         user,
@@ -101,12 +100,13 @@ function parseSeachParams<Q>(req: NextRequest, schema?: ZodSchema<Q>): Q {
   return schema.parse(Object.fromEntries(req.nextUrl.searchParams.entries()));
 }
 
-function parseBody<P>(req: NextRequest, schema?: ZodSchema<P>): P {
+async function parseBody<P>(req: NextRequest, schema?: ZodSchema<P>): Promise<P> {
   if (req.method === 'GET' || req.method === 'HEAD') {
     return {} as P; // No body for GET or HEAD requests
   }
   if (!schema) {
-    return req.json() as P;
+    return (await req.json()) as P;
   }
-  return schema.parse(req.json());
+  const json = await req.json();
+  return (await schema.parseAsync(json)) as P;
 }

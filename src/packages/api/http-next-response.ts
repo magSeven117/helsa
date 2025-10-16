@@ -27,7 +27,12 @@ export class HttpNextResponse {
   }
 
   static error(message: string): NextResponse {
-    return new NextResponse(null, { status: 400 });
+    return NextResponse.json(
+      {
+        message,
+      },
+      { status: 400 },
+    );
   }
 
   static ok(): NextResponse {

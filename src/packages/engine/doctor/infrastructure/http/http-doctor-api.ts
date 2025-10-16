@@ -95,8 +95,13 @@ export async function createDoctor(data: {
     }),
   });
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message);
+    try {
+      const error = await response.json();
+      throw new Error(error.message || `Request failed with status ${response.status}`);
+    } catch (_) {
+      const text = await response.text();
+      throw new Error(text || `Request failed with status ${response.status}`);
+    }
   }
 }
 
@@ -156,7 +161,7 @@ export async function getDoctorSchedule(doctorId: string) {
 }
 
 export async function getDoctorSpecialties() {
-  const response = await fetch('/api/v1/doctor/specialty', {
+  const response = await fetch('/api/v1/doctor/specialties', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

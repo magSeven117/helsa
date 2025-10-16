@@ -25,9 +25,9 @@ export class PrismaDoctorRepository implements DoctorRepository {
   async save(doctor: Doctor): Promise<void> {
     const data = doctor.toPrimitives();
     await this.model.upsert({
-      where: { id: doctor.id.value },
+      // userId es único en el esquema; esto evita duplicar doctores por reintento
+      where: { userId: data.userId },
       update: {
-        userId: data.userId,
         licenseMedicalNumber: data.licenseMedicalNumber,
         specialtyId: data.specialtyId,
         score: data.score,
