@@ -31,26 +31,63 @@ const daysLocale = {
   sunday: 'Domingo',
 };
 
+// Helper function para obtener horas de un día de forma segura
+const getDayHours = (schedule: Primitives<Schedule>, dayName: string): string[] => {
+  const day = schedule.days?.find((day) => day.day === dayName);
+  return day?.hours?.map((hour) => hour.hour) ?? [];
+};
+
+// Helper function para verificar si un día está habilitado
+const isDayEnabled = (schedule: Primitives<Schedule>, dayName: string): boolean => {
+  const day = schedule.days?.find((day) => day.day === dayName);
+  return (day?.hours?.length ?? 0) > 0;
+};
+
 export default function DoctorSchedule({ doctorId, schedule }: DoctorScheduleProps) {
   const [selectedHours, setSelectedHours] = React.useState<{ [key: string]: string[] }>({
-    monday: schedule.days.find((day) => day.day === 'monday')?.hours.map((hour) => hour.hour) ?? [],
-    tuesday: schedule.days.find((day) => day.day === 'tuesday')?.hours.map((hour) => hour.hour) ?? [],
-    wednesday: schedule.days.find((day) => day.day === 'wednesday')?.hours.map((hour) => hour.hour) ?? [],
-    thursday: schedule.days.find((day) => day.day === 'thursday')?.hours.map((hour) => hour.hour) ?? [],
-    friday: schedule.days.find((day) => day.day === 'friday')?.hours.map((hour) => hour.hour) ?? [],
-    saturday: schedule.days.find((day) => day.day === 'saturday')?.hours.map((hour) => hour.hour) ?? [],
-    sunday: schedule.days.find((day) => day.day === 'sunday')?.hours.map((hour) => hour.hour) ?? [],
+    monday: getDayHours(schedule, 'monday'),
+    tuesday: getDayHours(schedule, 'tuesday'),
+    wednesday: getDayHours(schedule, 'wednesday'),
+    thursday: getDayHours(schedule, 'thursday'),
+    friday: getDayHours(schedule, 'friday'),
+    saturday: getDayHours(schedule, 'saturday'),
+    sunday: getDayHours(schedule, 'sunday'),
   });
 
   const [enabledDays, setEnabledDays] = React.useState<{ [key: string]: boolean }>({
-    monday: schedule.days.find((day) => day.day === 'monday')!.hours.length > 0,
-    tuesday: schedule.days.find((day) => day.day === 'tuesday')!.hours.length > 0,
-    wednesday: schedule.days.find((day) => day.day === 'wednesday')!.hours.length > 0,
-    thursday: schedule.days.find((day) => day.day === 'thursday')!.hours.length > 0,
-    friday: schedule.days.find((day) => day.day === 'friday')!.hours.length > 0,
-    saturday: schedule.days.find((day) => day.day === 'saturday')!.hours.length > 0,
-    sunday: schedule.days.find((day) => day.day === 'sunday')!.hours.length > 0,
+    monday: isDayEnabled(schedule, 'monday'),
+    tuesday: isDayEnabled(schedule, 'tuesday'),
+    wednesday: isDayEnabled(schedule, 'wednesday'),
+    thursday: isDayEnabled(schedule, 'thursday'),
+    friday: isDayEnabled(schedule, 'friday'),
+    saturday: isDayEnabled(schedule, 'saturday'),
+    sunday: isDayEnabled(schedule, 'sunday'),
   });
+
+  // Actualizar el estado cuando schedule cambie (cuando llegue la respuesta de la API)
+  React.useEffect(() => {
+    if (schedule?.days && schedule.days.length > 0) {
+      setSelectedHours({
+        monday: getDayHours(schedule, 'monday'),
+        tuesday: getDayHours(schedule, 'tuesday'),
+        wednesday: getDayHours(schedule, 'wednesday'),
+        thursday: getDayHours(schedule, 'thursday'),
+        friday: getDayHours(schedule, 'friday'),
+        saturday: getDayHours(schedule, 'saturday'),
+        sunday: getDayHours(schedule, 'sunday'),
+      });
+
+      setEnabledDays({
+        monday: isDayEnabled(schedule, 'monday'),
+        tuesday: isDayEnabled(schedule, 'tuesday'),
+        wednesday: isDayEnabled(schedule, 'wednesday'),
+        thursday: isDayEnabled(schedule, 'thursday'),
+        friday: isDayEnabled(schedule, 'friday'),
+        saturday: isDayEnabled(schedule, 'saturday'),
+        sunday: isDayEnabled(schedule, 'sunday'),
+      });
+    }
+  }, [schedule]);
 
   const hours = Array.from({ length: 15 }, (_, i) => {
     const hour = (i + 7).toString().padStart(2, '0');
@@ -64,14 +101,14 @@ export default function DoctorSchedule({ doctorId, schedule }: DoctorSchedulePro
     }
     setSelectedHours((prev) => ({
       ...prev,
-      [day]: [...prev[day]!, hour].sort(),
+      [day]: [...(prev[day] ?? []), hour].sort(),
     }));
   };
 
   const handleHourRemove = (day: string, hour: string) => {
     setSelectedHours((prev) => ({
       ...prev,
-      [day]: prev[day]!.filter((h) => h !== hour),
+      [day]: (prev[day] ?? []).filter((h) => h !== hour),
     }));
   };
 
