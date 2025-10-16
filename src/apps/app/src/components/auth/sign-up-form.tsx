@@ -1,5 +1,5 @@
 'use client';
-import * as successAnimation from '@/public/animations/success_animation.json';
+import successAnimationData from '@/public/animations/success_animation.json';
 import { authClient } from '@helsa/auth/client';
 import {
   AlertDialog,
@@ -21,7 +21,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import Lottie from 'react-lottie';
@@ -66,6 +66,15 @@ export default function SignUpForm() {
     code: '',
     error: '',
   });
+
+  const lottieOptions = useMemo(() => ({
+    loop: false,
+    autoplay: true,
+    animationData: successAnimationData,
+    rendererSettings: {
+      preserveAspectRatio: 'xMidYMid slice',
+    },
+  }), []);
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
@@ -258,17 +267,15 @@ export default function SignUpForm() {
       </Form>
       <AlertDialog open={showSuccessModal}>
         <AlertDialogContent>
-          <Lottie
-            options={{
-              autoplay: true,
-              loop: false,
-              animationData: successAnimation,
-              rendererSettings: {
-                preserveAspectRatio: 'xMidYMid slice',
-              },
-            }}
-            style={{ width: 300, height: 300 }}
-          ></Lottie>
+          {showSuccessModal && (
+            <Lottie
+              options={lottieOptions}
+              height={300}
+              width={300}
+              isStopped={!showSuccessModal}
+              isPaused={false}
+            />
+          )}
           <AlertDialogHeader className="my-0">
             <AlertDialogTitle className="text-center text-2xl">Verificado!</AlertDialogTitle>
             <AlertDialogDescription className="text-center text-lg">

@@ -1,5 +1,5 @@
 'use client';
-import * as successAnimation from '@/public/animations/success_animation.json';
+import successAnimationData from '@/public/animations/success_animation.json';
 import { createHospital } from '@helsa/engine/hospital/infrastructure/http-hospital-api';
 import {
   AlertDialog,
@@ -18,7 +18,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import Lottie from 'react-lottie';
 import { toast } from 'sonner';
@@ -47,6 +47,16 @@ const HospitalForm = ({ userId }: { userId: string }) => {
   const { isSubmitting } = form.formState;
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const router = useRouter();
+
+  const lottieOptions = useMemo(() => ({
+    loop: false,
+    autoplay: true,
+    animationData: successAnimationData,
+    rendererSettings: {
+      preserveAspectRatio: 'xMidYMid slice',
+    },
+  }), []);
+
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: { name: string; street: string; city: string; country: string; zipCode: string }) =>
       createHospital({
@@ -168,17 +178,15 @@ const HospitalForm = ({ userId }: { userId: string }) => {
       </Form>
       <AlertDialog open={showSuccessModal}>
         <AlertDialogContent className="rounded-none">
-          <Lottie
-            options={{
-              autoplay: true,
-              loop: false,
-              animationData: successAnimation,
-              rendererSettings: {
-                preserveAspectRatio: 'xMidYMid slice',
-              },
-            }}
-            style={{ width: 300, height: 300 }}
-          ></Lottie>
+          {showSuccessModal && (
+            <Lottie
+              options={lottieOptions}
+              height={300}
+              width={300}
+              isStopped={!showSuccessModal}
+              isPaused={false}
+            />
+          )}
           <AlertDialogHeader className="my-0">
             <AlertDialogTitle className="text-center text-2xl">Verificado!</AlertDialogTitle>
             <AlertDialogDescription className="text-center text-lg">
