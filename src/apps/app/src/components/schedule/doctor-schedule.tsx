@@ -44,50 +44,67 @@ const isDayEnabled = (schedule: Primitives<Schedule>, dayName: string): boolean 
 };
 
 export default function DoctorSchedule({ doctorId, schedule }: DoctorScheduleProps) {
-  const [selectedHours, setSelectedHours] = React.useState<{ [key: string]: string[] }>({
-    monday: getDayHours(schedule, 'monday'),
-    tuesday: getDayHours(schedule, 'tuesday'),
-    wednesday: getDayHours(schedule, 'wednesday'),
-    thursday: getDayHours(schedule, 'thursday'),
-    friday: getDayHours(schedule, 'friday'),
-    saturday: getDayHours(schedule, 'saturday'),
-    sunday: getDayHours(schedule, 'sunday'),
-  });
+  // Usar useRef para controlar la inicialización y evitar re-renders innecesarios
+  const isInitializedRef = React.useRef(false);
+  const lastScheduleIdRef = React.useRef<string | undefined>(schedule?.id);
 
-  const [enabledDays, setEnabledDays] = React.useState<{ [key: string]: boolean }>({
-    monday: isDayEnabled(schedule, 'monday'),
-    tuesday: isDayEnabled(schedule, 'tuesday'),
-    wednesday: isDayEnabled(schedule, 'wednesday'),
-    thursday: isDayEnabled(schedule, 'thursday'),
-    friday: isDayEnabled(schedule, 'friday'),
-    saturday: isDayEnabled(schedule, 'saturday'),
-    sunday: isDayEnabled(schedule, 'sunday'),
-  });
-
-  // Actualizar el estado cuando schedule cambie (cuando llegue la respuesta de la API)
-  React.useEffect(() => {
+  const [selectedHours, setSelectedHours] = React.useState<{ [key: string]: string[] }>(() => {
     if (schedule?.days && schedule.days.length > 0) {
-      setSelectedHours({
-        monday: getDayHours(schedule, 'monday'),
-        tuesday: getDayHours(schedule, 'tuesday'),
-        wednesday: getDayHours(schedule, 'wednesday'),
-        thursday: getDayHours(schedule, 'thursday'),
-        friday: getDayHours(schedule, 'friday'),
-        saturday: getDayHours(schedule, 'saturday'),
-        sunday: getDayHours(schedule, 'sunday'),
+      const hours: { [key: string]: string[] } = {};
+      schedule.days.forEach((day) => {
+        hours[day.day] = day.hours?.map((h) => h.hour) ?? [];
       });
-
-      setEnabledDays({
-        monday: isDayEnabled(schedule, 'monday'),
-        tuesday: isDayEnabled(schedule, 'tuesday'),
-        wednesday: isDayEnabled(schedule, 'wednesday'),
-        thursday: isDayEnabled(schedule, 'thursday'),
-        friday: isDayEnabled(schedule, 'friday'),
-        saturday: isDayEnabled(schedule, 'saturday'),
-        sunday: isDayEnabled(schedule, 'sunday'),
-      });
+      return hours;
     }
-  }, [schedule]);
+    return {
+      monday: [],
+      tuesday: [],
+      wednesday: [],
+      thursday: [],
+      friday: [],
+      saturday: [],
+      sunday: [],
+    };
+  });
+
+  const [enabledDays, setEnabledDays] = React.useState<{ [key: string]: boolean }>(() => {
+    if (schedule?.days && schedule.days.length > 0) {
+      const days: { [key: string]: boolean } = {};
+      schedule.days.forEach((day) => {
+        days[day.day] = (day.hours?.length ?? 0) > 0;
+      });
+      return days;
+    }
+    return {
+      monday: false,
+      tuesday: false,
+      wednesday: false,
+      thursday: false,
+      friday: false,
+      saturday: false,
+      sunday: false,
+    };
+  });
+
+  // Solo actualizar cuando cambie el ID del schedule y no esté inicializado
+  React.useEffect(() => {
+    if (schedule?.id && schedule.id !== lastScheduleIdRef.current && !isInitializedRef.current) {
+      if (schedule.days && schedule.days.length > 0) {
+        const newSelectedHours: { [key: string]: string[] } = {};
+        const newEnabledDays: { [key: string]: boolean } = {};
+
+        schedule.days.forEach((day) => {
+          newSelectedHours[day.day] = day.hours?.map((h) => h.hour) ?? [];
+          newEnabledDays[day.day] = (day.hours?.length ?? 0) > 0;
+        });
+
+        setSelectedHours(newSelectedHours);
+        setEnabledDays(newEnabledDays);
+        isInitializedRef.current = true;
+        lastScheduleIdRef.current = schedule.id;
+      }
+    }
+  }, [schedule?.id]);
 
   const hours = Array.from({ length: 15 }, (_, i) => {
     const hour = (i + 7).toString().padStart(2, '0');
@@ -130,7 +147,7 @@ export default function DoctorSchedule({ doctorId, schedule }: DoctorSchedulePro
 
   const { mutate, isPending } = useMutation({
     mutationFn: async () => {
-      saveSchedule({
+      await saveSchedule({
         doctorId: doctorId,
         days: Object.entries(selectedHours).map(([day, hours]) => ({
           day,

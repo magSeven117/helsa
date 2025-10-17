@@ -44,7 +44,7 @@ export const routeHandler = <T extends DomainError, P, Q>(
     try {
       const searchParams = parseSeachParams<Q>(req, options.querySchema);
       const body = await parseBody<P>(req, options.schema);
-      return handler({
+      return await handler({
         req,
         user,
         params: urlParams,
@@ -52,22 +52,30 @@ export const routeHandler = <T extends DomainError, P, Q>(
         body,
       });
     } catch (error) {
-      console.error(error);
+      console.error('Error en routeHandler:', error);
+      console.error('Tipo de error:', error?.constructor?.name);
+      console.error('Stack trace:', error instanceof Error ? error.stack : 'No stack trace');
+      
       switch (true) {
         case error instanceof Unauthenticated:
+          console.log('Error: Usuario no autenticado');
           return HttpNextResponse.domainError(error, 401);
         case error instanceof Unauthorized:
+          console.log('Error: Usuario no autorizado');
           return HttpNextResponse.domainError(error, 403);
         case error instanceof DomainError:
+          console.log('Error: Error de dominio');
           const response = onError?.(error as T);
           if (response) {
             return response;
           }
-          return HttpNextResponse.internalServerError();
+          return HttpNextResponse.internalServerError(error instanceof Error ? error : undefined);
         case error instanceof ZodError:
+          console.log('Error: Error de validación Zod');
           return HttpNextResponse.error(error.message);
         default:
-          return HttpNextResponse.internalServerError();
+          console.log('Error: Error interno del servidor');
+          return HttpNextResponse.internalServerError(error instanceof Error ? error : undefined);
       }
     }
   };

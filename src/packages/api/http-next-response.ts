@@ -11,12 +11,15 @@ export class HttpNextResponse {
     );
   }
 
-  static internalServerError(): NextResponse {
+  static internalServerError(error?: Error): NextResponse {
     return NextResponse.json(
       {
         code: 'InternalServerError',
-        message: 'Internal server error',
-        data: {},
+        message: error?.message || 'Internal server error',
+        data: {
+          stack: error?.stack,
+          name: error?.name,
+        },
       },
       { status: 500 },
     );
