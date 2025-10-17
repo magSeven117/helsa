@@ -69,38 +69,31 @@ export class PrismaDoctorSearcher implements DoctorSearcher {
     },
     limit = 10,
   ): Promise<Doctor[]> {
-    const doctors = await this.client.searchDoctor.findMany({
+    // Buscar directamente en la tabla doctor con sus relaciones
+    const doctors = await this.client.doctor.findMany({
       where: {
         AND: [
-          ...(term ? [{ name: { search: term } }] : []),
-          ...(availability
-            ? [
-                {
-                  OR: [
-                    { searchSchedules: { some: { day: availability, availabilities: { gt: 0 } } } },
-                    { days: { some: { day: format(new Date(availability), 'EEEE').toLowerCase(), hours: { gt: 0 } } } },
-                  ],
-                },
-              ]
-            : []),
+          ...(term ? [{ user: { name: { contains: term, mode: 'insensitive' } } }] : []),
           ...(experience ? [{ experience: { gte: experience } }] : []),
           ...(minRate ? [{ score: { gte: minRate } }] : []),
         ],
       },
       include: {
-        doctor: {
+        user: true,
+        specialty: true,
+        schedule: true,
+        consultingRoomAddress: true,
+        educations: true,
+        prices: {
           include: {
-            appointments: true,
-            schedule: true,
-            user: true,
-            specialty: true,
-            prices: true,
-            educations: true,
+            type: true,
           },
         },
+        appointments: true,
       },
       take: limit,
     });
-    return doctors.map((doctor: any) => Doctor.fromPrimitives(doctor.doctor as Primitives<Doctor>));
+    
+    return doctors.map((doctor: any) => Doctor.fromPrimitives(doctor as Primitives<Doctor>));
   }
 }
