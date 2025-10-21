@@ -87,6 +87,19 @@ export async function createAppointment(data: {
   }
 }
 
+export async function confirmAppointment(id: string) {
+  if (!id) {
+    throw new Error('ID is required');
+  }
+  const response = await fetch(`/api/v1/appointment/${id}/confirm`, {
+    method: 'POST',
+  });
+  if (!response.ok) {
+    const error: { message: string } = await response.json();
+    throw new Error(error.message);
+  }
+}
+
 export async function finalizeAppointment(id: string) {
   if (!id) {
     throw new Error('ID is required');

@@ -69,13 +69,14 @@ const TreatmentProgress = ({ expanded = false }: TreatmentProgressProps) => {
                     <Badge
                       variant={goal.completed ? 'default' : 'outline'}
                       className={cn('max-sm:w-fit', {
-                        'bg-emerald-500 text-white': goal.completed,
+                        'bg-[#4CAF50] text-white': goal.completed,
+                        'border-[#FFB703] text-[#FFB703] bg-[#FFB703]/10': !goal.completed,
                       })}
                     >
                       {goal.completed ? 'Completado' : 'En progreso'}
                     </Badge>
                   </div>
-                  <p className="text-xs text-muted-foreground mt-1">{goal.description}</p>
+                  <p className="text-xs text-[#023047]/70 mt-1">{goal.description}</p>
                 </div>
               </div>
             ))}

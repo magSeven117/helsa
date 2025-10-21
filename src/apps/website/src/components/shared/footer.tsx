@@ -31,31 +31,31 @@ export default function Footer() {
       <div className="flex items-center justify-center w-full py-2 gap-6">
         <Link
           href="https://instagram.com"
-          className="rounded-full bg-brand-primary text-white p-3 hover:bg-violet-500 transition-colors"
+          className="rounded-full bg-brand-primary text-white p-3 hover:bg-[#4CAF50] transition-colors"
         >
           <Instagram size={20} />
         </Link>
         <Link
           href="https://facebook.com"
-          className="rounded-full bg-brand-primary text-white p-3 hover:bg-violet-500 transition-colors"
+          className="rounded-full bg-brand-primary text-white p-3 hover:bg-[#4CAF50] transition-colors"
         >
           <Facebook size={20} />
         </Link>
         <Link
           href="https://linkedin.com"
-          className="rounded-full bg-brand-primary text-white p-3 hover:bg-violet-500 transition-colors"
+          className="rounded-full bg-brand-primary text-white p-3 hover:bg-[#4CAF50] transition-colors"
         >
           <LinkedIn color="#fff" />
         </Link>
         <Link
           href="https://twitter.com"
-          className="rounded-full bg-brand-primary text-white p-3 hover:bg-violet-500 transition-colors"
+          className="rounded-full bg-brand-primary text-white p-3 hover:bg-[#4CAF50] transition-colors"
         >
           <XIcon />
         </Link>
         <Link
           href="https://twitter.com"
-          className="rounded-full bg-brand-primary text-white p-3 hover:bg-violet-500 transition-colors"
+          className="rounded-full bg-brand-primary text-white p-3 hover:bg-[#4CAF50] transition-colors"
         >
           <Github />
         </Link>

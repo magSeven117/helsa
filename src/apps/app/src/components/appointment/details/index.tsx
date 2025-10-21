@@ -39,7 +39,7 @@ const AppointmentDetailsSheet = ({ data, isOpen, setOpen }: Props) => {
                   <TooltipTrigger asChild>
                     <Link href={`/appointments/${data?.id}`}>
                       <Button variant={'ghost'} className="[&_svg]:size-5 cursor-pointer">
-                        <Eye className="size-6 text-violet-500" />
+                        <Eye className="size-6 text-[#4CAF50]" />
                       </Button>
                     </Link>
                   </TooltipTrigger>
@@ -70,7 +70,7 @@ const AppointmentDetailsSheet = ({ data, isOpen, setOpen }: Props) => {
             {data?.status !== 'CANCELLED' && (
               <>
                 <ReSchedule status={data?.status ?? ''} />
-                <Confirm status={data?.status ?? ''} />
+                <Confirm status={data?.status ?? ''} appointmentId={data?.id ?? ''} />
                 <Pay id={data?.id ?? ''} status={data?.status ?? ''} />
                 <Cancel status={data?.status ?? ''} />
               </>
@@ -148,7 +148,7 @@ const AppointmentDetailsSheet = ({ data, isOpen, setOpen }: Props) => {
           )}
 
           <div className="space-y-3 px-1 py-3">
-            <p className="text-lg text-violet-500">Motivo de la consulta</p>
+            <p className="text-lg text-[#4CAF50]">Motivo de la consulta</p>
             <p className="text-sm text-muted-foreground">{data?.motive ?? ''}</p>
           </div>
         </div>

@@ -1,27 +1,31 @@
 export const stateLabel: Record<string, { label: string; color: string }> = {
   SCHEDULED: {
     label: 'Agendada',
-    color: 'var(--border)',
+    color: '#FFB703',
   },
   CONFIRMED: {
     label: 'Confirmada',
-    color: '#0043ce',
+    color: '#023047',
   },
   PAYED: {
     label: 'Pagada',
-    color: '#8167ec',
+    color: '#4CAF50',
   },
   READY: {
     label: 'Lista',
-    color: '#22a094',
+    color: '#4CAF50',
   },
   STARTED: {
     label: 'Iniciada',
-    color: '#22a094',
+    color: '#4CAF50',
   },
   MISSED: {
     label: 'Perdida',
-    color: '#f1b603',
+    color: '#FFB703',
+  },
+  MISSED_BY_PATIENT: {
+    label: 'Perdida por paciente',
+    color: '#FFB703',
   },
   CANCELLED: {
     label: 'Cancelada',
@@ -29,6 +33,6 @@ export const stateLabel: Record<string, { label: string; color: string }> = {
   },
   FINISHED: {
     label: 'Finalizada',
-    color: '#673AB7',
+    color: '#023047',
   },
 };

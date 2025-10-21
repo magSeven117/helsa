@@ -37,10 +37,11 @@ export const PUT = routeHandler(
     const { id } = params;
     const service = new FinalizeAppointment(new PrismaAppointmentRepository(database));
     await service.run(id);
-    const call = client.video.call('appointment', id);
+    // Use 'default' call type (available types: audio_room, default, development, livestream)
+    const call = client.video.call('default', id);
     await call.end();
     revalidatePath('/appointments');
-    return HttpNextResponse.ok();
+    return HttpNextResponse.json({ success: true });
   },
   (error) => {
     switch (true) {

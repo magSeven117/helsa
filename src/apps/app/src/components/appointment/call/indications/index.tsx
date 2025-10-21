@@ -79,23 +79,25 @@ const Indications = ({ appointment }: { appointment: Primitives<Appointment> }) 
             <SheetTitle>Indicaciones</SheetTitle>
           </SheetHeader>
           <Tabs defaultValue="orders" className="flex flex-col flex-1 h-max">
-            <TabsList className="bg-transparent border-b-2 border-b-border rounded-none w-full justify-start">
-              <TabsTrigger value="orders" className="gap-2  data-[state=active]:text-violet-500 cursor-pointer">
+            <div className="border-b-2 border-b-border">
+              <TabsList className="bg-transparent rounded-none w-full justify-start flex-wrap">
+              <TabsTrigger value="orders" className="gap-2  data-[state=active]:text-[#4CAF50] cursor-pointer">
                 <ScrollText className="size-4" /> Ordenes
               </TabsTrigger>
-              <TabsTrigger value="treatments" className="gap-2  data-[state=active]:text-violet-500 cursor-pointer">
+              <TabsTrigger value="treatments" className="gap-2  data-[state=active]:text-[#4CAF50] cursor-pointer">
                 <Pill className="size-4" />
                 Tratamientos
               </TabsTrigger>
-              <TabsTrigger value="diagnosis" className="gap-2  data-[state=active]:text-violet-500 cursor-pointer">
+              <TabsTrigger value="diagnosis" className="gap-2  data-[state=active]:text-[#4CAF50] cursor-pointer">
                 <ClipboardMinus className="size-4" />
                 Diagnósticos
               </TabsTrigger>
             </TabsList>
-            <TabsContent value="orders" className="flex flex-col grow">
+            </div>
+            <TabsContent value="orders" className="flex flex-col grow mt-6">
               <Orders orders={orders} appointmentId={appointment.id} patientId={appointment.patientId} />
             </TabsContent>
-            <TabsContent value="treatments">
+            <TabsContent value="treatments" className="mt-6">
               <Treatments
                 treatments={treatments}
                 appointmentId={appointment.id}
@@ -103,7 +105,7 @@ const Indications = ({ appointment }: { appointment: Primitives<Appointment> }) 
                 doctorId={appointment.doctorId}
               />
             </TabsContent>
-            <TabsContent value="diagnosis" className="flex flex-col grow">
+            <TabsContent value="diagnosis" className="flex flex-col grow mt-6">
               <Diagnoses
                 diagnoses={diagnosis}
                 appointmentId={appointment.id}

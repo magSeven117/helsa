@@ -8,9 +8,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const Index = () => {
   const { data } = authClient.useSession();
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: '#8167ec', height: Dimensions.get('screen').height }}>
+    <ScrollView style={{ flex: 1, backgroundColor: '#023047', height: Dimensions.get('screen').height }}>
       <SafeAreaView
-        style={{ backgroundColor: '#8167ec', height: Dimensions.get('screen').height, position: 'relative' }}
+        style={{ backgroundColor: '#023047', height: Dimensions.get('screen').height, position: 'relative' }}
       >
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 20 }}>
           <TouchableOpacity
@@ -37,7 +37,7 @@ const Index = () => {
               height: 40,
             }}
           >
-            <Pencil color={'#8167ec'} />
+            <Pencil color={'#4CAF50'} />
           </TouchableOpacity>
         </View>
         <View style={{ alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 20 }}>

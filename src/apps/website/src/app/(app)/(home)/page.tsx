@@ -91,7 +91,7 @@ const Page = () => {
       </div>
       <section
         id="como-funciona"
-        className="w-full py-24 flex items-center  justify-center bg-violet-100 dark:bg-neutral-900"
+        className="w-full py-24 flex items-center  justify-center bg-[#4CAF50]/10 dark:bg-neutral-900"
       >
         <div className="container px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center">

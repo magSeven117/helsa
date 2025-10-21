@@ -32,7 +32,7 @@ const benefits = [
     title: 'Mayor Alcance de Pacientes',
     description:
       'Expande tu práctica médica y conecta con más pacientes a través de nuestra plataforma digital integrada.',
-    color: 'text-violet-500 bg-violet-100',
+    color: 'text-[#4CAF50] bg-[#4CAF50]/20',
     features: ['Red de pacientes ampliada', 'Referidos automáticos', 'Visibilidad profesional'],
   },
   {
@@ -40,14 +40,14 @@ const benefits = [
     title: 'Control Avanzado de Pacientes',
     description:
       'Sistema integral de gestión que te permite monitorear y controlar el progreso de tus pacientes en tiempo real.',
-    color: 'text-violet-500 bg-violet-100',
+    color: 'text-[#4CAF50] bg-[#4CAF50]/20',
     features: ['Historial médico completo', 'Seguimiento en tiempo real', 'Alertas automáticas'],
   },
   {
     icon: <BookOpen className="h-8 w-8" />,
     title: 'Recursos Educativos Continuos',
     description: 'Acceso a una biblioteca extensa de recursos médicos, cursos y actualizaciones profesionales.',
-    color: 'text-violet-500 bg-violet-100',
+    color: 'text-[#4CAF50] bg-[#4CAF50]/20',
     features: ['Cursos especializados', 'Webinars exclusivos', 'Certificaciones médicas'],
   },
   {
@@ -55,7 +55,7 @@ const benefits = [
     title: 'Tecnología de Vanguardia',
     description:
       'Herramientas tecnológicas avanzadas que optimizan tu práctica médica y mejoran la atención al paciente.',
-    color: 'text-violet-500 bg-violet-100',
+    color: 'text-[#4CAF50] bg-[#4CAF50]/20',
     features: ['Telemedicina integrada', 'IA diagnóstica', 'Apps móviles'],
   },
 ];
@@ -122,11 +122,11 @@ const features = [
 export default function Page() {
   return (
     <div className="min-h-screen">
-      <section className="bg-violet-100 dark:bg-neutral-900  py-20">
+      <section className="bg-[#4CAF50]/20 dark:bg-neutral-900  py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <div className="flex justify-center mb-6">
-              <div className="p-4 bg-violet-200 bg-opacity-20 rounded-full">
+              <div className="p-4 bg-[#4CAF50]/20 bg-opacity-20 rounded-full">
                 <Stethoscope className="h-12 w-12 text-brand-primary" />
               </div>
             </div>
@@ -204,7 +204,7 @@ export default function Page() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
               <div key={index} className="bg-muted rounded-xl p-6 ">
-                <div className="w-12 h-12 bg-violet-100 rounded-lg flex items-center justify-center mb-4">
+                <div className="w-12 h-12 bg-[#4CAF50]/20 rounded-lg flex items-center justify-center mb-4">
                   <div className="text-brand-primary">{feature.icon}</div>
                 </div>
                 <h3 className="text-lg font-semibold  mb-3">{feature.title}</h3>
@@ -219,7 +219,7 @@ export default function Page() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <div className="flex items-center mb-6">
-                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mr-4">
+                <div className="w-12 h-12 bg-[#4CAF50]/20 rounded-lg flex items-center justify-center mr-4">
                   <BookOpen className="h-6 w-6 text-brand-primary" />
                 </div>
                 <h2 className="text-3xl md:text-4xl font-bold ">Educación Médica Continua</h2>
@@ -230,7 +230,7 @@ export default function Page() {
               </p>
               <div className="space-y-4">
                 <div className="flex items-start">
-                  <div className="w-6 h-6 bg-violet-100 rounded-full flex items-center justify-center mr-4 mt-1">
+                  <div className="w-6 h-6 bg-[#4CAF50]/20 rounded-full flex items-center justify-center mr-4 mt-1">
                     <CheckCircle className="h-4 w-4 text-brand-primary" />
                   </div>
                   <div>
@@ -241,8 +241,8 @@ export default function Page() {
                   </div>
                 </div>
                 <div className="flex items-start">
-                  <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center mr-4 mt-1">
-                    <CheckCircle className="h-4 w-4 text-purple-600" />
+                  <div className="w-6 h-6 bg-[#4CAF50]/20 rounded-full flex items-center justify-center mr-4 mt-1">
+                    <CheckCircle className="h-4 w-4 text-[#4CAF50]" />
                   </div>
                   <div>
                     <h4 className="font-semibold  mb-1">Webinars en Vivo</h4>
@@ -252,8 +252,8 @@ export default function Page() {
                   </div>
                 </div>
                 <div className="flex items-start">
-                  <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center mr-4 mt-1">
-                    <CheckCircle className="h-4 w-4 text-purple-600" />
+                  <div className="w-6 h-6 bg-[#4CAF50]/20 rounded-full flex items-center justify-center mr-4 mt-1">
+                    <CheckCircle className="h-4 w-4 text-[#4CAF50]" />
                   </div>
                   <div>
                     <h4 className="font-semibold  mb-1">Certificaciones</h4>
@@ -286,7 +286,7 @@ export default function Page() {
                     <div className="text-sm text-muted-foreground">Satisfacción</div>
                   </div>
                 </div>
-                <button className="w-full bg-brand-primary text-white py-3 rounded-lg hover:bg-purple-700 transition-colors duration-200">
+                <button className="w-full bg-brand-primary text-white py-3 rounded-lg hover:bg-[#023047] transition-colors duration-200">
                   Explorar Recursos
                 </button>
               </div>
@@ -357,7 +357,7 @@ export default function Page() {
                   <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
                     <span className="text-muted-foreground">Telemedicina</span>
                     <div className="w-16 h-2 bg-gray-200 rounded-full">
-                      <div className="w-15 h-2 bg-purple-600 rounded-full"></div>
+                      <div className="w-15 h-2 bg-[#4CAF50] rounded-full"></div>
                     </div>
                   </div>
                   <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
@@ -371,7 +371,7 @@ export default function Page() {
             </div>
             <div>
               <div className="flex items-center mb-6">
-                <div className="w-12 h-12 bg-violet-100 rounded-lg flex items-center justify-center mr-4">
+                <div className="w-12 h-12 bg-[#4CAF50]/20 rounded-lg flex items-center justify-center mr-4">
                   <Target className="h-6 w-6 text-brand-primary" />
                 </div>
                 <h2 className="text-3xl md:text-4xl font-bold ">Innovación Constante</h2>
@@ -403,8 +403,8 @@ export default function Page() {
                   </div>
                 </div>
                 <div className="flex items-start">
-                  <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center mr-4 mt-1">
-                    <Shield className="h-4 w-4 text-purple-600" />
+                  <div className="w-8 h-8 bg-[#4CAF50]/20 rounded-full flex items-center justify-center mr-4 mt-1">
+                    <Shield className="h-4 w-4 text-[#4CAF50]" />
                   </div>
                   <div>
                     <h4 className="font-semibold  mb-2">Seguridad Avanzada</h4>

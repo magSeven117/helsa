@@ -69,13 +69,13 @@ export function PatientsList() {
           {patients.map((patient) => (
             <tr
               key={patient.id}
-              className="hover:bg-[#8167ec]/10 border border-transparent hover:border-[#8167ec] backdrop-blur-xl transition-all duration-200"
+              className="hover:bg-[#4CAF50]/10 border border-transparent hover:border-[#4CAF50] backdrop-blur-xl transition-all duration-200"
             >
               <td className="py-3 px-4">
                 <div className="flex items-center gap-3">
                   <Avatar>
                     <AvatarImage src={patient.avatar} />
-                    <AvatarFallback className="bg-[#8167ec]/20 text-[#8167ec]">
+                    <AvatarFallback className="bg-[#4CAF50]/20 text-[#4CAF50]">
                       {patient.name.substring(0, 2)}
                     </AvatarFallback>
                   </Avatar>
@@ -97,10 +97,10 @@ export function PatientsList() {
               </td>
               <td className="py-3 px-4 text-right">
                 <div className="flex justify-end gap-2">
-                  <Button variant="ghost" size="icon" className="hover:bg-[#8167ec]/20 hover:text-[#8167ec]">
+                  <Button variant="ghost" size="icon" className="hover:bg-[#4CAF50]/20 hover:text-[#4CAF50]">
                     <FileText className="h-4 w-4" />
                   </Button>
-                  <Button variant="ghost" size="icon" className="hover:bg-[#8167ec]/20 hover:text-[#8167ec]">
+                  <Button variant="ghost" size="icon" className="hover:bg-[#4CAF50]/20 hover:text-[#4CAF50]">
                     <MoreHorizontal className="h-4 w-4" />
                   </Button>
                 </div>
@@ -115,14 +115,14 @@ export function PatientsList() {
 
 function StatusBadge({ status }: { status: string }) {
   let variant: 'outline' | 'secondary' | 'default' = 'outline';
-  let className = 'border-white/20';
+  let className = 'border-[#FFB703] text-[#FFB703] bg-[#FFB703]/10';
 
   if (status === 'In Progress') {
     variant = 'secondary';
-    className = 'bg-[#8167ec]/20 text-[#8167ec] border-[#8167ec]';
+    className = 'bg-[#4CAF50]/20 text-[#4CAF50] border-[#4CAF50]';
   } else if (status === 'Completed') {
     variant = 'default';
-    className = 'bg-[#8167ec] text-white border-none';
+    className = 'bg-[#023047] text-white border-none';
   }
 
   return (

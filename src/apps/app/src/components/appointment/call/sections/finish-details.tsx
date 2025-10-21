@@ -45,6 +45,8 @@ import PayButton from './pay-button';
 
 const FinishDetails = ({ id }: { id: string }) => {
   const { setError } = useError();
+  console.log('FinishDetails - Received ID:', id);
+  
   const {
     data: appointment,
     isLoading,
@@ -59,6 +61,9 @@ const FinishDetails = ({ id }: { id: string }) => {
       }),
     refetchOnWindowFocus: false,
   });
+
+  console.log('FinishDetails - Appointment data:', appointment);
+  console.log('FinishDetails - Appointment ID:', appointment?.id);
 
   if (isLoading) {
     return (
@@ -123,7 +128,13 @@ const FinishDetails = ({ id }: { id: string }) => {
               <h3 className="text-lg  font-medium text-[var(--color-brand-primary)]">Paciente</h3>
               <div className="flex items-center mt-1 gap-2">
                 <div className="w-16 h-16 rounded-lg overflow-hidden border border-border">
-                  <img src={appointment.patient?.user?.image} alt="" />
+                  {appointment.patient?.user?.image ? (
+                    <img src={appointment.patient.user.image} alt="" />
+                  ) : (
+                    <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                      <User className="h-8 w-8 text-gray-400" />
+                    </div>
+                  )}
                 </div>
                 <div>
                   <div className="flex items-center mt-1 gap-2">
@@ -158,7 +169,7 @@ const FinishDetails = ({ id }: { id: string }) => {
               {appointment?.status !== 'CANCELLED' && (
                 <>
                   <ReSchedule status={appointment.status ?? ''} />
-                  <Confirm status={appointment.status ?? ''} />
+                  <Confirm status={appointment.status ?? ''} appointmentId={appointment.id ?? ''} />
                   <Pay id={appointment.id ?? ''} status={appointment.status ?? ''} />
                   <Cancel status={appointment.status ?? ''} />
                 </>
@@ -179,7 +190,9 @@ const FinishDetails = ({ id }: { id: string }) => {
                 Descargar Receta
               </Button>
             </div>
-            <TabsDetails id={appointment.id} patientId={appointment.patientId} doctorId={appointment.doctorId} />
+            {appointment.id && (
+              <TabsDetails id={appointment.id} patientId={appointment.patientId} doctorId={appointment.doctorId} />
+            )}
           </div>
         </div>
       </CardContent>
@@ -236,7 +249,7 @@ const HistoryDetails = ({ id }: { id: string }) => {
       <div className="flex flex-col gap-2">
         {diagnoses.map((diagnosis) => (
           <p key={diagnosis.id} className="flex gap-2 items-center">
-            <Stethoscope className="text-violet-500" /> {diagnosis.description}
+            <Stethoscope className="text-[#4CAF50]" /> {diagnosis.description}
           </p>
         ))}
       </div>
@@ -253,6 +266,8 @@ const HistoryDetails = ({ id }: { id: string }) => {
 };
 
 const TabsDetails = ({ id, patientId, doctorId }: { id: string; patientId: string; doctorId: string }) => {
+  console.log('TabsDetails - Received props:', { id, patientId, doctorId });
+  
   const { diagnoses, loading, notes, orders, recordings, transcriptions, treatments } = useQueries({
     queries: [
       {
@@ -283,7 +298,18 @@ const TabsDetails = ({ id, patientId, doctorId }: { id: string; patientId: strin
         initialData: [],
         queryKey: ['recordings'],
         queryFn: async () => {
-          return [];
+          if (!id) {
+            console.log('No appointment ID available for recordings');
+            return [];
+          }
+          console.log('Fetching recordings for ID:', id);
+          const res = await fetch('/api/functions/get-recordings?id=' + id);
+          if (!res.ok) {
+            console.error('Recordings fetch failed:', res.status, res.statusText);
+            return [];
+          }
+          const data = await res.json();
+          return data.recordings ?? [];
         },
         refetchOnWindowFocus: false,
       },
@@ -291,7 +317,18 @@ const TabsDetails = ({ id, patientId, doctorId }: { id: string; patientId: strin
         initialData: [],
         queryKey: ['transcriptions'],
         queryFn: async () => {
-          return [];
+          if (!id) {
+            console.log('No appointment ID available for transcriptions');
+            return [];
+          }
+          console.log('Fetching transcriptions for ID:', id);
+          const res = await fetch('/api/functions/get-transcription?id=' + id);
+          if (!res.ok) {
+            console.error('Transcription fetch failed:', res.status, res.statusText);
+            return [];
+          }
+          const data = await res.json();
+          return data.transcriptions ?? [];
         },
         refetchOnWindowFocus: false,
       },
@@ -331,51 +368,53 @@ const TabsDetails = ({ id, patientId, doctorId }: { id: string; patientId: strin
   }
   return (
     <Tabs defaultValue="orders" className="flex flex-col flex-1 h-max">
-      <TabsList className="bg-transparent border-b-2 border-b-border rounded-none w-full justify-start">
-        <TabsTrigger value="orders" className="gap-2  data-[state=active]:text-violet-500 cursor-pointer">
+      <div className="border-b-2 border-b-border">
+        <TabsList className="bg-transparent rounded-none w-full justify-start flex-wrap">
+        <TabsTrigger value="orders" className="gap-2  data-[state=active]:text-[#4CAF50] cursor-pointer">
           <ScrollText className="size-4" /> Ordenes
         </TabsTrigger>
-        <TabsTrigger value="treatments" className="gap-2  data-[state=active]:text-violet-500 cursor-pointer">
+        <TabsTrigger value="treatments" className="gap-2  data-[state=active]:text-[#4CAF50] cursor-pointer">
           <Pill className="size-4" />
           Tratamientos
         </TabsTrigger>
-        <TabsTrigger value="diagnosis" className="gap-2  data-[state=active]:text-violet-500 cursor-pointer">
+        <TabsTrigger value="diagnosis" className="gap-2  data-[state=active]:text-[#4CAF50] cursor-pointer">
           <ClipboardMinus className="size-4" />
           Diagnósticos
         </TabsTrigger>
-        <TabsTrigger value="notes" className="gap-2  data-[state=active]:text-violet-500 cursor-pointer">
+        <TabsTrigger value="notes" className="gap-2  data-[state=active]:text-[#4CAF50] cursor-pointer">
           <NotebookPen className="size-4" />
           Notas
         </TabsTrigger>
-        <TabsTrigger value="recordings" className="gap-2  data-[state=active]:text-violet-500 cursor-pointer">
+        <TabsTrigger value="recordings" className="gap-2  data-[state=active]:text-[#4CAF50] cursor-pointer">
           <Video className="size-4" />
           Grabaciones
         </TabsTrigger>
-        <TabsTrigger value="transcriptions" className="gap-2  data-[state=active]:text-violet-500 cursor-pointer">
+        <TabsTrigger value="transcriptions" className="gap-2  data-[state=active]:text-[#4CAF50] cursor-pointer">
           <AudioLines className="size-4" />
           Transcripciones
         </TabsTrigger>
       </TabsList>
-      <TabsContent value="orders" className="flex flex-col grow">
+      </div>
+      <TabsContent value="orders" className="flex flex-col grow mt-6">
         <Orders orders={orders} appointmentId={id} patientId={patientId} />
       </TabsContent>
-      <TabsContent value="treatments">
+      <TabsContent value="treatments" className="mt-6">
         <Treatments treatments={treatments} appointmentId={id} patientId={patientId} doctorId={doctorId} />
       </TabsContent>
-      <TabsContent value="diagnosis" className="flex flex-col grow">
+      <TabsContent value="diagnosis" className="flex flex-col grow mt-6">
         <Diagnoses diagnoses={diagnoses} appointmentId={id} patientId={patientId} doctorId={doctorId} />
       </TabsContent>
-      <TabsContent value="notes">
+      <TabsContent value="notes" className="mt-6">
         <NotesContent id={id} notes={notes} />
       </TabsContent>
-      <TabsContent value="recordings">
+      <TabsContent value="recordings" className="mt-6">
         {recordings.map((recording: any) => (
           <div key={recording.url} className="border-b py-3">
             <video src={recording.url} controls></video>
           </div>
         ))}
       </TabsContent>
-      <TabsContent value="transcriptions">
+      <TabsContent value="transcriptions" className="mt-6">
         {transcriptions.map((recording: any) => (
           <div key={recording.url} className="border-b py-3">
             <a href={recording.url} download={true} target="_blank">

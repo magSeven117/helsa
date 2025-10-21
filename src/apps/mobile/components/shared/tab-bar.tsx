@@ -25,7 +25,7 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
         style={[
           {
             position: 'absolute',
-            backgroundColor: '#8167ec',
+            backgroundColor: '#023047',
             borderRadius: 30,
             marginHorizontal: 12,
             width: buttonWidth - 25,

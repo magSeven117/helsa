@@ -57,8 +57,8 @@ export const auth = betterAuth({
     'http://localhost:3000',
     'https://helsahealthcare.com',
     'https://app.helsahealthcare.com',
-    'https://helsa-app.vercel.app',
-    'helsa-mobile://',
+    'https://topmedicos-integrales.vercel.app',
+    'topmedicos-mobile://',
   ],
   plugins: [
     emailOTP({

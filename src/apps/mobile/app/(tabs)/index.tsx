@@ -47,7 +47,7 @@ export default function HomeScreen() {
                 height: 50,
                 alignItems: 'center',
                 justifyContent: 'center',
-                backgroundColor: '#8167ec',
+                backgroundColor: '#023047',
                 borderRadius: 1000,
                 overflow: 'hidden',
               }}
@@ -75,7 +75,7 @@ export default function HomeScreen() {
                 position: 'absolute',
                 top: -1,
                 right: -1,
-                backgroundColor: '#8167ec',
+                backgroundColor: '#023047',
                 borderRadius: 1000,
                 width: 8,
                 height: 8,
@@ -110,7 +110,7 @@ export default function HomeScreen() {
             <Image source={logoHelsa} style={{ width: 70, height: 30 }} resizeMode="contain" />
             <Text style={{ fontFamily: 'Nunito', fontWeight: 500, color: '#000' }}>Ir al chat</Text>
           </View>
-          <ChevronRight color={'#8167ec'} />
+          <ChevronRight color={'#4CAF50'} />
         </TouchableOpacity>
         <View
           style={{
@@ -213,7 +213,7 @@ export default function HomeScreen() {
                   width: 50,
                   borderRadius: 15,
                   overflow: 'hidden',
-                  backgroundColor: (mood === 'euphoric' && '#8167ec') || '#d4d4d4',
+                  backgroundColor: (mood === 'euphoric' && '#4CAF50') || '#d4d4d4',
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}
@@ -255,7 +255,7 @@ export default function HomeScreen() {
                   padding: 4,
                 }}
               >
-                <BookMarked color={'#8167ec'} />
+                <BookMarked color={'#4CAF50'} />
               </View>
             </View>
             <Text style={{ color: '#fff', fontSize: 16 }}>Actividades diarias</Text>
@@ -282,7 +282,7 @@ export default function HomeScreen() {
                   padding: 4,
                 }}
               >
-                <Brain color={'#8167ec'} />
+                <Brain color={'#4CAF50'} />
               </View>
             </View>
             <Text style={{ color: '#fff', fontSize: 16 }}>Pensamientos</Text>
@@ -305,7 +305,7 @@ export default function HomeScreen() {
                 onPress={() => router.push('/(tabs)')}
                 style={{
                   marginTop: 8,
-                  backgroundColor: '#8167ec',
+                  backgroundColor: '#023047',
                   padding: 8,
                   borderRadius: 10,
                   alignItems: 'center',

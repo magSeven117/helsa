@@ -16,7 +16,7 @@ const buttonVariants = cva(
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
         primary:
-          'bg-[var(--color-brand-primary)] border border-[var(--color-brand-primary)] text-primary-foreground   hover:outline-1 hover:ring-2 hover:ring-offset-2 hover:ring-violet-500',
+          'bg-[var(--color-brand-primary)] border border-[var(--color-brand-primary)] text-primary-foreground   hover:outline-1 hover:ring-2 hover:ring-offset-2 hover:ring-[#4CAF50]',
       },
       size: {
         default: 'h-10 px-4 py-2',

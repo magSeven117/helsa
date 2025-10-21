@@ -54,6 +54,7 @@ export default function DoctorAppointment({
   const router = useRouter();
   const form = useForm({
     resolver: zodResolver(formSchema),
+    mode: 'onChange',
     defaultValues: {
       date: new Date(),
       time: '',
@@ -99,14 +100,14 @@ export default function DoctorAppointment({
         ),
     );
     setTimeSlots(availableSlots.map((hour) => ({ id: hour.hour, time: hour.hour })));
-    form.setValue('date', date);
+    form.setValue('date', date, { shouldValidate: true });
   }, [date]);
 
   useEffect(() => {
     if (!selectedSlot) {
       return;
     }
-    form.setValue('time', selectedSlot);
+    form.setValue('time', selectedSlot, { shouldValidate: true });
   }, [selectedSlot]);
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
@@ -115,13 +116,26 @@ export default function DoctorAppointment({
       return;
     }
 
+    // Encontrar el precio seleccionado para obtener el typeId correcto
+    const selectedPrice = doctor.prices?.find(price => price.id === data.priceId);
+    if (!selectedPrice) {
+      toast.error('No se pudo encontrar el tipo de consulta seleccionado');
+      return;
+    }
+
     const appointmentId = v4();
+    
+    // Combinar fecha y hora seleccionada
+    const [hours, minutes] = data.time.split(':');
+    const appointmentDateTime = new Date(data.date);
+    appointmentDateTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+    
     const appointmentData = {
-      date: data.date,
+      date: appointmentDateTime,
       motive: data.motive,
       symptoms: symptoms.map((s) => s.id),
       doctorId: doctor.id,
-      typeId: data.priceId,
+      typeId: selectedPrice.typeId, // Usar el typeId del precio seleccionado
       id: appointmentId,
       specialtyId: doctor.specialtyId,
       priceId: data.priceId,

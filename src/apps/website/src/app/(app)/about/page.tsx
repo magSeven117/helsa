@@ -17,26 +17,26 @@ const values = [
     icon: <Heart className="h-8 w-8" />,
     title: 'Cuidado Compasivo',
     description: 'Tratamos a cada paciente con empatía, respeto y dignidad, asegurando su comodidad y bienestar.',
-    color: 'text-violet-500 bg-violet-100',
+    color: 'text-[#4CAF50] bg-[#4CAF50]/20',
   },
   {
     icon: <Award className="h-8 w-8" />,
     title: 'Excelencia',
     description:
       'Buscamos los más altos estándares en atención médica, mejorando continuamente nuestros servicios y resultados.',
-    color: 'text-violet-500 bg-violet-100',
+    color: 'text-[#4CAF50] bg-[#4CAF50]/20',
   },
   {
     icon: <Users className="h-8 w-8" />,
     title: 'Colaboración',
     description: 'Trabajamos juntos como equipo, fomentando alianzas con pacientes, familias y la comunidad.',
-    color: 'text-violet-500 bg-violet-100',
+    color: 'text-[#4CAF50] bg-[#4CAF50]/20',
   },
   {
     icon: <Lightbulb className="h-8 w-8" />,
     title: 'Innovación',
     description: 'Adoptamos nuevas tecnologías y métodos para ofrecer soluciones de salud de vanguardia.',
-    color: 'text-violet-500 bg-violet-100',
+    color: 'text-[#4CAF50] bg-[#4CAF50]/20',
   },
 ];
 

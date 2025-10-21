@@ -12,11 +12,16 @@ import {
 } from '@helsa/ui/components/dialog';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { CircleCheck } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { toast } from 'sonner';
 
 const Finalize = ({ id }: { id: string }) => {
   const client = useQueryClient();
-  const { mutate: finalize } = useMutation({
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
+  
+  const { mutate: finalize, isPending } = useMutation({
     mutationFn: async () => finalizeAppointment(id),
     onSuccess: (data, variables, context) => {
       client.invalidateQueries({
@@ -25,6 +30,9 @@ const Finalize = ({ id }: { id: string }) => {
       client.invalidateQueries({
         queryKey: ['appointment'],
       });
+      toast.success('Cita finalizada exitosamente');
+      setOpen(false);
+      router.push('/appointments');
     },
     onError: (error, variables, context) => {
       console.error('Error finalizing appointment:', error);
@@ -33,7 +41,7 @@ const Finalize = ({ id }: { id: string }) => {
   });
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant={'outline'} className="gap-2">
           <CircleCheck />
@@ -51,12 +59,17 @@ const Finalize = ({ id }: { id: string }) => {
         </div>
         <DialogFooter className="sm:justify-start">
           <DialogClose asChild>
-            <Button type="button" variant="secondary">
+            <Button type="button" variant="secondary" disabled={isPending}>
               Cancelar
             </Button>
           </DialogClose>
-          <Button type="button" className="bg-emerald-400 text-white hover:text-background" onClick={() => finalize()}>
-            Finalizar
+          <Button 
+            type="button" 
+            className="bg-emerald-400 text-white hover:text-background" 
+            onClick={() => finalize()}
+            disabled={isPending}
+          >
+            {isPending ? 'Finalizando...' : 'Finalizar'}
           </Button>
         </DialogFooter>
       </DialogContent>

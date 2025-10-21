@@ -1,5 +1,5 @@
 {
-  "name": "helsa",
+  "name": "topmedicos-integrales",
   "version": "2.0.0",
   "scripts": {
     "build": "turbo build",
@@ -8,6 +8,7 @@
     "test": "turbo test"
   },
   "dependencies": {
+    "@deepgram/sdk": "^4.11.2",
     "@t3-oss/env-nextjs": "^0.12.0"
   },
   "devDependencies": {

@@ -44,7 +44,7 @@ const AppointmentHistory = () => {
           {appointments.map((apt) => (
             <div key={apt.id} className="flex items-center gap-4 p-4 border rounded-lg">
               <div className="flex-shrink-0">
-                <Calendar className="h-8 w-8 text-violet-500" />
+                <Calendar className="h-8 w-8 text-[#4CAF50]" />
               </div>
               <div className="flex-1">
                 <div className="flex justify-between items-start mb-2">

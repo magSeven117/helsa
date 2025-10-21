@@ -178,6 +178,10 @@ export class Appointment extends Aggregate {
     );
   }
 
+  confirm(): void {
+    this.status = AppointmentStatus.confirmed();
+  }
+
   pay(): void {
     this.status = AppointmentStatus.payed();
   }

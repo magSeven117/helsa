@@ -11,30 +11,44 @@ export const Icons = {
     <svg {...props} role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Facebook</title><path fill={props.color} d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/></svg>
   ),
   logo: (props: IconProps) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" {...props}>
-      <rect width="256" height="256" fill="none" />
-      <line
-        x1="208"
-        y1="128"
-        x2="128"
-        y2="208"
-        fill="none"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="16"
-      />
-      <line
-        x1="192"
-        y1="40"
-        x2="40"
-        y2="192"
-        fill="none"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="16"
-      />
+    <svg baseProfile="tiny" height="100%" width="100%" viewBox="0 0 100 100" {...props}>
+      <defs>
+        <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style={{stopColor:'#023047', stopOpacity:1}} />
+          <stop offset="100%" style={{stopColor:'#0d3d56', stopOpacity:1}} />
+        </linearGradient>
+        <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style={{stopColor:'#4CAF50', stopOpacity:1}} />
+          <stop offset="100%" style={{stopColor:'#66BB6A', stopOpacity:1}} />
+        </linearGradient>
+      </defs>
+      
+      {/* Fondo principal con gradiente azul profundo */}
+      <rect fill="url(#bgGradient)" height={100} rx={20} ry={20} width={100} x={0} y={0} />
+      
+      {/* Estetoscopio estilizado */}
+      <path d="M20 25 C20 15, 30 10, 40 15 C50 10, 60 15, 60 25 C60 35, 50 40, 40 35 C30 40, 20 35, 20 25 Z" 
+            fill="url(#accentGradient)" stroke="#4CAF50" strokeWidth="2"/>
+      
+      {/* Tubos del estetoscopio */}
+      <path d="M40 35 L40 50 L30 65" stroke="#4CAF50" strokeWidth="4" strokeLinecap="round"/>
+      <path d="M40 35 L40 50 L50 65" stroke="#4CAF50" strokeWidth="4" strokeLinecap="round"/>
+      
+      {/* Auriculares */}
+      <circle cx="30" cy="65" r="6" fill="#FFB703"/>
+      <circle cx="50" cy="65" r="6" fill="#FFB703"/>
+      
+      {/* Elementos decorativos */}
+      <circle cx="15" cy="15" r="3" fill="#FFB703"/>
+      <circle cx="85" cy="15" r="3" fill="#FFB703"/>
+      <circle cx="15" cy="85" r="3" fill="#FFB703"/>
+      <circle cx="85" cy="85" r="3" fill="#FFB703"/>
+      
+      {/* Líneas de conexión */}
+      <line x1="5" y1="50" x2="15" y2="50" stroke="#EAEAEA" strokeWidth="2" strokeLinecap="round"/>
+      <line x1="85" y1="50" x2="95" y2="50" stroke="#EAEAEA" strokeWidth="2" strokeLinecap="round"/>
+      <line x1="50" y1="5" x2="50" y2="15" stroke="#EAEAEA" strokeWidth="2" strokeLinecap="round"/>
+      <line x1="50" y1="85" x2="50" y2="95" stroke="#EAEAEA" strokeWidth="2" strokeLinecap="round"/>
     </svg>
   ),
   twitter: (props: IconProps) => (

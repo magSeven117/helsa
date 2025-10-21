@@ -112,9 +112,36 @@ async function parseBody<P>(req: NextRequest, schema?: ZodSchema<P>): Promise<P>
   if (req.method === 'GET' || req.method === 'HEAD') {
     return {} as P; // No body for GET or HEAD requests
   }
-  if (!schema) {
-    return (await req.json()) as P;
+  
+  // Check if there's actually a body to parse
+  const contentType = req.headers.get('content-type');
+  const contentLength = req.headers.get('content-length');
+  
+  // If no content-type or content-length is 0, return empty object
+  if (!contentType || contentLength === '0') {
+    return {} as P;
   }
-  const json = await req.json();
-  return (await schema.parseAsync(json)) as P;
+  
+  // Try to parse JSON, but handle empty body
+  try {
+    if (!schema) {
+      const text = await req.text();
+      if (!text || text.trim() === '') {
+        return {} as P;
+      }
+      return JSON.parse(text) as P;
+    }
+    const text = await req.text();
+    if (!text || text.trim() === '') {
+      return {} as P;
+    }
+    const json = JSON.parse(text);
+    return (await schema.parseAsync(json)) as P;
+  } catch (error) {
+    // If parsing fails and body is empty, return empty object
+    if (error instanceof SyntaxError && error.message.includes('JSON')) {
+      return {} as P;
+    }
+    throw error;
+  }
 }

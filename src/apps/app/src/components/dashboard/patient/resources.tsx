@@ -28,13 +28,13 @@ export function ResourcesSection({ expanded = false }: ResourcesSectionProps) {
               <div className="flex-1 space-y-1">
                 <div className="flex items-start justify-between">
                   <p className="text-sm font-medium leading-tight">{resource.title}</p>
-                  <Badge variant="outline" className="ml-2 text-xs">
+                  <Badge variant="outline" className="ml-2 text-xs border-[#4CAF50] text-[#4CAF50] bg-[#4CAF50]/10">
                     {resource.type === 'article' && 'Artículo'}
                     {resource.type === 'video' && 'Video'}
                     {resource.type === 'exercise' && 'Ejercicio'}
                   </Badge>
                 </div>
-                <p className="text-xs text-muted-foreground line-clamp-2">{resource.description}</p>
+                <p className="text-xs text-[#023047]/70 line-clamp-2">{resource.description}</p>
                 <div className="pt-1">
                   <Button
                     variant="ghost"

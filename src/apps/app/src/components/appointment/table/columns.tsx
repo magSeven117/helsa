@@ -125,15 +125,20 @@ export const columns: ColumnDef<Primitives<Appointment>>[] = [
 ];
 
 export const StateColumn = ({ state }: { state: string }) => {
+  const stateConfig = stateLabel[state] || {
+    label: state,
+    color: '#6b7280', // Color gris por defecto
+  };
+  
   return (
     <div className="flex items-center space-x-2">
       <span
         className="text-xs font-semibold px-3 py-1 rounded-full border"
         style={{
-          borderColor: stateLabel[state].color,
+          borderColor: stateConfig.color,
         }}
       >
-        {stateLabel[state].label}
+        {stateConfig.label}
       </span>
     </div>
   );

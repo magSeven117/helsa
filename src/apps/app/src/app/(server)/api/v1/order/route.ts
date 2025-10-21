@@ -49,7 +49,7 @@ export const GET = routeHandler(
   async ({ user, searchParams }) => {
     const { patientId, appointmentId } = searchParams;
 
-    if (!patientId || !appointmentId) {
+    if (!patientId && !appointmentId) {
       throw new FormatError('Either patientId or appointmentId must be provided');
     }
 

@@ -46,7 +46,7 @@ const SignUp = () => {
     <ScrollView
       style={{
         flex: 1,
-        backgroundColor: '#8167ec',
+        backgroundColor: '#023047',
         height: Dimensions.get('screen').height,
       }}
     >
@@ -134,7 +134,7 @@ const SignUp = () => {
               style={{
                 width: '100%',
                 height: 50,
-                backgroundColor: '#8167ec',
+                backgroundColor: '#023047',
                 borderRadius: 100,
                 display: 'flex',
                 alignItems: 'center',
@@ -175,7 +175,7 @@ const SignUp = () => {
               style={{ fontSize: 16, fontFamily: 'NunitoMedium', textAlign: 'center', color: '#EOEOEO', marginTop: 20 }}
             >
               <Text style={{ fontFamily: 'NunitoMedium', color: '#0E0E0E' }}>¿Ya tienes una cuenta?</Text>
-              <Text style={{ fontFamily: 'NunitoBold', color: '#8167ec' }}> Inicia sesion</Text>
+              <Text style={{ fontFamily: 'NunitoBold', color: '#4CAF50' }}> Inicia sesion</Text>
             </Link>
           </View>
         </View>

@@ -78,7 +78,7 @@ export function AppointmentsCalendar() {
               <h3 className="font-medium">Proxima</h3>
               <p className="text-xs text-muted-foreground">En espera</p>
             </div>
-            <Badge variant="outline" className="border-white/20">
+            <Badge variant="outline" className="border-[#FFB703] text-[#FFB703] bg-[#FFB703]/10">
               1:15 PM
             </Badge>
           </div>
@@ -86,7 +86,7 @@ export function AppointmentsCalendar() {
           <div className="flex items-center gap-3">
             <Avatar>
               <AvatarImage src="/images/placeholder.svg?height=48&width=48" />
-              <AvatarFallback className="bg-[#8167ec]/20 text-[#8167ec]">SM</AvatarFallback>
+              <AvatarFallback className="bg-[#4CAF50]/20 text-[#4CAF50]">SM</AvatarFallback>
             </Avatar>
             <div>
               <div className="font-medium">Sophia Martinez</div>
@@ -120,7 +120,7 @@ export function AppointmentsCalendar() {
                     </div>
                   </div>
                 </div>
-                <Badge variant="outline" className="border-white/20">
+                <Badge variant="outline" className="border-[#4CAF50] text-[#4CAF50] bg-[#4CAF50]/10">
                   {appointment.time}
                 </Badge>
               </div>

@@ -12,8 +12,8 @@ export const authClient = createAuthClient({
     inferAdditionalFields<typeof auth>(),
     expoClient({
       storage: SecureStore,
-      scheme: 'helsa-mobile',
-      storagePrefix: 'helsa_mobile',
+      scheme: 'topmedicos-mobile',
+      storagePrefix: 'topmedicos_mobile',
     }),
   ],
 });

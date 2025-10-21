@@ -2,7 +2,7 @@ import { getSession } from '@helsa/auth/server';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 export const metadata: Metadata = {
-  title: 'Helsa',
+  title: 'TopMedicosIntegrales',
 };
 
 const Layout = async ({

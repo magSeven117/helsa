@@ -43,7 +43,7 @@ const benefits = [
     icon: <FileText className="h-8 w-8" />,
     title: 'Historial Digital',
     description: 'Acceso completo a tu historial médico, resultados de laboratorio y tratamientos.',
-    color: 'text-purple-600 bg-purple-100',
+    color: 'text-[#4CAF50] bg-[#4CAF50]/20',
     features: ['Acceso 24/7', 'Compartir con especialistas', 'Backup seguro', 'Historial familiar'],
   },
   {
@@ -120,11 +120,11 @@ const features = [
 export default function Page() {
   return (
     <div className="min-h-screen">
-      <section className="bg-violet-100 dark:bg-neutral-900  py-20">
+      <section className="bg-[#4CAF50]/10 dark:bg-neutral-900  py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <div className="flex justify-center mb-6">
-              <div className="p-4 bg-violet-200 bg-opacity-20 rounded-full">
+              <div className="p-4 bg-[#4CAF50]/20 rounded-full">
                 <Heart className="h-12 w-12 text-brand-primary" />
               </div>
             </div>
@@ -201,7 +201,7 @@ export default function Page() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
               <div key={index} className="bg-muted rounded-xl p-6 ">
-                <div className="w-12 h-12 bg-violet-100 rounded-lg flex items-center justify-center mb-4">
+                <div className="w-12 h-12 bg-[#4CAF50]/20 rounded-lg flex items-center justify-center mb-4">
                   <div className="text-brand-primary">{feature.icon}</div>
                 </div>
                 <h3 className="text-lg font-semibold  mb-3">{feature.title}</h3>
@@ -319,8 +319,8 @@ export default function Page() {
                   </div>
                 </div>
                 <div className="flex items-start">
-                  <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center mr-4 mt-1">
-                    <Bell className="h-4 w-4 text-purple-600" />
+                  <div className="w-8 h-8 bg-[#4CAF50]/20 rounded-full flex items-center justify-center mr-4 mt-1">
+                    <Bell className="h-4 w-4 text-[#4CAF50]" />
                   </div>
                   <div>
                     <h4 className="font-semibold  mb-2">Recordatorios de Bienestar</h4>

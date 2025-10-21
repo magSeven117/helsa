@@ -28,7 +28,6 @@ import {
   StreamVideo,
   StreamVideoClient,
   StreamVideoParticipant,
-  TranscriptionSettingsRequestModeEnum,
   useCall,
   useCallStateHooks,
   useParticipantViewContext,
@@ -55,6 +54,9 @@ import {
 } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
+import { useDeepgramTranscription } from '@/src/hooks/useDeepgramTranscription';
+import LiveTranscriptionDisplay from './live-transcription-display';
+import { TranscriptionDebug } from './transcription-debug';
 
 const apiKey = process.env.NEXT_PUBLIC_STREAM_CLIENT_KEY!;
 
@@ -62,32 +64,91 @@ export const VideoCall = ({ id, token }: { id: string; token: string }) => {
   const { user } = useSession();
   const [client, setClient] = useState<StreamVideoClient | null>(null);
   const [call, setCall] = useState<Call | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  
   useEffect(() => {
-    if (!user) {
+    if (!user || !token) {
+      console.log('Missing user or token:', { user: !!user, token: !!token });
       return;
     }
-    const streamUser = {
-      id: user.id.value,
-      name: user.name.value,
-      image: user.image.value ?? '',
-      role: user.role.value === 'PATIENT' ? 'patient' : 'doctor',
-    };
-    const newClient = new StreamVideoClient({
-      apiKey,
-      user: streamUser,
-      token,
-    });
-    const newCall = newClient.call('appointment', id);
+    
     const init = async () => {
-      newCall.getOrCreate();
-      setClient(newClient);
-      setCall(newCall);
+      try {
+        console.log('Initializing Stream.io client with:', {
+          userId: user.id.value,
+          userName: user.name.value,
+          userRole: user.role.value,
+          hasToken: !!token
+        });
+        
+        const streamUser = {
+          id: user.id.value,
+          name: user.name.value,
+          image: user.image.value ?? '',
+          role: 'user', // Use default role temporarily
+        };
+        
+        console.log('Creating StreamVideoClient with user:', streamUser);
+        
+        const newClient = new StreamVideoClient({
+          apiKey,
+          user: streamUser,
+          token,
+        });
+        
+        console.log('StreamVideoClient created');
+        
+        // Use 'default' call type (available types: audio_room, default, development, livestream)
+        const newCall = newClient.call('default', id);
+        console.log('Creating/getting call with type "default" and id:', id);
+        await newCall.getOrCreate();
+        console.log('Call created/retrieved');
+        
+        setClient(newClient);
+        setCall(newCall);
+        setError(null);
+      } catch (err) {
+        console.error('Error initializing Stream.io:', err);
+        setError(err instanceof Error ? err.message : 'Unknown error');
+      }
     };
+    
     init();
-  }, [user]);
-  if (!client || !call || !user) {
-    return null;
+    
+        // Cleanup function
+        return () => {
+          if (client) {
+            try {
+              client.disconnectUser();
+            } catch (error) {
+              console.log('Error disconnecting user:', error);
+            }
+          }
+        };
+  }, [user, token, id]);
+  
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-64 bg-red-50 border border-red-200 rounded-lg">
+        <div className="text-center">
+          <p className="text-red-600 font-medium">Error al conectar con la videollamada</p>
+          <p className="text-red-500 text-sm mt-1">{error}</p>
+        </div>
+      </div>
+    );
   }
+  
+  if (!client || !call || !user) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#4CAF50] mx-auto"></div>
+          <p className="text-gray-600 mt-2">Conectando a la videollamada...</p>
+        </div>
+      </div>
+    );
+  }
+  
   return (
     <StreamVideo client={client}>
       <StreamCall call={call}>
@@ -109,6 +170,11 @@ export const MyUILayout = () => {
   const { mutateAsync: enterRoom } = useMutation({
     mutationFn: async (id: string) => enterAppointmentRoom(id),
   });
+
+  // Hook de transcripción de Deepgram
+  const { isTranscribing, transcripts, error, startTranscription, stopTranscription } = useDeepgramTranscription(
+    call?.id ?? ''
+  );
 
   const joinCall = useCallback(async () => {
     if (call) {
@@ -147,8 +213,16 @@ export const MyUILayout = () => {
         <>
           <MyFloatingLocalParticipant participant={localParticipant} count={participantCount} />
           <MyParticipantList participants={remoteParticipants} />
-          <ActionsBar />
+          <ActionsBar 
+            transcriptionState={{ 
+              isTranscribing, 
+              startTranscription, 
+              stopTranscription 
+            }} 
+          />
           <CallCHat id={call?.id ?? ''} />
+          <LiveTranscriptionDisplay transcripts={transcripts} isTranscribing={isTranscribing} />
+          <TranscriptionDebug isTranscribing={isTranscribing} transcripts={transcripts} error={error} />
         </>
       )}
     </div>
@@ -224,7 +298,13 @@ const CustomVideoPlaceholder = ({ style }: VideoPlaceholderProps) => {
   );
 };
 
-const ActionsBar = () => {
+type TranscriptionState = {
+  isTranscribing: boolean;
+  startTranscription: (stream: MediaStream) => Promise<void>;
+  stopTranscription: () => void;
+};
+
+const ActionsBar = ({ transcriptionState }: { transcriptionState: TranscriptionState }) => {
   const [user] = useLocalStorage<BetterUser | null>('user', null);
   const call = useCall();
 
@@ -286,9 +366,10 @@ const ActionsBar = () => {
           <>
             <Separator orientation="vertical" className="mr-3 ml-2 h-4" />
             <RecordingButton />
-            <TranscriptionButton />
           </>
         )}
+        <Separator orientation="vertical" className="mr-3 ml-2 h-4" />
+        <TranscriptionButton transcriptionState={transcriptionState} />
         <Separator orientation="vertical" className="mr-3 ml-2 h-4" />
         <Info />
         <DevicesList />
@@ -576,34 +657,62 @@ const ExtendSessionButton = ({ duration }: { duration: number }) => {
   );
 };
 
-const TranscriptionButton = () => {
+const TranscriptionButton = ({ transcriptionState }: { transcriptionState: TranscriptionState }) => {
   const call = useCall();
-  const { useCallSettings, useIsCallTranscribingInProgress } = useCallStateHooks();
-  const { transcription } = useCallSettings() || {};
+  const { useLocalParticipant } = useCallStateHooks();
+  const localParticipant = useLocalParticipant();
+  const { isTranscribing, startTranscription, stopTranscription } = transcriptionState;
 
-  const isTranscribing = useIsCallTranscribingInProgress();
 
-  if (transcription?.mode === TranscriptionSettingsRequestModeEnum.DISABLED) {
-    // transcriptions are not available, render nothing
-    return null;
-  }
-
-  const toggleTranscription = useCallback(() => {
+  const toggleTranscription = useCallback(async () => {
     if (!isTranscribing) {
-      call?.startTranscription({ language: 'es' });
+      try {
+        // Obtener acceso directo al micrófono del usuario
+        console.log('Solicitando acceso al micrófono...');
+        const stream = await navigator.mediaDevices.getUserMedia({ 
+          audio: {
+            echoCancellation: true,
+            noiseSuppression: true,
+            sampleRate: 16000
+          } 
+        });
+        
+        console.log('Stream de micrófono obtenido:', stream);
+        await startTranscription(stream);
+      } catch (error) {
+        console.error('Error al obtener acceso al micrófono:', error);
+        // Fallback: intentar con el stream del participante
+        console.log('Intentando con stream del participante...');
+        const fallbackStream = localParticipant?.audioStream;
+        if (fallbackStream) {
+          console.log('Usando stream del participante como fallback');
+          await startTranscription(fallbackStream);
+        } else {
+          console.error('No se pudo obtener ningún stream de audio');
+        }
+      }
     } else {
-      call?.stopTranscription();
+      stopTranscription();
     }
-  }, [isTranscribing]);
+  }, [isTranscribing, localParticipant, startTranscription, stopTranscription]);
 
   return (
-    <Button variant="ghost" size="icon" className="rounded-full size-8" onClick={toggleTranscription}>
-      {!isTranscribing ? (
-        <AudioLines className="size-4" />
-      ) : (
-        <AudioLines className="size-4 text-red-500 animate-pulse" />
-      )}
-    </Button>
+    <TooltipProvider delayDuration={0}>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button variant="ghost" size="icon" className="rounded-full size-8" onClick={toggleTranscription}>
+            {!isTranscribing ? (
+              <AudioLines className="size-4 text-primary" />
+            ) : (
+              <AudioLines className="size-4 text-red-500 animate-pulse" />
+            )}
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent sideOffset={15} className="text-[10px] px-2 py-1 rounded-sm font-medium">
+          <p>{isTranscribing ? 'Detener transcripción' : 'Iniciar transcripción'}</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 };
 

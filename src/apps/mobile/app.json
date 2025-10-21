@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "Helsa",
-    "slug": "helsa",
+    "name": "TopMedicosIntegrales",
+    "slug": "topmedicos-integrales",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "helsa-mobile",
+    "scheme": "topmedicos-mobile",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
@@ -17,7 +17,7 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.ducen29.helsamobile"
+      "package": "com.ducen29.topmedicosmobile"
     },
     "web": {
       "bundler": "metro",
@@ -29,7 +29,7 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#8167EC"
+          "backgroundColor": "#023047"
         }
       ]
     ],

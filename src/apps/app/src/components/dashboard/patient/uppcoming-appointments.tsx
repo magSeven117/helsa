@@ -38,13 +38,15 @@ export function UpcomingAppointments({ showAll = false }: UpcomingAppointmentsPr
                   <Clock className="mr-1 h-3 w-3" />
                   <span>{appointment.time}</span>
                 </div>
-                <p className="text-xs text-muted-foreground">{appointment.type}</p>
+                <p className="text-xs text-[#023047]/70">{appointment.type}</p>
               </div>
               <div className="flex items-center gap-2">
                 <Badge
                   variant={appointment.status === 'confirmed' ? 'default' : 'outline'}
                   className={
-                    appointment.status === 'confirmed' ? 'bg-emerald-600 text-foreground hover:text-background' : ''
+                    appointment.status === 'confirmed' 
+                      ? 'bg-[#4CAF50] text-white hover:bg-[#4CAF50]/90' 
+                      : 'border-[#FFB703] text-[#FFB703] bg-[#FFB703]/10'
                   }
                 >
                   {appointment.status === 'confirmed' ? 'Confirmada' : 'Pendiente'}
@@ -53,7 +55,7 @@ export function UpcomingAppointments({ showAll = false }: UpcomingAppointmentsPr
                   <Button
                     variant="outline"
                     size="sm"
-                    className="h-8 text-violet-500 border-violet-600 hover:bg-violet-50 hover:text-violet-700 cursor-pointer"
+                    className="h-8 text-[#4CAF50] border-[#4CAF50] hover:bg-[#4CAF50]/10 hover:text-[#023047] cursor-pointer"
                   >
                     <Video className="mr-1 h-4 w-4" />
                     Unirse
@@ -75,7 +77,7 @@ export function UpcomingAppointments({ showAll = false }: UpcomingAppointmentsPr
           ))}
 
           {!showAll && appointments.length > 3 && (
-            <Button variant="ghost" className="w-full text-violet-600 hover:text-violet-700 hover:bg-violet-50">
+            <Button variant="ghost" className="w-full text-[#4CAF50] hover:text-[#023047] hover:bg-[#4CAF50]/10">
               Ver todas mis citas
             </Button>
           )}

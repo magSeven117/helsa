@@ -36,7 +36,7 @@ export default function VerifyEmailScreen() {
     <ScrollView
       style={{
         flex: 1,
-        backgroundColor: '#8167ec',
+        backgroundColor: '#023047',
         height: Dimensions.get('screen').height,
       }}
     >
@@ -102,7 +102,7 @@ export default function VerifyEmailScreen() {
               style={{
                 width: '100%',
                 height: 50,
-                backgroundColor: '#8167ec',
+                backgroundColor: '#023047',
                 borderRadius: 100,
                 display: 'flex',
                 alignItems: 'center',
@@ -142,7 +142,7 @@ export default function VerifyEmailScreen() {
                 ¿No recibiste el código?
               </Text>
               <Text
-                style={{ fontFamily: 'NunitoBold', color: '#8167ec', fontSize: 16, textAlign: 'center', marginTop: 20 }}
+                style={{ fontFamily: 'NunitoBold', color: '#4CAF50', fontSize: 16, textAlign: 'center', marginTop: 20 }}
               >
                 {' '}
                 Reenviar código

@@ -2,6 +2,7 @@ import { keys as ai } from '@helsa/ai/keys';
 import { keys as auth } from '@helsa/auth/keys';
 import { keys as cache } from '@helsa/cache/keys';
 import { keys as database } from '@helsa/database/keys';
+import { keys as deepgram } from '@helsa/deepgram/keys';
 import { keys as emails } from '@helsa/email/keys';
 import { keys as events } from '@helsa/events/keys';
 import { keys as notifications } from '@helsa/notifications/keys';
@@ -16,6 +17,7 @@ export const env = createEnv({
     ai(),
     auth(),
     database(),
+    deepgram(),
     emails(),
     observability(),
     payments(),

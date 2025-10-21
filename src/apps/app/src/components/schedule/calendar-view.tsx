@@ -158,7 +158,7 @@ export function CalendarView() {
                         onClick={() => handleEditAppointment(appointment)}
                         className="flex h-full cursor-pointer flex-col justify-between rounded-sm border p-1 text-xs shadow-sm transition-all hover:bg-white hover:border-black hover:text-black group"
                       >
-                        <div className="font-medium text-violet-500 truncate">{appointment.patientName}</div>
+                        <div className="font-medium text-[#4CAF50] truncate">{appointment.patientName}</div>
                         <div className="flex items-center justify-between">
                           <Badge variant="outline" className="text-[10px] group-hover:text-black">
                             {appointment.type}

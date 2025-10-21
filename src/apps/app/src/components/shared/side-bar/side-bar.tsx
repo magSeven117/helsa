@@ -77,7 +77,7 @@ const SideBar = () => {
       <SidebarContent className="">
         {sections.map((section) => (
           <SidebarGroup key={section.title}>
-            <SidebarGroupLabel className="text-muted-foreground">{section.title}</SidebarGroupLabel>
+            <SidebarGroupLabel className="text-white/90 font-semibold">{section.title}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {section.routes.map((route) => (

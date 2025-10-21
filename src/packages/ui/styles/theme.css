@@ -1,27 +1,27 @@
 @import './tokens.css';
 :root {
-  --color-brand-primary: #8167ec;
-  --color-brand-secondary: #dfcbfa;
-  --color-background-primary: #ffffff;
-  --color-background-secondary: #e1e7ef;
-  --color-foreground-primary: #0e0f13;
-  --color-foreground-secondary: #22242e;
+  --color-brand-primary: #023047;
+  --color-brand-secondary: #4CAF50;
+  --color-background-primary: #FFFFFF;
+  --color-background-secondary: #EAEAEA;
+  --color-foreground-primary: #023047;
+  --color-foreground-secondary: #0d3d56;
   --color-complementary-danger: #ea3a3d;
-  --color-complementary-success: #22a094;
-  --color-complementary-warning: #f1b603;
+  --color-complementary-success: #4CAF50;
+  --color-complementary-warning: #FFB703;
 }
 
 .dark {
   :root {
-    --color-brand-primary: #8167ec;
-    --color-brand-secondary: #dfcbfa;
-    --color-background-primary: #0e0f13;
-    --color-background-secondary: #22242e;
-    --color-foreground-primary: #ffffff;
-    --color-foreground-secondary: #e1e7ef;
-    --color-complementary-danger: #ea3a3d;
-    --color-complementary-success: #22a094;
-    --color-complementary-warning: #f7cb45;
-    color: #4b3eff;
+    --color-brand-primary: #4CAF50;
+    --color-brand-secondary: #FFB703;
+    --color-background-primary: #011520;
+    --color-background-secondary: #023047;
+    --color-foreground-primary: #FFFFFF;
+    --color-foreground-secondary: #EAEAEA;
+    --color-complementary-danger: #ff6b6e;
+    --color-complementary-success: #4CAF50;
+    --color-complementary-warning: #FFB703;
+    color: #4CAF50;
   }
 }
